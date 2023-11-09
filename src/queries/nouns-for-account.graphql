@@ -1,6 +1,7 @@
 query NounsForAccountQuery($address: ID!) {
     account(id: $address) {
-        nouns {
+        # After 6000, hit skip limit (ok for now...)
+        nouns(first: 6000) {
             id
             seed {
                 background

@@ -3,6 +3,10 @@ sources:
       handler:
           graphql:
               endpoint: https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph
+      transforms:
+          - autoPagination:
+                validateSchema: true
 
 documents:
     - ./src/queries/nouns-for-account.graphql
+    - ./src/queries/noun-by-id.graphql

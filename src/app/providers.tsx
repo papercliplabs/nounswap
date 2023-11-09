@@ -17,7 +17,7 @@ const { connectors } = getDefaultWallets({
 });
 
 const wagmiConfig = createConfig({
-    autoConnect: true,
+    autoConnect: false, // Issues with SSR, there is a workaround we used for Hopscotch can add if needed
     connectors,
     publicClient,
 });

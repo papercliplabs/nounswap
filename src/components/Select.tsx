@@ -20,11 +20,9 @@ export default function Select({ name, selectedValue, options, onSelect }: Selec
                 placeholder={name}
             >
                 {options.map((option, i) => (
-                    <>
-                        <option value={option.value} key={i} title={name}>
-                            {option.name}
-                        </option>
-                    </>
+                    <option value={option.value} key={i} title={name}>
+                        {option.name}
+                    </option>
                 ))}
             </select>
         </div>

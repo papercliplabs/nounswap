@@ -38,8 +38,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <Providers>
                     <div className={inter.className + " flex flex-col min-h-screen justify-between p-6 bg-gray-100 "}>
                         <Header />
-                        <main className="flex flex-col grow self-start justify-start py-12 ">{children}</main>
-                        <Footer />
+                        <main className="flex flex-col grow self-start justify-start pt-12 w-full">{children}</main>
+                        {/* <Footer /> */}
                     </div>
                 </Providers>
             </body>

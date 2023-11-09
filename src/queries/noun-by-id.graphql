@@ -1,0 +1,12 @@
+query NounById($id: ID!) {
+    noun(id: $id) {
+        id
+        seed {
+            background
+            body
+            accessory
+            head
+            glasses
+        }
+    }
+}

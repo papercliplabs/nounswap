@@ -19,3 +19,13 @@
 body {
   color: rgb(var(--foreground-rgb));
 }
+
+@layer base {
+  a:hover {
+      @apply brightness-90;
+  }
+
+  button:hover {
+    @apply brightness-90;
+  }
+}
