@@ -1,0 +1,14 @@
+query NounsForAccountQuery($address: ID!) {
+    account(id: $address) {
+        nouns {
+            id
+            seed {
+                background
+                body
+                accessory
+                head
+                glasses
+            }
+        }
+    }
+}

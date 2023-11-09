@@ -1,27 +1,36 @@
 {
-  "name": "noun-swap",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "react": "^18",
-    "react-dom": "^18",
-    "next": "14.0.1"
-  },
-  "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "autoprefixer": "^10.0.1",
-    "postcss": "^8",
-    "tailwindcss": "^3.3.0",
-    "eslint": "^8",
-    "eslint-config-next": "14.0.1"
-  }
+    "name": "noun-swap",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "codegen": "graphclient build",
+        "dev": "next dev",
+        "build": "yarn codegen; next build",
+        "start": "next start",
+        "lint": "next lint"
+    },
+    "dependencies": {
+        "@nouns/assets": "^0.5.0",
+        "@nouns/sdk": "^0.4.0",
+        "@rainbow-me/rainbowkit": "^1",
+        "graphql": "^16.8.1",
+        "next": "14.0.1",
+        "pino-pretty": "^10.2.3",
+        "react": "^18",
+        "react-dom": "^18",
+        "viem": "^1.18.9",
+        "wagmi": "^1"
+    },
+    "devDependencies": {
+        "@graphprotocol/client-cli": "^3.0.0",
+        "@types/node": "^20",
+        "@types/react": "^18",
+        "@types/react-dom": "^18",
+        "autoprefixer": "^10.0.1",
+        "eslint": "^8",
+        "eslint-config-next": "14.0.1",
+        "postcss": "^8",
+        "tailwindcss": "^3.3.0",
+        "typescript": "^5"
+    }
 }

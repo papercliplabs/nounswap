@@ -1,0 +1,8 @@
+sources:
+    - name: nouns
+      handler:
+          graphql:
+              endpoint: https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph
+
+documents:
+    - ./src/queries/nouns-for-account.graphql
