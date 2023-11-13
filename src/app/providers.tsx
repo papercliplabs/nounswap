@@ -1,13 +1,15 @@
 "use client";
-import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { mainnet } from "wagmi/chains";
+import { getLinearGradientForAddress } from "@/common/utils";
+import { getDefaultWallets, RainbowKitProvider, AvatarComponent } from "@rainbow-me/rainbowkit";
+import Image from "next/image";
+import { Address, configureChains, createConfig, WagmiConfig } from "wagmi";
+import { mainnet, localhost, sepolia, goerli } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 
 const { chains, publicClient } = configureChains(
-    [mainnet],
-    [alchemyProvider({ apiKey: process.env.ALCHEMY_ID as string }), publicProvider()]
+    [localhost],
+    [alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_ID as string }), publicProvider()]
 );
 
 const { connectors } = getDefaultWallets({
@@ -22,10 +24,28 @@ const wagmiConfig = createConfig({
     publicClient,
 });
 
+const CustomAvatar: AvatarComponent = ({ address, ensImage, size }) => {
+    const linearGradient = getLinearGradientForAddress(address as Address);
+    return ensImage ? (
+        <Image src={ensImage} width={size} height={size} alt="" style={{ borderRadius: 999 }} />
+    ) : (
+        <div
+            style={{
+                background: linearGradient,
+                borderRadius: 999,
+                height: size,
+                width: size,
+            }}
+        />
+    );
+};
+
 export default function Providers({ children }: { children: React.ReactNode }) {
     return (
         <WagmiConfig config={wagmiConfig}>
-            <RainbowKitProvider chains={chains}>{children}</RainbowKitProvider>
+            <RainbowKitProvider chains={chains} avatar={CustomAvatar}>
+                {children}
+            </RainbowKitProvider>
         </WagmiConfig>
     );
 }

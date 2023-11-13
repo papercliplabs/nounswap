@@ -21,7 +21,7 @@ export default function NounSelect({ nouns }: NounSelectProps) {
             let backgroundMatch = backgroundFilter == -1 ? true : backgroundFilter == noun.seed.background;
             let bodyMatch = bodyFilter == -1 ? true : bodyFilter == noun.seed.body;
             let accessoryMatch = accessoryFilter == -1 ? true : accessoryFilter == noun.seed.accessory;
-            let headMatch = headFilter == -1 ? true : accessoryFilter == noun.seed.accessory;
+            let headMatch = headFilter == -1 ? true : headFilter == noun.seed.head;
             let glassesMatch = glassesFilter == -1 ? true : glassesFilter == noun.seed.glasses;
 
             return backgroundMatch && bodyMatch && accessoryMatch && headMatch && glassesMatch;
@@ -33,7 +33,7 @@ export default function NounSelect({ nouns }: NounSelectProps) {
             background: {
                 name: "Background",
                 options: [
-                    { name: "Any", value: -1 },
+                    { name: "Background", value: -1 },
                     { name: "Cool", value: 0 },
                     { name: "Warm", value: 1 },
                 ],
@@ -42,7 +42,7 @@ export default function NounSelect({ nouns }: NounSelectProps) {
             body: {
                 name: "Body",
                 options: [
-                    { name: "Any", value: -1 },
+                    { name: "Body", value: -1 },
                     ...ImageData.images.bodies.map((item, i) => {
                         return { name: item.filename.substring(item.filename.indexOf("-") + 1), value: i };
                     }),
@@ -52,7 +52,7 @@ export default function NounSelect({ nouns }: NounSelectProps) {
             accessory: {
                 name: "Accessory",
                 options: [
-                    { name: "Any", value: -1 },
+                    { name: "Accessory", value: -1 },
                     ...ImageData.images.accessories.map((item, i) => {
                         return { name: item.filename.substring(item.filename.indexOf("-") + 1), value: i };
                     }),
@@ -62,7 +62,7 @@ export default function NounSelect({ nouns }: NounSelectProps) {
             head: {
                 name: "Head",
                 options: [
-                    { name: "Any", value: -1 },
+                    { name: "Head", value: -1 },
                     ...ImageData.images.heads.map((item, i) => {
                         return { name: item.filename.substring(item.filename.indexOf("-") + 1), value: i };
                     }),
@@ -72,7 +72,7 @@ export default function NounSelect({ nouns }: NounSelectProps) {
             glasses: {
                 name: "Glasses",
                 options: [
-                    { name: "Any", value: -1 },
+                    { name: "Glasses", value: -1 },
                     ...ImageData.images.glasses.map((item, i) => {
                         return { name: item.filename.substring(item.filename.indexOf("-") + 1), value: i };
                     }),
@@ -83,15 +83,18 @@ export default function NounSelect({ nouns }: NounSelectProps) {
     }, []);
 
     return (
-        <div className="flex flex-row ">
-            <NounFilter
-                backgroundFilterSelectProps={{ selectedValue: backgroundFilter, ...selectProps.background }}
-                bodyFilterSelectProps={{ selectedValue: bodyFilter, ...selectProps.body }}
-                accessoryFilterSelectProps={{ selectedValue: accessoryFilter, ...selectProps.accessory }}
-                headFilterSelectProps={{ selectedValue: headFilter, ...selectProps.head }}
-                glassesFilterSelectProps={{ selectedValue: glassesFilter, ...selectProps.glasses }}
-            />
-            <NounGrid nouns={filteredNouns} />
+        <div className="flex flex-col w-full gap-2">
+            <div className="w-full flex justify-end">{filteredNouns.length} nouns</div>
+            <div className="flex flex-row gap-6 w-full">
+                <NounFilter
+                    backgroundFilterSelectProps={{ selectedValue: backgroundFilter, ...selectProps.background }}
+                    bodyFilterSelectProps={{ selectedValue: bodyFilter, ...selectProps.body }}
+                    accessoryFilterSelectProps={{ selectedValue: accessoryFilter, ...selectProps.accessory }}
+                    headFilterSelectProps={{ selectedValue: headFilter, ...selectProps.head }}
+                    glassesFilterSelectProps={{ selectedValue: glassesFilter, ...selectProps.glasses }}
+                />
+                <NounGrid nouns={filteredNouns} />
+            </div>
         </div>
     );
 }

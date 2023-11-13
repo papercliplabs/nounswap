@@ -1,0 +1,50 @@
+export const nounsDoaLogicAbi = [
+    {
+        inputs: [{ internalType: "uint256", name: "proposalId", type: "uint256" }],
+        name: "cancel",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [{ internalType: "uint256", name: "proposalId", type: "uint256" }],
+        name: "execute",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [],
+        name: "proposalThreshold",
+        outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [],
+        name: "proposalThresholdBPS",
+        outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            { internalType: "address[]", name: "targets", type: "address[]" },
+            { internalType: "uint256[]", name: "values", type: "uint256[]" },
+            { internalType: "string[]", name: "signatures", type: "string[]" },
+            { internalType: "bytes[]", name: "calldatas", type: "bytes[]" },
+            { internalType: "string", name: "description", type: "string" },
+        ],
+        name: "propose",
+        outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [{ internalType: "uint256", name: "proposalId", type: "uint256" }],
+        name: "queue",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+];

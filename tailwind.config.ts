@@ -1,20 +1,86 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from "tailwindcss";
 
 const config: Config = {
-  content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
-  theme: {
-    extend: {
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-      },
+    content: [
+        "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+        "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+        "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    ],
+    theme: {
+        colors: {
+            transparent: "transparent",
+            white: "#ffffff",
+            black: "#000000",
+            accent: "#0D6EFD",
+            positive: "#198754",
+            warning: "#FFC107",
+            negative: "#DC3545",
+            gray: {
+                100: "#f8f9fa",
+                200: "#e9ecef",
+                300: "#dee2e6",
+                400: "#ced4da",
+                500: "#adb5bd",
+                600: "#6C757D",
+                700: "#495057",
+                800: "#343a40",
+                900: "#212529",
+            },
+            green: {
+                100: "#CBFFE9",
+                200: "#32FFA8",
+                300: "#20C997",
+                400: "#26CB7E",
+                500: "#1FA969",
+                600: "#198754",
+                700: "#13653F",
+                800: "#0C442A",
+                900: "#062215",
+            },
+            blue: {
+                100: "#C9DFFF",
+                200: "#93BFFE",
+                300: "#5E9EFE",
+                400: "#3888FD",
+                500: "#0D6EFD",
+                600: "#0455CF",
+                700: "#0949a9",
+                800: "#063170",
+                900: "#031838",
+            },
+            red: {
+                100: "#F7D2D6",
+                200: "#32FFA8",
+                300: "#E87883",
+                400: "#E04B5A",
+                500: "#DC3545",
+                600: "#C42F3D",
+                700: "#93232E",
+                800: "#62181F",
+                900: "#310C0F",
+            },
+            yellow: {
+                100: "#FFF1C8",
+                200: "#ffe391",
+                300: "#FFD65A",
+                400: "#FFD249",
+                500: "#FFC107",
+                600: "#E3AC06",
+                700: "#AA8105",
+                800: "#715603",
+                900: "#392B02",
+            },
+        },
+        extend: {
+            backgroundImage: {
+                "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+                "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+            },
+            fontFamily: {
+                londrina: ["'Londrina Solid'", "sans-serif"],
+            },
+        },
     },
-  },
-  plugins: [],
-}
-export default config
+    plugins: [],
+};
+export default config;

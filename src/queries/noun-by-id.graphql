@@ -1,6 +1,9 @@
 query NounById($id: ID!) {
     noun(id: $id) {
         id
+        owner {
+            id
+        }
         seed {
             background
             body

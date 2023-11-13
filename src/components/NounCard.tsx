@@ -12,12 +12,13 @@ export default function NounCard({ noun, size, enableHover }: NounCardProps) {
     return (
         <div
             className={twMerge(
-                "relative flex justify-center rounded-3xl overflow-hidden hover:border-solid border-4 border-transparent",
-                enableHover && "hover:border-blue-400 [&>span]:hover:block"
+                "relative flex justify-center rounded-3xl overflow-hidden outline outline-4 outline-transparent w-fit",
+                enableHover && "hover:outline-blue-400 [&>span]:hover:block",
+                size < 100 && "rounded-xl"
             )}
         >
             <Image src={noun.imageSrc} width={size} height={size} className="" alt="" />
-            <span className="absolute bottom-[4px] bg-white rounded-full px-1 hidden">{noun.id}</span>
+            <span className="absolute bottom-[4px] bg-white rounded-full px-3 hidden text-black">{noun.id}</span>
         </div>
     );
 }

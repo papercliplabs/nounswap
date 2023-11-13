@@ -3,6 +3,9 @@ query NounsForAccountQuery($address: ID!) {
         # After 6000, hit skip limit (ok for now...)
         nouns(first: 6000) {
             id
+            owner {
+                id
+            }
             seed {
                 background
                 body

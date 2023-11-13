@@ -3,16 +3,20 @@ import { Noun } from "@/common/types";
 import { NounSeed } from "@nouns/assets/dist/types";
 import { ImageData, getNounData } from "@nouns/assets";
 import { buildSVG } from "@nouns/sdk";
-import { Address } from "viem";
+import { Address, getAddress } from "viem";
+import { LOCAL_ANVIL_0_ADDRESS, NOUNDERS_ADDRESS } from "./constants";
 
 const { palette } = ImageData; // Used with `buildSVG``
 
 export async function getNounsForAddress(address: Address): Promise<Noun[]> {
+    const addressMod = address == LOCAL_ANVIL_0_ADDRESS ? NOUNDERS_ADDRESS : address;
+
     const graphSdk = getBuiltGraphSDK();
-    const queryResult = await graphSdk.NounsForAccountQuery({ address: address.toLocaleLowerCase() });
+    const queryResult = await graphSdk.NounsForAccountQuery({ address: addressMod.toLocaleLowerCase() });
 
     let nouns: Noun[] = (queryResult.account?.nouns ?? []).map((data) => {
         let id = Number(data.id);
+        const owner = getAddress(data.owner.id);
         let seed: NounSeed = {
             background: Number(data.seed?.background),
             body: Number(data.seed?.body),
@@ -27,6 +31,7 @@ export async function getNounsForAddress(address: Address): Promise<Noun[]> {
 
         return {
             id,
+            owner,
             seed,
             imageSrc: `data:image/svg+xml;base64,${svgBase64}`,
         };
@@ -45,6 +50,7 @@ export async function getNounById(id: string): Promise<Noun | undefined> {
     if (queryResult.noun && queryResult.noun.seed) {
         let data = queryResult.noun;
         let id = Number(data.id);
+        const owner = getAddress(data.owner.id);
         let seed: NounSeed = {
             background: Number(data.seed?.background),
             body: Number(data.seed?.body),
@@ -59,6 +65,7 @@ export async function getNounById(id: string): Promise<Noun | undefined> {
 
         return {
             id,
+            owner,
             seed,
             imageSrc: `data:image/svg+xml;base64,${svgBase64}`,
         };

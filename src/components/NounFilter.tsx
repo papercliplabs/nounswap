@@ -10,11 +10,11 @@ interface NounFilterProps {
 
 export default function NounFilter(props: NounFilterProps) {
     return (
-        <div className="flex flex-col bg-gray-200 rounded-lg p-4 min-w-[250px] gap-4 h-min">
+        <div className="flex flex-col bg-gray-200 p-6 gap-6 h-min w-[286px] rounded-3xl">
             <div className="flex flex-row justify-between">
-                <span>Filter</span>
+                <h3>Filter</h3>
                 <button
-                    className="text-blue-500"
+                    className="text-blue-500 hover:brightness-[85%]"
                     onClick={() => {
                         props.backgroundFilterSelectProps.onSelect(-1);
                         props.bodyFilterSelectProps.onSelect(-1);
