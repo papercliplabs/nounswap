@@ -10,7 +10,7 @@ interface NounFilterProps {
 
 export default function NounFilter(props: NounFilterProps) {
     return (
-        <div className="flex flex-col bg-gray-200 p-6 gap-6 h-min w-[286px] rounded-3xl">
+        <div className="flex flex-col bg-gray-200 p-6 gap-6 h-min w-[350px] rounded-3xl ">
             <div className="flex flex-row justify-between">
                 <h3>Filter</h3>
                 <button

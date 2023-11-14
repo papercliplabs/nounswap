@@ -31,13 +31,13 @@ export default function Modal({ title, isOpen, children, onClose }: ModalProps) 
                 )}
                 ref={ref}
             >
-                <div className="flex flex-row pl-6 pr-2 py-4 text-black justify-between items-center">
+                <div className="flex flex-row pl-6 pr-2 py-4 text-gray-900 justify-between items-center">
                     <h4>{title}</h4>
                     <button className="ghost" onClick={onClose}>
                         <Icon icon="x" size={16} />
                     </button>
                 </div>
-                <div className="flex flex-col overflow-y-scroll">{children}</div>
+                <div className="flex flex-col overflow-y-auto">{children}</div>
             </div>
         </>
     );

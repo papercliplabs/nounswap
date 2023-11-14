@@ -48,7 +48,7 @@ export default function NounSwap({ treasuryNoun }: NounSwapProps) {
         <>
             <div className="flex flex-col grow justify-between border-gray-700">
                 <div className="flex flex-row  w-full grow border-b-4">
-                    <div className="flex flex-col  w-1/2 justify-center items-center border-r-2 gap-8 py-3">
+                    <div className="flex flex-col  w-1/2 justify-center items-center border-r-2 gap-8 py-3 relative">
                         <WalletButton />
                         {selectedUserNoun ? (
                             <div className="relative">
@@ -73,6 +73,11 @@ export default function NounSwap({ treasuryNoun }: NounSwapProps) {
                             </button>
                         )}
                         <h5>Offer: {selectedUserNoun?.id}</h5>
+                        <Icon
+                            icon="repeat"
+                            size={64}
+                            className="absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 rounded-full p-3 bg-gray-200 border-4 border-white"
+                        />
                     </div>
                     <div className="flex flex-col w-1/2 justify-center items-center border-l-2 gap-8 py-3">
                         <div className="flex flex-row gap-2 px-4 py-3 border-2 border-gray-400 rounded-2xl items-center">
@@ -95,21 +100,19 @@ export default function NounSwap({ treasuryNoun }: NounSwapProps) {
                 </div>
             </div>
             <Modal title="Select your Noun" isOpen={pickModalOpen} onClose={() => setPickModalOpen(false)}>
-                <div className="flex flex-col grow overflow-y-scroll">
-                    {userNouns.map((noun, i) => (
-                        <button
-                            className="flex flex-row text-center bg-gray-100 p-2 gap-6 items-center hover:brightness-[85%] px-6 py-3"
-                            onClick={() => {
-                                setSelectedUserNoun(noun);
-                                setPickModalOpen(false);
-                            }}
-                            key={i}
-                        >
-                            <NounCard noun={noun} size={80} enableHover={false} />
-                            <h4>Noun {noun.id}</h4>
-                        </button>
-                    ))}
-                </div>
+                {userNouns.map((noun, i) => (
+                    <button
+                        className="flex flex-row text-center bg-gray-100 p-2 gap-6 items-center hover:brightness-[85%] px-6 py-3"
+                        onClick={() => {
+                            setSelectedUserNoun(noun);
+                            setPickModalOpen(false);
+                        }}
+                        key={i}
+                    >
+                        <NounCard noun={noun} size={80} enableHover={false} />
+                        <h4>Noun {noun.id}</h4>
+                    </button>
+                ))}
             </Modal>
             <SwapTransactionModal
                 isOpen={transactionModalOpen}

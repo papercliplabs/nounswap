@@ -64,7 +64,7 @@ export default function SwapTransactionModal({ userNoun, treasuryNoun, isOpen, o
                         {approveNounTxn.requiresApproval ? (
                             <>
                                 <NounCard noun={userNoun} size={80} enableHover={false} />
-                                <div className="flex flex-col justify-center items-center text-center">
+                                <div className="flex flex-col justify-center items-center text-center gap-2">
                                     <h4>Approve Noun {userNoun.id}</h4>
                                     <span className="text-gray-600">
                                         This will give the Nouns Treasury permission to swap your Noun if the prop
@@ -87,7 +87,7 @@ export default function SwapTransactionModal({ userNoun, treasuryNoun, isOpen, o
                                     </div>
                                     <NounCard noun={treasuryNoun} size={80} enableHover={false} />
                                 </div>
-                                <div className="flex flex-col justify-center items-center text-center">
+                                <div className="flex flex-col justify-center items-center text-center gap-2">
                                     <h4>Create a Swap Prop</h4>
                                     <span className="text-gray-600">
                                         This will create a prop in the Nouns DAO to swap Noun {userNoun.id} for Noun{" "}

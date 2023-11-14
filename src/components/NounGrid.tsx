@@ -10,14 +10,14 @@ interface NounGridInterface {
 export default function NounGrid({ nouns }: NounGridInterface) {
     const nounCards = useMemo(() => {
         return nouns.map((noun, i) => (
-            <Link href={`/swap/${noun.id}`} key={i} className="active:clickable-active">
-                <NounCard noun={noun} size={128} enableHover key={i} />
+            <Link href={`/swap/${noun.id}`} key={i} className="active:clickable-active ">
+                <NounCard noun={noun} enableHover key={i} />
             </Link>
         ));
     }, [nouns]);
 
     return (
-        <div className="justify-between gap-6 grid grid-cols-[repeat(auto-fill,_128px)] w-full text-gray-600">
+        <div className=" justify-stretch items-stretch gap-6 grid grid-cols-[repeat(auto-fill,minmax(130px,1fr))] auto-rows-min grow text-gray-600">
             {nounCards.length == 0 ? "None matching filter" : nounCards}
         </div>
     );

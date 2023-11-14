@@ -19,7 +19,7 @@ export default function HowItWorksModal() {
             <Modal title="What is NounSwap?" isOpen={howItWorksModalOpen} onClose={() => setHowItWorksModalOpen(false)}>
                 <div className="flex flex-col gap-10 px-6 pb-6 text-gray-600">
                     <div className="flex flex-col gap-2">
-                        <h5 className="text-black">Who built this?</h5>
+                        <h5 className="text-gray-900">Who built this?</h5>
                         <div>
                             We{"'"}re{" "}
                             <Link href="https://paperclip.xyz/" target="_blank" rel="noopener noreferrer">
@@ -39,25 +39,25 @@ export default function HowItWorksModal() {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <h5 className="text-black">How does it work?</h5>
+                        <h5 className="text-gray-900">How does it work?</h5>
                         <div>
                             Create a prop in 4 steps.
                             <ol className="pt-6">
                                 <li>
-                                    <span className="text-black">1. Choose a Noun:</span> Look through the treasury and
-                                    pick a Noun you like.
+                                    <span className="text-gray-900">1. Choose a Noun:</span> Look through the treasury
+                                    and pick a Noun you like.
                                 </li>
                                 <li>
-                                    <span className="text-black">2. Select your Noun:</span> Decide which one of your
+                                    <span className="text-gray-900">2. Select your Noun:</span> Decide which one of your
                                     Nouns you{"'"}d like to offer in the swap.
                                 </li>
                                 <li>
-                                    <span className="text-black">3. Approve your Noun:</span> This step is very
+                                    <span className="text-gray-900">3. Approve your Noun:</span> This step is very
                                     important so the Treasury can your noun can be swapped if your proposal (prop) is
                                     successful. You are only allowing the Nouns Treasury to use you noun.
                                 </li>
                                 <li>
-                                    <span className="text-black">4. Create a Prop:</span> Finally, approve the
+                                    <span className="text-gray-900">4. Create a Prop:</span> Finally, approve the
                                     CreateProp transaction. This will create a prop in Nouns Governance. If the Prop
                                     passes, the swap will be automatically executed, and you{"'"}ll receive the Noun you
                                     wanted.

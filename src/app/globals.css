@@ -20,11 +20,7 @@
 
 @layer base {
   a {
-      @apply text-blue-500;
-  }
-
-  a:hover {
-      @apply brightness-[85%];
+      @apply text-blue-500 hover:brightness-[85%];
   }
 
   h1 {
@@ -48,7 +44,7 @@
   }
 
   body {
-    @apply font-londrina text-[18px] font-normal leading-[24px] tracking-wide text-black bg-white;
+    @apply font-londrina text-[18px] font-normal leading-[24px] tracking-wide text-gray-900 bg-white;
   }
 }
 
@@ -70,7 +66,7 @@
   }
 
   .btn-secondary {
-    @apply btn-primary bg-white text-black border-2 border-gray-400 enabled:hover:bg-gray-200;
+    @apply btn-primary bg-white text-gray-900 border-2 border-gray-400 enabled:hover:bg-gray-200;
   }
 
   .ghost {

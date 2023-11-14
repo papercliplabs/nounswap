@@ -17,7 +17,7 @@ export default function WalletButton() {
             {address ? (
                 <button
                     onClick={openAccountModal}
-                    className="flex flex-row gap-2 px-4 py-3 border-2 border-gray-400 rounded-2xl hover:bg-gray-200 active:clickable-active items-center "
+                    className="flex flex-row gap-2 px-4 py-3 border-2 border-gray-400 rounded-2xl hover:bg-gray-200 active:clickable-active items-center text-gray-900"
                 >
                     {ensAvatar ? (
                         <Image src={ensAvatar ?? ""} width={32} height={32} alt="avatar" className=" rounded-full" />
