@@ -7,6 +7,7 @@ import { Address, configureChains, createConfig, WagmiConfig } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import { mainnet, localhost, sepolia, goerli } from "wagmi/chains";
+import { useEffect } from "react";
 
 const { chains, publicClient } = configureChains(
     [goerli],
@@ -42,6 +43,11 @@ const CustomAvatar: AvatarComponent = ({ address, ensImage, size }) => {
 };
 
 export default function Providers({ children }: { children: React.ReactNode }) {
+    useEffect(() => {
+        // Manually trigger autoconnect after mounted
+        wagmiConfig.autoConnect();
+    }, []);
+
     return (
         <WagmiConfig config={wagmiConfig}>
             <RainbowKitProvider chains={chains} avatar={CustomAvatar}>

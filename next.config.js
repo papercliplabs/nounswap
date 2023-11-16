@@ -12,6 +12,41 @@ const nextConfig = {
         
         return config;
       },
+      logging: {
+        fetches: {
+          fullUrl: true,
+          level: "verbose"
+        },
+      },
+      headers: () => [
+        {
+          source: '/',
+          headers: [
+            {
+              key: 'Cache-Control',
+              value: 'no-store',
+            },
+          ],
+        },
+        {
+            source: '/swap:id*',
+            headers: [
+                {
+                key: 'Cache-Control',
+                value: 'no-store',
+                },
+            ],
+        },
+        {
+            source: '/props',
+            headers: [
+              {
+                key: 'Cache-Control',
+                value: 'no-store',
+              },
+            ],
+        },
+      ],
 }
 
 module.exports = nextConfig
