@@ -1,14 +1,15 @@
 "use client";
 import { getLinearGradientForAddress } from "@/common/utils";
+import { ToastProvider } from "@/contexts/toast";
 import { getDefaultWallets, RainbowKitProvider, AvatarComponent } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
 import { Address, configureChains, createConfig, WagmiConfig } from "wagmi";
-import { mainnet, localhost, sepolia, goerli } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
+import { mainnet, localhost, sepolia, goerli } from "wagmi/chains";
 
 const { chains, publicClient } = configureChains(
-    [localhost],
+    [goerli],
     [alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_ID as string }), publicProvider()]
 );
 
@@ -44,7 +45,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     return (
         <WagmiConfig config={wagmiConfig}>
             <RainbowKitProvider chains={chains} avatar={CustomAvatar}>
-                {children}
+                <ToastProvider>{children}</ToastProvider>
             </RainbowKitProvider>
         </WagmiConfig>
     );

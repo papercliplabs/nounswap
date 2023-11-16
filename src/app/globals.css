@@ -46,6 +46,12 @@
   body {
     @apply font-londrina text-[18px] font-normal leading-[24px] tracking-wide text-gray-900 bg-white;
   }
+
+  ol {
+    list-style-position: outside;
+    list-style-type: decimal;
+    display: inline-block;
+  }
 }
 
 @layer components {
@@ -67,6 +73,10 @@
 
   .btn-secondary {
     @apply btn-primary bg-white text-gray-900 border-2 border-gray-400 enabled:hover:bg-gray-200;
+  }
+
+  .btn-negative {
+    @apply btn-primary bg-red-500 enabled:hover:bg-red-700;
   }
 
   .ghost {

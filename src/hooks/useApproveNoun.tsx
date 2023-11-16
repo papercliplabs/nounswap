@@ -45,7 +45,14 @@ export default function useApproveNoun({ id, spender, onReject }: UseApproveNoun
         return request;
     }, [id, spender, address]);
 
-    const sendTxnData = useSendTransaction({ request, onSuccess: () => refetchGetApproved(), onReject });
+    const sendTxnData = useSendTransaction({
+        request,
+        successMsg: `Noun ${id} approved!`,
+        onSuccess: () => refetchGetApproved(),
+        onReject,
+    });
+
+    console.log("APPROVE RECEIPT", sendTxnData?.receipt);
 
     return { requiresApproval: currentApprovalAddress != spender, ...sendTxnData };
 }

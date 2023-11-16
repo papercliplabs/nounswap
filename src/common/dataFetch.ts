@@ -1,18 +1,15 @@
 import { getBuiltGraphSDK } from "../../.graphclient";
-import { Noun } from "@/common/types";
+import { Noun, Proposal } from "@/common/types";
 import { NounSeed } from "@nouns/assets/dist/types";
 import { ImageData, getNounData } from "@nouns/assets";
 import { buildSVG } from "@nouns/sdk";
 import { Address, getAddress } from "viem";
-import { LOCAL_ANVIL_0_ADDRESS, NOUNDERS_ADDRESS } from "./constants";
 
 const { palette } = ImageData; // Used with `buildSVG``
 
 export async function getNounsForAddress(address: Address): Promise<Noun[]> {
-    const addressMod = address == LOCAL_ANVIL_0_ADDRESS ? NOUNDERS_ADDRESS : address;
-
     const graphSdk = getBuiltGraphSDK();
-    const queryResult = await graphSdk.NounsForAccountQuery({ address: addressMod.toLocaleLowerCase() });
+    const queryResult = await graphSdk.NounsForAccountQuery({ address: address.toLocaleLowerCase() });
 
     let nouns: Noun[] = (queryResult.account?.nouns ?? []).map((data) => {
         let id = Number(data.id);

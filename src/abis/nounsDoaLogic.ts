@@ -47,4 +47,20 @@ export const nounsDoaLogicAbi = [
         stateMutability: "nonpayable",
         type: "function",
     },
+    {
+        anonymous: false,
+        inputs: [
+            { indexed: false, internalType: "uint256", name: "id", type: "uint256" },
+            { indexed: false, internalType: "address", name: "proposer", type: "address" },
+            { indexed: false, internalType: "address[]", name: "targets", type: "address[]" },
+            { indexed: false, internalType: "uint256[]", name: "values", type: "uint256[]" },
+            { indexed: false, internalType: "string[]", name: "signatures", type: "string[]" },
+            { indexed: false, internalType: "bytes[]", name: "calldatas", type: "bytes[]" },
+            { indexed: false, internalType: "uint256", name: "startBlock", type: "uint256" },
+            { indexed: false, internalType: "uint256", name: "endBlock", type: "uint256" },
+            { indexed: false, internalType: "string", name: "description", type: "string" },
+        ],
+        name: "ProposalCreated",
+        type: "event",
+    },
 ];

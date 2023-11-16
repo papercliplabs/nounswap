@@ -12,7 +12,7 @@ export default function NounCard({ noun, size, enableHover }: NounCardProps) {
     return (
         <div
             className={twMerge(
-                "relative flex justify-center rounded-3xl overflow-hidden outline outline-4 outline-transparent aspect-square",
+                "relative flex justify-center rounded-3xl overflow-hidden outline outline-[5px] outline-transparent -outline-offset-1 aspect-square",
                 enableHover && "hover:outline-blue-400 [&>span]:hover:block",
                 size && size < 100 && "rounded-xl"
             )}
@@ -23,7 +23,7 @@ export default function NounCard({ noun, size, enableHover }: NounCardProps) {
                 width={size}
                 height={size}
                 alt=""
-                // className="w-full h-full"
+                className="outline outline-4 outline-transparent"
             />
             <span className="absolute bottom-[4px] bg-white rounded-full px-3 hidden text-gray-900">{noun.id}</span>
         </div>

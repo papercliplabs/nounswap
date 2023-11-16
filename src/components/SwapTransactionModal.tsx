@@ -1,13 +1,14 @@
 import { Noun } from "@/common/types";
 import Modal, { ModalProps } from "./Modal";
 import useApproveNoun from "@/hooks/useApproveNoun";
-import { NOUNS_TOKEN_ADDRESS } from "@/common/constants";
+import { NOUNS_TREASURY_ADDRESS, NOUNS_WTF_PROP_URL } from "@/common/constants";
 import { useCreateSwapProp } from "@/hooks/useCreateSwapProp";
 import { useCallback, useEffect, useMemo } from "react";
 import { SendTransactionState } from "@/hooks/useSendTransaction";
 import NounCard from "./NounCard";
 import ProgressCircle from "./ProgressCircle";
 import Icon from "./Icon";
+import Link from "next/link";
 
 interface SwapTransactionModalProps {
     isOpen: boolean;
@@ -19,7 +20,7 @@ interface SwapTransactionModalProps {
 export default function SwapTransactionModal({ userNoun, treasuryNoun, isOpen, onClose }: SwapTransactionModalProps) {
     const approveNounTxn = useApproveNoun({
         id: userNoun?.id,
-        spender: NOUNS_TOKEN_ADDRESS,
+        spender: NOUNS_TREASURY_ADDRESS,
         onReject: onClose,
     });
     const createSwapPropTxn = useCreateSwapProp({ userNoun, treasuryNoun, onReject: onClose });
@@ -70,6 +71,20 @@ export default function SwapTransactionModal({ userNoun, treasuryNoun, isOpen, o
                                         This will give the Nouns Treasury permission to swap your Noun if the prop
                                         passes.{" "}
                                     </span>
+                                </div>
+                            </>
+                        ) : createSwapPropTxn.state == SendTransactionState.Success ? (
+                            <>
+                                <Icon icon="checkCircle" size={64} className="fill-green-600" />
+                                <div className="flex flex-col justify-center items-center">
+                                    <h4>Swap Prop created!</h4>
+                                    <Link
+                                        href={NOUNS_WTF_PROP_URL + "/" + createSwapPropTxn.propNumber}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        View Prop
+                                    </Link>
                                 </div>
                             </>
                         ) : (

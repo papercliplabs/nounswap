@@ -26,7 +26,7 @@ export default function Modal({ title, isOpen, children, onClose }: ModalProps) 
             />
             <div
                 className={twMerge(
-                    "w-[420px] max-h-[520px] bg-gray-100 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden flex flex-col z-50 rounded-2xl shadow-md",
+                    "w-[420px] max-h-[60vh] bg-gray-100 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden flex flex-col z-50 rounded-2xl shadow-md",
                     !isOpen && "hidden"
                 )}
                 ref={ref}

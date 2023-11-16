@@ -1,8 +1,15 @@
 import { getAddress, Address } from "viem";
+// import { ChainId, getContractAddressesForChainOrThrow } from "@nouns/sdk";
 
-export const NOUNS_TREASURY_ADDRESS: Address = getAddress("0xb1a32fc9f9d8b2cf86c068cae13108809547ef71");
-export const NOUNS_TOKEN_ADDRESS: Address = getAddress("0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03");
-export const NOUNS_DOA_PROXY: Address = getAddress("0x6f3E6272A167e8AcCb32072d08E0957F9c79223d");
+// const nounsAddresses = getContractAddressesForChainOrThrow(5);
+
+// export const NOUNS_TREASURY_ADDRESS: Address = getAddress("0xb1a32fc9f9d8b2cf86c068cae13108809547ef71"); // Mainnet
+// export const NOUNS_TREASURY_ADDRESS: Address = getAddress("0x07e5D6a1550aD5E597A9b0698A474AA080A2fB28"); // Sepolia
+export const NOUNS_TREASURY_ADDRESS: Address = getAddress("0xc15008dE43D93D115BD64ED4D95817fFdBfb6DEA"); // Goerli
+export const NOUNS_TOKEN_ADDRESS: Address = getAddress("0x99265CE0983aab76F5a3789663FDD887dE66638A");
+export const NOUNS_DOA_PROXY: Address = getAddress("0x22F7658f64be277e6b3968ecE7b773b092a39864");
+
+export const NOUNS_WTF_PROP_URL = "http://localhost:3001/vote";
 
 // For testing only
 export const LOCAL_ANVIL_0_ADDRESS: Address = getAddress("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266");

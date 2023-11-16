@@ -1,4 +1,5 @@
-import { useMemo } from "react";
+"use client";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { TransactionReceipt, TransactionRequest } from "viem";
 import { Hash } from "viem";
 import {
@@ -7,9 +8,13 @@ import {
     useSendTransaction as useWagmiSendTransaction,
     useWaitForTransaction,
 } from "wagmi";
+import useToast from "./useToast";
+import Icon from "@/components/Icon";
+import { ToastType } from "@/contexts/toast";
 
 interface UseSendTransactionParams {
     request?: TransactionRequest;
+    successMsg?: string;
     onSuccess?: () => void;
     onReject?: () => void;
 }
@@ -34,16 +39,18 @@ export interface UseSendTransactionReturnType {
 
 export default function useSendTransaction({
     request,
+    successMsg,
     onSuccess,
     onReject,
 }: UseSendTransactionParams): UseSendTransactionReturnType {
-    // const { data: feeData } = useFeeData();
+    const [_, setPendingToastId] = useState<number | undefined>(undefined);
+    const { addToast, removeToast } = useToast();
 
     const { config } = usePrepareSendTransaction({
         to: request?.to ?? undefined,
         data: request?.data,
         enabled: request != undefined,
-        // maxFeePerGas: feeData?.maxFeePerGas ?? undefined,
+        gas: request?.gas,
     });
 
     const {
@@ -89,6 +96,46 @@ export default function useSendTransaction({
             return SendTransactionState.Idle;
         }
     }, [pendingWalletSignature, pendingTransaction, failed, success, rejected]);
+
+    // Handle toasts
+    useEffect(() => {
+        let pendingToastId: number | undefined = undefined;
+
+        switch (state) {
+            case SendTransactionState.Rejected:
+                addToast({
+                    content: "Txn rejected",
+                    type: ToastType.Failure,
+                });
+                break;
+            case SendTransactionState.PendingTransaction:
+                pendingToastId = addToast({
+                    content: "Txn pending",
+                    type: ToastType.Pending,
+                });
+                break;
+            case SendTransactionState.Failed:
+                addToast({
+                    content: "Txn failed",
+                    type: ToastType.Failure,
+                });
+                break;
+            case SendTransactionState.Success:
+                addToast({
+                    content: successMsg ?? "Txn success",
+                    type: ToastType.Success,
+                });
+                break;
+        }
+
+        setPendingToastId((currentId) => {
+            if (currentId) {
+                removeToast(currentId);
+            }
+
+            return pendingToastId;
+        });
+    }, [state, addToast, removeToast, setPendingToastId, successMsg]);
 
     return {
         state,
