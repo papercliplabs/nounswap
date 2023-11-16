@@ -9,9 +9,9 @@ export interface Noun {
     imageSrc: string;
 }
 
-export interface Proposal {
+export interface SwapNounProposal {
     id: number;
-    title: string;
-    description: string;
+    fromNoun: Noun;
+    toNoun: Noun;
     status: ProposalStatus;
 }

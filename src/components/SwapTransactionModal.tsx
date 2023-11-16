@@ -9,6 +9,7 @@ import NounCard from "./NounCard";
 import ProgressCircle from "./ProgressCircle";
 import Icon from "./Icon";
 import Link from "next/link";
+import SwapNounGraphic from "./SwapNounGraphic";
 
 interface SwapTransactionModalProps {
     isOpen: boolean;
@@ -89,19 +90,7 @@ export default function SwapTransactionModal({ userNoun, treasuryNoun, isOpen, o
                             </>
                         ) : (
                             <>
-                                <div className="flex flex-row gap-5">
-                                    <div className="relative">
-                                        <NounCard noun={userNoun} size={80} enableHover={false} />
-                                        <div className="absolute right-0 top-1/2 calc() translate-x-[calc(50%+10px)] -translate-y-1/2 z-40">
-                                            <Icon
-                                                icon="repeat"
-                                                size={36}
-                                                className="p-2 rounded-full bg-gray-200 border-2 border-white"
-                                            />
-                                        </div>
-                                    </div>
-                                    <NounCard noun={treasuryNoun} size={80} enableHover={false} />
-                                </div>
+                                <SwapNounGraphic fromNoun={userNoun} toNoun={treasuryNoun} />
                                 <div className="flex flex-col justify-center items-center text-center gap-2">
                                     <h4>Create a Swap Prop</h4>
                                     <span className="text-gray-600">

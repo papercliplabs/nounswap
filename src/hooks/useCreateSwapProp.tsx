@@ -96,7 +96,7 @@ NounSwap is a tool built for the Nourish communities by [Paperclip Labs](https:/
         }
 
         return request;
-    }, [userNoun, treasuryNoun, address]);
+    }, [userNoun, treasuryNoun, address, publicClient]);
 
     const sendTxnData = useSendTransaction({ request, successMsg: "Swap Prop created!", onReject });
 

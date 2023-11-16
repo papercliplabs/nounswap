@@ -1,6 +1,6 @@
 query NounSwapProposalsForDelegate($id: ID!) {
     delegate(id: $id) {
-        proposals(where: { title_contains: "NounSwap" }, first: 6000) {
+        proposals(where: { title_contains: "NounSwap" }, first: 6000, orderBy: id, orderDirection: desc) {
             id
             title
             description
