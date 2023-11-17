@@ -1,4 +1,3 @@
-"use server";
 import { ProposalState, SwapNounProposal } from "@/common/types";
 import { Address, createPublicClient, http } from "viem";
 import { getClient } from "./ApolloClient";
@@ -6,6 +5,9 @@ import { gql } from "@/data/__generated__/gql";
 import { getNounById } from "./getNounById";
 import { ProposalStatus } from "./__generated__/graphql";
 import { goerli } from "viem/chains"; // TODO: need to remember to update!
+
+// Force no caching (needed for the getBlockNumber, apollo already disabled caching)
+export const dynamic = "force-dynamic";
 
 const query = gql(`
     query NounSwapProposalsForDelegate($id: ID!) {
@@ -32,9 +34,11 @@ export async function getNounSwapProposalsForDelegate(address?: Address): Promis
 
     const publicClient = createPublicClient({
         chain: goerli,
-        transport: http(),
+        transport: http(goerli.rpcUrls.alchemy.http + "/" + process.env.NEXT_PUBLIC_ALCHEMY_ID),
+        pollingInterval: 10_000,
     });
 
+    // Nextjs is caching this...
     const currentBlock = await publicClient.getBlockNumber();
 
     const { data: queryResult } = await getClient().query({
@@ -60,7 +64,17 @@ export async function getNounSwapProposalsForDelegate(address?: Address): Promis
             const ended = currentBlock > proposal.endBlock;
             const passing = proposal.forVotes >= proposal.quorumVotes && proposal.forVotes > proposal.againstVotes;
 
-            console.log("PROPOSAL", proposal.id, started, ended, passing, proposal.status);
+            console.log(
+                "PROPOSAL",
+                proposal.id,
+                started,
+                ended,
+                passing,
+                proposal.status,
+                proposal.startBlock,
+                proposal.endBlock,
+                currentBlock
+            );
 
             // Compute actual state, subgraph can't know with Active and Pending since no events
             let state: ProposalState = ProposalState.Cancelled;
