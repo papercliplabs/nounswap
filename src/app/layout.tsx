@@ -1,14 +1,27 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
+import { Analytics } from "@vercel/analytics/react";
 
 import Providers from "./providers";
 import ToastContainer from "@/components/ToastContainer";
 import Link from "next/link";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
-    title: "Noun Swap",
-    description: "Swap your noun with the Nouns Treasury",
+    title: "NounSwap",
+    description: "Swap your Noun with the Nouns Treasury",
+    metadataBase: new URL("https://nounswap.wtf"),
+    openGraph: {
+        title: "NounSwap",
+        description: "Swap your Noun with the Nouns Treasury",
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "NounSwap",
+        description: "Swap your Noun with the Nouns Treasury",
+    },
+    keywords: ["crypto", "cryptocurrency", "ethereum", "nft", "nouns", "nounsDOA", "paperclip", "labs"],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -32,6 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     </div>
                     <ToastContainer />
                 </Providers>
+                <Analytics />
             </body>
         </html>
     );

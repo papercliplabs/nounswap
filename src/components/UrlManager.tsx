@@ -25,8 +25,10 @@ export default function UrlManager() {
             params.delete("address");
         }
 
-        router.replace(`${pathname}?${params}`);
-    }, [address, chain, pathname, router]);
+        if (params.toString() != searchParams.toString()) {
+            router.replace(`${pathname}?${params}`);
+        }
+    }, [address, chain, pathname, router, searchParams]);
 
     return <></>;
 }

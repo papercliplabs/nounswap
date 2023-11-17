@@ -2,7 +2,6 @@
 import { useState } from "react";
 import Icon from "./Icon";
 import Modal from "./Modal";
-import LinkRetainParams from "./LinkRetainParams";
 import Link from "next/link";
 
 export default function HowItWorksModal() {

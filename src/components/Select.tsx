@@ -1,8 +1,7 @@
 "use client";
 import { twMerge } from "tailwind-merge";
 import Icon from "./Icon";
-import { useEffect, useRef, useState } from "react";
-import useClickOutside from "@/hooks/useClickOutside";
+import { useState } from "react";
 export interface SelectProps<T> {
     name: string;
     selectedValue: T;

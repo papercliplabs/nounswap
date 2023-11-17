@@ -60,6 +60,8 @@ export async function getNounSwapProposalsForDelegate(address?: Address): Promis
             const ended = currentBlock > proposal.endBlock;
             const passing = proposal.forVotes >= proposal.quorumVotes && proposal.forVotes > proposal.againstVotes;
 
+            console.log("PROPOSAL", proposal.id, started, ended, passing, proposal.status);
+
             // Compute actual state, subgraph can't know with Active and Pending since no events
             let state: ProposalState = ProposalState.Cancelled;
             switch (proposal.status) {

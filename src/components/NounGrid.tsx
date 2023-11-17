@@ -2,7 +2,6 @@ import { Noun } from "@/common/types";
 import NounCard from "./NounCard";
 import { useMemo } from "react";
 import LinkRetainParams from "./LinkRetainParams";
-import Link from "next/link";
 
 interface NounGridInterface {
     nouns: Noun[];

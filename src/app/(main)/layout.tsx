@@ -1,4 +1,3 @@
-import Link from "next/link";
 import WalletButton from "@/components/WalletButton";
 import Nav from "@/components/Nav";
 import Icon from "@/components/Icon";

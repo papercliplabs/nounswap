@@ -115,7 +115,5 @@ NounSwap is a tool built for the Nourish communities by [Paperclip Labs](https:/
         return Number((event.args as any)["id"]);
     }, [sendTxnData]);
 
-    console.log("CREAT STATE", sendTxnData.state);
-
     return { ...sendTxnData, propNumber };
 }

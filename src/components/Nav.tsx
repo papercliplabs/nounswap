@@ -2,7 +2,6 @@
 import { usePathname } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 import LinkRetainParams from "./LinkRetainParams";
-import Link from "next/link";
 
 interface NavProps {
     navInfo: {

@@ -1,6 +1,5 @@
 import { NounSeed } from "@nouns/assets/dist/types";
 import { Address } from "viem";
-import { ProposalStatus } from "@/data/__generated__/graphql";
 
 export interface Noun {
     id: number;
@@ -9,7 +8,7 @@ export interface Noun {
     imageSrc: string;
 }
 
-// Need our own to add success and failed, extends ProposalStatus
+// Need our own to add success and failed, extends ProposalStatus (autogen)
 export enum ProposalState {
     Active = "ACTIVE",
     Cancelled = "CANCELED",

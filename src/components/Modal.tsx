@@ -1,5 +1,5 @@
 import useClickOutside from "@/hooks/useClickOutside";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { twMerge } from "tailwind-merge";
 import Icon from "./Icon";
 

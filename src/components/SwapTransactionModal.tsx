@@ -1,16 +1,13 @@
 import { Noun } from "@/common/types";
-import Modal, { ModalProps } from "./Modal";
+import Modal from "./Modal";
 import useApproveNoun from "@/hooks/useApproveNoun";
 import { NOUNS_TREASURY_ADDRESS, NOUNS_WTF_PROP_URL } from "@/common/constants";
 import { useCreateSwapProp } from "@/hooks/useCreateSwapProp";
-import { useCallback, useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { SendTransactionState } from "@/hooks/useSendTransaction";
 import NounCard from "./NounCard";
 import ProgressCircle from "./ProgressCircle";
-import Icon from "./Icon";
 import SwapNounGraphic from "./SwapNounGraphic";
-import LinkRetainParams from "./LinkRetainParams";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
 interface SwapTransactionModalProps {
@@ -34,7 +31,6 @@ export default function SwapTransactionModal({ userNoun, treasuryNoun, isOpen, o
         if (isOpen) {
             if (approveNounTxn.requiresApproval) {
                 if (approveNounTxn.state == SendTransactionState.Idle) {
-                    console.log("SENDING");
                     approveNounTxn.send?.();
                 } else if (approveNounTxn.state == SendTransactionState.Rejected) {
                     approveNounTxn.reset();

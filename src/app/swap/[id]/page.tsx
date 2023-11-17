@@ -1,7 +1,5 @@
 import { getNounById } from "@/data/getNounById";
 import NounSwap from "@/components/NounSwap";
-import HowItWorksModal from "@/components/HowItWorks";
-import LinkRetainParams from "@/components/LinkRetainParams";
 import { Address } from "viem";
 
 export default async function Swap({

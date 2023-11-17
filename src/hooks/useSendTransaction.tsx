@@ -5,6 +5,7 @@ import { Hash } from "viem";
 import { usePrepareSendTransaction, useSendTransaction as useWagmiSendTransaction, useWaitForTransaction } from "wagmi";
 import useToast from "./useToast";
 import { ToastType } from "@/contexts/toast";
+import { track } from "@vercel/analytics";
 
 interface UseSendTransactionParams {
     request?: TransactionRequest;
@@ -83,8 +84,10 @@ export default function useSendTransaction({
         } else if (pendingTransaction) {
             return SendTransactionState.PendingTransaction;
         } else if (failed) {
+            track("TxFailed");
             return SendTransactionState.Failed;
         } else if (success) {
+            track("TxSuccess");
             return SendTransactionState.Success;
         } else {
             return SendTransactionState.Idle;
@@ -107,7 +110,6 @@ export default function useSendTransaction({
                     content: "Txn pending",
                     type: ToastType.Pending,
                 });
-                console.log("ADDED PENDING TOAST!", pendingToastId);
                 break;
             case SendTransactionState.Failed:
                 addToast({
@@ -125,7 +127,6 @@ export default function useSendTransaction({
 
         setPendingToastId((currentId) => {
             if (currentId) {
-                console.log("REMOVING PENDING TOAST!", currentId);
                 removeToast(currentId);
             }
 

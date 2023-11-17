@@ -53,7 +53,5 @@ export default function useApproveNoun({ id, spender, onReject }: UseApproveNoun
         onReject,
     });
 
-    console.log("APPROVE RECEIPT", sendTxnData?.receipt);
-
     return { requiresApproval: currentApprovalAddress != spender, ...sendTxnData };
 }

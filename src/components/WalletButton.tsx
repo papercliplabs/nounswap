@@ -1,7 +1,7 @@
 "use client";
 import { useAccountModal, useChainModal, useConnectModal } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
-import { Address, useAccount, useEnsAvatar, useEnsName, useNetwork } from "wagmi";
+import { useAccount, useEnsAvatar, useEnsName, useNetwork } from "wagmi";
 import { getLinearGradientForAddress, getShortAddress } from "@/common/utils";
 
 export default function WalletButton() {

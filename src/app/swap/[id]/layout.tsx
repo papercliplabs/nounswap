@@ -1,8 +1,6 @@
 import HowItWorksModal from "@/components/HowItWorks";
 import LinkRetainParams from "@/components/LinkRetainParams";
 
-import Link from "next/link";
-
 export default async function Layout({ children }: { children: React.ReactElement }) {
     return (
         <div className="flex flex-col w-full grow">

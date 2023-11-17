@@ -1,6 +1,6 @@
 "use client";
 import { Noun } from "@/common/types";
-import { Address, useAccount } from "wagmi";
+import { Address } from "wagmi";
 import NounCard from "./NounCard";
 import { useEffect, useState } from "react";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
@@ -10,6 +10,7 @@ import WalletButton from "./WalletButton";
 import Image from "next/image";
 import Icon from "./Icon";
 import useNounsForAddress from "@/hooks/useNounsForAddress";
+import { track } from "@vercel/analytics";
 
 interface NounSwapProps {
     treasuryNoun: Noun;
@@ -78,7 +79,10 @@ export default function NounSwap({ treasuryNoun, address }: NounSwapProps) {
                     <span>Creates a prop in Nouns governance.</span>
                     <button
                         className="btn-primary"
-                        onClick={() => setTransactionModalOpen(true)}
+                        onClick={() => {
+                            setTransactionModalOpen(true);
+                            track("InitCreateSwapProp");
+                        }}
                         disabled={selectedUserNoun == undefined}
                     >
                         Create a swap prop
