@@ -26,7 +26,7 @@ export default function UrlManager() {
         }
 
         router.replace(`${pathname}?${params}`);
-    }, [address, chain]);
+    }, [address, chain, pathname, router]);
 
     return <></>;
 }

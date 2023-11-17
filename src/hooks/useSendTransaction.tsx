@@ -107,6 +107,7 @@ export default function useSendTransaction({
                     content: "Txn pending",
                     type: ToastType.Pending,
                 });
+                console.log("ADDED PENDING TOAST!", pendingToastId);
                 break;
             case SendTransactionState.Failed:
                 addToast({
@@ -124,6 +125,7 @@ export default function useSendTransaction({
 
         setPendingToastId((currentId) => {
             if (currentId) {
+                console.log("REMOVING PENDING TOAST!", currentId);
                 removeToast(currentId);
             }
 

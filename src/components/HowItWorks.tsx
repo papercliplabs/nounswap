@@ -40,22 +40,20 @@ export default function HowItWorksModal() {
                     <div className="flex flex-col pt-6 gap-2">
                         <h5>What is NounSwap?</h5>
                         <div className="text-gray-600">
-                            NounSwap, inspired by{" "}
-                            <LinkRetainParams
+                            NounSwap was built by{" "}
+                            <Link href="https://paperclip.xyz/" target="_blank" rel="noopener noreferrer">
+                                Paperclip Labs
+                            </Link>{" "}
+                            and inspired by{" "}
+                            <Link
                                 href="https://warpcast.com/toadyhawk.eth/0x38d070e1"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                an idea from ToadyHawk.eth
-                            </LinkRetainParams>
-                            , makes it easy for Noun owners to get the Noun they want. Simply propose a swap between
-                            your Noun and one in the treasury.
-                            <br />
-                            <br />
-                            Designed, build and shipped by{" "}
-                            <LinkRetainParams href="https://paperclip.xyz/" target="_blank" rel="noopener noreferrer">
-                                Paperclip Labs
-                            </LinkRetainParams>
+                                this cast from ToadyHawk.eth
+                            </Link>
+                            . NounSwap makes it easy for Noun owners to get the Noun they want. Simply propose a swap
+                            between your Noun and one in the treasury.
                         </div>
                     </div>
                 </div>

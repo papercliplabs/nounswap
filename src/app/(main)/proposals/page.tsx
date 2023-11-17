@@ -5,6 +5,8 @@ import { NOUNS_WTF_PROP_URL } from "@/common/constants";
 import { twMerge } from "tailwind-merge";
 import { getNounSwapProposalsForDelegate } from "@/data/getNounSwapProposalsForDelegate";
 import LinkRetainParams from "@/components/LinkRetainParams";
+import Link from "next/link";
+import { ProposalState } from "@/common/types";
 
 export default async function Proposals({ searchParams }: { searchParams: { address?: Address; chain?: string } }) {
     const proposals = await getNounSwapProposalsForDelegate(searchParams.address);
@@ -27,7 +29,7 @@ export default async function Proposals({ searchParams }: { searchParams: { addr
                 <>
                     {proposals.map((proposal, i) => {
                         return (
-                            <LinkRetainParams
+                            <Link
                                 href={NOUNS_WTF_PROP_URL + "/" + proposal.id}
                                 className="flex flex-row w-full border-2 border-gray-200 p-6 rounded-2xl gap-4 text-gray-600 hover:bg-gray-100 justify-between items-center"
                                 key={i}
@@ -45,13 +47,21 @@ export default async function Proposals({ searchParams }: { searchParams: { addr
                                 </div>
                                 <div
                                     className={twMerge(
-                                        "flex justify-end bg-green-600 px-8 py-4 shrink rounded-2xl text-white h-min ",
-                                        (proposal.status == "CANCELLED" || proposal.status == "VETOED") && "bg-red-500"
+                                        "flex justify-end bg-gray-400 px-8 py-4 shrink rounded-2xl text-white h-min ",
+                                        (proposal.state == ProposalState.Active ||
+                                            proposal.state == ProposalState.Pending) &&
+                                            "bg-green-500",
+                                        (proposal.state == ProposalState.Defeated ||
+                                            proposal.state == ProposalState.Vetoed) &&
+                                            "bg-red-500",
+                                        (proposal.state == ProposalState.Executed ||
+                                            proposal.state == ProposalState.Succeeded) &&
+                                            "bg-blue-500"
                                     )}
                                 >
-                                    {proposal.status}
+                                    {proposal.state}
                                 </div>
-                            </LinkRetainParams>
+                            </Link>
                         );
                     })}
                 </>

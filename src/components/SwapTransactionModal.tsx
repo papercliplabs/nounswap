@@ -11,6 +11,7 @@ import Icon from "./Icon";
 import SwapNounGraphic from "./SwapNounGraphic";
 import LinkRetainParams from "./LinkRetainParams";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface SwapTransactionModalProps {
     isOpen: boolean;
@@ -26,6 +27,8 @@ export default function SwapTransactionModal({ userNoun, treasuryNoun, isOpen, o
         onReject: onClose,
     });
     const createSwapPropTxn = useCreateSwapProp({ userNoun, treasuryNoun, onReject: onClose });
+    const router = useRouter();
+    const searchParams = useSearchParams();
 
     useEffect(() => {
         if (isOpen) {
@@ -44,7 +47,12 @@ export default function SwapTransactionModal({ userNoun, treasuryNoun, isOpen, o
                 }
             }
         }
-    }, [isOpen, approveNounTxn, createSwapPropTxn]);
+
+        if (createSwapPropTxn.state == SendTransactionState.Success) {
+            // Push over to proposals page on success
+            router.push("/proposals" + "?" + searchParams.toString());
+        }
+    }, [isOpen, approveNounTxn, createSwapPropTxn, router, searchParams]);
 
     console.log("Approve txn state", approveNounTxn.state);
     console.log("Create prop txn state", createSwapPropTxn.state);
@@ -75,21 +83,22 @@ export default function SwapTransactionModal({ userNoun, treasuryNoun, isOpen, o
                                     </span>
                                 </div>
                             </>
-                        ) : createSwapPropTxn.state == SendTransactionState.Success ? (
-                            <>
-                                <Icon icon="checkCircle" size={64} className="fill-green-600" />
-                                <div className="flex flex-col justify-center items-center">
-                                    <h4>Swap Prop created!</h4>
-                                    <LinkRetainParams
-                                        href={NOUNS_WTF_PROP_URL + "/" + createSwapPropTxn.propNumber}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        View Prop
-                                    </LinkRetainParams>
-                                </div>
-                            </>
                         ) : (
+                            // ) : createSwapPropTxn.state == SendTransactionState.Success ? (
+                            //     <>
+                            //         <Icon icon="checkCircle" size={64} className="fill-green-600" />
+                            //         <div className="flex flex-col justify-center items-center">
+                            //             <h4>Swap Prop created!</h4>
+                            //             <Link
+                            //                 href={NOUNS_WTF_PROP_URL + "/" + createSwapPropTxn.propNumber}
+                            //                 target="_blank"
+                            //                 rel="noopener noreferrer"
+                            //             >
+                            //                 View Prop
+                            //             </Link>
+                            //         </div>
+                            //     </>
+                            // ) : (
                             <>
                                 <SwapNounGraphic fromNoun={userNoun} toNoun={treasuryNoun} />
                                 <div className="flex flex-col justify-center items-center text-center gap-2">
