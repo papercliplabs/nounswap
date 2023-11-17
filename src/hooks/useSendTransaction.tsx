@@ -1,15 +1,9 @@
 "use client";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { TransactionReceipt, TransactionRequest } from "viem";
 import { Hash } from "viem";
-import {
-    useFeeData,
-    usePrepareSendTransaction,
-    useSendTransaction as useWagmiSendTransaction,
-    useWaitForTransaction,
-} from "wagmi";
+import { usePrepareSendTransaction, useSendTransaction as useWagmiSendTransaction, useWaitForTransaction } from "wagmi";
 import useToast from "./useToast";
-import Icon from "@/components/Icon";
 import { ToastType } from "@/contexts/toast";
 
 interface UseSendTransactionParams {

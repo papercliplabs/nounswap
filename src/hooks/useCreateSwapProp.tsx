@@ -1,15 +1,14 @@
+"use client";
 import useSendTransaction, { UseSendTransactionReturnType } from "./useSendTransaction";
 import { useMemo } from "react";
 import {
-    Address,
     TransactionRequest,
     decodeEventLog,
     encodeAbiParameters,
     encodeFunctionData,
-    getContract,
     getFunctionSignature,
 } from "viem";
-import { useAccount, useContractRead, usePrepareContractWrite, usePublicClient, useWalletClient } from "wagmi";
+import { useAccount, usePublicClient } from "wagmi";
 import { nounsDoaLogicAbi } from "@/abis/nounsDoaLogic";
 import { nounsTokenAbi } from "@/abis/nounsToken";
 import { Noun } from "@/common/types";

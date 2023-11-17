@@ -1,6 +1,6 @@
 import { NounSeed } from "@nouns/assets/dist/types";
 import { Address } from "viem";
-import { ProposalStatus } from "../../.graphclient";
+import { ProposalStatus } from "@/data/__generated__/graphql";
 
 export interface Noun {
     id: number;

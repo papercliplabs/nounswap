@@ -1,41 +1,27 @@
 "use client";
 import { Noun } from "@/common/types";
-import { useAccount } from "wagmi";
+import { Address, useAccount } from "wagmi";
 import NounCard from "./NounCard";
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import Modal from "./Modal";
 import SwapTransactionModal from "./SwapTransactionModal";
 import WalletButton from "./WalletButton";
 import Image from "next/image";
 import Icon from "./Icon";
+import useNounsForAddress from "@/hooks/useNounsForAddress";
 
 interface NounSwapProps {
     treasuryNoun: Noun;
+    address?: Address;
 }
 
-export default function NounSwap({ treasuryNoun }: NounSwapProps) {
-    const { address } = useAccount();
+export default function NounSwap({ treasuryNoun, address }: NounSwapProps) {
     const { openConnectModal } = useConnectModal();
-    const [userNouns, setUserNouns] = useState<Noun[]>([]);
     const [selectedUserNoun, setSelectedUserNoun] = useState<Noun | undefined>(undefined);
     const [pickModalOpen, setPickModalOpen] = useState<boolean>(false);
     const [transactionModalOpen, setTransactionModalOpen] = useState<boolean>(false);
-
-    useEffect(() => {
-        async function getUserNouns() {
-            if (address != undefined) {
-                const res = await fetch(`/api?address=${address}`);
-                const nouns = (await res.json()) as Noun[];
-                setUserNouns(nouns);
-            } else {
-                setUserNouns([]);
-            }
-        }
-
-        getUserNouns();
-    }, [address]);
+    const userNouns = useNounsForAddress(address);
 
     useEffect(() => {
         // Clear selection if disconnected
@@ -100,19 +86,23 @@ export default function NounSwap({ treasuryNoun }: NounSwapProps) {
                 </div>
             </div>
             <Modal title="Select your Noun" isOpen={pickModalOpen} onClose={() => setPickModalOpen(false)}>
-                {userNouns.map((noun, i) => (
-                    <button
-                        className="flex flex-row text-center bg-gray-100 p-2 gap-6 items-center hover:brightness-[85%] px-6 py-3"
-                        onClick={() => {
-                            setSelectedUserNoun(noun);
-                            setPickModalOpen(false);
-                        }}
-                        key={i}
-                    >
-                        <NounCard noun={noun} size={80} enableHover={false} />
-                        <h4>Noun {noun.id}</h4>
-                    </button>
-                ))}
+                {userNouns == undefined ? (
+                    <Icon icon="pending" size={60} className="animate-spin" />
+                ) : (
+                    userNouns.map((noun, i) => (
+                        <button
+                            className="flex flex-row text-center bg-gray-100 p-2 gap-6 items-center hover:brightness-[85%] px-6 py-3"
+                            onClick={() => {
+                                setSelectedUserNoun(noun);
+                                setPickModalOpen(false);
+                            }}
+                            key={i}
+                        >
+                            <NounCard noun={noun} size={80} enableHover={false} />
+                            <h4>Noun {noun.id}</h4>
+                        </button>
+                    ))
+                )}
             </Modal>
             <SwapTransactionModal
                 isOpen={transactionModalOpen}

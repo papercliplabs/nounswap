@@ -8,8 +8,9 @@ import { SendTransactionState } from "@/hooks/useSendTransaction";
 import NounCard from "./NounCard";
 import ProgressCircle from "./ProgressCircle";
 import Icon from "./Icon";
-import Link from "next/link";
 import SwapNounGraphic from "./SwapNounGraphic";
+import LinkRetainParams from "./LinkRetainParams";
+import Link from "next/link";
 
 interface SwapTransactionModalProps {
     isOpen: boolean;
@@ -79,13 +80,13 @@ export default function SwapTransactionModal({ userNoun, treasuryNoun, isOpen, o
                                 <Icon icon="checkCircle" size={64} className="fill-green-600" />
                                 <div className="flex flex-col justify-center items-center">
                                     <h4>Swap Prop created!</h4>
-                                    <Link
+                                    <LinkRetainParams
                                         href={NOUNS_WTF_PROP_URL + "/" + createSwapPropTxn.propNumber}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >
                                         View Prop
-                                    </Link>
+                                    </LinkRetainParams>
                                 </div>
                             </>
                         ) : (

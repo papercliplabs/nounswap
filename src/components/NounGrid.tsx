@@ -1,6 +1,7 @@
 import { Noun } from "@/common/types";
 import NounCard from "./NounCard";
 import { useMemo } from "react";
+import LinkRetainParams from "./LinkRetainParams";
 import Link from "next/link";
 
 interface NounGridInterface {
@@ -10,9 +11,9 @@ interface NounGridInterface {
 export default function NounGrid({ nouns }: NounGridInterface) {
     const nounCards = useMemo(() => {
         return nouns.map((noun, i) => (
-            <Link href={`/swap/${noun.id}`} key={i} className="active:clickable-active ">
+            <LinkRetainParams href={`/swap/${noun.id}`} key={i} className="active:clickable-active ">
                 <NounCard noun={noun} enableHover key={i} />
-            </Link>
+            </LinkRetainParams>
         ));
     }, [nouns]);
 

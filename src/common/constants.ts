@@ -14,3 +14,6 @@ export const NOUNS_WTF_PROP_URL = "https://nouns-webapp-nu.vercel.app/vote";
 // For testing only
 export const LOCAL_ANVIL_0_ADDRESS: Address = getAddress("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266");
 export const NOUNDERS_ADDRESS: Address = getAddress("0x2573c60a6d127755aa2dc85e342f7da2378a0cc5");
+
+export const SUBGRAPH_URL =
+    "https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns-v3-goerli/0.1.6/gn";

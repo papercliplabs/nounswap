@@ -37,4 +37,4 @@ next-env.d.ts
 
 .env
 
-.graphclient
+__generated__

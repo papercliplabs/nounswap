@@ -8,6 +8,7 @@ import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import { mainnet, localhost, sepolia, goerli } from "wagmi/chains";
 import { useEffect } from "react";
+import UrlManager from "@/components/UrlManager";
 
 const { chains, publicClient } = configureChains(
     [goerli],
@@ -52,6 +53,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         <WagmiConfig config={wagmiConfig}>
             <RainbowKitProvider chains={chains} avatar={CustomAvatar}>
                 <ToastProvider>{children}</ToastProvider>
+                <UrlManager />
             </RainbowKitProvider>
         </WagmiConfig>
     );

@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
 import Icon from "./Icon";
-import Modal, { ModalProps } from "./Modal";
+import Modal from "./Modal";
+import LinkRetainParams from "./LinkRetainParams";
 import Link from "next/link";
 
 export default function HowItWorksModal() {
@@ -40,21 +41,21 @@ export default function HowItWorksModal() {
                         <h5>What is NounSwap?</h5>
                         <div className="text-gray-600">
                             NounSwap, inspired by{" "}
-                            <Link
+                            <LinkRetainParams
                                 href="https://warpcast.com/toadyhawk.eth/0x38d070e1"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
                                 an idea from ToadyHawk.eth
-                            </Link>
+                            </LinkRetainParams>
                             , makes it easy for Noun owners to get the Noun they want. Simply propose a swap between
                             your Noun and one in the treasury.
                             <br />
                             <br />
                             Designed, build and shipped by{" "}
-                            <Link href="https://paperclip.xyz/" target="_blank" rel="noopener noreferrer">
+                            <LinkRetainParams href="https://paperclip.xyz/" target="_blank" rel="noopener noreferrer">
                                 Paperclip Labs
-                            </Link>
+                            </LinkRetainParams>
                         </div>
                     </div>
                 </div>

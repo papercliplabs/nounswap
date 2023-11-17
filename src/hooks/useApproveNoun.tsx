@@ -1,7 +1,8 @@
+"use client";
 import { NOUNS_TOKEN_ADDRESS } from "@/common/constants";
 import { useMemo } from "react";
-import { Address, TransactionRequest, encodeFunctionData, getContract } from "viem";
-import { useAccount, useContractRead, usePrepareContractWrite, usePublicClient } from "wagmi";
+import { Address, TransactionRequest, encodeFunctionData } from "viem";
+import { useAccount, useContractRead } from "wagmi";
 import useSendTransaction, { UseSendTransactionReturnType } from "./useSendTransaction";
 import { nounsTokenAbi } from "@/abis/nounsToken";
 

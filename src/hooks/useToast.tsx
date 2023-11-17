@@ -1,3 +1,4 @@
+"use client";
 import { ToastContext, Toast, ToastConfig } from "@/contexts/toast";
 import { useContext } from "react";
 

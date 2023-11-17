@@ -1,7 +1,8 @@
 "use client";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { twMerge } from "tailwind-merge";
+import LinkRetainParams from "./LinkRetainParams";
+import Link from "next/link";
 
 interface NavProps {
     navInfo: {
@@ -18,9 +19,13 @@ export default function Nav({ navInfo }: NavProps) {
             {navInfo.map((info, i) => {
                 const active = info.href == pathName;
                 return (
-                    <Link href={info.href} className={twMerge("py-4 text-gray-600", active && "text-gray-900")} key={i}>
+                    <LinkRetainParams
+                        href={info.href}
+                        className={twMerge("py-4 text-gray-600", active && "text-gray-900")}
+                        key={i}
+                    >
                         {info.name}
-                    </Link>
+                    </LinkRetainParams>
                 );
             })}
         </div>
