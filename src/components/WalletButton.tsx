@@ -40,7 +40,7 @@ export default function WalletButton() {
                                 style={{ background: getLinearGradientForAddress(address) }}
                             />
                         )}
-                        {ensName ?? getShortAddress(address)}
+                        <span className="hidden md:flex">{ensName ?? getShortAddress(address)}</span>
                     </button>
                 )
             ) : (

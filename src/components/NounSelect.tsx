@@ -15,6 +15,7 @@ export default function NounSelect({ nouns }: NounSelectProps) {
     const [accessoryFilter, setAccessoryFilter] = useState<number>(-1);
     const [headFilter, setHeadFilter] = useState<number>(-1);
     const [glassesFilter, setGlassesFilter] = useState<number>(-1);
+    const [filterOpen, setFilterOpen] = useState<boolean>(false);
 
     let filteredNouns = useMemo(() => {
         return nouns.filter((noun) => {
@@ -84,7 +85,12 @@ export default function NounSelect({ nouns }: NounSelectProps) {
 
     return (
         <div className="flex flex-col w-full gap-2">
-            <div className="w-full flex justify-end">{filteredNouns.length} nouns</div>
+            <div className="flex flex-row justify-between items-end pb-3">
+                <button className="btn-secondary md:hidden" onClick={() => setFilterOpen(!filterOpen)}>
+                    Filter
+                </button>
+                <div className="w-full flex justify-end">{filteredNouns.length} nouns</div>
+            </div>
             <div className="flex flex-row gap-6 w-full">
                 <NounFilter
                     backgroundFilterSelectProps={{ selectedValue: backgroundFilter, ...selectProps.background }}
@@ -92,6 +98,8 @@ export default function NounSelect({ nouns }: NounSelectProps) {
                     accessoryFilterSelectProps={{ selectedValue: accessoryFilter, ...selectProps.accessory }}
                     headFilterSelectProps={{ selectedValue: headFilter, ...selectProps.head }}
                     glassesFilterSelectProps={{ selectedValue: glassesFilter, ...selectProps.glasses }}
+                    isOpen={filterOpen}
+                    onClose={() => setFilterOpen(false)}
                 />
                 <NounGrid nouns={filteredNouns} />
             </div>

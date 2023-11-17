@@ -31,23 +31,21 @@ export default async function Proposals({ searchParams }: { searchParams: { addr
                         return (
                             <Link
                                 href={NOUNS_WTF_PROP_URL + "/" + proposal.id}
-                                className="flex flex-row w-full border-2 border-gray-200 p-6 rounded-2xl gap-4 text-gray-600 hover:bg-gray-100 justify-between items-center"
+                                className="flex flex-col md:flex-row w-full border-2 border-gray-200 p-6 rounded-2xl text-gray-600 hover:bg-gray-100 text-center md:text-start md:justify-start items-center gap-4 "
                                 key={i}
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                <div className="flex flex-row gap-4">
-                                    <SwapNounGraphic fromNoun={proposal.fromNoun} toNoun={proposal.toNoun} />
-                                    <div className="flex flex-col justify-center ">
-                                        <h4 className="text-gray-900">Prop {proposal.id}</h4>
-                                        <div>
-                                            Swap Noun {proposal.fromNoun.id} for Noun {proposal.toNoun.id}
-                                        </div>
+                                <SwapNounGraphic fromNoun={proposal.fromNoun} toNoun={proposal.toNoun} />
+                                <div className="flex flex-col justify-center md:justify-start">
+                                    <h4 className="text-gray-900">Prop {proposal.id}</h4>
+                                    <div>
+                                        Swap Noun {proposal.fromNoun.id} for Noun {proposal.toNoun.id}
                                     </div>
                                 </div>
                                 <div
                                     className={twMerge(
-                                        "flex justify-end bg-gray-400 px-8 py-4 shrink rounded-2xl text-white h-min ",
+                                        "flex bg-gray-400 px-8 py-4 rounded-2xl text-white justify-self-end ml-auto w-full md:w-auto justify-center",
                                         (proposal.state == ProposalState.Active ||
                                             proposal.state == ProposalState.Pending) &&
                                             "bg-green-500",

@@ -1,3 +1,4 @@
+"use server";
 import { ProposalState, SwapNounProposal } from "@/common/types";
 import { Address, createPublicClient, http } from "viem";
 import { getClient } from "./ApolloClient";
@@ -5,9 +6,6 @@ import { gql } from "@/data/__generated__/gql";
 import { getNounById } from "./getNounById";
 import { ProposalStatus } from "./__generated__/graphql";
 import { goerli } from "viem/chains"; // TODO: need to remember to update!
-
-// Force no caching (needed for the getBlockNumber, apollo already disabled caching)
-export const dynamic = "force-dynamic";
 
 const query = gql(`
     query NounSwapProposalsForDelegate($id: ID!) {
