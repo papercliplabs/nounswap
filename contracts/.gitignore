@@ -1,0 +1,10 @@
+# Build outputs
+out
+cache
+
+# Env
+.env*
+!.env.example 
+
+# Config
+.vscode
