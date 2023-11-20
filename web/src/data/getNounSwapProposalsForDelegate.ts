@@ -50,8 +50,12 @@ export async function getNounSwapProposalsForDelegate(address?: Address): Promis
         const swapNounProposals: SwapNounProposal[] = [];
         for (let proposal of data.proposals) {
             const title = proposal.title;
-            const match = title.match(/Swap Noun [0-9]* for Noun [0-9]*/)![0]; // Swap Noun XX for Noun YY
-            const split = match.split(" ");
+            let match = title.match(/Swap Noun [0-9]* for Noun [0-9]*/); // Swap Noun XX for Noun YY
+            if (match == null || match.length == 0) {
+                continue;
+            }
+
+            const split = match[0].split(" ");
             const fromNounId = split[2];
             const toNounId = split[5];
 
