@@ -17,3 +17,6 @@ export const NOUNDERS_ADDRESS: Address = getAddress("0x2573c60a6d127755aa2dc85e3
 
 export const SUBGRAPH_URL =
     "https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns-v3-goerli/0.1.6/gn";
+
+// NounsDAOExecutorProxy => NounsDAOExecutor: a.k.a Treasury
+// NounsDAOProxy => NounsDOALogic: a.k.a Governance (don't need this if we go without props)
