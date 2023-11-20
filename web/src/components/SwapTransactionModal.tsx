@@ -1,14 +1,14 @@
 import { Noun } from "../common/types";
 import Modal from "./Modal";
 import useApproveNoun from "../hooks/useApproveNoun";
-import { NOUNS_TREASURY_ADDRESS, NOUNS_WTF_PROP_URL } from "../common/constants";
-import { useCreateSwapProp } from "../hooks/useCreateSwapProp";
+import { NOUN_SWAP_CONTRACT_ADDRESS } from "../common/constants";
 import { useEffect, useMemo } from "react";
 import { SendTransactionState } from "../hooks/useSendTransaction";
 import NounCard from "./NounCard";
 import ProgressCircle from "./ProgressCircle";
 import SwapNounGraphic from "./SwapNounGraphic";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useSwap } from "../hooks/useSwap";
 
 interface SwapTransactionModalProps {
     isOpen: boolean;
@@ -20,10 +20,10 @@ interface SwapTransactionModalProps {
 export default function SwapTransactionModal({ userNoun, treasuryNoun, isOpen, onClose }: SwapTransactionModalProps) {
     const approveNounTxn = useApproveNoun({
         id: userNoun?.id,
-        spender: NOUNS_TREASURY_ADDRESS,
+        spender: NOUN_SWAP_CONTRACT_ADDRESS,
         onReject: onClose,
     });
-    const createSwapPropTxn = useCreateSwapProp({ userNoun, treasuryNoun, onReject: onClose });
+    const swapTxn = useSwap({ userNoun, treasuryNoun, onReject: onClose });
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -36,26 +36,26 @@ export default function SwapTransactionModal({ userNoun, treasuryNoun, isOpen, o
                     approveNounTxn.reset();
                 }
             } else {
-                if (createSwapPropTxn.state == SendTransactionState.Idle) {
-                    createSwapPropTxn.send?.();
-                } else if (createSwapPropTxn.state == SendTransactionState.Rejected) {
-                    createSwapPropTxn.reset();
+                if (swapTxn.state == SendTransactionState.Idle) {
+                    swapTxn.send?.();
+                } else if (swapTxn.state == SendTransactionState.Rejected) {
+                    swapTxn.reset();
                 }
             }
         }
 
-        if (createSwapPropTxn.state == SendTransactionState.Success) {
+        if (swapTxn.state == SendTransactionState.Success) {
             // Push over to proposals page on success
             router.push("/proposals" + "?" + searchParams.toString());
         }
-    }, [isOpen, approveNounTxn, createSwapPropTxn, router, searchParams]);
+    }, [isOpen, approveNounTxn, swapTxn, router, searchParams]);
 
     console.log("Approve txn state", approveNounTxn.state);
-    console.log("Create prop txn state", createSwapPropTxn.state);
+    console.log("Create prop txn state", swapTxn.state);
 
     const focusedTxn = useMemo(() => {
-        return approveNounTxn.requiresApproval ? approveNounTxn : createSwapPropTxn;
-    }, [approveNounTxn, createSwapPropTxn]);
+        return approveNounTxn.requiresApproval ? approveNounTxn : swapTxn;
+    }, [approveNounTxn, swapTxn]);
 
     if (!userNoun || !treasuryNoun) {
         return <></>; // Ignore for now...
@@ -80,13 +80,13 @@ export default function SwapTransactionModal({ userNoun, treasuryNoun, isOpen, o
                                 </div>
                             </>
                         ) : (
-                            // ) : createSwapPropTxn.state == SendTransactionState.Success ? (
+                            // ) : swapTxn.state == SendTransactionState.Success ? (
                             //     <>
                             //         <Icon icon="checkCircle" size={64} className="fill-green-600" />
                             //         <div className="flex flex-col justify-center items-center">
                             //             <h4>Swap Prop created!</h4>
                             //             <Link
-                            //                 href={NOUNS_WTF_PROP_URL + "/" + createSwapPropTxn.propNumber}
+                            //                 href={NOUNS_WTF_PROP_URL + "/" + swapTxn.propNumber}
                             //                 target="_blank"
                             //                 rel="noopener noreferrer"
                             //             >

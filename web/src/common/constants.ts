@@ -9,6 +9,8 @@ export const NOUNS_TREASURY_ADDRESS: Address = getAddress("0xc15008dE43D93D115BD
 export const NOUNS_TOKEN_ADDRESS: Address = getAddress("0x99265CE0983aab76F5a3789663FDD887dE66638A");
 export const NOUNS_DOA_PROXY: Address = getAddress("0x22F7658f64be277e6b3968ecE7b773b092a39864");
 
+export const NOUN_SWAP_CONTRACT_ADDRESS: Address = getAddress("0xaF45ecd8391b22E2006bD90BD743617948A823be");
+
 export const NOUNS_WTF_PROP_URL = "https://nouns-webapp-nu.vercel.app/vote";
 
 // For testing only
