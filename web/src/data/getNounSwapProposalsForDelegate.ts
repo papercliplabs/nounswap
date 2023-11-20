@@ -37,7 +37,7 @@ export async function getNounSwapProposalsForDelegate(address?: Address): Promis
     });
 
     // Nextjs is caching this...
-    const currentBlock = await publicClient.getBlockNumber();
+    const currentBlock = await publicClient.getBlockNumber({ cacheTime: 10_000 });
 
     const { data: queryResult } = await getClient().query({
         query: query,
