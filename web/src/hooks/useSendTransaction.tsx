@@ -126,7 +126,7 @@ export default function useSendTransaction({
         }
 
         setPendingToastId((currentId) => {
-            if (currentId) {
+            if (currentId != undefined) {
                 removeToast(currentId);
             }
 
