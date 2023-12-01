@@ -9,6 +9,7 @@ import { track } from "@vercel/analytics";
 
 interface UseSendTransactionParams {
     request?: TransactionRequest;
+    chainId?: number;
     successMsg?: string;
     onSuccess?: () => void;
     onReject?: () => void;
@@ -34,6 +35,7 @@ export interface UseSendTransactionReturnType {
 
 export default function useSendTransaction({
     request,
+    chainId,
     successMsg,
     onSuccess,
     onReject,
@@ -46,6 +48,8 @@ export default function useSendTransaction({
         data: request?.data,
         enabled: request != undefined,
         gas: request?.gas,
+        onError: () => {},
+        chainId,
     });
 
     const {
@@ -60,6 +64,7 @@ export default function useSendTransaction({
             console.error("SEND ERROR: ", e);
             onReject?.();
         },
+        chainId,
     });
 
     const {
@@ -139,7 +144,7 @@ export default function useSendTransaction({
         estimatedFeeEth: config && config.maxFeePerGas && config.gas ? config.maxFeePerGas * config.gas : undefined,
         hash: sendData?.hash,
         receipt,
-        send: sendTransactionAsync ? () => sendTransactionAsync() : undefined,
+        send: sendTransactionAsync,
         reset,
     };
 }

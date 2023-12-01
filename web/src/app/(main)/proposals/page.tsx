@@ -1,15 +1,16 @@
 import { Address } from "wagmi";
 import WalletButton from "../../../components/WalletButton";
 import SwapNounGraphic from "../../../components/SwapNounGraphic";
-import { NOUNS_WTF_PROP_URL } from "../../../common/constants";
 import { twMerge } from "tailwind-merge";
 import { getNounSwapProposalsForDelegate } from "../../../data/getNounSwapProposalsForDelegate";
 import LinkRetainParams from "../../../components/LinkRetainParams";
 import Link from "next/link";
 import { ProposalState } from "../../../common/types";
+import getChainSpecificData from "../../../common/chainSpecificData";
 
-export default async function Proposals({ searchParams }: { searchParams: { address?: Address; chain?: string } }) {
-    const proposals = await getNounSwapProposalsForDelegate(searchParams.address);
+export default async function Proposals({ searchParams }: { searchParams: { address?: Address; chain?: number } }) {
+    const proposals = await getNounSwapProposalsForDelegate(searchParams.address, searchParams.chain);
+    const chainSpecificData = getChainSpecificData(searchParams.chain);
 
     return (
         <div className="flex flex-col gap-4 w-full justify-center items-center text-gray-600">
@@ -30,7 +31,7 @@ export default async function Proposals({ searchParams }: { searchParams: { addr
                     {proposals.map((proposal, i) => {
                         return (
                             <Link
-                                href={NOUNS_WTF_PROP_URL + "/" + proposal.id}
+                                href={chainSpecificData.nounsFrontendUrl + "/vote/" + proposal.id}
                                 className="flex flex-col md:flex-row w-full border-2 border-gray-200 p-6 rounded-2xl text-gray-600 hover:bg-gray-100 text-center md:text-start md:justify-start items-center gap-4 "
                                 key={i}
                                 target="_blank"

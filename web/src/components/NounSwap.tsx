@@ -1,28 +1,35 @@
 "use client";
 import { Noun } from "../common/types";
-import { Address } from "wagmi";
+import { Address, useNetwork } from "wagmi";
 import NounCard from "./NounCard";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import Modal from "./Modal";
 import SwapTransactionModal from "./SwapTransactionModal";
 import WalletButton from "./WalletButton";
 import Image from "next/image";
 import Icon from "./Icon";
-import useNounsForAddress from "../hooks/useNounsForAddress";
 import { track } from "@vercel/analytics";
+import getChainSpecificData from "../common/chainSpecificData";
+import { switchNetwork } from "wagmi/actions";
+import Link from "next/link";
 
 interface NounSwapProps {
+    userNouns: Noun[];
     treasuryNoun: Noun;
     address?: Address;
 }
 
-export default function NounSwap({ treasuryNoun, address }: NounSwapProps) {
+export default function NounSwap({ userNouns, treasuryNoun, address }: NounSwapProps) {
     const { openConnectModal } = useConnectModal();
     const [selectedUserNoun, setSelectedUserNoun] = useState<Noun | undefined>(undefined);
     const [pickModalOpen, setPickModalOpen] = useState<boolean>(false);
     const [transactionModalOpen, setTransactionModalOpen] = useState<boolean>(false);
-    const userNouns = useNounsForAddress(address);
+    const { chain: activeChain } = useNetwork();
+
+    const wrongNetwork = useMemo(() => {
+        return activeChain?.id != treasuryNoun.chainId;
+    }, [activeChain, treasuryNoun]);
 
     useEffect(() => {
         // Clear selection if disconnected
@@ -36,7 +43,7 @@ export default function NounSwap({ treasuryNoun, address }: NounSwapProps) {
             <div className="flex flex-col grow justify-between border-gray-700">
                 <div className="flex flex-col md:flex-row w-full grow border-b-4">
                     <div className="flex flex-col grow justify-center items-center border-b-2 md:border-r-2 md:border-b-0 gap-8 py-12 px-6 relative">
-                        <WalletButton />
+                        <WalletButton hideChainSwitcher />
                         {selectedUserNoun ? (
                             <div className="relative">
                                 <button onClick={() => setPickModalOpen(true)}>
@@ -59,7 +66,12 @@ export default function NounSwap({ treasuryNoun, address }: NounSwapProps) {
                                 <div>Select your Noun</div>
                             </button>
                         )}
-                        <h5>Offer: {selectedUserNoun?.id}</h5>
+                        <div className="flex flex-col justify-center items-center">
+                            <h5>Offer: {selectedUserNoun?.id}</h5>
+                            <div>
+                                On {selectedUserNoun ? getChainSpecificData(selectedUserNoun.chainId).chain.name : ""}
+                            </div>
+                        </div>
                         <Icon
                             icon="repeat"
                             size={64}
@@ -67,12 +79,24 @@ export default function NounSwap({ treasuryNoun, address }: NounSwapProps) {
                         />
                     </div>
                     <div className="flex flex-col grow justify-center items-center border-t-2 md:border-l-2 md:border-t-0 gap-8 py-12 px-6">
-                        <div className="flex flex-row gap-2 px-4 py-3 border-2 border-gray-400 rounded-2xl items-center">
+                        <Link
+                            href={
+                                getChainSpecificData(treasuryNoun.chainId).chain.blockExplorers?.default.url +
+                                "/address/" +
+                                getChainSpecificData(treasuryNoun.chainId).nounsTreasuryAddress
+                            }
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex flex-row gap-2 px-4 py-3 border-2 border-gray-400 rounded-2xl items-center text-gray-900 hover:bg-gray-200 hover:brightness-100 active:clickable-active"
+                        >
                             <Image src="/nouns.png" width={32} height={32} alt="" className="rounded-full" />
                             <span>Nouns Treasury</span>
-                        </div>
+                        </Link>
                         <NounCard noun={treasuryNoun} size={200} enableHover={false} />
-                        <h5>For: Noun {treasuryNoun.id}</h5>
+                        <div className="flex flex-col justify-center items-center">
+                            <h5>For: Noun {treasuryNoun.id}</h5>
+                            <div>On {getChainSpecificData(treasuryNoun.chainId).chain.name}</div>
+                        </div>
                     </div>
                 </div>
                 <div className="flex flex-col-reverse md:flex-row w-full justify-end px-4 md:px-10 py-4 md:py-2 item-center items-center gap-6 text-gray-600">
@@ -80,18 +104,26 @@ export default function NounSwap({ treasuryNoun, address }: NounSwapProps) {
                     <button
                         className="btn-primary w-full md:w-auto justify-center"
                         onClick={() => {
-                            setTransactionModalOpen(true);
-                            track("InitCreateSwapProp");
+                            if (wrongNetwork) {
+                                switchNetwork({ chainId: treasuryNoun.chainId });
+                            } else {
+                                setTransactionModalOpen(true);
+                                track("InitCreateSwapProp");
+                            }
                         }}
                         disabled={selectedUserNoun == undefined}
                     >
-                        Create a swap prop
+                        {wrongNetwork && selectedUserNoun ? "Switch network" : "Create a swap prop"}
                     </button>
                 </div>
             </div>
             <Modal title="Select your Noun" isOpen={pickModalOpen} onClose={() => setPickModalOpen(false)}>
                 {userNouns == undefined ? (
                     <Icon icon="pending" size={60} className="animate-spin" />
+                ) : userNouns.length == 0 ? (
+                    <div className="flex p-2 items-center w-full justify-center">
+                        You have no nouns on {getChainSpecificData(treasuryNoun.chainId).chain.name}
+                    </div>
                 ) : (
                     userNouns.map((noun, i) => (
                         <button
@@ -109,10 +141,10 @@ export default function NounSwap({ treasuryNoun, address }: NounSwapProps) {
                 )}
             </Modal>
             <SwapTransactionModal
-                isOpen={transactionModalOpen}
-                onClose={() => setTransactionModalOpen(false)}
                 userNoun={selectedUserNoun}
                 treasuryNoun={treasuryNoun}
+                isOpen={transactionModalOpen}
+                onClose={() => setTransactionModalOpen(false)}
             />
         </>
     );

@@ -12,7 +12,7 @@ import { useAccount, usePublicClient } from "wagmi";
 import { nounsDoaLogicAbi } from "../abis/nounsDoaLogic";
 import { nounsTokenAbi } from "../abis/nounsToken";
 import { Noun } from "../common/types";
-import { NOUNS_DOA_PROXY, NOUNS_TOKEN_ADDRESS, NOUNS_TREASURY_ADDRESS } from "../common/constants";
+import getChainSpecificData from "../common/chainSpecificData";
 
 interface UseCreateSwapPropParams {
     userNoun?: Noun;
@@ -35,22 +35,29 @@ export function useCreateSwapProp({
     const request = useMemo(() => {
         let request: TransactionRequest | undefined = undefined;
 
-        if (userNoun != undefined && treasuryNoun != undefined && address != undefined && publicClient != undefined) {
+        if (
+            userNoun != undefined &&
+            treasuryNoun != undefined &&
+            address != undefined &&
+            publicClient != undefined &&
+            userNoun.chainId == treasuryNoun.chainId
+        ) {
             const transferFromAbi = nounsTokenAbi.find((entry) => entry.name == "transferFrom")!; // Must exist
             const safeTransferFromAbi = nounsTokenAbi.find((entry) => entry.name == "safeTransferFrom")!; // Must exist
+            const chainSpecificData = getChainSpecificData(treasuryNoun.chainId);
 
             const userNounToTreasuryTransferFromInputData = encodeAbiParameters(
                 transferFromAbi.inputs, // from: address, to: address, tokenId: uint256
-                [userNoun.owner, NOUNS_TREASURY_ADDRESS, BigInt(userNoun.id)]
+                [userNoun.owner, chainSpecificData.nounsTreasuryAddress, BigInt(userNoun.id)]
             );
 
             const treasuryNounToUserSafeTransferFromInputData = encodeAbiParameters(
                 safeTransferFromAbi.inputs, // from: address, to: address, tokenId: uint256
-                [NOUNS_TREASURY_ADDRESS, userNoun.owner, BigInt(treasuryNoun.id)]
+                [chainSpecificData.nounsTreasuryAddress, userNoun.owner, BigInt(treasuryNoun.id)]
             );
 
             const proposeArgs = [
-                [NOUNS_TOKEN_ADDRESS, NOUNS_TOKEN_ADDRESS], // targets
+                [chainSpecificData.nounsTokenAddress, chainSpecificData.nounsTokenAddress], // targets
                 [BigInt(0), BigInt(0)], // values
                 [getFunctionSignature(transferFromAbi), getFunctionSignature(safeTransferFromAbi)], // signatures
                 [userNounToTreasuryTransferFromInputData, treasuryNounToUserSafeTransferFromInputData], // calldatas (fn input data, no selector)
@@ -87,7 +94,7 @@ NounSwap is a tool built for the Nourish communities by [Paperclip Labs](https:/
             });
 
             request = {
-                to: NOUNS_DOA_PROXY,
+                to: chainSpecificData.nounsDoaProxyAddress,
                 from: address,
                 data: propCalldata,
                 gas: BigInt(1000000), // Reasonable default incase gas estimate fails...
@@ -97,7 +104,12 @@ NounSwap is a tool built for the Nourish communities by [Paperclip Labs](https:/
         return request;
     }, [userNoun, treasuryNoun, address, publicClient]);
 
-    const sendTxnData = useSendTransaction({ request, successMsg: "Swap Prop created!", onReject });
+    const sendTxnData = useSendTransaction({
+        request,
+        chainId: treasuryNoun?.chainId,
+        successMsg: "Swap Prop created!",
+        onReject,
+    });
 
     const propNumber = useMemo(() => {
         const log = sendTxnData.receipt?.logs.find((log) => true); // First event is ProposalCreated

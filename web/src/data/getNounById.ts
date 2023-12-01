@@ -4,7 +4,7 @@ import { NounSeed } from "@nouns/assets/dist/types";
 import { ImageData, getNounData } from "@nouns/assets";
 import { buildSVG } from "@nouns/sdk";
 import { getAddress } from "viem";
-import { getClient } from "./ApolloClient";
+import getClientForChain from "./ApolloClient";
 import { gql } from "./__generated__/gql";
 
 const { palette } = ImageData; // Used with `buildSVG``
@@ -27,8 +27,8 @@ const query = gql(`
     }
 `);
 
-export async function getNounById(id: string): Promise<Noun | undefined> {
-    const { data: queryResult } = await getClient().query({
+export async function getNounById(id: string, chainId: number): Promise<Noun | undefined> {
+    const { data: queryResult } = await getClientForChain(chainId).query({
         query: query,
         variables: { id },
     });
@@ -54,6 +54,7 @@ export async function getNounById(id: string): Promise<Noun | undefined> {
             owner,
             seed,
             imageSrc: `data:image/svg+xml;base64,${svgBase64}`,
+            chainId: Number(chainId),
         };
     } else {
         console.error(`getNounById: noun not found - ${id}`);

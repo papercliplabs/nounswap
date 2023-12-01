@@ -1,7 +1,6 @@
 import { Noun } from "../common/types";
 import Modal from "./Modal";
 import useApproveNoun from "../hooks/useApproveNoun";
-import { NOUNS_TREASURY_ADDRESS, NOUNS_WTF_PROP_URL } from "../common/constants";
 import { useCreateSwapProp } from "../hooks/useCreateSwapProp";
 import { useEffect, useMemo } from "react";
 import { SendTransactionState } from "../hooks/useSendTransaction";
@@ -9,18 +8,20 @@ import NounCard from "./NounCard";
 import ProgressCircle from "./ProgressCircle";
 import SwapNounGraphic from "./SwapNounGraphic";
 import { useRouter, useSearchParams } from "next/navigation";
+import useChainSpecificData from "../hooks/useChainSpecificData";
 
 interface SwapTransactionModalProps {
-    isOpen: boolean;
-    onClose: () => void;
     userNoun?: Noun;
     treasuryNoun?: Noun;
+    isOpen: boolean;
+    onClose: () => void;
 }
 
 export default function SwapTransactionModal({ userNoun, treasuryNoun, isOpen, onClose }: SwapTransactionModalProps) {
+    const chainSpecificData = useChainSpecificData(treasuryNoun?.chainId);
     const approveNounTxn = useApproveNoun({
-        id: userNoun?.id,
-        spender: NOUNS_TREASURY_ADDRESS,
+        noun: userNoun,
+        spender: chainSpecificData.nounsTreasuryAddress,
         onReject: onClose,
     });
     const createSwapPropTxn = useCreateSwapProp({ userNoun, treasuryNoun, onReject: onClose });
@@ -52,10 +53,13 @@ export default function SwapTransactionModal({ userNoun, treasuryNoun, isOpen, o
 
     console.log("Approve txn state", approveNounTxn.state);
     console.log("Create prop txn state", createSwapPropTxn.state);
+    console.log("IS OPEN", isOpen);
 
     const focusedTxn = useMemo(() => {
         return approveNounTxn.requiresApproval ? approveNounTxn : createSwapPropTxn;
     }, [approveNounTxn, createSwapPropTxn]);
+
+    console.log("FOXUSED TXN", focusedTxn);
 
     if (!userNoun || !treasuryNoun) {
         return <></>; // Ignore for now...
@@ -80,24 +84,9 @@ export default function SwapTransactionModal({ userNoun, treasuryNoun, isOpen, o
                                 </div>
                             </>
                         ) : (
-                            // ) : createSwapPropTxn.state == SendTransactionState.Success ? (
-                            //     <>
-                            //         <Icon icon="checkCircle" size={64} className="fill-green-600" />
-                            //         <div className="flex flex-col justify-center items-center">
-                            //             <h4>Swap Prop created!</h4>
-                            //             <Link
-                            //                 href={NOUNS_WTF_PROP_URL + "/" + createSwapPropTxn.propNumber}
-                            //                 target="_blank"
-                            //                 rel="noopener noreferrer"
-                            //             >
-                            //                 View Prop
-                            //             </Link>
-                            //         </div>
-                            //     </>
-                            // ) : (
                             <>
                                 <SwapNounGraphic fromNoun={userNoun} toNoun={treasuryNoun} />
-                                <div className="flex flex-col justify-center items-center text-center gap-2">
+                                <div className="flex flex-col justify-center items-center text-center gap-2 ">
                                     <h4>Create a Swap Prop</h4>
                                     <span className="text-gray-600">
                                         This will create a prop in the Nouns DAO to swap Noun {userNoun.id} for Noun{" "}

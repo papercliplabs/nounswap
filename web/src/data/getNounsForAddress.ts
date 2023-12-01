@@ -4,8 +4,9 @@ import { NounSeed } from "@nouns/assets/dist/types";
 import { ImageData, getNounData } from "@nouns/assets";
 import { buildSVG } from "@nouns/sdk";
 import { Address, getAddress } from "viem";
-import { getClient } from "./ApolloClient";
+import getClientForChain from "./ApolloClient";
 import { gql } from "./__generated__/gql";
+import { washChainId } from "../common/chainSpecificData";
 
 const { palette } = ImageData; // Used with `buildSVG``
 
@@ -29,8 +30,14 @@ const query = gql(`
     }
 `);
 
-export async function getNounsForAddress(address: Address): Promise<Noun[]> {
-    const { data: queryResult } = await getClient().query({
+export async function getNounsForAddress(address?: Address, chainId?: number): Promise<Noun[]> {
+    if (address == undefined) {
+        return [];
+    }
+
+    const washedChainId = washChainId(chainId);
+
+    const { data: queryResult } = await getClientForChain(washedChainId).query({
         query: query,
         variables: { address: address.toString().toLowerCase() },
     });
@@ -55,6 +62,7 @@ export async function getNounsForAddress(address: Address): Promise<Noun[]> {
             owner,
             seed,
             imageSrc: `data:image/svg+xml;base64,${svgBase64}`,
+            chainId: washedChainId,
         };
     });
 

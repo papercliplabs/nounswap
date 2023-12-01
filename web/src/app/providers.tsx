@@ -11,7 +11,7 @@ import { useEffect } from "react";
 import UrlManager from "../components/UrlManager";
 
 const { chains, publicClient } = configureChains(
-    [goerli],
+    [mainnet, { ...goerli, iconUrl: "/ethereum-testnet.png" }],
     [alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_ID as string }), publicProvider()]
 );
 

@@ -1,11 +1,12 @@
 "use server";
 import { ProposalState, SwapNounProposal } from "../common/types";
 import { Address, createPublicClient, http } from "viem";
-import { getClient } from "./ApolloClient";
+import getClientForChain from "./ApolloClient";
 import { gql } from "./__generated__/gql";
 import { getNounById } from "./getNounById";
 import { ProposalStatus } from "./__generated__/graphql";
 import { goerli } from "viem/chains"; // TODO: need to remember to update!
+import { washChainId } from "../common/chainSpecificData";
 
 const query = gql(`
     query NounSwapProposalsForDelegate($id: ID!) {
@@ -25,10 +26,15 @@ const query = gql(`
     }
 `);
 
-export async function getNounSwapProposalsForDelegate(address?: Address): Promise<SwapNounProposal[]> {
+export async function getNounSwapProposalsForDelegate(
+    address?: Address,
+    chainId?: number
+): Promise<SwapNounProposal[]> {
     if (address == undefined) {
         return [];
     }
+
+    const washedChainId = washChainId(chainId);
 
     const publicClient = createPublicClient({
         chain: goerli,
@@ -39,7 +45,7 @@ export async function getNounSwapProposalsForDelegate(address?: Address): Promis
     // Nextjs is caching this...
     const currentBlock = await publicClient.getBlockNumber({ cacheTime: 10_000 });
 
-    const { data: queryResult } = await getClient().query({
+    const { data: queryResult } = await getClientForChain(washedChainId).query({
         query: query,
         variables: { id: address.toString().toLowerCase() },
     });
@@ -59,8 +65,8 @@ export async function getNounSwapProposalsForDelegate(address?: Address): Promis
             const fromNounId = split[2];
             const toNounId = split[5];
 
-            const fromNoun = await getNounById(fromNounId);
-            const toNoun = await getNounById(toNounId);
+            const fromNoun = await getNounById(fromNounId, washedChainId);
+            const toNoun = await getNounById(toNounId, washedChainId);
 
             const started = currentBlock > proposal.startBlock;
             const ended = currentBlock > proposal.endBlock;

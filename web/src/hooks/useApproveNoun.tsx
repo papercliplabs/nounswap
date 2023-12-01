@@ -1,13 +1,14 @@
 "use client";
-import { NOUNS_TOKEN_ADDRESS } from "../common/constants";
 import { useMemo } from "react";
 import { Address, TransactionRequest, encodeFunctionData } from "viem";
 import { useAccount, useContractRead } from "wagmi";
 import useSendTransaction, { UseSendTransactionReturnType } from "./useSendTransaction";
 import { nounsTokenAbi } from "../abis/nounsToken";
+import useChainSpecificData from "./useChainSpecificData";
+import { Noun } from "../common/types";
 
 interface UseApproveNounParams {
-    id?: number;
+    noun?: Noun;
     spender?: Address;
     onReject?: () => void;
 }
@@ -16,39 +17,42 @@ interface UseApproveNounReturnType extends UseSendTransactionReturnType {
     requiresApproval: boolean;
 }
 
-export default function useApproveNoun({ id, spender, onReject }: UseApproveNounParams): UseApproveNounReturnType {
+export default function useApproveNoun({ noun, spender, onReject }: UseApproveNounParams): UseApproveNounReturnType {
     const { address } = useAccount();
+    const chainSpecificData = useChainSpecificData(noun?.chainId);
 
     const { data: currentApprovalAddress, refetch: refetchGetApproved } = useContractRead({
-        address: NOUNS_TOKEN_ADDRESS,
+        address: chainSpecificData.nounsTokenAddress,
         abi: nounsTokenAbi,
         functionName: "getApproved",
-        args: [id != undefined ? BigInt(id) : BigInt(0)],
-        enabled: id != undefined,
+        args: [noun != undefined ? BigInt(noun.id) : BigInt(0)],
+        enabled: noun != undefined,
+        chainId: noun?.chainId,
     });
 
     const request = useMemo(() => {
         let request: TransactionRequest | undefined = undefined;
 
-        if (id != undefined && spender && address) {
+        if (noun != undefined && spender && address) {
             const calldata = encodeFunctionData({
                 abi: nounsTokenAbi,
                 functionName: "approve",
-                args: [spender, id != undefined ? BigInt(id) : BigInt(0)],
+                args: [spender, noun != undefined ? BigInt(noun.id) : BigInt(0)],
             });
             request = {
-                to: NOUNS_TOKEN_ADDRESS,
+                to: chainSpecificData.nounsTokenAddress,
                 from: address,
                 data: calldata,
             };
         }
 
         return request;
-    }, [id, spender, address]);
+    }, [noun, spender, address, chainSpecificData]);
 
     const sendTxnData = useSendTransaction({
         request,
-        successMsg: `Noun ${id} approved!`,
+        chainId: noun?.chainId,
+        successMsg: `Noun ${noun?.id} approved!`,
         onSuccess: () => refetchGetApproved(),
         onReject,
     });

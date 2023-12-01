@@ -13,7 +13,7 @@ export default function HowItWorksModal() {
                 className="flex flex-row gap-2 items-center z-50 hover:brightness-[85%] text-gray-600"
                 onClick={() => setHowItWorksModalOpen(true)}
             >
-                <span>How it works</span>
+                <span className="hidden md:block">How it works</span>
                 <Icon icon="questionCircle" size={20} className="fill-gray-600" />
             </button>
             <Modal title="How it works" isOpen={howItWorksModalOpen} onClose={() => setHowItWorksModalOpen(false)}>

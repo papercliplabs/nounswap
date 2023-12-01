@@ -10,7 +10,7 @@ interface NounGridInterface {
 export default function NounGrid({ nouns }: NounGridInterface) {
     const nounCards = useMemo(() => {
         return nouns.map((noun, i) => (
-            <LinkRetainParams href={`/swap/${noun.id}`} key={i} className="active:clickable-active ">
+            <LinkRetainParams href={`/swap/${noun.chainId}/${noun.id}`} key={i} className="active:clickable-active ">
                 <NounCard noun={noun} enableHover key={i} />
             </LinkRetainParams>
         ));
