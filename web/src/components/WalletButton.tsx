@@ -8,9 +8,10 @@ import { twMerge } from "tailwind-merge";
 
 interface WalletButtonProps {
     hideChainSwitcher?: boolean;
+    disableMobileShrink?: boolean;
 }
 
-export default function WalletButton({ hideChainSwitcher }: WalletButtonProps) {
+export default function WalletButton({ hideChainSwitcher, disableMobileShrink }: WalletButtonProps) {
     const { address } = useAccount();
     const { data: ensName } = useEnsName({ address, chainId: 1 });
     const { data: ensAvatar } = useEnsAvatar({ name: ensName, chainId: 1 });
@@ -70,7 +71,7 @@ export default function WalletButton({ hideChainSwitcher }: WalletButtonProps) {
                                                     }}
                                                 />
                                             )}
-                                            <span className="hidden md:flex">
+                                            <span className={twMerge("md:flex", !disableMobileShrink && "hidden")}>
                                                 {ensName ?? getShortAddress(account.address as Address)}
                                             </span>
                                         </button>

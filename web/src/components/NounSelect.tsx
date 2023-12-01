@@ -1,7 +1,7 @@
 "use client";
 import { Noun } from "../common/types";
 import NounGrid from "./NounGrid";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import NounFilter from "./NounFilter";
 import { ImageData } from "@nouns/assets";
 
@@ -83,6 +83,14 @@ export default function NounSelect({ nouns }: NounSelectProps) {
         };
     }, []);
 
+    const clearAllFilters = useCallback(() => {
+        setBackgroundFilter(-1);
+        setBodyFilter(-1);
+        setAccessoryFilter(-1);
+        setHeadFilter(-1);
+        setGlassesFilter(-1);
+    }, [setBackgroundFilter, setBodyFilter, setAccessoryFilter, setHeadFilter, setGlassesFilter]);
+
     return (
         <div className="flex flex-col w-full gap-2">
             <div className="flex flex-row justify-between items-end pb-3">
@@ -100,8 +108,9 @@ export default function NounSelect({ nouns }: NounSelectProps) {
                     glassesFilterSelectProps={{ selectedValue: glassesFilter, ...selectProps.glasses }}
                     isOpen={filterOpen}
                     onClose={() => setFilterOpen(false)}
+                    onClearAllFilters={clearAllFilters}
                 />
-                <NounGrid nouns={filteredNouns} />
+                <NounGrid nouns={filteredNouns} onClearAllFilters={clearAllFilters} />
             </div>
         </div>
     );

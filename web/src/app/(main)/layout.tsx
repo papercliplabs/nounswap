@@ -3,6 +3,8 @@ import Nav from "../../components/Nav";
 import Icon from "../../components/Icon";
 import HowItWorksModal from "../../components/HowItWorks";
 import LinkRetainParams from "../../components/LinkRetainParams";
+import Image from "next/image";
+import Link from "next/link";
 
 const navInfo = [
     { name: "Explore", href: "/" },
@@ -41,6 +43,21 @@ function Header() {
     );
 }
 
+function Footer() {
+    return (
+        <footer className="w-full flex flex-row justify-center items-center gap-1 h-20 py-2 px-10">
+            Made for{" "}
+            <Link href="https://nouns.wtf/" target="_blank" rel="noopener noreferrer">
+                <Image src="/nouns-icon.png" width={40} height={40} alt="Nouns" />
+            </Link>{" "}
+            by
+            <Link href="https://paperclip.xyz/" target="_blank">
+                Paperclip Labs
+            </Link>
+        </footer>
+    );
+}
+
 export default function Layout({ children }: { children: React.ReactNode }) {
     return (
         <>
@@ -48,6 +65,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <main className="flex flex-col px-4 md:px-8 grow justify-start items-start pt-10 pb-4 md:pb-8 gap-10">
                 {children}
             </main>
+            <Footer />
         </>
     );
 }

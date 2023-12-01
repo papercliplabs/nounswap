@@ -12,6 +12,7 @@ interface NounFilterProps {
     glassesFilterSelectProps: SelectProps<number>;
     isOpen: boolean; // Mobile only
     onClose: () => void;
+    onClearAllFilters: () => void;
 }
 
 export default function NounFilter(props: NounFilterProps) {
@@ -25,16 +26,7 @@ export default function NounFilter(props: NounFilterProps) {
             >
                 <div className="flex flex-row justify-between">
                     <h3>Filter</h3>
-                    <button
-                        className="text-blue-500 hover:brightness-[85%]"
-                        onClick={() => {
-                            props.backgroundFilterSelectProps.onSelect(-1);
-                            props.bodyFilterSelectProps.onSelect(-1);
-                            props.accessoryFilterSelectProps.onSelect(-1);
-                            props.headFilterSelectProps.onSelect(-1);
-                            props.glassesFilterSelectProps.onSelect(-1);
-                        }}
-                    >
+                    <button className="text-blue-500 hover:brightness-[85%]" onClick={props.onClearAllFilters}>
                         Clear all
                     </button>
                 </div>

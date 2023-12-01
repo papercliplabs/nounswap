@@ -1,6 +1,6 @@
 "use client";
 import { Noun } from "../common/types";
-import { Address, useNetwork } from "wagmi";
+import { Address, useNetwork, useSwitchNetwork } from "wagmi";
 import NounCard from "./NounCard";
 import { useEffect, useMemo, useState } from "react";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
@@ -13,6 +13,8 @@ import { track } from "@vercel/analytics";
 import getChainSpecificData from "../common/chainSpecificData";
 import { switchNetwork } from "wagmi/actions";
 import Link from "next/link";
+import { goerli } from "viem/chains";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface NounSwapProps {
     userNouns: Noun[];
@@ -26,6 +28,9 @@ export default function NounSwap({ userNouns, treasuryNoun, address }: NounSwapP
     const [pickModalOpen, setPickModalOpen] = useState<boolean>(false);
     const [transactionModalOpen, setTransactionModalOpen] = useState<boolean>(false);
     const { chain: activeChain } = useNetwork();
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const { switchNetworkAsync } = useSwitchNetwork();
 
     const wrongNetwork = useMemo(() => {
         return activeChain?.id != treasuryNoun.chainId;
@@ -40,10 +45,10 @@ export default function NounSwap({ userNouns, treasuryNoun, address }: NounSwapP
 
     return (
         <>
-            <div className="flex flex-col grow justify-between border-gray-700">
+            <div className="flex flex-col grow justify-between border-gray-700 md: pb-[72px]">
                 <div className="flex flex-col md:flex-row w-full grow border-b-4">
                     <div className="flex flex-col grow justify-center items-center border-b-2 md:border-r-2 md:border-b-0 gap-8 py-12 px-6 relative">
-                        <WalletButton hideChainSwitcher />
+                        <WalletButton hideChainSwitcher disableMobileShrink />
                         {selectedUserNoun ? (
                             <div className="relative">
                                 <button onClick={() => setPickModalOpen(true)}>
@@ -89,7 +94,13 @@ export default function NounSwap({ userNouns, treasuryNoun, address }: NounSwapP
                             rel="noopener noreferrer"
                             className="flex flex-row gap-2 px-4 py-3 border-2 border-gray-400 rounded-2xl items-center text-gray-900 hover:bg-gray-200 hover:brightness-100 active:clickable-active"
                         >
-                            <Image src="/nouns.png" width={32} height={32} alt="" className="rounded-full" />
+                            <Image
+                                src="/nouns-icon.png"
+                                width={32}
+                                height={32}
+                                alt=""
+                                className="rounded-full bg-yellow-400 p-0.5"
+                            />
                             <span>Nouns Treasury</span>
                         </Link>
                         <NounCard noun={treasuryNoun} size={200} enableHover={false} />
@@ -99,7 +110,7 @@ export default function NounSwap({ userNouns, treasuryNoun, address }: NounSwapP
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col-reverse md:flex-row w-full justify-end px-4 md:px-10 py-4 md:py-2 item-center items-center gap-6 text-gray-600">
+                <div className="flex flex-col-reverse md:flex-row w-full justify-end px-4 md:px-10 py-4 md:py-2 item-center items-center gap-6 text-gray-600 md:fixed md:bottom-0 md:bg-white md:border-t-4">
                     <span>Creates a prop in Nouns governance.</span>
                     <button
                         className="btn-primary w-full md:w-auto justify-center"
@@ -121,8 +132,39 @@ export default function NounSwap({ userNouns, treasuryNoun, address }: NounSwapP
                 {userNouns == undefined ? (
                     <Icon icon="pending" size={60} className="animate-spin" />
                 ) : userNouns.length == 0 ? (
-                    <div className="flex p-2 items-center w-full justify-center">
-                        You have no nouns on {getChainSpecificData(treasuryNoun.chainId).chain.name}
+                    <div className="flex flex-col px-8 py-6 items-center w-full justify-center h-[244px] gap-2 text-center">
+                        <h4>No Nouns available</h4>
+                        <div className="text-gray-600">
+                            {getChainSpecificData(treasuryNoun.chainId).chain.id == 1 ? (
+                                <>
+                                    Don{"'"}t have a noun on Ethereum? Try NounSwap on{" "}
+                                    <button
+                                        className="text-blue-500 hover:brightness-[85%]"
+                                        onClick={async () => {
+                                            await switchNetworkAsync?.(goerli.id);
+                                            router.push("/" + "?" + searchParams.toString());
+                                        }}
+                                    >
+                                        Goerli Testnet
+                                    </button>
+                                    .
+                                </>
+                            ) : (
+                                <>
+                                    You don{"'"}t have a noun on Goerli Testnet.
+                                    <br />
+                                    Get a{" "}
+                                    <Link
+                                        href="https://nouns-webapp-nu.vercel.app"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        Goerli Noun here
+                                    </Link>
+                                    .
+                                </>
+                            )}
+                        </div>
                     </div>
                 ) : (
                     userNouns.map((noun, i) => (

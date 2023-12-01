@@ -53,13 +53,10 @@ export default function SwapTransactionModal({ userNoun, treasuryNoun, isOpen, o
 
     console.log("Approve txn state", approveNounTxn.state);
     console.log("Create prop txn state", createSwapPropTxn.state);
-    console.log("IS OPEN", isOpen);
 
     const focusedTxn = useMemo(() => {
         return approveNounTxn.requiresApproval ? approveNounTxn : createSwapPropTxn;
     }, [approveNounTxn, createSwapPropTxn]);
-
-    console.log("FOXUSED TXN", focusedTxn);
 
     if (!userNoun || !treasuryNoun) {
         return <></>; // Ignore for now...
