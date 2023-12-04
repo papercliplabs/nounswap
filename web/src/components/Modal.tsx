@@ -19,10 +19,7 @@ export default function Modal({ title, isOpen, children, onClose }: ModalProps) 
     return (
         <>
             <div
-                className={twMerge(
-                    "fixed top-0 left-0 bg-gray-700 opacity-50 w-full h-full backdrop-blur-md z-50",
-                    !isOpen && "hidden"
-                )}
+                className={twMerge("fixed top-0 left-0 bg-gray-700 opacity-50 w-full h-full z-50", !isOpen && "hidden")}
             />
             <div
                 className={twMerge(

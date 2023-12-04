@@ -13,7 +13,7 @@ export default async function Layout({ children }: { children: React.ReactElemen
                 </div>
                 <div className="flex flex-col justify-center items-center text-center pb-10 px-6 md:px-10">
                     <h1>Create a Swap Prop</h1>
-                    <div>Choose the Noun you want to swap for the Treasury Noun. </div>
+                    <div>Select the Noun you want to offer for the Swap.</div>
                 </div>
             </div>
             {children}

@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Address, configureChains, createConfig, WagmiConfig } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
-import { mainnet, localhost, sepolia, goerli } from "wagmi/chains";
+import { mainnet, goerli, localhost } from "wagmi/chains";
 import { useEffect } from "react";
 import UrlManager from "../components/UrlManager";
 

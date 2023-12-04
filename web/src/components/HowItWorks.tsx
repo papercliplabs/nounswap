@@ -36,8 +36,11 @@ export default function HowItWorksModal() {
                         <br />
                         <br />
                         Read about{" "}
-                        <Link href="https://paperclip.xyz/" target="_blank" rel="noopener noreferrer">
-                            {/* TODO: add actual blog link! */}
+                        <Link
+                            href="https://paperclip.xyz/blog/introducing-nounswap"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
                             why we built NounSwap
                         </Link>
                         .
