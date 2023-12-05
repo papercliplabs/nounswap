@@ -7,8 +7,9 @@ import { Address, configureChains, createConfig, WagmiConfig } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import { mainnet, goerli, localhost } from "wagmi/chains";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import UrlManager from "../components/UrlManager";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const { chains, publicClient } = configureChains(
     [mainnet, { ...goerli, iconUrl: "/ethereum-testnet.png" }],
@@ -53,7 +54,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         <WagmiConfig config={wagmiConfig}>
             <RainbowKitProvider chains={chains} avatar={CustomAvatar}>
                 <ToastProvider>{children}</ToastProvider>
-                <UrlManager />
+                <Suspense fallback={<LoadingSpinner />}>
+                    <UrlManager />
+                </Suspense>
             </RainbowKitProvider>
         </WagmiConfig>
     );

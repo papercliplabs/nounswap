@@ -1,7 +1,8 @@
 import { Noun } from "../common/types";
 import NounCard from "./NounCard";
-import { useMemo } from "react";
+import { Suspense, useMemo } from "react";
 import LinkRetainParams from "./LinkRetainParams";
+import LoadingSpinner from "./LoadingSpinner";
 
 interface NounGridInterface {
     nouns: Noun[];
@@ -11,9 +12,15 @@ interface NounGridInterface {
 export default function NounGrid({ nouns, onClearAllFilters }: NounGridInterface) {
     const nounCards = useMemo(() => {
         return nouns.map((noun, i) => (
-            <LinkRetainParams href={`/swap/${noun.chainId}/${noun.id}`} key={i} className="active:clickable-active ">
-                <NounCard noun={noun} enableHover key={i} />
-            </LinkRetainParams>
+            <Suspense key={i} fallback={<LoadingSpinner />}>
+                <LinkRetainParams
+                    href={`/swap/${noun.chainId}/${noun.id}`}
+                    key={i}
+                    className="active:clickable-active "
+                >
+                    <NounCard noun={noun} enableHover key={i} />
+                </LinkRetainParams>
+            </Suspense>
         ));
     }, [nouns]);
 

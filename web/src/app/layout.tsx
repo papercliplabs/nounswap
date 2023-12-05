@@ -5,13 +5,12 @@ import { Analytics } from "@vercel/analytics/react";
 
 import Providers from "./providers";
 import ToastContainer from "../components/ToastContainer";
-import { Suspense } from "react";
 import BetaBanner from "../components/BetaBanner";
 
 export const metadata: Metadata = {
     title: "NounSwap",
     description: "Swap your Noun with the Nouns Treasury",
-    metadataBase: new URL("https://nounswap.wtf"),
+    metadataBase: new URL("https://www.nounswap.wtf"),
     openGraph: {
         title: "NounSwap",
         description: "Swap your Noun with the Nouns Treasury",

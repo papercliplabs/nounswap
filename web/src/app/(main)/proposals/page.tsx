@@ -7,6 +7,8 @@ import LinkRetainParams from "../../../components/LinkRetainParams";
 import Link from "next/link";
 import { ProposalState } from "../../../common/types";
 import getChainSpecificData from "../../../common/chainSpecificData";
+import { Suspense } from "react";
+import LoadingSpinner from "../../../components/LoadingSpinner";
 
 export default async function Proposals({ searchParams }: { searchParams: { address?: Address; chain?: number } }) {
     const proposals = await getNounSwapProposalsForDelegate(searchParams.address, searchParams.chain);
@@ -24,9 +26,11 @@ export default async function Proposals({ searchParams }: { searchParams: { addr
                     <h4 className="text-gray-900">You don{"'"}t have any Swap Props</h4>
                     <span>
                         You can create one from the{" "}
-                        <LinkRetainParams href="/" className="inline">
-                            Explore Page
-                        </LinkRetainParams>
+                        <Suspense fallback={<LoadingSpinner />}>
+                            <LinkRetainParams href="/" className="inline">
+                                Explore Page
+                            </LinkRetainParams>
+                        </Suspense>
                     </span>
                 </div>
             ) : (

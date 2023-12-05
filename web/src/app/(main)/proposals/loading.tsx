@@ -1,5 +1,5 @@
-import Icon from "../../../components/Icon";
+import LoadingSpinner from "../../../components/LoadingSpinner";
 
 export default function Loading() {
-    return <Icon icon="pending" size={60} className="flex w-full justify-center animate-spin" />;
+    return <LoadingSpinner />;
 }

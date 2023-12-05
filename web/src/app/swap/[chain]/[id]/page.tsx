@@ -3,6 +3,8 @@ import NounSwap from "../../../../components/NounSwap";
 import { Address } from "viem";
 import { DEFAULT_CHAIN } from "../../../../common/chainSpecificData";
 import { getNounsForAddress } from "../../../../data/getNounsForAddress";
+import { Suspense } from "react";
+import LoadingSpinner from "../../../../components/LoadingSpinner";
 
 export default async function Swap({
     params,
@@ -19,5 +21,9 @@ export default async function Swap({
 
     const userNouns = await getNounsForAddress(searchParams.address, treasuryNoun.chainId); // Using treasury noun chain, not active one
 
-    return <NounSwap userNouns={userNouns} treasuryNoun={treasuryNoun} address={searchParams.address} />;
+    return (
+        <Suspense fallback={<LoadingSpinner />}>
+            <NounSwap userNouns={userNouns} treasuryNoun={treasuryNoun} address={searchParams.address} />
+        </Suspense>
+    );
 }

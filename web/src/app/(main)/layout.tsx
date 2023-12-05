@@ -5,6 +5,8 @@ import HowItWorksModal from "../../components/HowItWorks";
 import LinkRetainParams from "../../components/LinkRetainParams";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 const navInfo = [
     { name: "Explore", href: "/" },
@@ -18,13 +20,19 @@ function Header() {
                 <div className="flex flex-row justify-between w-full">
                     <div className="flex md:flex-1 items-center gap-6">
                         <div className="pr-6 md:border-r-2">
-                            <LinkRetainParams
-                                href="/"
-                                className="text-gray-900  flex flex-row  gap-2 [&>svg]:hover:rotate-12 shrink grow-0 "
-                            >
-                                <Icon icon="repeat" size={28} className="transition-all ease-linear fill-gray-900" />
-                                <h5 className="hidden md:flex">NounSwap</h5>
-                            </LinkRetainParams>
+                            <Suspense fallback={<LoadingSpinner />}>
+                                <LinkRetainParams
+                                    href="/"
+                                    className="text-gray-900  flex flex-row  gap-2 [&>svg]:hover:rotate-12 shrink grow-0 "
+                                >
+                                    <Icon
+                                        icon="repeat"
+                                        size={28}
+                                        className="transition-all ease-linear fill-gray-900"
+                                    />
+                                    <h5 className="hidden md:flex">NounSwap</h5>
+                                </LinkRetainParams>
+                            </Suspense>
                         </div>
                         <span className="hidden md:flex">
                             <Nav navInfo={navInfo} />

@@ -2,7 +2,7 @@
 import { Noun } from "../common/types";
 import { Address, useNetwork, useSwitchNetwork } from "wagmi";
 import NounCard from "./NounCard";
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import Modal from "./Modal";
 import SwapTransactionModal from "./SwapTransactionModal";
@@ -15,6 +15,7 @@ import { switchNetwork } from "wagmi/actions";
 import Link from "next/link";
 import { goerli } from "viem/chains";
 import { useRouter, useSearchParams } from "next/navigation";
+import LoadingSpinner from "./LoadingSpinner";
 
 interface NounSwapProps {
     userNouns: Noun[];
@@ -182,12 +183,14 @@ export default function NounSwap({ userNouns, treasuryNoun, address }: NounSwapP
                     ))
                 )}
             </Modal>
-            <SwapTransactionModal
-                userNoun={selectedUserNoun}
-                treasuryNoun={treasuryNoun}
-                isOpen={transactionModalOpen}
-                onClose={() => setTransactionModalOpen(false)}
-            />
+            <Suspense fallback={<LoadingSpinner />}>
+                <SwapTransactionModal
+                    userNoun={selectedUserNoun}
+                    treasuryNoun={treasuryNoun}
+                    isOpen={transactionModalOpen}
+                    onClose={() => setTransactionModalOpen(false)}
+                />
+            </Suspense>
         </>
     );
 }
