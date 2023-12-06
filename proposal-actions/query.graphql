@@ -1,0 +1,10 @@
+query NounsForAccountQuery($address: ID!) {
+    account(id: $address) {
+        nouns(first: 1000) {
+            id
+            owner {
+                id
+            }
+        }
+    }
+}

@@ -23,3 +23,9 @@ Start dev server
 ```bash
 yarn dev
 ```
+
+Build for production (before pushing)
+
+```bash
+yarn build
+```
