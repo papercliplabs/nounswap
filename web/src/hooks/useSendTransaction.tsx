@@ -4,7 +4,7 @@ import { TransactionReceipt, TransactionRequest } from "viem";
 import { Hash } from "viem";
 import { usePrepareSendTransaction, useSendTransaction as useWagmiSendTransaction, useWaitForTransaction } from "wagmi";
 import useToast from "./useToast";
-import { ToastType } from "../contexts/toast";
+import { ToastType } from "@/providers/toast";
 import { track } from "@vercel/analytics";
 
 interface UseSendTransactionParams {

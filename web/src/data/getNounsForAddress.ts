@@ -1,12 +1,12 @@
 "use server";
-import { Noun } from "../common/types";
+import { Noun } from "../lib/types";
 import { NounSeed } from "@nouns/assets/dist/types";
 import { ImageData, getNounData } from "@nouns/assets";
 import { buildSVG } from "@nouns/sdk";
 import { Address, getAddress } from "viem";
 import getClientForChain from "./ApolloClient";
 import { gql } from "./__generated__/gql";
-import { washChainId } from "../common/chainSpecificData";
+import { washChainId } from "../lib/chainSpecificData";
 
 const { palette } = ImageData; // Used with `buildSVG``
 

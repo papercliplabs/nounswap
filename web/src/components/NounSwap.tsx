@@ -1,5 +1,5 @@
 "use client";
-import { Noun } from "../common/types";
+import { Noun } from "../lib/types";
 import { Address, useNetwork, useSwitchNetwork } from "wagmi";
 import NounCard from "./NounCard";
 import { Suspense, useEffect, useMemo, useState } from "react";
@@ -10,7 +10,7 @@ import WalletButton from "./WalletButton";
 import Image from "next/image";
 import Icon from "./Icon";
 import { track } from "@vercel/analytics";
-import getChainSpecificData from "../common/chainSpecificData";
+import getChainSpecificData from "../lib/chainSpecificData";
 import { switchNetwork } from "wagmi/actions";
 import Link from "next/link";
 import { goerli } from "viem/chains";

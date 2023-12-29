@@ -1,4 +1,4 @@
-import { Noun } from "../common/types";
+import { Noun } from "../lib/types";
 import NounCard from "./NounCard";
 import { Suspense, useMemo } from "react";
 import LinkRetainParams from "./LinkRetainParams";

@@ -1,22 +1,34 @@
 import { Address } from "wagmi";
-import WalletButton from "../../../components/WalletButton";
-import SwapNounGraphic from "../../../components/SwapNounGraphic";
+import WalletButton from "@/components/WalletButton";
+import SwapNounGraphic from "@/components/SwapNounGraphic";
 import { twMerge } from "tailwind-merge";
-import { getNounSwapProposalsForDelegate } from "../../../data/getNounSwapProposalsForDelegate";
-import LinkRetainParams from "../../../components/LinkRetainParams";
+import { getNounSwapProposalsForDelegate } from "@/data/getNounSwapProposalsForDelegate";
+import LinkRetainParams from "@/components/LinkRetainParams";
 import Link from "next/link";
-import { ProposalState } from "../../../common/types";
-import getChainSpecificData from "../../../common/chainSpecificData";
+import { ProposalState } from "@/lib/types";
+import getChainSpecificData from "@/lib/chainSpecificData";
 import { Suspense } from "react";
-import LoadingSpinner from "../../../components/LoadingSpinner";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
-export default async function Proposals({ searchParams }: { searchParams: { address?: Address; chain?: number } }) {
-    const proposals = await getNounSwapProposalsForDelegate(searchParams.address, searchParams.chain);
-    const chainSpecificData = getChainSpecificData(searchParams.chain);
+export default function Proposals({ searchParams }: { searchParams: { address?: Address; chain?: number } }) {
+    return (
+        <div className="flex flex-col justify-start items-start w-full max-w-4xl self-center">
+            <h1>My Props</h1>
+            <span className="pb-10">All of your Swap Props created with NounSwap</span>
+            <Suspense fallback={<LoadingSpinner />}>
+                <ProposalsTable address={searchParams.address} chain={searchParams.chain} />
+            </Suspense>
+        </div>
+    );
+}
+
+async function ProposalsTable({ address, chain }: { address?: Address; chain?: number }) {
+    const proposals = await getNounSwapProposalsForDelegate(address, chain);
+    const chainSpecificData = getChainSpecificData(chain);
 
     return (
         <div className="flex flex-col gap-4 w-full justify-center items-center text-gray-600">
-            {searchParams.address == undefined ? (
+            {address == undefined ? (
                 <div className="flex flex-col py-24 justify-center items-center text-center gap-6 rounded-3xl border-4 border-gray-200 w-full">
                     <h4 className="text-gray-900">Connect your wallet to view your props</h4>
                     <WalletButton />

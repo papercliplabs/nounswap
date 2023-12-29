@@ -1,5 +1,5 @@
 "use client";
-import { ToastType } from "../contexts/toast";
+import { ToastType } from "@/providers/toast";
 import useToast from "../hooks/useToast";
 import Icon from "./Icon";
 

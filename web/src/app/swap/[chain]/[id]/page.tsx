@@ -1,29 +1,58 @@
-import { getNounById } from "../../../../data/getNounById";
-import NounSwap from "../../../../components/NounSwap";
+import { getNounById } from "@//data/getNounById";
+import NounSwap from "@//components/NounSwap";
 import { Address } from "viem";
-import { DEFAULT_CHAIN } from "../../../../common/chainSpecificData";
-import { getNounsForAddress } from "../../../../data/getNounsForAddress";
+import { getNounsForAddress } from "@//data/getNounsForAddress";
 import { Suspense } from "react";
-import LoadingSpinner from "../../../../components/LoadingSpinner";
+import HowItWorksModal from "@/components/HowItWorks";
+import LinkRetainParams from "@/components/LinkRetainParams";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
-export default async function Swap({
+export default function Swap({
     params,
     searchParams,
 }: {
     params: { chain: number; id: string };
-    searchParams: { address?: Address; chain?: number };
+    searchParams: { address?: Address };
 }) {
-    const treasuryNoun = await getNounById(params.id, params.chain);
+    return (
+        <div className="flex flex-col w-full grow">
+            <div className=" bg-gray-200">
+                <div className="flex flex-row justify-between px-6 md:px-10 py-5">
+                    <Suspense fallback={<LoadingSpinner />}>
+                        <LinkRetainParams href="/">
+                            <button className="btn-secondary">Back</button>
+                        </LinkRetainParams>
+                    </Suspense>
+                    <HowItWorksModal />
+                </div>
+                <div className="flex flex-col justify-center items-center text-center pb-10 px-6 md:px-10">
+                    <h1>Create a Swap Prop</h1>
+                    <div>Select the Noun you want to offer for the Swap.</div>
+                </div>
+            </div>
+            <Suspense fallback={<LoadingSpinner />}>
+                <NounSwapContainer userAddress={searchParams.address} treasuryNounId={params.id} chain={params.chain} />
+            </Suspense>
+        </div>
+    );
+}
+
+async function NounSwapContainer({
+    userAddress,
+    treasuryNounId,
+    chain,
+}: {
+    userAddress?: Address;
+    treasuryNounId: string;
+    chain: number;
+}) {
+    const treasuryNoun = await getNounById(treasuryNounId, chain);
 
     if (!treasuryNoun) {
         return <>No treasury noun exists!</>;
     }
 
-    const userNouns = await getNounsForAddress(searchParams.address, treasuryNoun.chainId); // Using treasury noun chain, not active one
+    const userNouns = await getNounsForAddress(userAddress, chain); // Using treasury noun chain, not active one
 
-    return (
-        <Suspense fallback={<LoadingSpinner />}>
-            <NounSwap userNouns={userNouns} treasuryNoun={treasuryNoun} address={searchParams.address} />
-        </Suspense>
-    );
+    return <NounSwap userNouns={userNouns} treasuryNoun={treasuryNoun} address={userAddress} />;
 }

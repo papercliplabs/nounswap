@@ -2,7 +2,7 @@
 import { useAccountModal, useChainModal, useConnectModal } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
 import { Address, useAccount, useEnsAvatar, useEnsName, useNetwork, useSwitchNetwork } from "wagmi";
-import { getLinearGradientForAddress, getShortAddress } from "../common/utils";
+import { getLinearGradientForAddress, getShortAddress } from "@/lib/utils";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { twMerge } from "tailwind-merge";
 

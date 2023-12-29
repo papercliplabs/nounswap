@@ -1,12 +1,12 @@
 "use server";
-import { ProposalState, SwapNounProposal } from "../common/types";
+import { ProposalState, SwapNounProposal } from "../lib/types";
 import { Address, createPublicClient, http } from "viem";
 import getClientForChain from "./ApolloClient";
 import { gql } from "./__generated__/gql";
 import { getNounById } from "./getNounById";
 import { ProposalStatus } from "./__generated__/graphql";
 import { goerli } from "viem/chains"; // TODO: need to remember to update!
-import { washChainId } from "../common/chainSpecificData";
+import { washChainId } from "../lib/chainSpecificData";
 
 const query = gql(`
     query NounSwapProposalsForDelegate($id: ID!) {

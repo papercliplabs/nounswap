@@ -1,12 +1,12 @@
-import WalletButton from "../../components/WalletButton";
-import Nav from "../../components/Nav";
-import Icon from "../../components/Icon";
-import HowItWorksModal from "../../components/HowItWorks";
-import LinkRetainParams from "../../components/LinkRetainParams";
+import WalletButton from "@/components/WalletButton";
+import Nav from "@/components/Nav";
+import Icon from "@/components/Icon";
+import HowItWorksModal from "@/components/HowItWorks";
+import LinkRetainParams from "@/components/LinkRetainParams";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
-import LoadingSpinner from "../../components/LoadingSpinner";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const navInfo = [
     { name: "Explore", href: "/" },

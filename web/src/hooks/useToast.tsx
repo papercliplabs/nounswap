@@ -1,5 +1,5 @@
 "use client";
-import { ToastContext, Toast, ToastConfig } from "../contexts/toast";
+import { ToastContext, Toast, ToastConfig } from "@/providers/toast";
 import { useContext } from "react";
 
 interface UseToastReturnType {

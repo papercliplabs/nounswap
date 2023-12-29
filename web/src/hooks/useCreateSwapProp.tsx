@@ -11,8 +11,8 @@ import {
 import { useAccount, usePublicClient } from "wagmi";
 import { nounsDoaLogicAbi } from "../abis/nounsDoaLogic";
 import { nounsTokenAbi } from "../abis/nounsToken";
-import { Noun } from "../common/types";
-import getChainSpecificData from "../common/chainSpecificData";
+import { Noun } from "../lib/types";
+import getChainSpecificData from "../lib/chainSpecificData";
 
 interface UseCreateSwapPropParams {
     userNoun?: Noun;

@@ -3,9 +3,9 @@ import "./globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import { Analytics } from "@vercel/analytics/react";
 
-import Providers from "./providers";
-import ToastContainer from "../components/ToastContainer";
-import BetaBanner from "../components/BetaBanner";
+import Providers from "@/providers/providers";
+import ToastContainer from "@/components/ToastContainer";
+import BetaBanner from "@/components/BetaBanner";
 
 export const metadata: Metadata = {
     title: "NounSwap",

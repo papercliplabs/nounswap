@@ -1,6 +1,6 @@
 import { Suspense } from "react";
-import LinkRetainParams from "../components/LinkRetainParams";
-import LoadingSpinner from "../components/LoadingSpinner";
+import LinkRetainParams from "@/components/LinkRetainParams";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function NotFound() {
     return (

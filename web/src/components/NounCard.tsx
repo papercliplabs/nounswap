@@ -1,4 +1,4 @@
-import { Noun } from "../common/types";
+import { Noun } from "../lib/types";
 import Image from "next/image";
 import { twMerge } from "tailwind-merge";
 

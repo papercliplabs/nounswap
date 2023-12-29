@@ -1,5 +1,5 @@
 "use server";
-import { Noun } from "../common/types";
+import { Noun } from "../lib/types";
 import { NounSeed } from "@nouns/assets/dist/types";
 import { ImageData, getNounData } from "@nouns/assets";
 import { buildSVG } from "@nouns/sdk";

@@ -1,6 +1,6 @@
 "use client";
-import { getLinearGradientForAddress } from "../common/utils";
-import { ToastProvider } from "../contexts/toast";
+import { getLinearGradientForAddress } from "@/lib/utils";
+import { ToastProvider } from "./toast";
 import { getDefaultWallets, RainbowKitProvider, AvatarComponent } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
 import { Address, configureChains, createConfig, WagmiConfig } from "wagmi";
@@ -8,8 +8,8 @@ import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import { mainnet, goerli, localhost } from "wagmi/chains";
 import { Suspense, useEffect } from "react";
-import UrlManager from "../components/UrlManager";
-import LoadingSpinner from "../components/LoadingSpinner";
+import UrlManager from "@/components/UrlManager";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const { chains, publicClient } = configureChains(
     [mainnet, { ...goerli, iconUrl: "/ethereum-testnet.png" }],

@@ -1,4 +1,4 @@
-import { Noun } from "../common/types";
+import { Noun } from "../lib/types";
 import Modal from "./Modal";
 import useApproveNoun from "../hooks/useApproveNoun";
 import { useCreateSwapProp } from "../hooks/useCreateSwapProp";

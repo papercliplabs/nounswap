@@ -1,5 +1,5 @@
 "use client";
-import { Noun } from "../common/types";
+import { Noun } from "../lib/types";
 import NounGrid from "./NounGrid";
 import { useCallback, useMemo, useState } from "react";
 import NounFilter from "./NounFilter";
