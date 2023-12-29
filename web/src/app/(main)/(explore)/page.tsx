@@ -3,8 +3,9 @@ import NounSelect from "@/components/NounSelect";
 import getChainSpecificData from "@/lib/chainSpecificData";
 import { getAddress } from "viem";
 import { Suspense } from "react";
-import LoadingSpinner from "@/components/LoadingSpinner";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import Link from "next/link";
+import { LinkExternal } from "@/components/ui/link";
 
 export default function Home({ searchParams }: { searchParams: { chain?: number } }) {
     return (
@@ -13,13 +14,9 @@ export default function Home({ searchParams }: { searchParams: { chain?: number 
                 <h1 className="pb-1">Choose a Noun</h1>
                 <div>
                     Swap your Noun for a Noun, from the{" "}
-                    <Link
-                        href="https://etherscan.io/tokenholdings?a=0xb1a32FC9F9D8b2cf86C068Cae13108809547ef71"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
+                    <LinkExternal href="https://etherscan.io/tokenholdings?a=0xb1a32FC9F9D8b2cf86C068Cae13108809547ef71">
                         Nouns treasury.
-                    </Link>
+                    </LinkExternal>
                 </div>
             </div>
             <Suspense fallback={<LoadingSpinner />}>

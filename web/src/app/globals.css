@@ -1,85 +1,62 @@
-@import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,100;1,300;1,400;1,500;1,600;1,700&family=Londrina+Solid:wght@100;300;400;900&family=Syne:wght@400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
 @layer base {
-  a {
-      @apply text-blue-500 hover:brightness-[85%];
-  }
+    * {
+        @apply tracking-wide font-pt font-normal;
+    }
 
-  h1 {
-    @apply font-londrina text-[56px] font-normal leading-[64px] tracking-wide;
-  }
+    *,
+    ::before,
+    ::after {
+        @apply border-primary;
+    }
 
-  h2 {
-    @apply font-londrina text-[42px] font-normal leading-[56px] tracking-wide;
-  }
+    body {
+        @apply bg-primary text-primary border-primary;
+    }
 
-  h3 {
-    @apply font-londrina text-[36px] font-normal leading-[44px] tracking-wide;
-  }
+    h1 {
+        @apply text-[56px] leading-[64px] font-londrina;
+    }
 
-  h4 {
-    @apply font-londrina text-[28px] font-normal leading-[36px] tracking-wide;
-  }
+    h2 {
+        @apply text-[42px] leading-[56px] font-londrina;
+    }
 
-  h5 {
-    @apply font-londrina text-[24px] font-normal leading-[32px] tracking-wide;
-  }
+    h3 {
+        @apply text-[36px] leading-[44px] font-londrina;
+    }
 
-  body {
-    @apply font-londrina text-[18px] font-normal leading-[24px] tracking-wide text-gray-900 bg-white;
-  }
+    h4 {
+        @apply text-[28px] leading-[36px] font-londrina;
+    }
 
-  ol {
-    list-style-position: outside;
-    list-style-type: decimal;
-    display: inline-block;
-  }
-}
+    h5 {
+        @apply text-[24px] leading-[32px] font-londrina;
+    }
 
-@layer components {
-  .text-body {
-    @apply font-londrina text-[18px] font-normal leading-[24px] tracking-wide;
-  }
+    h6 {
+        @apply text-[18px] leading-[24px] font-londrina;
+    }
 
-  .text-caption {
-    @apply font-londrina text-[14px] font-normal leading-[16px] tracking-wide;
-  }
+    span,
+    p {
+        @apply text-[18px] leading-[24px] font-pt;
+    }
 
-  .clickable-active {
-    @apply brightness-[85%] scale-[98%] ease-[cubic-bezier(0.16,1.0,0.3,1)]; 
-  }
+    caption {
+        @apply text-[14px] leading-[16px] font-pt;
+    }
 
-  .btn-primary {
-    @apply px-8 py-4 bg-blue-500 rounded-2xl text-white enabled:hover:bg-blue-700 enabled:active:clickable-active flex items-center disabled:bg-gray-300 disabled:text-gray-600;
-  }
+    ol {
+        list-style-position: outside;
+        list-style-type: decimal;
+        display: inline-block;
+    }
 
-  .btn-secondary {
-    @apply btn-primary bg-white text-gray-900 border-2 border-gray-400 enabled:hover:bg-gray-200;
-  }
-
-  .btn-negative {
-    @apply btn-primary bg-red-500 enabled:hover:bg-red-700;
-  }
-
-  .ghost {
-    @apply p-4 rounded-2xl enabled:hover:bg-gray-200 enabled:active:clickable-active disabled:text-gray-600 disabled:stroke-gray-600;
-  }
+    .clickable-active {
+        @apply brightness-[85%] scale-[98%] ease-in-out;
+    }
 }

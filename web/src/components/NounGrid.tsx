@@ -1,8 +1,8 @@
 import { Noun } from "../lib/types";
 import NounCard from "./NounCard";
 import { Suspense, useMemo } from "react";
-import LinkRetainParams from "./LinkRetainParams";
-import LoadingSpinner from "./LoadingSpinner";
+import { LinkInternal } from "@/components/ui/link";
+import LoadingSpinner from "./ui/LoadingSpinner";
 
 interface NounGridInterface {
     nouns: Noun[];
@@ -13,13 +13,9 @@ export default function NounGrid({ nouns, onClearAllFilters }: NounGridInterface
     const nounCards = useMemo(() => {
         return nouns.map((noun, i) => (
             <Suspense key={i} fallback={<LoadingSpinner />}>
-                <LinkRetainParams
-                    href={`/swap/${noun.chainId}/${noun.id}`}
-                    key={i}
-                    className="active:clickable-active "
-                >
+                <LinkInternal href={`/swap/${noun.chainId}/${noun.id}`} key={i} className="active:clickable-active ">
                     <NounCard noun={noun} enableHover key={i} />
-                </LinkRetainParams>
+                </LinkInternal>
             </Suspense>
         ));
     }, [nouns]);
@@ -29,8 +25,8 @@ export default function NounGrid({ nouns, onClearAllFilters }: NounGridInterface
             {nounCards.length == 0 ? (
                 <div className="flex flex-col border-4 rounded-3xl border-gray-200 grow py-24 h-fit justify-center items-center gap-2">
                     <h4>No Nouns found.</h4>
-                    <button className="text-blue-500 hover:brightness-[85%]" onClick={onClearAllFilters}>
-                        Clear all filters
+                    <button className="text-accent hover:brightness-[85%]" onClick={onClearAllFilters}>
+                        <h6>Clear all filters</h6>
                     </button>
                 </div>
             ) : (

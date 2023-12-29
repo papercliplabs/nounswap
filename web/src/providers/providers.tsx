@@ -9,7 +9,7 @@ import { publicProvider } from "wagmi/providers/public";
 import { mainnet, goerli, localhost } from "wagmi/chains";
 import { Suspense, useEffect } from "react";
 import UrlManager from "@/components/UrlManager";
-import LoadingSpinner from "@/components/LoadingSpinner";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 const { chains, publicClient } = configureChains(
     [mainnet, { ...goerli, iconUrl: "/ethereum-testnet.png" }],

@@ -1,6 +1,6 @@
 import { Noun } from "../lib/types";
 import NounCard from "./NounCard";
-import Icon from "./Icon";
+import Icon from "./ui/Icon";
 
 interface SwapNounGraphicProps {
     fromNoun: Noun;

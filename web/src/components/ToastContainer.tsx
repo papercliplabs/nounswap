@@ -1,7 +1,7 @@
 "use client";
 import { ToastType } from "@/providers/toast";
 import useToast from "../hooks/useToast";
-import Icon from "./Icon";
+import Icon from "./ui/Icon";
 
 export default function ToastContainer() {
     const { toasts } = useToast();

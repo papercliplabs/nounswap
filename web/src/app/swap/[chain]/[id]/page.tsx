@@ -4,8 +4,9 @@ import { Address } from "viem";
 import { getNounsForAddress } from "@//data/getNounsForAddress";
 import { Suspense } from "react";
 import HowItWorksModal from "@/components/HowItWorks";
-import LinkRetainParams from "@/components/LinkRetainParams";
-import LoadingSpinner from "@/components/LoadingSpinner";
+import { LinkInternal } from "@/components/ui/link";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import { Button } from "@/components/ui/button";
 
 export default function Swap({
     params,
@@ -16,12 +17,12 @@ export default function Swap({
 }) {
     return (
         <div className="flex flex-col w-full grow">
-            <div className=" bg-gray-200">
+            <div className="bg-secondary">
                 <div className="flex flex-row justify-between px-6 md:px-10 py-5">
                     <Suspense fallback={<LoadingSpinner />}>
-                        <LinkRetainParams href="/">
-                            <button className="btn-secondary">Back</button>
-                        </LinkRetainParams>
+                        <LinkInternal href="/">
+                            <Button variant="secondary">Back</Button>
+                        </LinkInternal>
                     </Suspense>
                     <HowItWorksModal />
                 </div>

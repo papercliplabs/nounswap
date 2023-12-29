@@ -4,6 +4,7 @@ import NounGrid from "./NounGrid";
 import { useCallback, useMemo, useState } from "react";
 import NounFilter from "./NounFilter";
 import { ImageData } from "@nouns/assets";
+import { Button } from "./ui/button";
 
 interface NounSelectProps {
     nouns: Noun[];
@@ -94,10 +95,10 @@ export default function NounSelect({ nouns }: NounSelectProps) {
     return (
         <div className="flex flex-col w-full gap-2">
             <div className="flex flex-row justify-between items-end pb-3">
-                <button className="btn-secondary md:hidden" onClick={() => setFilterOpen(!filterOpen)}>
+                <Button variant="secondary" className="md:hidden" onClick={() => setFilterOpen(!filterOpen)}>
                     Filter
-                </button>
-                <div className="w-full flex justify-end">{filteredNouns.length} nouns</div>
+                </Button>
+                <h6 className="w-full flex justify-end">{filteredNouns.length} nouns</h6>
             </div>
             <div className="flex flex-row gap-6 w-full">
                 <NounFilter
