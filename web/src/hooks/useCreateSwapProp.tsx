@@ -11,12 +11,15 @@ import {
 import { useAccount, usePublicClient } from "wagmi";
 import { nounsDoaLogicAbi } from "../abis/nounsDoaLogic";
 import { nounsTokenAbi } from "../abis/nounsToken";
+import { erc20TokenAbi } from "@/abis/erc20Token";
 import { Noun } from "../lib/types";
 import getChainSpecificData from "../lib/chainSpecificData";
 
 interface UseCreateSwapPropParams {
     userNoun?: Noun;
     treasuryNoun?: Noun;
+    tip?: bigint;
+    reason?: string;
     onReject?: () => void;
 }
 
@@ -27,6 +30,8 @@ interface UseCreateSwapPropReturnType extends UseSendTransactionReturnType {
 export function useCreateSwapProp({
     userNoun,
     treasuryNoun,
+    tip,
+    reason,
     onReject,
 }: UseCreateSwapPropParams): UseCreateSwapPropReturnType {
     const { address } = useAccount();
@@ -40,10 +45,12 @@ export function useCreateSwapProp({
             treasuryNoun != undefined &&
             address != undefined &&
             publicClient != undefined &&
+            tip != undefined &&
             userNoun.chainId == treasuryNoun.chainId
         ) {
             const transferFromAbi = nounsTokenAbi.find((entry) => entry.name == "transferFrom")!; // Must exist
             const safeTransferFromAbi = nounsTokenAbi.find((entry) => entry.name == "safeTransferFrom")!; // Must exist
+            const erc20TransferFromAbi = erc20TokenAbi.find((entry) => entry.name == "transferFrom")!; // Must exist
             const chainSpecificData = getChainSpecificData(treasuryNoun.chainId);
 
             const userNounToTreasuryTransferFromInputData = encodeAbiParameters(
@@ -51,16 +58,34 @@ export function useCreateSwapProp({
                 [userNoun.owner, chainSpecificData.nounsTreasuryAddress, BigInt(userNoun.id)]
             );
 
+            const wethTransferToTreasuryInputData = encodeAbiParameters(erc20TransferFromAbi.inputs, [
+                userNoun.owner,
+                chainSpecificData.nounsTreasuryAddress,
+                tip,
+            ]);
+
             const treasuryNounToUserSafeTransferFromInputData = encodeAbiParameters(
                 safeTransferFromAbi.inputs, // from: address, to: address, tokenId: uint256
                 [chainSpecificData.nounsTreasuryAddress, userNoun.owner, BigInt(treasuryNoun.id)]
             );
 
             const proposeArgs = [
-                [chainSpecificData.nounsTokenAddress, chainSpecificData.nounsTokenAddress], // targets
-                [BigInt(0), BigInt(0)], // values
-                [getFunctionSignature(transferFromAbi), getFunctionSignature(safeTransferFromAbi)], // signatures
-                [userNounToTreasuryTransferFromInputData, treasuryNounToUserSafeTransferFromInputData], // calldatas (fn input data, no selector)
+                [
+                    chainSpecificData.nounsTokenAddress,
+                    chainSpecificData.wrappedNativeTokenAddress,
+                    chainSpecificData.nounsTokenAddress,
+                ], // targets
+                [BigInt(0), BigInt(0), BigInt(0)], // values
+                [
+                    getFunctionSignature(transferFromAbi),
+                    getFunctionSignature(erc20TransferFromAbi),
+                    getFunctionSignature(safeTransferFromAbi),
+                ], // signatures
+                [
+                    userNounToTreasuryTransferFromInputData,
+                    wethTransferToTreasuryInputData,
+                    treasuryNounToUserSafeTransferFromInputData,
+                ], // calldatas (fn input data, no selector)
                 `# NounSwap: Swap Noun ${userNoun.id} for Noun ${treasuryNoun.id} from the Noun Treasury
 
 This proposal seeks to swap Noun ${userNoun.id} for Noun ${treasuryNoun.id} from the Nouns DAO treasury.
@@ -84,7 +109,10 @@ This proposal aims to enrich both the individual Noun owner's experience and the
 
 
 ## This Prop was created using NounSwap.
-NounSwap is a tool built for the Nourish communities by [Paperclip Labs](https://paperclip.xyz/). It allows Noun owners easily create proposals to swap their Nouns for Nouns in the treasury. It serves purely as a facilitation tool for proposal creation. NounSwap does not have contracts and does not take custody of any Nouns at any time. You can check it out at [nounswap.wtf](nounswap.wtf).`,
+NounSwap is a tool built for the Nourish communities by [Paperclip Labs](https://paperclip.xyz/). It allows Noun owners easily create proposals to swap their Nouns for Nouns in the treasury. It serves purely as a facilitation tool for proposal creation. NounSwap does not have contracts and does not take custody of any Nouns at any time. You can check it out at [nounswap.wtf](nounswap.wtf).
+
+## Custom Reason
+${reason}`,
             ];
 
             const propCalldata = encodeFunctionData({
@@ -102,7 +130,7 @@ NounSwap is a tool built for the Nourish communities by [Paperclip Labs](https:/
         }
 
         return request;
-    }, [userNoun, treasuryNoun, address, publicClient]);
+    }, [userNoun, treasuryNoun, reason, tip, address, publicClient]);
 
     const sendTxnData = useSendTransaction({
         request,

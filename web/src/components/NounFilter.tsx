@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import Select, { SelectProps } from "./Select";
+import Select, { SelectProps } from "./ui/Select";
 import { twMerge } from "tailwind-merge";
 import Icon from "./ui/Icon";
 import { Button } from "./ui/button";

@@ -8,6 +8,7 @@ interface ChainSpecificData {
     nounsDoaProxyAddress: Address; // GovernorBravoDelegator, proxy to logic contract
     nounsFrontendUrl: string;
     subgraphUrl: string;
+    wrappedNativeTokenAddress: Address;
 }
 
 const CHAIN_SPECIFIC_DATA: Record<number, ChainSpecificData> = {
@@ -18,6 +19,7 @@ const CHAIN_SPECIFIC_DATA: Record<number, ChainSpecificData> = {
         nounsDoaProxyAddress: getAddress("0x6f3E6272A167e8AcCb32072d08E0957F9c79223d"),
         nounsFrontendUrl: "https://nouns.wtf",
         subgraphUrl: "https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph",
+        wrappedNativeTokenAddress: getAddress("0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"),
     },
     [goerli.id]: {
         chain: { ...goerli, iconUrl: "/ethereum-testnet.png" },
@@ -27,6 +29,7 @@ const CHAIN_SPECIFIC_DATA: Record<number, ChainSpecificData> = {
         nounsFrontendUrl: "https://nouns-webapp-nu.vercel.app",
         subgraphUrl:
             "https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns-v3-goerli/0.1.6/gn",
+        wrappedNativeTokenAddress: getAddress("0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6"),
     },
 };
 

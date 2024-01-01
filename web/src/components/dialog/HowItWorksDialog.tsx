@@ -1,15 +1,15 @@
 "use client";
-import { LinkExternal } from "./ui/link";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { LinkExternal } from "../ui/link";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialogBase";
 import { Button } from "@/components/ui/button";
-import Icon from "./ui/Icon";
+import Icon from "../ui/Icon";
 
-export default function HowItWorksModal() {
+export default function HowItWorksDialog() {
     return (
         <Dialog>
             <DialogTrigger asChild>
                 <Button variant="ghost" size="icon" className="gap-2">
-                    <h6 className="text-secondary">How it works</h6>
+                    <h6 className="text-secondary hidden md:block">How it works</h6>
                     <Icon icon="questionCircle" size={20} className="fill-gray-600" />
                 </Button>
             </DialogTrigger>

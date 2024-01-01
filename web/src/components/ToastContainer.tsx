@@ -10,7 +10,7 @@ export default function ToastContainer() {
         <>
             {toasts.map((toast, i) => (
                 <div
-                    className="flex flex-row fixed bottom-[24px] p-4 left-1/2 -translate-x-1/2 bg-black text-white rounded-2xl  gap-2 z-50"
+                    className="flex flex-row fixed bottom-[24px] p-4 left-1/2 -translate-x-1/2 bg-black text-white rounded-2xl gap-2 z-100"
                     key={i}
                 >
                     {toast.config.type == ToastType.Success ? (
