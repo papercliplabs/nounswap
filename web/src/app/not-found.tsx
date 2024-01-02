@@ -1,6 +1,6 @@
 import { Suspense } from "react";
-import LinkRetainParams from "../components/LinkRetainParams";
-import LoadingSpinner from "../components/LoadingSpinner";
+import { LinkInternal } from "@/components/ui/link";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function NotFound() {
     return (
@@ -8,7 +8,7 @@ export default function NotFound() {
             <h2>404 - Not Found</h2>
             <p>Could not find requested resource</p>
             <Suspense fallback={<LoadingSpinner />}>
-                <LinkRetainParams href="/">Return Home</LinkRetainParams>
+                <LinkInternal href="/">Return Home</LinkInternal>
             </Suspense>
         </div>
     );

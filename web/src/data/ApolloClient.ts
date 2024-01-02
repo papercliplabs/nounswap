@@ -1,6 +1,6 @@
 import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 import { registerApolloClient } from "@apollo/experimental-nextjs-app-support/rsc";
-import getChainSpecificData from "../common/chainSpecificData";
+import getChainSpecificData from "../lib/chainSpecificData";
 import { mainnet } from "viem/chains";
 
 export const { getClient: getMainnetSubgraphClient } = registerApolloClient(() => {

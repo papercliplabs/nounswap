@@ -22,7 +22,7 @@
         "name": "next"
       }
     ],
-    "baseUrl": "web/",
+    "baseUrl": ".",
     "paths": {
       "@/*": [
         "./src/*"

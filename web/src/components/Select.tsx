@@ -1,6 +1,6 @@
 "use client";
 import { twMerge } from "tailwind-merge";
-import Icon from "./Icon";
+import Icon from "./ui/Icon";
 import { useState } from "react";
 export interface SelectProps<T> {
     name: string;
@@ -17,13 +17,12 @@ export default function Select({ name, selectedValue, options, onSelect }: Selec
     const [optionsOpen, setOptionsOpen] = useState<boolean>(false);
 
     return (
-        // <div className="flex flex-col relative [&>div]:focus-within:text-blue-400 [&>svg]:focus-within:rotate-180">
         <div className="flex flex-col relative ">
             <div
                 className={twMerge(
-                    "text-caption absolute left-4 top-0 -translate-y-1/2 text-gray-600 backdrop-blur-sm transition-all duration-75 pointer-events-none",
+                    "text-caption absolute left-4 top-0 -translate-y-1/2 text-secondary backdrop-blur-sm transition-all duration-75 pointer-events-none font-londrina",
                     selectedValue == -1 && "top-1/2 opacity-0",
-                    optionsOpen && "text-blue-400"
+                    optionsOpen && "text-accent"
                 )}
             >
                 {name}
@@ -38,9 +37,9 @@ export default function Select({ name, selectedValue, options, onSelect }: Selec
             />
             <select
                 className={twMerge(
-                    "flex flex-row justify-between p-4 bg-white rounded-2xl border-2 border-gray-400 appearance-none outline-none",
-                    selectedValue == -1 && "text-gray-600",
-                    optionsOpen && "border-blue-400"
+                    "flex flex-row justify-between p-4 bg-white rounded-2xl border-2 border-gray-400 appearance-none outline-none font-londrina ",
+                    selectedValue == -1 && "text-secondary",
+                    optionsOpen && "border-accent"
                 )}
                 value={selectedValue}
                 onChange={(e) => {

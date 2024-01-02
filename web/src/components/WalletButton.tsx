@@ -1,10 +1,10 @@
 "use client";
-import { useAccountModal, useChainModal, useConnectModal } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
-import { Address, useAccount, useEnsAvatar, useEnsName, useNetwork, useSwitchNetwork } from "wagmi";
-import { getLinearGradientForAddress, getShortAddress } from "../common/utils";
+import { Address, useAccount, useEnsAvatar, useEnsName } from "wagmi";
+import { getLinearGradientForAddress, getShortAddress } from "@/lib/utils";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { twMerge } from "tailwind-merge";
+import { Button } from "./ui/button";
 
 interface WalletButtonProps {
     hideChainSwitcher?: boolean;
@@ -17,106 +17,66 @@ export default function WalletButton({ hideChainSwitcher, disableMobileShrink }:
     const { data: ensAvatar } = useEnsAvatar({ name: ensName, chainId: 1 });
 
     return (
-        <>
-            <ConnectButton.Custom>
-                {({ account, chain, openAccountModal, openChainModal, openConnectModal }) => {
-                    const connected = account && chain;
+        <ConnectButton.Custom>
+            {({ account, chain, openAccountModal, openChainModal, openConnectModal }) => {
+                const connected = account && chain;
 
-                    return (
-                        <div>
-                            {(() => {
-                                if (!connected) {
-                                    return (
-                                        <button className="btn-primary" onClick={openConnectModal}>
-                                            Connect
-                                        </button>
-                                    );
-                                }
+                return (
+                    <div>
+                        {(() => {
+                            if (!connected) {
+                                return <Button onClick={openConnectModal}>Connect</Button>;
+                            }
 
-                                if (chain.unsupported) {
-                                    return (
-                                        <button className="btn-negative" onClick={openChainModal}>
-                                            Wrong Network
-                                        </button>
-                                    );
-                                }
-
+                            if (chain.unsupported) {
                                 return (
-                                    <div className="flex flex-row gap-2">
-                                        <button
-                                            className={twMerge("ghost flex", hideChainSwitcher && "hidden")}
-                                            onClick={openChainModal}
-                                        >
-                                            <Image src={chain.iconUrl ?? ""} width={32} height={32} alt="" />
-                                        </button>
-                                        <button
-                                            onClick={openAccountModal}
-                                            className="flex flex-row gap-2 px-4 py-3 border-2 border-gray-400 rounded-2xl hover:bg-gray-200 active:clickable-active items-center text-gray-900"
-                                        >
-                                            {ensAvatar ? (
-                                                <Image
-                                                    src={ensAvatar ?? ""}
-                                                    width={32}
-                                                    height={32}
-                                                    alt="avatar"
-                                                    className=" rounded-full"
-                                                />
-                                            ) : (
-                                                <div
-                                                    className="w-[32px] h-[32px] rounded-full"
-                                                    style={{
-                                                        background: getLinearGradientForAddress(
-                                                            account.address as Address
-                                                        ),
-                                                    }}
-                                                />
-                                            )}
-                                            <span className={twMerge("md:flex", !disableMobileShrink && "hidden")}>
-                                                {ensName ?? getShortAddress(account.address as Address)}
-                                            </span>
-                                        </button>
-                                    </div>
+                                    <Button variant="negative" onClick={openChainModal}>
+                                        Wrong Network
+                                    </Button>
                                 );
-                            })()}
-                        </div>
-                    );
-                }}
-            </ConnectButton.Custom>
-            {/* {address ? (
-                chain?.unsupported ? (
-                    <button className="btn-negative" onClick={openChainModal}>
-                        Wrong Network
-                    </button>
-                ) : (
-                    <div className="flex flex-row gap-2">
-                        <button>HERE</button>
-                        <button
-                            onClick={openAccountModal}
-                            className="flex flex-row gap-2 px-4 py-3 border-2 border-gray-400 rounded-2xl hover:bg-gray-200 active:clickable-active items-center text-gray-900"
-                        >
-                            {ensAvatar ? (
-                                <Image
-                                    src={ensAvatar ?? ""}
-                                    width={32}
-                                    height={32}
-                                    alt="avatar"
-                                    className=" rounded-full"
-                                />
-                            ) : (
-                                <div
-                                    className="w-[32px] h-[32px] rounded-full"
-                                    style={{ background: getLinearGradientForAddress(address) }}
-                                />
-                            )}
-                            <span className="hidden md:flex">{ensName ?? getShortAddress(address)}</span>
-                        </button>
+                            }
+
+                            return (
+                                <div className="flex flex-row gap-2">
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className={twMerge(hideChainSwitcher && "hidden")}
+                                        onClick={openChainModal}
+                                    >
+                                        <Image src={chain.iconUrl ?? ""} width={32} height={32} alt="" />
+                                    </Button>
+                                    <Button
+                                        variant="secondary"
+                                        onClick={openAccountModal}
+                                        className="flex flex-row gap-2 px-4 py-3"
+                                    >
+                                        {ensAvatar ? (
+                                            <Image
+                                                src={ensAvatar ?? ""}
+                                                width={32}
+                                                height={32}
+                                                alt="avatar"
+                                                className=" rounded-full"
+                                            />
+                                        ) : (
+                                            <div
+                                                className="w-[32px] h-[32px] rounded-full"
+                                                style={{
+                                                    background: getLinearGradientForAddress(account.address as Address),
+                                                }}
+                                            />
+                                        )}
+                                        <h6 className={twMerge("md:flex", !disableMobileShrink && "hidden")}>
+                                            {ensName ?? getShortAddress(account.address as Address)}
+                                        </h6>
+                                    </Button>
+                                </div>
+                            );
+                        })()}
                     </div>
-                )
-            ) : (
-                <button className="btn-primary" onClick={openConnectModal}>
-                    Connect
-                </button>
-            )} */}
-        </>
+                );
+            }}
+        </ConnectButton.Custom>
     );
 }

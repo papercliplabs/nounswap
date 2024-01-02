@@ -1,4 +1,4 @@
-import { Noun } from "../common/types";
+import { Noun } from "../lib/types";
 import Image from "next/image";
 import { twMerge } from "tailwind-merge";
 
@@ -6,15 +6,18 @@ interface NounCardProps {
     noun: Noun;
     size?: number;
     enableHover: boolean;
+    alwaysShowNumber?: boolean;
 }
 
-export default function NounCard({ noun, size, enableHover }: NounCardProps) {
+export default function NounCard({ noun, size, enableHover, alwaysShowNumber }: NounCardProps) {
     return (
         <div
             className={twMerge(
                 "relative flex justify-center rounded-3xl overflow-hidden outline outline-[5px] outline-transparent -outline-offset-1 aspect-square",
-                enableHover && "hover:outline-blue-400 [&>span]:hover:block",
-                size && size < 100 && "rounded-xl"
+                enableHover && "hover:outline-blue-400 [&>h6]:hover:block",
+                alwaysShowNumber && "[&>h6]:block",
+                size && size <= 100 && "rounded-xl",
+                size && size <= 50 && "rounded-lg"
             )}
         >
             <Image
@@ -25,7 +28,14 @@ export default function NounCard({ noun, size, enableHover }: NounCardProps) {
                 alt=""
                 className="outline outline-4 outline-transparent"
             />
-            <span className="absolute bottom-[4px] bg-white rounded-full px-3 hidden text-gray-900">{noun.id}</span>
+            <h6
+                className={twMerge(
+                    "absolute bottom-[8px] bg-white rounded-full px-3 py-0.5 hidden text-primary shadow-lg",
+                    size && size <= 100 && "bottom-[4px] px-2 text-sm"
+                )}
+            >
+                {noun.id}
+            </h6>
         </div>
     );
 }

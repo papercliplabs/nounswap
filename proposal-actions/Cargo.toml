@@ -1,0 +1,27 @@
+[package]
+name = "proposals"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+graphql_client = "0.9.0"
+# These three below are for json serialization and deserialization
+serde = "1.0.114"
+serde_derive = "1.0.114"
+serde_json = "1.0.56"
+# For making http requests
+reqwest = {version = "0.11.0", features = ["json"]}
+# This one enables us to use async operations
+tokio = {version = "1.1.1", features = ["full"]}
+# Error handling crate
+anyhow = "1.0.39"
+ethers = { version = "2.0", features = ["rustls", "ws"] }
+clap = { version = "4.4.7", features = ["derive"] }
+dotenv = "0.15.0"
+dotenv_codegen = "0.15.0"
+ethers-contract = "2.0.10"
+strum = "0.25.0"
+strum_macros = "0.25.3"
+

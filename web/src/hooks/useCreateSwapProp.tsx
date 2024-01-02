@@ -11,12 +11,17 @@ import {
 import { useAccount, usePublicClient } from "wagmi";
 import { nounsDoaLogicAbi } from "../abis/nounsDoaLogic";
 import { nounsTokenAbi } from "../abis/nounsToken";
-import { Noun } from "../common/types";
-import getChainSpecificData from "../common/chainSpecificData";
+import { erc20TokenAbi } from "@/abis/erc20Token";
+import { Noun } from "../lib/types";
+import getChainSpecificData from "../lib/chainSpecificData";
+import { formatTokenAmount } from "@/lib/utils";
+import { NATIVE_ASSET_DECIMALS } from "@/lib/constants";
 
 interface UseCreateSwapPropParams {
     userNoun?: Noun;
     treasuryNoun?: Noun;
+    tip?: bigint;
+    reason?: string;
     onReject?: () => void;
 }
 
@@ -27,6 +32,8 @@ interface UseCreateSwapPropReturnType extends UseSendTransactionReturnType {
 export function useCreateSwapProp({
     userNoun,
     treasuryNoun,
+    tip,
+    reason,
     onReject,
 }: UseCreateSwapPropParams): UseCreateSwapPropReturnType {
     const { address } = useAccount();
@@ -40,10 +47,12 @@ export function useCreateSwapProp({
             treasuryNoun != undefined &&
             address != undefined &&
             publicClient != undefined &&
+            tip != undefined &&
             userNoun.chainId == treasuryNoun.chainId
         ) {
             const transferFromAbi = nounsTokenAbi.find((entry) => entry.name == "transferFrom")!; // Must exist
             const safeTransferFromAbi = nounsTokenAbi.find((entry) => entry.name == "safeTransferFrom")!; // Must exist
+            const erc20TransferFromAbi = erc20TokenAbi.find((entry) => entry.name == "transferFrom")!; // Must exist
             const chainSpecificData = getChainSpecificData(treasuryNoun.chainId);
 
             const userNounToTreasuryTransferFromInputData = encodeAbiParameters(
@@ -51,40 +60,67 @@ export function useCreateSwapProp({
                 [userNoun.owner, chainSpecificData.nounsTreasuryAddress, BigInt(userNoun.id)]
             );
 
+            const wethTransferToTreasuryInputData = encodeAbiParameters(erc20TransferFromAbi.inputs, [
+                userNoun.owner,
+                chainSpecificData.nounsTreasuryAddress,
+                tip,
+            ]);
+
             const treasuryNounToUserSafeTransferFromInputData = encodeAbiParameters(
                 safeTransferFromAbi.inputs, // from: address, to: address, tokenId: uint256
                 [chainSpecificData.nounsTreasuryAddress, userNoun.owner, BigInt(treasuryNoun.id)]
             );
 
             const proposeArgs = [
-                [chainSpecificData.nounsTokenAddress, chainSpecificData.nounsTokenAddress], // targets
-                [BigInt(0), BigInt(0)], // values
-                [getFunctionSignature(transferFromAbi), getFunctionSignature(safeTransferFromAbi)], // signatures
-                [userNounToTreasuryTransferFromInputData, treasuryNounToUserSafeTransferFromInputData], // calldatas (fn input data, no selector)
-                `# NounSwap: Swap Noun ${userNoun.id} for Noun ${treasuryNoun.id} from the Noun Treasury
+                [
+                    chainSpecificData.nounsTokenAddress,
+                    chainSpecificData.wrappedNativeTokenAddress,
+                    chainSpecificData.nounsTokenAddress,
+                ], // targets
+                [BigInt(0), BigInt(0), BigInt(0)], // values
+                [
+                    getFunctionSignature(transferFromAbi),
+                    getFunctionSignature(erc20TransferFromAbi),
+                    getFunctionSignature(safeTransferFromAbi),
+                ], // signatures
+                [
+                    userNounToTreasuryTransferFromInputData,
+                    wethTransferToTreasuryInputData,
+                    treasuryNounToUserSafeTransferFromInputData,
+                ], // calldatas (fn input data, no selector)
+                `# NounSwap v1: Swap Noun ${userNoun.id} + ${formatTokenAmount(
+                    tip,
+                    NATIVE_ASSET_DECIMALS,
+                    6
+                )} WETH for Noun ${treasuryNoun.id} from the Nouns Treasury
 
-This proposal seeks to swap Noun ${userNoun.id} for Noun ${treasuryNoun.id} from the Nouns DAO treasury.
+## Summary
+                
+This proposal seeks to swap **Noun ${userNoun.id} + ${formatTokenAmount(
+                    tip,
+                    NATIVE_ASSET_DECIMALS,
+                    6
+                )} WETH** for **Noun ${treasuryNoun.id}** from the Nouns DAO treasury.
+                  
+Noun ${userNoun.id}   
+![Noun ${userNoun.id}](https://noun.pics/${userNoun.id})
 
-## General Rationale for swapping Nouns: 
-Noun owners might seek a swap for various reasons, including:
-- **Aesthetic Preference**: Seeking a Noun that resonates more with personal artistic tastes or visual preferences.
-- **Trait Alignment**: Aiming to align with Nouns that reflect specific traits or characteristics resonating with the owner's personality, interests, or collection strategy.
-- **Community Engagement**: Enhancing personal connection and engagement with the Nouns DAO community through ownership of a Noun that resonates more strongly on a personal level.
+Noun ${treasuryNoun.id}   
+![Noun ${treasuryNoun.id}](https://noun.pics/${treasuryNoun.id})
 
+---
 
-## Benefits of swapping to the DAO:
-Swapping Nouns can offer several advantages to the DAO:
-- **Community Diversity:** Encourages a treasury that mirrors the diverse tastes and interests of the Nouns community.
-- **Active Participation:** Owners who feel a stronger personal connection to their Nouns are often more engaged and active in DAO initiatives.
-- **Dynamic Treasury:** Regular swaps keep the treasury dynamic and reflective of current community preferences and trends.
+## Rationale for Swap
 
+*This rationale is directly from the creator of the proposal*
 
-## Conclusion
-This proposal aims to enrich both the individual Noun owner's experience and the overall diversity of the Nouns DAO Treasury through a strategic swap, enhancing engagement and more alignment within the community.
+${reason ?? "No rationale provided"}
 
+---
 
 ## This Prop was created using NounSwap.
-NounSwap is a tool built for the Nourish communities by [Paperclip Labs](https://paperclip.xyz/). It allows Noun owners easily create proposals to swap their Nouns for Nouns in the treasury. It serves purely as a facilitation tool for proposal creation. NounSwap does not have contracts and does not take custody of any Nouns at any time. You can check it out at [nounswap.wtf](nounswap.wtf).`,
+
+[NounSwap](nounswap.wtf) is a tool built for the Nouns communities by [Paperclip Labs](https://paperclip.xyz/). It allows Noun owners to easily create proposals to swap their Noun for a Noun in the DAO treasury. It serves purely as a facilitation tool for proposal creation. NounSwap does not have contracts and does not take custody of any Nouns or tokens at any time.`,
             ];
 
             const propCalldata = encodeFunctionData({
@@ -97,12 +133,12 @@ NounSwap is a tool built for the Nourish communities by [Paperclip Labs](https:/
                 to: chainSpecificData.nounsDoaProxyAddress,
                 from: address,
                 data: propCalldata,
-                gas: BigInt(1000000), // Reasonable default incase gas estimate fails...
+                gas: BigInt(2000000), // Reasonable default incase gas estimate fails...
             };
         }
 
         return request;
-    }, [userNoun, treasuryNoun, address, publicClient]);
+    }, [userNoun, treasuryNoun, reason, tip, address, publicClient]);
 
     const sendTxnData = useSendTransaction({
         request,

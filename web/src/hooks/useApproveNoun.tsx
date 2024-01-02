@@ -5,7 +5,7 @@ import { useAccount, useContractRead } from "wagmi";
 import useSendTransaction, { UseSendTransactionReturnType } from "./useSendTransaction";
 import { nounsTokenAbi } from "../abis/nounsToken";
 import useChainSpecificData from "./useChainSpecificData";
-import { Noun } from "../common/types";
+import { Noun } from "../lib/types";
 
 interface UseApproveNounParams {
     noun?: Noun;
