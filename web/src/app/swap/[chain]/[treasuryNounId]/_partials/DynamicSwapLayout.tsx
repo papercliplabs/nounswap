@@ -1,9 +1,9 @@
 import HowItWorksDialog from "@/components/dialog/HowItWorksDialog";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import { LinkInternal } from "@/components/ui/link";
 import { Suspense } from "react";
-import ProgressCircle from "./ui/ProgressCircle";
+import ProgressCircle from "../../../../../components/ProgressCircle";
 
 interface DynamicSwapLayoutProps {
     currentStep: number;

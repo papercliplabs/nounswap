@@ -3,7 +3,7 @@ import { usePathname } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 import { LinkInternal } from "@/components/ui/link";
 import { Suspense } from "react";
-import LoadingSpinner from "./ui/LoadingSpinner";
+import LoadingSpinner from "./LoadingSpinner";
 
 interface NavProps {
     navInfo: {

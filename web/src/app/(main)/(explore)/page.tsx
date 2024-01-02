@@ -1,9 +1,9 @@
 import { getNounsForAddress } from "@/data/getNounsForAddress";
-import NounSelect from "@/components/NounSelect";
+import NounSelect from "./_partials/NounSelect";
 import getChainSpecificData from "@/lib/chainSpecificData";
 import { getAddress } from "viem";
 import { Suspense } from "react";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import Link from "next/link";
 import { LinkExternal } from "@/components/ui/link";
 

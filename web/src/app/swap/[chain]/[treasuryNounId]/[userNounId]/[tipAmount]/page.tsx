@@ -1,9 +1,9 @@
-import DynamicSwapLayout from "@/components/DynamicSwapLayout";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import DynamicSwapLayout from "../../_partials/DynamicSwapLayout";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import { getNounById } from "@/data/getNounById";
 import { Suspense } from "react";
 import { Address } from "viem";
-import SwapReasonSelect from "@/components/SwapReasonSelect";
+import SwapReasonSelect from "./_partials/SwapReasonSelect";
 
 export default function SwapReasonPage({
     params,

@@ -8,7 +8,7 @@ import Link from "next/link";
 import { ProposalState } from "@/lib/types";
 import getChainSpecificData from "@/lib/chainSpecificData";
 import { Suspense } from "react";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function Proposals({ searchParams }: { searchParams: { address?: Address; chain?: number } }) {
     return (

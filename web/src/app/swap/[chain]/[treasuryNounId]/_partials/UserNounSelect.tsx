@@ -1,16 +1,16 @@
 "use client";
-import { Noun } from "../lib/types";
+import { Noun } from "../../../../../lib/types";
 import { Address, useBalance, useNetwork } from "wagmi";
-import NounCard from "./NounCard";
+import NounCard from "../../../../../components/NounCard";
 import { useEffect, useMemo, useState } from "react";
-import WalletButton from "./WalletButton";
+import WalletButton from "../../../../../components/WalletButton";
 import Image from "next/image";
-import Icon from "./ui/Icon";
-import getChainSpecificData from "../lib/chainSpecificData";
-import { LinkExternal } from "./ui/link";
-import { Button } from "./ui/button";
-import UserNounSelectDialog from "./dialog/UserNounSelectDialog";
-import UserTipDialog from "./dialog/UserTipDialog";
+import Icon from "../../../../../components/ui/Icon";
+import getChainSpecificData from "../../../../../lib/chainSpecificData";
+import { LinkExternal } from "../../../../../components/ui/link";
+import { Button } from "../../../../../components/ui/button";
+import UserNounSelectDialog from "../../../../../components/dialog/UserNounSelectDialog";
+import UserTipDialog from "../../../../../components/dialog/UserTipDialog";
 import { useRouter, useSearchParams } from "next/navigation";
 
 interface NounSwapProps {
@@ -22,12 +22,6 @@ interface NounSwapProps {
 export default function UserNounSelect({ userNouns, treasuryNoun, address }: NounSwapProps) {
     const [selectedUserNoun, setSelectedUserNoun] = useState<Noun | undefined>(undefined);
     const [tip, setTip] = useState<bigint | undefined>(undefined);
-
-    const { chain: activeChain } = useNetwork();
-
-    const wrongNetwork = useMemo(() => {
-        return activeChain?.id != treasuryNoun.chainId;
-    }, [activeChain, treasuryNoun]);
 
     const chainSpecificData = useMemo(() => {
         return getChainSpecificData(treasuryNoun.chainId);
@@ -104,7 +98,7 @@ export default function UserNounSelect({ userNouns, treasuryNoun, address }: Nou
                 <div className="flex flex-col-reverse md:flex-row w-full justify-end px-4 md:px-10 py-4 md:py-2 item-center items-center gap-6 text-secondary md:fixed md:bottom-0 md:bg-white md:border-t-4 border-secondary">
                     <Button
                         className="w-full md:w-auto justify-center"
-                        disabled={selectedUserNoun == undefined || tip == undefined || wrongNetwork}
+                        disabled={selectedUserNoun == undefined || tip == undefined}
                         onClick={() =>
                             router.push(
                                 `/swap/${treasuryNoun.chainId}/${treasuryNoun.id}/${selectedUserNoun?.id}/${tip}?` +

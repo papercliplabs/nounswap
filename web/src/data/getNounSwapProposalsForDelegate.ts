@@ -56,14 +56,29 @@ export async function getNounSwapProposalsForDelegate(
         const swapNounProposals: SwapNounProposal[] = [];
         for (let proposal of data.proposals) {
             const title = proposal.title;
-            let match = title.match(/Swap Noun [0-9]* for Noun [0-9]*/); // Swap Noun XX for Noun YY
-            if (match == null || match.length == 0) {
-                continue;
-            }
 
-            const split = match[0].split(" ");
-            const fromNounId = split[2];
-            const toNounId = split[5];
+            let v0 = title.match(/NounSwap:/) != null;
+            let v1 = title.match(/NounSwap v1:/) != null;
+
+            let fromNounId = "";
+            let toNounId = "";
+            if (v0) {
+                const match = title.match(/NounSwap: Swap Noun [0-9]* for Noun [0-9]*/); // NounSwap: Swap Noun XX for Noun YY
+                if (match == null || match.length == 0) {
+                    continue;
+                }
+                const split = match[0].split(" ");
+                fromNounId = split[3];
+                toNounId = split[6];
+            } else {
+                const match = title.match(/NounSwap v1: Swap Noun [0-9]* \+ [0-9]*\.?[0-9]*? WETH for Noun [0-9]*/); // NounSwap v1: Swap Noun XX + ZZ WETH for Noun YY
+                if (match == null || match.length == 0) {
+                    continue;
+                }
+                const split = match[0].split(" ");
+                fromNounId = split[4];
+                toNounId = split[10];
+            }
 
             const fromNoun = await getNounById(fromNounId, washedChainId);
             const toNoun = await getNounById(toNounId, washedChainId);

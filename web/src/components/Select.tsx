@@ -1,6 +1,6 @@
 "use client";
 import { twMerge } from "tailwind-merge";
-import Icon from "./Icon";
+import Icon from "./ui/Icon";
 import { useState } from "react";
 export interface SelectProps<T> {
     name: string;

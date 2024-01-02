@@ -2,9 +2,9 @@ import { getNounById } from "@//data/getNounById";
 import { Address } from "viem";
 import { getNounsForAddress } from "@//data/getNounsForAddress";
 import { Suspense } from "react";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
-import DynamicSwapLayout from "@/components/DynamicSwapLayout";
-import UserNounSelect from "@/components/UserNounSelect";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import DynamicSwapLayout from "@/app/swap/[chain]/[treasuryNounId]/_partials/DynamicSwapLayout";
+import UserNounSelect from "./_partials/UserNounSelect";
 
 export default function UserNounSelectPage({
     params,

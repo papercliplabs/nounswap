@@ -1,10 +1,10 @@
 "use client";
-import { Noun } from "../lib/types";
+import { Noun } from "../../../../lib/types";
 import NounGrid from "./NounGrid";
 import { useCallback, useMemo, useState } from "react";
 import NounFilter from "./NounFilter";
 import { ImageData } from "@nouns/assets";
-import { Button } from "./ui/button";
+import { Button } from "../../../../components/ui/button";
 
 interface NounSelectProps {
     nouns: Noun[];

@@ -4,7 +4,7 @@ import { useCreateSwapProp } from "../../hooks/useCreateSwapProp";
 import { useEffect, useMemo, useState } from "react";
 import { SendTransactionState } from "../../hooks/useSendTransaction";
 import NounCard from "../NounCard";
-import ProgressCircle from "../ui/ProgressCircle";
+import ProgressCircle from "../ProgressCircle";
 import SwapNounGraphic from "../SwapNounGraphic";
 import { useRouter, useSearchParams } from "next/navigation";
 import useChainSpecificData from "../../hooks/useChainSpecificData";
@@ -16,7 +16,9 @@ import Image from "next/image";
 import { formatTokenAmount } from "@/lib/utils";
 import { NATIVE_ASSET_DECIMALS } from "@/lib/constants";
 import { twMerge } from "tailwind-merge";
-import LoadingSpinner from "../ui/LoadingSpinner";
+import LoadingSpinner from "../LoadingSpinner";
+import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
+import { useChainModal, useConnectModal } from "@rainbow-me/rainbowkit";
 
 interface SwapTransactionDialogProps {
     userNoun?: Noun;
@@ -27,6 +29,11 @@ interface SwapTransactionDialogProps {
 
 export default function SwapTransactionDialog({ userNoun, treasuryNoun, tip, reason }: SwapTransactionDialogProps) {
     const chainSpecificData = useChainSpecificData(treasuryNoun?.chainId);
+
+    const { address, isConnected } = useAccount();
+    const { chain } = useNetwork();
+    const { openConnectModal } = useConnectModal();
+    const { switchNetwork } = useSwitchNetwork();
 
     const approveNounTxn = useApproveNoun({
         noun: userNoun,
@@ -83,6 +90,13 @@ export default function SwapTransactionDialog({ userNoun, treasuryNoun, tip, rea
         }
     }, [isOpen, approveNounTxn, createSwapPropTxn, approveWethTxn, router, searchParams]);
 
+    useEffect(() => {
+        if (isConnected && address != userNoun?.owner) {
+            // Go back to last page, need to select a new Noun...
+            router.back();
+        }
+    });
+
     console.log("Approve Noun txn state", approveNounTxn.state);
     console.log("Approve WETH txn state", approveWethTxn.state);
     console.log("Create prop txn state", createSwapPropTxn.state);
@@ -94,12 +108,23 @@ export default function SwapTransactionDialog({ userNoun, treasuryNoun, tip, rea
 
     return (
         <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
-            <Button
-                onClick={() => setIsOpen(true)}
-                disabled={!userNoun || !treasuryNoun || tip == undefined || reason == undefined || reason == ""}
-            >
-                Create Swap Prop
-            </Button>
+            {isConnected ? (
+                chain?.id == userNoun?.chainId ? (
+                    <Button
+                        onClick={() => setIsOpen(true)}
+                        disabled={!userNoun || !treasuryNoun || tip == undefined || reason == undefined || reason == ""}
+                    >
+                        Create Swap Prop
+                    </Button>
+                ) : (
+                    <Button variant="negative" onClick={() => switchNetwork?.(userNoun?.chainId)}>
+                        Wrong Network
+                    </Button>
+                )
+            ) : (
+                <Button onClick={() => openConnectModal?.()}>Connect Wallet</Button>
+            )}
+
             <DialogContent className="max-w-[425px] max-h-[80vh] flex flex-col overflow-y-auto pt-12">
                 {!userNoun || !treasuryNoun ? (
                     "Invalid nouns selected"

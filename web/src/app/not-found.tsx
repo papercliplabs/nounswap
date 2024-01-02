@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { LinkInternal } from "@/components/ui/link";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function NotFound() {
     return (

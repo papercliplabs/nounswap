@@ -6,7 +6,7 @@ import { LinkExternal, LinkInternal } from "@/components/ui/link";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const navInfo = [
     { name: "Explore", href: "/" },

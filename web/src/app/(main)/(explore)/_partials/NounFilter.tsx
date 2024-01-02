@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
-import Select, { SelectProps } from "./ui/Select";
+import Select, { SelectProps } from "../../../../components/Select";
 import { twMerge } from "tailwind-merge";
-import Icon from "./ui/Icon";
-import { Button } from "./ui/button";
+import Icon from "../../../../components/ui/Icon";
+import { Button } from "../../../../components/ui/button";
 
 interface NounFilterProps {
     backgroundFilterSelectProps: SelectProps<number>;

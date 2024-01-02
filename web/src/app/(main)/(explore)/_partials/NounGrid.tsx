@@ -1,8 +1,8 @@
-import { Noun } from "../lib/types";
-import NounCard from "./NounCard";
+import { Noun } from "../../../../lib/types";
+import NounCard from "../../../../components/NounCard";
 import { Suspense, useMemo } from "react";
 import { LinkInternal } from "@/components/ui/link";
-import LoadingSpinner from "./ui/LoadingSpinner";
+import LoadingSpinner from "../../../../components/LoadingSpinner";
 
 interface NounGridInterface {
     nouns: Noun[];

@@ -1,15 +1,15 @@
 "use client";
 
 import { Noun } from "@/lib/types";
-import SwapTransactionDialog from "./dialog/SwapTransactionDialog";
+import SwapTransactionDialog from "../../../../../../../components/dialog/SwapTransactionDialog";
 import { useState } from "react";
-import Icon from "./ui/Icon";
-import { Input } from "./ui/input";
-import NounCard from "./NounCard";
+import Icon from "../../../../../../../components/ui/Icon";
+import { Input } from "../../../../../../../components/ui/input";
+import NounCard from "../../../../../../../components/NounCard";
 import Image from "next/image";
 import { formatTokenAmount } from "@/lib/utils";
 import { NATIVE_ASSET_DECIMALS } from "@/lib/constants";
-import { Textarea } from "./ui/textarea";
+import { Textarea } from "../../../../../../../components/ui/textarea";
 
 interface SwapReasonSelectProps {
     userNoun: Noun;
