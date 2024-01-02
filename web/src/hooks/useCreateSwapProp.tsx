@@ -125,7 +125,7 @@ ${reason}`,
                 to: chainSpecificData.nounsDoaProxyAddress,
                 from: address,
                 data: propCalldata,
-                gas: BigInt(1000000), // Reasonable default incase gas estimate fails...
+                gas: BigInt(2000000), // Reasonable default incase gas estimate fails...
             };
         }
 

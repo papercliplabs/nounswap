@@ -9,6 +9,7 @@ interface ChainSpecificData {
     nounsFrontendUrl: string;
     subgraphUrl: string;
     wrappedNativeTokenAddress: Address;
+    swapForWrappedNativeUrl: string;
 }
 
 const CHAIN_SPECIFIC_DATA: Record<number, ChainSpecificData> = {
@@ -20,6 +21,8 @@ const CHAIN_SPECIFIC_DATA: Record<number, ChainSpecificData> = {
         nounsFrontendUrl: "https://nouns.wtf",
         subgraphUrl: "https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph",
         wrappedNativeTokenAddress: getAddress("0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"),
+        swapForWrappedNativeUrl:
+            "https://app.uniswap.org/swap?outputCurrency=0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2&chain=mainnet",
     },
     [goerli.id]: {
         chain: { ...goerli, iconUrl: "/ethereum-testnet.png" },
@@ -30,6 +33,8 @@ const CHAIN_SPECIFIC_DATA: Record<number, ChainSpecificData> = {
         subgraphUrl:
             "https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns-v3-goerli/0.1.6/gn",
         wrappedNativeTokenAddress: getAddress("0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6"),
+        swapForWrappedNativeUrl:
+            "https://app.uniswap.org/swap?outputCurrency=0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6&chain=goerli",
     },
 };
 

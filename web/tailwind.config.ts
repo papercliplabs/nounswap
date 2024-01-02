@@ -104,6 +104,7 @@ const config: Config = {
             ...commonColors,
             primary: palette.white,
             secondary: palette.gray[200],
+            ternary: palette.gray[100],
             disabled: palette.gray[400],
             nouns: palette.yellow[400],
         },

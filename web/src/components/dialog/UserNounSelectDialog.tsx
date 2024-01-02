@@ -10,6 +10,7 @@ import NounCard from "../NounCard";
 import { LinkExternal } from "../ui/link";
 import { useState } from "react";
 import getChainSpecificData from "@/lib/chainSpecificData";
+import Image from "next/image";
 
 interface UserNounSelectDialogProps {
     connected: boolean;
@@ -56,15 +57,15 @@ export default function UserNounSelectDialog({
                 ) : (
                     <button
                         onClick={() => (connected ? setOpen(true) : openConnectModal?.())}
-                        className="h-[200px] w-[200px] border-4 border-dashed rounded-[20px] p-8 flex flex-col gap-4 text-secondary justify-center items-center hover:brightness-[85%]"
+                        className="h-[200px] w-[200px] border-4 border-dashed rounded-[20px] p-8 flex flex-col gap-2 text-secondary justify-center items-center hover:brightness-[85%] bg-ternary"
                     >
-                        <Icon icon="plusCircle" size={54} className="fill-gray-600" />
+                        <Image src="/noggles.png" width={64} height={64} alt="" />
                         <h6>Select your Noun</h6>
                     </button>
                 )}
             </>
 
-            <DialogContent className="max-w-[425px] max-h-[60vh] flex flex-col overflow-y-auto p-0">
+            <DialogContent className="max-w-[425px] max-h-[80vh] flex flex-col overflow-y-auto p-0">
                 <h4 className="px-6 pt-6">Select your Noun</h4>
                 <div className="flex flex-col [&>ol>li>div]:text-secondary">
                     {userNouns == undefined ? (

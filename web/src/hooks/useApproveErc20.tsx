@@ -60,7 +60,7 @@ export default function useApproveErc20({
             const calldata = encodeFunctionData({
                 abi: erc20TokenAbi,
                 functionName: "approve",
-                args: [spender, amount - allowance],
+                args: [spender, amount],
             });
             request = {
                 to: tokenAddress,

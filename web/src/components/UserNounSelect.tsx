@@ -23,16 +23,19 @@ export default function UserNounSelect({ userNouns, treasuryNoun, address }: Nou
     const [selectedUserNoun, setSelectedUserNoun] = useState<Noun | undefined>(undefined);
     const [tip, setTip] = useState<bigint | undefined>(undefined);
 
-    const [transactionModalOpen, setTransactionModalOpen] = useState<boolean>(false);
     const { chain: activeChain } = useNetwork();
 
     const wrongNetwork = useMemo(() => {
         return activeChain?.id != treasuryNoun.chainId;
     }, [activeChain, treasuryNoun]);
 
+    const chainSpecificData = useMemo(() => {
+        return getChainSpecificData(treasuryNoun.chainId);
+    }, [treasuryNoun]);
+
     const { data: userBalance } = useBalance({
         address: address,
-        token: getChainSpecificData(treasuryNoun.chainId).wrappedNativeTokenAddress,
+        token: chainSpecificData.wrappedNativeTokenAddress,
         chainId: treasuryNoun.chainId,
     });
 
@@ -53,7 +56,7 @@ export default function UserNounSelect({ userNouns, treasuryNoun, address }: Nou
                 <div className="flex flex-col md:flex-row w-full grow border-b-4">
                     <div className="flex flex-col grow justify-center items-center border-b-2 md:border-r-2 md:border-b-0 gap-8 py-12 px-8 relative border-secondary flex-1">
                         <WalletButton hideChainSwitcher disableMobileShrink />
-                        <div className="flex flex-col lg:flex-row gap-4 md:gap-12">
+                        <div className="flex flex-col lg:flex-row gap-6 justify-center items-center">
                             <UserNounSelectDialog
                                 connected={address != undefined}
                                 userNouns={userNouns}
@@ -61,9 +64,11 @@ export default function UserNounSelect({ userNouns, treasuryNoun, address }: Nou
                                 selectedUserNoun={selectedUserNoun}
                                 selectedNounCallback={(noun?: Noun) => setSelectedUserNoun(noun)}
                             />
+                            <Icon icon="plus" size={20} className="fill-gray-600" />
                             <UserTipDialog
                                 connected={address != undefined}
                                 userBalance={userBalance?.value}
+                                swapUrl={chainSpecificData.swapForWrappedNativeUrl}
                                 tip={tip}
                                 setTipCallback={setTip}
                             />
@@ -77,9 +82,9 @@ export default function UserNounSelect({ userNouns, treasuryNoun, address }: Nou
                     <div className="flex flex-col grow justify-center items-center border-t-2 md:border-l-2 md:border-t-0 gap-8 py-12 px-8 border-secondary flex-1">
                         <LinkExternal
                             href={
-                                getChainSpecificData(treasuryNoun.chainId).chain.blockExplorers?.default.url +
+                                chainSpecificData.chain.blockExplorers?.default.url +
                                 "/address/" +
-                                getChainSpecificData(treasuryNoun.chainId).nounsTreasuryAddress
+                                chainSpecificData.nounsTreasuryAddress
                             }
                         >
                             <Button variant="secondary" className="gap-2 px-4 py-4">

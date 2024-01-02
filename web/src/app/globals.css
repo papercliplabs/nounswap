@@ -4,7 +4,7 @@
 
 @layer base {
     * {
-        @apply tracking-wide font-pt font-normal;
+        @apply tracking-wide font-pt;
     }
 
     *,
@@ -14,40 +14,40 @@
     }
 
     body {
-        @apply bg-primary text-primary border-primary;
+        @apply bg-primary text-primary border-primary font-medium;
     }
 
     h1 {
-        @apply text-[56px] leading-[64px] font-londrina;
+        @apply text-[56px] leading-[64px] font-londrina font-normal;
     }
 
     h2 {
-        @apply text-[42px] leading-[56px] font-londrina;
+        @apply text-[42px] leading-[56px] font-londrina font-normal;
     }
 
     h3 {
-        @apply text-[36px] leading-[44px] font-londrina;
+        @apply text-[36px] leading-[44px] font-londrina font-normal;
     }
 
     h4 {
-        @apply text-[28px] leading-[36px] font-londrina;
+        @apply text-[28px] leading-[36px] font-londrina font-normal;
     }
 
     h5 {
-        @apply text-[24px] leading-[32px] font-londrina;
+        @apply text-[24px] leading-[32px] font-londrina font-normal;
     }
 
     h6 {
-        @apply text-[18px] leading-[24px] font-londrina;
+        @apply text-[18px] leading-[24px] font-londrina font-normal;
     }
 
     span,
     p {
-        @apply text-[18px] leading-[24px] font-pt;
+        @apply text-[16px] leading-[24px] font-pt font-medium;
     }
 
-    caption {
-        @apply text-[14px] leading-[16px] font-pt;
+    .caption {
+        @apply text-[14px] leading-[16px] font-pt font-medium;
     }
 
     ol {

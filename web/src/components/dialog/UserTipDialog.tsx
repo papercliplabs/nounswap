@@ -12,20 +12,20 @@ import getChainSpecificData from "@/lib/chainSpecificData";
 import Image from "next/image";
 import { twMerge } from "tailwind-merge";
 import { formatTokenAmount } from "@/lib/utils";
+import { LinkExternal } from "../ui/link";
 
 interface UserTipDialogProps {
     connected: boolean;
     userBalance?: bigint;
+    swapUrl: string;
 
     tip?: bigint;
     setTipCallback: (amount?: bigint) => void;
 }
 
-export default function UserTipDialog({ connected, userBalance, tip, setTipCallback }: UserTipDialogProps) {
+export default function UserTipDialog({ connected, userBalance, swapUrl, tip, setTipCallback }: UserTipDialogProps) {
     const [open, setOpen] = useState<boolean>(false);
     const [formattedInputValue, setFormattedInputValue] = useState<string | undefined>(undefined);
-
-    console.log("INPUT", formattedInputValue);
 
     const { openConnectModal } = useConnectModal();
 
@@ -63,15 +63,15 @@ export default function UserTipDialog({ connected, userBalance, tip, setTipCallb
                 ) : (
                     <button
                         onClick={() => (connected ? setOpen(true) : openConnectModal?.())}
-                        className="h-[200px] w-[200px] border-4 border-dashed rounded-[20px] p-8 flex flex-col gap-4 text-secondary justify-center items-center hover:brightness-[85%]"
+                        className="h-[200px] w-[200px] border-4 border-dashed rounded-[20px] p-8 flex flex-col gap-2 text-secondary justify-center items-center hover:brightness-[85%] bg-ternary"
                     >
-                        <Icon icon="plusCircle" size={54} className="fill-gray-600" />
+                        <Image src="/tip.png" width={64} height={64} alt="" />
                         <h6>Add a tip</h6>
                     </button>
                 )}
             </>
 
-            <DialogContent className="max-w-[425px] max-h-[60vh] flex flex-col overflow-y-auto">
+            <DialogContent className="max-w-[425px] max-h-[80vh] flex flex-col overflow-y-auto">
                 <h4>Add a tip</h4>
                 <div className="flex flex-col gap-4">
                     <div>
@@ -105,24 +105,30 @@ export default function UserTipDialog({ connected, userBalance, tip, setTipCallb
                             Insufficient WETH balance.
                         </div>
                     </div>
-                    <div>
-                        <span>
-                            Balance:{" "}
+                    <div className="text-secondary">
+                        Balance:{" "}
+                        <span className="font-bold">
                             {userBalance != undefined ? formatTokenAmount(userBalance, NATIVE_ASSET_DECIMALS, 6) : "--"}{" "}
                             WETH{" "}
+                            <button
+                                onClick={() =>
+                                    userBalance != undefined ? setFormattedInputValue(formatEther(userBalance)) : {}
+                                }
+                                className="text-accent hover:text-accent-dark"
+                            >
+                                (Max)
+                            </button>
                         </span>
-                        <button
-                            onClick={() =>
-                                userBalance != undefined ? setFormattedInputValue(formatEther(userBalance)) : {}
-                            }
-                            className="text-accent hover:text-accent-dark"
-                        >
-                            (Max)
-                        </button>
                     </div>
-                    <div className="flex flex-row p-4 bg-accent-light rounded-xl gap-3">
+                    <div className="flex flex-row p-4 bg-accent-light rounded-xl gap-3 items-center">
                         <Icon icon="questionCircle" size={30} />
-                        Make sure you have enough WETH in your wallet when the prop executes.
+                        <div className="caption">
+                            Make sure you have enough WETH in your wallet when the prop executes.
+                            <br />
+                            <LinkExternal href={swapUrl} className=" underline text-primary hover:text-secondary">
+                                Get Wrapped ETH
+                            </LinkExternal>
+                        </div>
                     </div>
                     <Button
                         onClick={() => {

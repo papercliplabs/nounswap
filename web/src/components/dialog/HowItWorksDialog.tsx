@@ -13,7 +13,7 @@ export default function HowItWorksDialog() {
                     <Icon icon="questionCircle" size={20} className="fill-gray-600" />
                 </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-[425px] max-h-[60vh] flex flex-col overflow-y-auto">
+            <DialogContent className="max-w-[425px] max-h-[80vh] flex flex-col overflow-y-auto">
                 <h4>How it works</h4>
                 <div className="flex flex-col [&>ol>li>div]:text-secondary">
                     <div className="pb-6 border-b-2 border-gray-400">

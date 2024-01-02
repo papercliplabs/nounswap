@@ -25,13 +25,13 @@ export default function SwapReasonSelect({ userNoun, treasuryNoun, tip }: SwapRe
             <div className="flex flex-col grow justify-between md:pb-[72px] items-center">
                 <div className="flex flex-col md:flex-row w-full grow justify-center max-w-[1200px] p-4 gap-6">
                     <div className="flex-[2] flex flex-col gap-4">
-                        <div className="bg-accent-light w-full rounded-2xl p-4 gap-2 flex flex-row items-center">
+                        <div className="bg-accent-light w-full rounded-2xl p-4 gap-2 flex flex-row items-center caption">
                             <Icon icon="questionCircle" size={16} className="shrink-0" />
                             This will show up in the prop. Be honest and be detailed.
                         </div>
                         <h5 className="pt-2">Why do you want Noun {treasuryNoun.id}?</h5>
                         <Textarea
-                            className="grow justify-start"
+                            className="grow justify-start text-base p-6"
                             placeholder={`The reason I want to swap for Noun ${treasuryNoun.id} is because...`}
                             onChange={(event) => setReason(event.target.value)}
                             value={reason}
@@ -41,11 +41,13 @@ export default function SwapReasonSelect({ userNoun, treasuryNoun, tip }: SwapRe
                         <h6 className="pb-2">Review</h6>
                         <div className="flex flex-col bg-primary rounded-[20px] w-full px-4 pt-4 pb-8 justify-center items-center text-secondary gap-4 relative">
                             You offer
-                            <div className="flex flex-row gap-4">
-                                <NounCard noun={userNoun} size={48} enableHover={false} />
-                                <div className="h-[48px] flex justify-center items-center bg-secondary px-4 py-2 gap-3 rounded-xl">
-                                    <h6 className="text-primary">{formatTokenAmount(tip, NATIVE_ASSET_DECIMALS, 6)}</h6>
-                                    <Image src="/ethereum-logo.png" width={24} height={24} alt="WETH" />
+                            <div className="flex flex-row gap-4 justify-center items-center">
+                                <NounCard noun={userNoun} size={100} enableHover={false} alwaysShowNumber />
+                                <Icon icon="plus" size={20} className="fill-gray-600" />
+                                <div className="h-[100px] flex justify-center items-center bg-secondary px-4 py-2 gap-3 rounded-xl">
+                                    <h6 className="text-primary">
+                                        {formatTokenAmount(tip, NATIVE_ASSET_DECIMALS, 6)} WETH
+                                    </h6>
                                 </div>
                             </div>
                             <Icon
@@ -55,8 +57,8 @@ export default function SwapReasonSelect({ userNoun, treasuryNoun, tip }: SwapRe
                             />
                         </div>
                         <div className="flex flex-col bg-primary rounded-[20px] w-full px-4 pt-8 pb-4 justify-center items-center text-secondary gap-4">
-                            For Noun {treasuryNoun.id}
-                            <NounCard noun={treasuryNoun} size={48} enableHover={false} />
+                            For
+                            <NounCard noun={treasuryNoun} size={100} enableHover={false} alwaysShowNumber />
                         </div>
                     </div>
                 </div>

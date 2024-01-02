@@ -15,6 +15,8 @@ import getChainSpecificData from "@/lib/chainSpecificData";
 import Image from "next/image";
 import { formatTokenAmount } from "@/lib/utils";
 import { NATIVE_ASSET_DECIMALS } from "@/lib/constants";
+import { twMerge } from "tailwind-merge";
+import LoadingSpinner from "../ui/LoadingSpinner";
 
 interface SwapTransactionDialogProps {
     userNoun?: Noun;
@@ -81,14 +83,14 @@ export default function SwapTransactionDialog({ userNoun, treasuryNoun, tip, rea
         }
     }, [isOpen, approveNounTxn, createSwapPropTxn, approveWethTxn, router, searchParams]);
 
-    console.log("Approve txn state", approveNounTxn.state);
+    console.log("Approve Noun txn state", approveNounTxn.state);
+    console.log("Approve WETH txn state", approveWethTxn.state);
     console.log("Create prop txn state", createSwapPropTxn.state);
 
-    console.log(userNoun, treasuryNoun, tip, reason);
-
-    const focusedTxn = useMemo(() => {
-        return approveNounTxn.requiresApproval ? approveNounTxn : createSwapPropTxn;
-    }, [approveNounTxn, createSwapPropTxn]);
+    const { step, focusedTxn } = useMemo(() => {
+        const step = approveNounTxn.requiresApproval ? 0 : approveWethTxn.requiresApproval ? 1 : 2;
+        return { step, focusedTxn: step == 0 ? approveNounTxn : step == 1 ? approveWethTxn : createSwapPropTxn };
+    }, [approveNounTxn, approveWethTxn, createSwapPropTxn]);
 
     return (
         <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
@@ -98,76 +100,72 @@ export default function SwapTransactionDialog({ userNoun, treasuryNoun, tip, rea
             >
                 Create Swap Prop
             </Button>
-            <DialogContent>
-                <div className="px-6 pt-12">
-                    {!userNoun || !treasuryNoun ? (
-                        "Invalid nouns selected"
-                    ) : (
-                        <div className="flex flex-col gap-6 justify-center items-center">
-                            {approveNounTxn.requiresApproval ? (
-                                <>
-                                    <NounCard noun={userNoun} size={80} enableHover={false} />
-                                    <div className="flex flex-col justify-center items-center text-center gap-2">
-                                        <h4>Approve Noun {userNoun.id}</h4>
-                                        <span className="text-secondary">
-                                            This will give the Nouns Treasury permission to swap your Noun if the prop
-                                            passes.{" "}
-                                        </span>
-                                    </div>
-                                </>
-                            ) : approveWethTxn.requiresApproval ? (
-                                <>
-                                    <Image src="/ethereum-logo.png" width={80} height={80} alt="WETH" />
-                                    <div className="flex flex-col justify-center items-center text-center gap-2">
-                                        <h4>Approve WETH</h4>
-                                        <span className="text-secondary">
-                                            Give the Nouns Treasury permission to withdraw{" "}
-                                            {formatTokenAmount(tip, NATIVE_ASSET_DECIMALS, 6)} WETH if the prop passes.
-                                        </span>
-                                    </div>
-                                </>
-                            ) : (
-                                <>
-                                    <SwapNounGraphic fromNoun={userNoun} toNoun={treasuryNoun} />
-                                    <div className="flex flex-col justify-center items-center text-center gap-2 ">
-                                        <h4>Create a Swap Prop</h4>
-                                        <span className="text-secondary">
-                                            This will create a prop in the Nouns DAO to swap Noun {userNoun.id} for Noun{" "}
-                                            {treasuryNoun.id}.
-                                        </span>
-                                    </div>
-                                </>
-                            )}
-                        </div>
-                    )}
+            <DialogContent className="max-w-[425px] max-h-[80vh] flex flex-col overflow-y-auto pt-12">
+                {!userNoun || !treasuryNoun ? (
+                    "Invalid nouns selected"
+                ) : (
+                    <div className="flex flex-col gap-6 justify-center items-center">
+                        {approveNounTxn.requiresApproval ? (
+                            <>
+                                <NounCard noun={userNoun} size={80} enableHover={false} />
+                                <div className="flex flex-col justify-center items-center text-center gap-2">
+                                    <h4>Approve Noun {userNoun.id}</h4>
+                                    <span className="text-secondary">
+                                        This will give the Nouns Treasury permission to swap your Noun if the prop
+                                        passes.{" "}
+                                    </span>
+                                </div>
+                            </>
+                        ) : approveWethTxn.requiresApproval ? (
+                            <>
+                                <Image src="/ethereum-logo.png" width={80} height={80} alt="WETH" />
+                                <div className="flex flex-col justify-center items-center text-center gap-2">
+                                    <h4>Approve WETH</h4>
+                                    <span className="text-secondary">
+                                        Give the Nouns Treasury permission to withdraw the{" "}
+                                        {formatTokenAmount(tip, NATIVE_ASSET_DECIMALS, 6)} WETH tip if the prop passes.
+                                    </span>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <SwapNounGraphic fromNoun={userNoun} toNoun={treasuryNoun} />
+                                <div className="flex flex-col justify-center items-center text-center gap-2 ">
+                                    <h4>Create a Swap Prop</h4>
+                                    <span className="text-secondary">
+                                        This will create a prop in the Nouns DAO to swap Noun {userNoun.id} for Noun{" "}
+                                        {treasuryNoun.id}.
+                                    </span>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                )}
 
-                    <div className="flex flex-col gap-4 pt-12 pb-6 text-gray-600 justify-center items-center">
-                        <div className="flex flex-row">
-                            {focusedTxn.state == SendTransactionState.PendingWalletSignature &&
-                                "Proceed in your wallet"}
-                            {focusedTxn.state == SendTransactionState.PendingTransaction && "Pending transaction"}
-                            {focusedTxn.state == SendTransactionState.Failed && "Transaction failed!"}{" "}
-                            {/** TODO: remove */}
-                        </div>
-                        <div className="flex flex-row gap-[7px] justify-center items-center">
-                            <ProgressCircle state={approveNounTxn.requiresApproval ? "active" : "completed"} />
-                            <ProgressCircle
-                                state={
-                                    approveNounTxn.requiresApproval
-                                        ? "todo"
-                                        : approveWethTxn.requiresApproval
-                                        ? "active"
-                                        : "completed"
-                                }
-                            />
-                            <ProgressCircle
-                                state={
-                                    approveNounTxn.requiresApproval || approveWethTxn.requiresApproval
-                                        ? "todo"
-                                        : "active"
-                                }
-                            />
-                        </div>
+                <div className="flex flex-col gap-3 text-secondary justify-center items-center">
+                    <div className="flex flex-row py-3 w-full justify-center gap-2 caption">
+                        {focusedTxn.state == SendTransactionState.PendingWalletSignature && "Proceed in your wallet"}
+                        {focusedTxn.state == SendTransactionState.PendingTransaction && (
+                            <>
+                                <div className="flex justify-center items-center">
+                                    <LoadingSpinner size={16} className=" fill-gray-600" />
+                                </div>
+                                Pending transaction
+                            </>
+                        )}
+                        {focusedTxn.state == SendTransactionState.Failed && "Transaction failed!"}{" "}
+                    </div>
+                    <div className="flex flex-row w-full justify-between px-10 items-center">
+                        <ProgressCircle state={step == 0 ? "active" : "completed"} />
+                        <div className={twMerge("h-1 bg-disabled w-1/3", step > 0 && "bg-accent")} />
+                        <ProgressCircle state={step == 0 ? "todo" : step == 1 ? "active" : "completed"} />
+                        <div className={twMerge("h-1 bg-disabled w-1/3", step > 1 && "bg-accent")} />
+                        <ProgressCircle state={step < 2 ? "todo" : "active"} />
+                    </div>
+                    <div className="flex flex-row w-full justify-between  caption">
+                        <div className="text-accent">Approve Noun</div>
+                        <div className={twMerge(step > 0 && "text-accent")}>Approve WETH</div>
+                        <div className={twMerge(step > 1 && "text-accent")}>Create Prop</div>
                     </div>
                 </div>
             </DialogContent>

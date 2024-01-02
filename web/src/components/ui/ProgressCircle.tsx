@@ -8,8 +8,8 @@ export default function ProgressCircle({ state }: ProgressCircleProps) {
     return (
         <div
             className={twMerge(
-                "w-3 h-3 rounded-full bg-disabled border-white",
-                state == "active" && "w-[18px] h-[18px] border-[3px] bg-accent border-accent-light",
+                "w-3 h-3 rounded-full bg-disabled ",
+                state == "active" && "bg-accent ring-4 ring-accent-light",
                 state == "completed" && "bg-accent"
             )}
         ></div>
