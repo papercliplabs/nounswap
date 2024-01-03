@@ -103,10 +103,18 @@ This proposal seeks to swap **Noun ${userNoun.id} + ${formatTokenAmount(
                 )} WETH** for **Noun ${treasuryNoun.id}** from the Nouns DAO treasury.
                   
 Noun ${userNoun.id}   
-![Noun ${userNoun.id}](https://noun.pics/${userNoun.id})
+![Noun ${userNoun.id}](https://noun-api.com/beta/pfp?background=${userNoun.seed.background}&body=${
+                    userNoun.seed.body
+                }&accessory=${userNoun.seed.accessory}&head=${userNoun.seed.head}&glasses=${
+                    userNoun.seed.glasses
+                }&size=200)
 
 Noun ${treasuryNoun.id}   
-![Noun ${treasuryNoun.id}](https://noun.pics/${treasuryNoun.id})
+![Noun ${treasuryNoun.id}](https://noun-api.com/beta/pfp?background=${treasuryNoun.seed.background}&body=${
+                    treasuryNoun.seed.body
+                }&accessory=${treasuryNoun.seed.accessory}&head=${treasuryNoun.seed.head}&glasses=${
+                    treasuryNoun.seed.glasses
+                }&size=200)
 
 ---
 
