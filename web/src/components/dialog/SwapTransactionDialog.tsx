@@ -18,7 +18,8 @@ import { NATIVE_ASSET_DECIMALS } from "@/lib/constants";
 import { twMerge } from "tailwind-merge";
 import LoadingSpinner from "../LoadingSpinner";
 import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
-import { useChainModal, useConnectModal } from "@rainbow-me/rainbowkit";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
+import { track } from "@vercel/analytics";
 
 interface SwapTransactionDialogProps {
     userNoun?: Noun;
@@ -65,18 +66,21 @@ export default function SwapTransactionDialog({ userNoun, treasuryNoun, tip, rea
         if (isOpen) {
             if (approveNounTxn.requiresApproval) {
                 if (approveNounTxn.state == SendTransactionState.Idle) {
+                    track("InitNounApproval");
                     approveNounTxn.send?.();
                 } else if (approveNounTxn.state == SendTransactionState.Rejected) {
                     approveNounTxn.reset();
                 }
             } else if (approveWethTxn.requiresApproval) {
                 if (approveWethTxn.state == SendTransactionState.Idle) {
+                    track("InitWethApproval");
                     approveWethTxn.send?.();
                 } else if (approveWethTxn.state == SendTransactionState.Rejected) {
                     approveWethTxn.reset();
                 }
             } else {
                 if (createSwapPropTxn.state == SendTransactionState.Idle) {
+                    track("InitPropApproval");
                     createSwapPropTxn.send?.();
                 } else if (createSwapPropTxn.state == SendTransactionState.Rejected) {
                     createSwapPropTxn.reset();

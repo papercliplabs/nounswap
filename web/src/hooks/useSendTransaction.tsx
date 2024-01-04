@@ -85,6 +85,7 @@ export default function useSendTransaction({
         if (pendingWalletSignature) {
             return SendTransactionState.PendingWalletSignature;
         } else if (rejected) {
+            track("TxRejected");
             return SendTransactionState.Rejected;
         } else if (pendingTransaction) {
             return SendTransactionState.PendingTransaction;
