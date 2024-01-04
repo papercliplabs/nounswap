@@ -13,6 +13,7 @@ import Image from "next/image";
 import { twMerge } from "tailwind-merge";
 import { formatTokenAmount } from "@/lib/utils";
 import { LinkExternal } from "../ui/link";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 interface UserTipDialogProps {
     connected: boolean;
@@ -120,14 +121,33 @@ export default function UserTipDialog({ connected, userBalance, swapUrl, tip, se
                             </button>
                         </span>
                     </div>
-                    <div className="flex flex-row p-4 bg-accent-light rounded-xl gap-3 items-center">
-                        <Icon icon="questionCircle" size={30} />
+
+                    <div className="flex flex-row p-4 bg-accent-light rounded-xl gap-3 items-center ">
+                        <Icon icon="questionCircle" size={16} className="shrink-0" />
                         <div className="caption">
                             Make sure you have enough WETH in your wallet when the prop executes.
-                            <br />
-                            <LinkExternal href={swapUrl} className=" underline text-primary hover:text-secondary">
-                                Get Wrapped ETH
-                            </LinkExternal>
+                            <div className="flex flex-row justify-between pt-2 ">
+                                <Tooltip>
+                                    <TooltipTrigger className="text-secondary underline ">
+                                        <div>Why Wrapped ETH?</div>
+                                    </TooltipTrigger>
+                                    <TooltipContent className="flex flex-col gap-2 max-w-[270px]">
+                                        <h6>Why WETH instead of ETH?</h6>
+                                        <div>
+                                            Using ETH as the tip would require sending it with the creation or execution
+                                            transaction, and additional smart contract logic to ensure it is the correct
+                                            amount for the proposal.
+                                        </div>
+                                        <div>
+                                            In contrast, WETH can be pre-approved, then the transfer is executed and
+                                            enforced as a transaction within the proposal.
+                                        </div>
+                                        <LinkExternal href={swapUrl} className="underline">
+                                            Get Wrapped ETH
+                                        </LinkExternal>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </div>
                         </div>
                     </div>
                     <Button

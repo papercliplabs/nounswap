@@ -32,23 +32,39 @@ export default function HowItWorksDialog() {
                         </LinkExternal>
                         .
                     </div>
-                    <h5 className="py-6">How to create a Swap Prop</h5>
-                    <ol className="pl-4 flex flex-col gap-6">
+                    <h5 className="pt-6 pb-2">How to create a Swap Prop</h5>
+                    <ol className="pl-6 flex flex-col gap-2">
                         <li>
-                            <b>Choose the Noun you want</b>
+                            Choose the Noun you want
                             <div>Any Noun from the Nouns treasury.</div>
                         </li>
                         <li>
-                            <b>Select your Noun to trade</b>
+                            Select your Noun to trade
                             <div>Decide which of your Nouns you want to trade.</div>
                         </li>
                         <li>
-                            <b>Approve your Noun:</b>
-                            <div>This will approve the Nouns Treasury to swap your Noun if the prop passes.</div>
+                            Select your tip amount
+                            <div>
+                                Decide the WETH tip you are willing to give to the Nouns treasury to accept your swap.
+                            </div>
                         </li>
                         <li>
-                            <b>Create a Swap Prop</b>
-                            <div>Confirm the transaction and a swap proposal will be created in Nouns Governance.</div>
+                            Approve your Noun
+                            <div>
+                                Confirm the transaction to allow the Nouns Treasury to swap your Noun if the prop
+                                passes.
+                            </div>
+                        </li>
+                        <li>
+                            Approve your tip
+                            <div>
+                                Confirm the transaction to allow the Nouns Treasury to take your WETH tip amount if the
+                                prop passes.
+                            </div>
+                        </li>
+                        <li>
+                            Create the Swap Prop
+                            <div>Confirm the transaction to create the swap proposal in Nouns Governance.</div>
                         </li>
                     </ol>
                 </div>

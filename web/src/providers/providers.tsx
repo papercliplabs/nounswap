@@ -10,6 +10,7 @@ import { mainnet, goerli, localhost } from "wagmi/chains";
 import { Suspense, useEffect } from "react";
 import UrlManager from "@/components/UrlManager";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const { chains, publicClient } = configureChains(
     [mainnet, { ...goerli, iconUrl: "/ethereum-testnet.png" }],
@@ -53,7 +54,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     return (
         <WagmiConfig config={wagmiConfig}>
             <RainbowKitProvider chains={chains} avatar={CustomAvatar}>
-                <ToastProvider>{children}</ToastProvider>
+                <TooltipProvider>
+                    <ToastProvider>{children}</ToastProvider>
+                </TooltipProvider>
                 <Suspense fallback={<LoadingSpinner />}>
                     <UrlManager />
                 </Suspense>
