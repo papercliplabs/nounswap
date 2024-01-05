@@ -31,14 +31,14 @@ async function NounSelectContainer({ chain }: { chain?: number }) {
         getChainSpecificData(chain).nounsTreasuryAddress,
         chain // active chain
     );
-    const escrowNounsPromise = getNounsForAddress(
-        getAddress("0x44d97D22B3d37d837cE4b22773aAd9d1566055D9"),
-        chain // active chain
-    );
+    // const escrowNounsPromise = getNounsForAddress(
+    //     getAddress("0x44d97D22B3d37d837cE4b22773aAd9d1566055D9"),
+    //     chain // active chain
+    // );
 
-    const [treasuryNouns, escrowNouns] = await Promise.all([treasuryNounsPromise, escrowNounsPromise]);
+    const [treasuryNouns] = await Promise.all([treasuryNounsPromise]);
 
-    const nouns = [...treasuryNouns, ...escrowNouns];
+    const nouns = [...treasuryNouns];
 
     return <NounSelect nouns={nouns} />;
 }
