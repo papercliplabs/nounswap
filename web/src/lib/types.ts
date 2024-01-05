@@ -27,3 +27,11 @@ export interface SwapNounProposal {
     toNoun: Noun;
     state: ProposalState;
 }
+
+export enum NounFeatureFilterOption {
+    Background = "Background",
+    Body = "Body",
+    Accessory = "Accessory",
+    Head = "Head",
+    Glasses = "Glasses",
+}

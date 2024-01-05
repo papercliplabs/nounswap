@@ -6,8 +6,11 @@ import { Suspense } from "react";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Link from "next/link";
 import { LinkExternal } from "@/components/ui/link";
+import { Button } from "@/components/ui/button";
+import NounFilter from "../../../components/NounFilter";
+import NounGrid from "./_partials/NounGrid";
 
-export default function Home({ searchParams }: { searchParams: { chain?: number } }) {
+export default function Explore({ searchParams }: { searchParams: { chain?: number; background?: number } }) {
     return (
         <>
             <div>
@@ -19,26 +22,27 @@ export default function Home({ searchParams }: { searchParams: { chain?: number 
                     </LinkExternal>
                 </div>
             </div>
-            <Suspense fallback={<LoadingSpinner />}>
-                <NounSelectContainer chain={searchParams.chain} />
-            </Suspense>
+            <div className="flex flex-row grow gap-2 bg-negative w-full">
+                <NounFilter />
+                <NounGrid chainId={searchParams.chain} />
+            </div>
         </>
     );
 }
 
-async function NounSelectContainer({ chain }: { chain?: number }) {
-    const treasuryNounsPromise = getNounsForAddress(
-        getChainSpecificData(chain).nounsTreasuryAddress,
-        chain // active chain
-    );
-    const escrowNounsPromise = getNounsForAddress(
-        getAddress("0x44d97D22B3d37d837cE4b22773aAd9d1566055D9"),
-        chain // active chain
-    );
+// async function NounSelectContainer({ chain }: { chain?: number }) {
+//     const treasuryNounsPromise = getNounsForAddress(
+//         getChainSpecificData(chain).nounsTreasuryAddress,
+//         chain // active chain
+//     );
+//     const escrowNounsPromise = getNounsForAddress(
+//         getAddress("0x44d97D22B3d37d837cE4b22773aAd9d1566055D9"),
+//         chain // active chain
+//     );
 
-    const [treasuryNouns, escrowNouns] = await Promise.all([treasuryNounsPromise, escrowNounsPromise]);
+//     const [treasuryNouns, escrowNouns] = await Promise.all([treasuryNounsPromise, escrowNounsPromise]);
 
-    const nouns = [...treasuryNouns, ...escrowNouns];
+//     const nouns = [...treasuryNouns, ...escrowNouns];
 
-    return <NounSelect nouns={nouns} />;
-}
+//     return <NounSelect nouns={nouns} />;
+// }

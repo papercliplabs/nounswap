@@ -2,7 +2,7 @@
 import { Noun } from "../../../../lib/types";
 import NounGrid from "./NounGrid";
 import { useCallback, useMemo, useState } from "react";
-import NounFilter from "./NounFilter";
+import NounFilter from "../../../../components/NounFilter";
 import { ImageData } from "@nouns/assets";
 import { Button } from "../../../../components/ui/button";
 
