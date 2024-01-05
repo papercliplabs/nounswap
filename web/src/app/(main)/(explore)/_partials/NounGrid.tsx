@@ -12,10 +12,7 @@ interface NounGridProps {
 }
 
 export default async function NounGrid({ chainId }: NounGridProps) {
-    const treasuryNounsPromise = getNounsForAddress(
-        getChainSpecificData(chain).nounsTreasuryAddress,
-        chain // active chain
-    );
+    const treasuryNounsPromise = getNounsForAddress(getChainSpecificData(chainId).nounsTreasuryAddress, chainId);
     const escrowNounsPromise = getNounsForAddress(
         getAddress("0x44d97D22B3d37d837cE4b22773aAd9d1566055D9"),
         chain // active chain
