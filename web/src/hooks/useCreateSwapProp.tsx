@@ -2,6 +2,7 @@
 import useSendTransaction, { UseSendTransactionReturnType } from "./useSendTransaction";
 import { useMemo } from "react";
 import {
+    Address,
     TransactionRequest,
     decodeEventLog,
     encodeAbiParameters,
@@ -23,6 +24,13 @@ interface UseCreateSwapPropParams {
     tip?: bigint;
     reason?: string;
     onReject?: () => void;
+}
+
+interface GovernanceProposalTransaction {
+    target: Address;
+    value: bigint;
+    functionSignature: string;
+    inputData: `0x${string}`;
 }
 
 interface UseCreateSwapPropReturnType extends UseSendTransactionReturnType {
@@ -50,13 +58,14 @@ export function useCreateSwapProp({
             tip != undefined &&
             userNoun.chainId == treasuryNoun.chainId
         ) {
-            const transferFromAbi = nounsTokenAbi.find((entry) => entry.name == "transferFrom")!; // Must exist
-            const safeTransferFromAbi = nounsTokenAbi.find((entry) => entry.name == "safeTransferFrom")!; // Must exist
-            const erc20TransferFromAbi = erc20TokenAbi.find((entry) => entry.name == "transferFrom")!; // Must exist
             const chainSpecificData = getChainSpecificData(treasuryNoun.chainId);
 
+            const transferNounFromAbi = nounsTokenAbi.find((entry) => entry.name == "transferFrom")!; // Must exist
+            const safeTransferNounFromAbi = nounsTokenAbi.find((entry) => entry.name == "safeTransferFrom")!; // Must exist
+            const erc20TransferFromAbi = erc20TokenAbi.find((entry) => entry.name == "transferFrom")!; // Must exist
+
             const userNounToTreasuryTransferFromInputData = encodeAbiParameters(
-                transferFromAbi.inputs, // from: address, to: address, tokenId: uint256
+                transferNounFromAbi.inputs, // from: address, to: address, tokenId: uint256
                 [userNoun.owner, chainSpecificData.nounsTreasuryAddress, BigInt(userNoun.id)]
             );
 
@@ -67,27 +76,44 @@ export function useCreateSwapProp({
             ]);
 
             const treasuryNounToUserSafeTransferFromInputData = encodeAbiParameters(
-                safeTransferFromAbi.inputs, // from: address, to: address, tokenId: uint256
+                safeTransferNounFromAbi.inputs, // from: address, to: address, tokenId: uint256
                 [chainSpecificData.nounsTreasuryAddress, userNoun.owner, BigInt(treasuryNoun.id)]
             );
 
+            const transferUserNounGovTxn: GovernanceProposalTransaction = {
+                target: chainSpecificData.nounsTokenAddress,
+                value: BigInt(0),
+                functionSignature: getFunctionSignature(transferNounFromAbi),
+                inputData: userNounToTreasuryTransferFromInputData,
+            };
+
+            const transferWethGovTxn: GovernanceProposalTransaction = {
+                target: chainSpecificData.wrappedNativeTokenAddress,
+                value: BigInt(0),
+                functionSignature: getFunctionSignature(erc20TransferFromAbi),
+                inputData: wethTransferToTreasuryInputData,
+            };
+
+            const transferTreasuryNounGovTxn: GovernanceProposalTransaction = {
+                target: chainSpecificData.nounsTokenAddress,
+                value: BigInt(0),
+                functionSignature: getFunctionSignature(safeTransferNounFromAbi),
+                inputData: treasuryNounToUserSafeTransferFromInputData,
+            };
+
+            let govTxns: GovernanceProposalTransaction[] = [];
+            if (tip > 0) {
+                govTxns = [transferUserNounGovTxn, transferWethGovTxn, transferTreasuryNounGovTxn];
+            } else {
+                // Exclude the WETH transfer all together if the tip is 0
+                govTxns = [transferUserNounGovTxn, transferTreasuryNounGovTxn];
+            }
+
             const proposeArgs = [
-                [
-                    chainSpecificData.nounsTokenAddress,
-                    chainSpecificData.wrappedNativeTokenAddress,
-                    chainSpecificData.nounsTokenAddress,
-                ], // targets
-                [BigInt(0), BigInt(0), BigInt(0)], // values
-                [
-                    getFunctionSignature(transferFromAbi),
-                    getFunctionSignature(erc20TransferFromAbi),
-                    getFunctionSignature(safeTransferFromAbi),
-                ], // signatures
-                [
-                    userNounToTreasuryTransferFromInputData,
-                    wethTransferToTreasuryInputData,
-                    treasuryNounToUserSafeTransferFromInputData,
-                ], // calldatas (fn input data, no selector)
+                govTxns.map((txn) => txn.target), // targets
+                govTxns.map((txn) => txn.value), // values
+                govTxns.map((txn) => txn.functionSignature), // signatures
+                govTxns.map((txn) => txn.inputData), // input data
                 `# NounSwap v1: Swap Noun ${userNoun.id} + ${formatTokenAmount(
                     tip,
                     NATIVE_ASSET_DECIMALS,
