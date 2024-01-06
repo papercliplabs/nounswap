@@ -21,14 +21,7 @@ export default function Explore({ searchParams }: { searchParams: Record<string,
                 <Suspense>
                     <NounFilter />
                 </Suspense>
-                <NounGrid
-                    chainId={numberFromString(searchParams["chain"])}
-                    headFilter={numberFromString(searchParams[NounFeatureFilterOption.Head])}
-                    glassesFilter={numberFromString(searchParams[NounFeatureFilterOption.Glasses])}
-                    accessoryFilter={numberFromString(searchParams[NounFeatureFilterOption.Accessory])}
-                    bodyFilter={numberFromString(searchParams[NounFeatureFilterOption.Body])}
-                    backgroundFilter={numberFromString(searchParams[NounFeatureFilterOption.Background])}
-                />
+                <NounGrid />
             </div>
         </>
     );

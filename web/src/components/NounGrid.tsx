@@ -1,14 +1,8 @@
-"use client";
-import NounCard from "./NounCard";
 import { Suspense } from "react";
-import { LinkInternal } from "@/components/ui/link";
 import { getNounsForAddress } from "@/data/getNounsForAddress";
 import getChainSpecificData from "@/lib/chainSpecificData";
-import { Noun } from "@/lib/types";
-import ClearNounFiltersButton from "./ClearNounFiltersButton";
 import AnimationGird from "./AnimationGrid";
 import { Skeleton } from "./ui/skeleton";
-import { useSearchParams } from "next/navigation";
 import NounGridClient from "./NounGridClient";
 
 interface NounGridProps {

@@ -1,3 +1,4 @@
+"use client";
 import { Noun } from "@/lib/types";
 import { useSearchParams } from "next/navigation";
 import { LinkInternal } from "./ui/link";
