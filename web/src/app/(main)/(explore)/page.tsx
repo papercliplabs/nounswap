@@ -20,11 +20,11 @@ export default function Explore({ searchParams }: { searchParams: Record<string,
                 <NounFilter />
                 <NounGrid
                     chainId={numberFromString(searchParams["chain"])}
-                    // headFilter={numberFromString(searchParams[NounFeatureFilterOption.Head])}
-                    // glassesFilter={numberFromString(searchParams[NounFeatureFilterOption.Glasses])}
-                    // accessoryFilter={numberFromString(searchParams[NounFeatureFilterOption.Accessory])}
-                    // bodyFilter={numberFromString(searchParams[NounFeatureFilterOption.Body])}
-                    // backgroundFilter={numberFromString(searchParams[NounFeatureFilterOption.Background])}
+                    headFilter={numberFromString(searchParams[NounFeatureFilterOption.Head])}
+                    glassesFilter={numberFromString(searchParams[NounFeatureFilterOption.Glasses])}
+                    accessoryFilter={numberFromString(searchParams[NounFeatureFilterOption.Accessory])}
+                    bodyFilter={numberFromString(searchParams[NounFeatureFilterOption.Body])}
+                    backgroundFilter={numberFromString(searchParams[NounFeatureFilterOption.Background])}
                 />
             </div>
         </>

@@ -25,8 +25,8 @@ export default function useUpdateSearchParams(): (params: { name: string; value:
             }
 
             if (shouldUpdate) {
-                // router.replace(`${pathname}?${newParams}`, { scroll: false });
-                window.history.replaceState(null, "", `${pathname}?${newParams}`);
+                router.replace(`${pathname}?${newParams}`, { scroll: false });
+                // window.history.replaceState(null, "", `${pathname}?${newParams}`);
             }
         },
         [router, searchParams, pathname]
