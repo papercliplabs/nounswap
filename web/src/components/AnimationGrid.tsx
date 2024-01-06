@@ -1,32 +1,24 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
-import { Noun } from "@/lib/types";
-import { LinkInternal } from "./ui/link";
-import NounCard from "./NounCard";
 
 interface AnimateGridProps {
-    // items: React.ReactNode[];
-    nouns: Noun[];
+    items: { element: React.ReactNode; id: number }[];
+    disableAnimateIn?: boolean;
+    disableAnimateOut?: boolean;
 }
-export default function AnimationGird({ nouns }: AnimateGridProps) {
+export default function AnimationGird({ items, disableAnimateIn, disableAnimateOut }: AnimateGridProps) {
     return (
         <ul className="justify-stretch items-stretch gap-6 grid grid-cols-[repeat(auto-fill,minmax(130px,1fr))] auto-rows-min grow text-secondary">
-            <AnimatePresence mode="wait">
-                {nouns.map((noun, i) => (
+            <AnimatePresence mode="popLayout">
+                {items.map((item, i) => (
                     <motion.li
-                        initial={{ transform: "scale(0)" }}
+                        initial={disableAnimateIn ? false : { transform: "scale(0)" }}
                         animate={{ transform: "scale(1)" }}
-                        exit={{ transform: "scale(0)" }}
+                        exit={disableAnimateOut ? { opacity: 1 } : { opacity: 0 }}
                         layout
-                        key={noun.id}
+                        key={item.id}
                     >
-                        <LinkInternal
-                            href={`/swap/${noun.chainId}/${noun.id}`}
-                            key={i}
-                            className="active:clickable-active "
-                        >
-                            <NounCard noun={noun} enableHover key={i} />
-                        </LinkInternal>
+                        {item.element}
                     </motion.li>
                 ))}
             </AnimatePresence>

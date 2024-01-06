@@ -6,6 +6,7 @@ import getChainSpecificData from "@/lib/chainSpecificData";
 import { Noun } from "@/lib/types";
 import ClearNounFiltersButton from "./ClearNounFiltersButton";
 import AnimationGird from "./AnimationGrid";
+import { Skeleton } from "./ui/skeleton";
 
 interface NounGridProps {
     chainId?: number;
@@ -34,11 +35,9 @@ export default async function NounGrid({
         return backgroundMatch && bodyMatch && accessoryMatch && headMatch && glassesMatch;
     };
 
-    // TODO: try to find a nice solution to make this smooth... - there is a flash with the server components here, can make the key only chain to get rid of flash but its slower than doing client side filtering then...
     return (
-        <Suspense fallback={<NounGridLoading numItems={200} />} key={`chain=${chainId}`}>
+        <Suspense fallback={<NounGridLoading numItems={48} />} key={`chain=${chainId}`}>
             <NounGridLoaded chainId={chainId} filterFn={filterFn} />
-            {/* <NounGridLoading /> */}
         </Suspense>
     );
 }
@@ -47,32 +46,40 @@ async function NounGridLoaded({ chainId, filterFn }: { chainId?: number; filterF
     const nouns = await getNounsForAddress(getChainSpecificData(chainId).nounsTreasuryAddress, chainId);
     const filteredNouns = nouns.filter(filterFn);
 
-    const nounCards = filteredNouns.map((noun, i) => (
-        <LinkInternal href={`/swap/${noun.chainId}/${noun.id}`} key={i} className="active:clickable-active ">
-            <NounCard noun={noun} enableHover key={i} />
-        </LinkInternal>
-    ));
+    const nounCardItems = filteredNouns.map((noun, i) => {
+        const element = (
+            <Suspense>
+                <LinkInternal href={`/swap/${noun.chainId}/${noun.id}`} key={i} className="active:clickable-active ">
+                    <NounCard noun={noun} enableHover key={i} lazyLoad={i > 50} />
+                </LinkInternal>
+            </Suspense>
+        ) as React.ReactNode;
+        return { element, id: noun.id };
+    });
 
     return (
         <>
-            {nounCards.length == 0 ? (
+            {nounCardItems.length == 0 ? (
                 <div className="flex flex-col border-4 rounded-3xl border-gray-200 grow py-24 h-fit justify-center items-center gap-2">
                     <h4>No Nouns found.</h4>
-                    <ClearNounFiltersButton />
+                    <Suspense>
+                        <ClearNounFiltersButton />
+                    </Suspense>
                 </div>
             ) : (
-                // <AnimationGird items={nounCards} />
-                <AnimationGird nouns={filteredNouns} />
+                <AnimationGird items={nounCardItems} />
             )}
         </>
     );
 }
 
 export function NounGridLoading({ numItems }: { numItems: number }) {
-    const items = [...Array(numItems)].map((_, i) => (
-        <div className=" aspect-square w-full h-full rounded-2xl bg-secondary" />
-        // <Skeleton className={twMerge("rounded-2xl aspect-square animate-come-in")} />
-    ));
+    const items = [...Array(numItems)].map((_, i) => {
+        return {
+            element: (<Skeleton className="rounded-2xl aspect-square" key={i} />) as React.ReactNode,
+            id: i,
+        };
+    });
 
-    return <></>; //<AnimationGird nouns={items} />;
+    return <AnimationGird items={items} disableAnimateIn disableAnimateOut />;
 }

@@ -3,15 +3,22 @@ import { Noun } from "../lib/types";
 import Image from "next/image";
 import { twMerge } from "tailwind-merge";
 import { motion, AnimatePresence } from "framer-motion";
+import { Skeleton } from "./ui/skeleton";
+import useIsOnScreen from "@/hooks/useIsOnScreen";
+import { useRef } from "react";
 
 interface NounCardProps {
     noun: Noun;
     size?: number;
     enableHover: boolean;
     alwaysShowNumber?: boolean;
+    lazyLoad?: boolean;
 }
 
-export default function NounCard({ noun, size, enableHover, alwaysShowNumber }: NounCardProps) {
+export default function NounCard({ noun, size, enableHover, alwaysShowNumber, lazyLoad }: NounCardProps) {
+    const ref = useRef<HTMLInputElement>(null);
+    const isVisible = useIsOnScreen(ref);
+
     return (
         <div
             className={twMerge(
@@ -21,15 +28,20 @@ export default function NounCard({ noun, size, enableHover, alwaysShowNumber }: 
                 size && size <= 100 && "rounded-xl",
                 size && size <= 50 && "rounded-lg"
             )}
+            ref={ref}
         >
-            <Image
-                src={noun.imageSrc}
-                fill={size == undefined}
-                width={size}
-                height={size}
-                alt=""
-                className="outline outline-4 outline-transparent"
-            />
+            {!isVisible && lazyLoad ? (
+                <div className="aspect-square bg-secondary" />
+            ) : (
+                <Image
+                    src={noun.imageSrc}
+                    fill={size == undefined}
+                    width={size}
+                    height={size}
+                    alt=""
+                    className="outline outline-4 outline-transparent"
+                />
+            )}
             <h6
                 className={twMerge(
                     "absolute bottom-[8px] bg-white rounded-full px-3 py-0.5 hidden text-primary shadow-lg",

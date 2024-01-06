@@ -1,15 +1,12 @@
-"use client";
 import WalletButton from "@/components/WalletButton";
 import Nav from "@/components/Nav";
 import Icon from "@/components/ui/Icon";
 import HowItWorksDialog from "@/components/dialog/HowItWorksDialog";
 import { LinkExternal, LinkInternal } from "@/components/ui/link";
 import Image from "next/image";
-import Link from "next/link";
 import { Suspense } from "react";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import ChainSelect from "@/components/ChainSelect";
-import { AnimatePresence } from "framer-motion";
 
 const navInfo = [
     { name: "Explore", href: "/" },
@@ -43,7 +40,9 @@ function Header() {
                     </div>
                     <div className="flex-1 flex justify-end gap-1 text-gray-600 items-center">
                         <HowItWorksDialog />
-                        <ChainSelect />
+                        <Suspense>
+                            <ChainSelect />
+                        </Suspense>
                         <WalletButton />
                     </div>
                 </div>

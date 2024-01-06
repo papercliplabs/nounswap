@@ -5,7 +5,7 @@ import useUpdateSearchParams from "@/hooks/useUpdateSearchParam";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ImageData } from "@nouns/assets";
 import { NounFeatureFilterOption } from "@/lib/types";
-import { useMemo } from "react";
+import { Suspense, useMemo } from "react";
 import ClearNounFiltersButton from "./ClearNounFiltersButton";
 
 export default function NounFilter() {
@@ -17,47 +17,75 @@ export default function NounFilter() {
         >
             <div className="flex flex-row justify-between">
                 <h3>Filter</h3>
-                <ClearNounFiltersButton />
+                <Suspense>
+                    <ClearNounFiltersButton />
+                </Suspense>
             </div>
-            <FilterSelect
-                name={NounFeatureFilterOption.Head}
-                options={ImageData.images.heads
-                    .map((item, i) => {
-                        return { name: item.filename.substring(item.filename.indexOf("-") + 1), value: i.toString() };
-                    })
-                    .sort((itemA, itemB) => (itemA.name > itemB.name ? 1 : -1))}
-            />
-            <FilterSelect
-                name={NounFeatureFilterOption.Glasses}
-                options={ImageData.images.glasses
-                    .map((item, i) => {
-                        return { name: item.filename.substring(item.filename.indexOf("-") + 1), value: i.toString() };
-                    })
-                    .sort((itemA, itemB) => (itemA.name > itemB.name ? 1 : -1))}
-            />
-            <FilterSelect
-                name={NounFeatureFilterOption.Accessory}
-                options={ImageData.images.accessories
-                    .map((item, i) => {
-                        return { name: item.filename.substring(item.filename.indexOf("-") + 1), value: i.toString() };
-                    })
-                    .sort((itemA, itemB) => (itemA.name > itemB.name ? 1 : -1))}
-            />
-            <FilterSelect
-                name={NounFeatureFilterOption.Body}
-                options={ImageData.images.bodies
-                    .map((item, i) => {
-                        return { name: item.filename.substring(item.filename.indexOf("-") + 1), value: i.toString() };
-                    })
-                    .sort((itemA, itemB) => (itemA.name > itemB.name ? 1 : -1))}
-            />
-            <FilterSelect
-                name={NounFeatureFilterOption.Background}
-                options={[
-                    { name: "cool", value: "0" },
-                    { name: "warm", value: "1" },
-                ]}
-            />
+            <Suspense>
+                <FilterSelect
+                    name={NounFeatureFilterOption.Head}
+                    options={ImageData.images.heads
+                        .map((item, i) => {
+                            return {
+                                name: item.filename.substring(item.filename.indexOf("-") + 1),
+                                value: i.toString(),
+                            };
+                        })
+                        .sort((itemA, itemB) => (itemA.name > itemB.name ? 1 : -1))}
+                />
+            </Suspense>
+
+            <Suspense>
+                <FilterSelect
+                    name={NounFeatureFilterOption.Glasses}
+                    options={ImageData.images.glasses
+                        .map((item, i) => {
+                            return {
+                                name: item.filename.substring(item.filename.indexOf("-") + 1),
+                                value: i.toString(),
+                            };
+                        })
+                        .sort((itemA, itemB) => (itemA.name > itemB.name ? 1 : -1))}
+                />
+            </Suspense>
+
+            <Suspense>
+                <FilterSelect
+                    name={NounFeatureFilterOption.Accessory}
+                    options={ImageData.images.accessories
+                        .map((item, i) => {
+                            return {
+                                name: item.filename.substring(item.filename.indexOf("-") + 1),
+                                value: i.toString(),
+                            };
+                        })
+                        .sort((itemA, itemB) => (itemA.name > itemB.name ? 1 : -1))}
+                />
+            </Suspense>
+
+            <Suspense>
+                <FilterSelect
+                    name={NounFeatureFilterOption.Body}
+                    options={ImageData.images.bodies
+                        .map((item, i) => {
+                            return {
+                                name: item.filename.substring(item.filename.indexOf("-") + 1),
+                                value: i.toString(),
+                            };
+                        })
+                        .sort((itemA, itemB) => (itemA.name > itemB.name ? 1 : -1))}
+                />
+            </Suspense>
+
+            <Suspense>
+                <FilterSelect
+                    name={NounFeatureFilterOption.Background}
+                    options={[
+                        { name: "cool", value: "0" },
+                        { name: "warm", value: "1" },
+                    ]}
+                />
+            </Suspense>
         </div>
     );
 }

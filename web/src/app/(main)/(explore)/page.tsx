@@ -3,6 +3,7 @@ import NounFilter from "@/components/NounFilter";
 import NounGrid from "@/components/NounGrid";
 import { NounFeatureFilterOption } from "@/lib/types";
 import { numberFromString } from "@/lib/utils";
+import { Suspense } from "react";
 
 export default function Explore({ searchParams }: { searchParams: Record<string, string | undefined> }) {
     return (
@@ -17,7 +18,9 @@ export default function Explore({ searchParams }: { searchParams: Record<string,
                 </div>
             </div>
             <div className="flex flex-row grow gap-6  w-full">
-                <NounFilter />
+                <Suspense>
+                    <NounFilter />
+                </Suspense>
                 <NounGrid
                     chainId={numberFromString(searchParams["chain"])}
                     headFilter={numberFromString(searchParams[NounFeatureFilterOption.Head])}
