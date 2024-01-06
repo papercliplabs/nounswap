@@ -1,16 +1,10 @@
-import { getNounsForAddress } from "@/data/getNounsForAddress";
-import NounSelect from "./_partials/NounSelect";
-import getChainSpecificData from "@/lib/chainSpecificData";
-import { getAddress } from "viem";
-import { Suspense } from "react";
-import LoadingSpinner from "@/components/LoadingSpinner";
-import Link from "next/link";
 import { LinkExternal } from "@/components/ui/link";
-import { Button } from "@/components/ui/button";
-import NounFilter from "../../../components/NounFilter";
-import NounGrid from "./_partials/NounGrid";
+import NounFilter from "@/components/NounFilter";
+import NounGrid from "@/components/NounGrid";
+import { NounFeatureFilterOption } from "@/lib/types";
+import { numberFromString } from "@/lib/utils";
 
-export default function Explore({ searchParams }: { searchParams: { chain?: number; background?: number } }) {
+export default function Explore({ searchParams }: { searchParams: Record<string, string | undefined> }) {
     return (
         <>
             <div>
@@ -22,27 +16,17 @@ export default function Explore({ searchParams }: { searchParams: { chain?: numb
                     </LinkExternal>
                 </div>
             </div>
-            <div className="flex flex-row grow gap-2 bg-negative w-full">
+            <div className="flex flex-row grow gap-6  w-full">
                 <NounFilter />
-                <NounGrid chainId={searchParams.chain} />
+                <NounGrid
+                    chainId={numberFromString(searchParams["chain"])}
+                    // headFilter={numberFromString(searchParams[NounFeatureFilterOption.Head])}
+                    // glassesFilter={numberFromString(searchParams[NounFeatureFilterOption.Glasses])}
+                    // accessoryFilter={numberFromString(searchParams[NounFeatureFilterOption.Accessory])}
+                    // bodyFilter={numberFromString(searchParams[NounFeatureFilterOption.Body])}
+                    // backgroundFilter={numberFromString(searchParams[NounFeatureFilterOption.Background])}
+                />
             </div>
         </>
     );
 }
-
-// async function NounSelectContainer({ chain }: { chain?: number }) {
-//     const treasuryNounsPromise = getNounsForAddress(
-//         getChainSpecificData(chain).nounsTreasuryAddress,
-//         chain // active chain
-//     );
-//     const escrowNounsPromise = getNounsForAddress(
-//         getAddress("0x44d97D22B3d37d837cE4b22773aAd9d1566055D9"),
-//         chain // active chain
-//     );
-
-//     const [treasuryNouns, escrowNouns] = await Promise.all([treasuryNounsPromise, escrowNounsPromise]);
-
-//     const nouns = [...treasuryNouns, ...escrowNouns];
-
-//     return <NounSelect nouns={nouns} />;
-// }

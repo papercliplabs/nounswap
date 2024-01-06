@@ -4,7 +4,6 @@ import SwapNounGraphic from "@/components/SwapNounGraphic";
 import { twMerge } from "tailwind-merge";
 import { getNounSwapProposalsForDelegate } from "@/data/getNounSwapProposalsForDelegate";
 import { LinkExternal, LinkInternal } from "@/components/ui/link";
-import Link from "next/link";
 import { ProposalState } from "@/lib/types";
 import getChainSpecificData from "@/lib/chainSpecificData";
 import { Suspense } from "react";

@@ -1,6 +1,8 @@
+"use client";
 import { Noun } from "../lib/types";
 import Image from "next/image";
 import { twMerge } from "tailwind-merge";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface NounCardProps {
     noun: Noun;

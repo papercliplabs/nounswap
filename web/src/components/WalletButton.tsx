@@ -39,14 +39,6 @@ export default function WalletButton({ hideChainSwitcher, disableMobileShrink }:
                             return (
                                 <div className="flex flex-row gap-2">
                                     <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        className={twMerge(hideChainSwitcher && "hidden")}
-                                        onClick={openChainModal}
-                                    >
-                                        <Image src={chain.iconUrl ?? ""} width={32} height={32} alt="" />
-                                    </Button>
-                                    <Button
                                         variant="secondary"
                                         onClick={openAccountModal}
                                         className="flex flex-row gap-2 px-4 py-3"

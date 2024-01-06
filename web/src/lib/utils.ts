@@ -76,3 +76,7 @@ export function formatTokenAmount(tokenAmount?: bigint, tokenDecimals?: number, 
 
     return formatNumber(tokens, decimalPrecision);
 }
+
+export function numberFromString(val?: string): number | undefined {
+    return val != undefined ? Number(val) : undefined;
+}

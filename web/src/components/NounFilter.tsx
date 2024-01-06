@@ -5,32 +5,19 @@ import useUpdateSearchParams from "@/hooks/useUpdateSearchParam";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ImageData } from "@nouns/assets";
 import { NounFeatureFilterOption } from "@/lib/types";
+import { useMemo } from "react";
+import ClearNounFiltersButton from "./ClearNounFiltersButton";
 
 export default function NounFilter() {
-    const updateSearchParams = useUpdateSearchParams();
-
     return (
         <div
             className={twMerge(
-                "flex-col bg-secondary p-6 gap-6 md:h-min md:w-[350px] md:rounded-3xl hidden md:flex fixed md:static w-full h-full top-0 left-0 z-50 md:z-0"
+                "flex-col bg-secondary p-6 gap-6 md:h-min md:w-[350px] md:rounded-3xl hidden md:flex fixed md:static w-full h-full top-0 left-0 z-50 md:z-0 shrink-0"
             )}
         >
             <div className="flex flex-row justify-between">
                 <h3>Filter</h3>
-                <button
-                    className="text-accent hover:brightness-[85%]"
-                    onClick={() => {
-                        updateSearchParams([
-                            { name: NounFeatureFilterOption.Head, value: null },
-                            { name: NounFeatureFilterOption.Glasses, value: null },
-                            { name: NounFeatureFilterOption.Accessory, value: null },
-                            { name: NounFeatureFilterOption.Body, value: null },
-                            { name: NounFeatureFilterOption.Background, value: null },
-                        ]);
-                    }}
-                >
-                    Clear all
-                </button>
+                <ClearNounFiltersButton />
             </div>
             <FilterSelect
                 name={NounFeatureFilterOption.Head}
@@ -88,6 +75,10 @@ function FilterSelect({ name, options }: FilterSelectProps) {
     const updateSearchParams = useUpdateSearchParams();
     const value = searchParams.get(name) ?? "none";
 
+    const displayName = useMemo(() => {
+        return name.charAt(0).toUpperCase() + name.substring(1);
+    }, [name]);
+
     return (
         <Select
             onValueChange={(value) => updateSearchParams([{ name, value: value == "none" ? null : value }])}
@@ -105,16 +96,16 @@ function FilterSelect({ name, options }: FilterSelectProps) {
                         value == "none" && "top-1/2 opacity-0"
                     )}
                 >
-                    {name}
+                    {displayName}
                 </div>
-                <SelectValue placeholder={name} asChild>
-                    <h6>{value == "none" ? name : options.find((option) => option.value == value)?.name}</h6>
+                <SelectValue placeholder={displayName} asChild>
+                    <h6>{value == "none" ? displayName : options.find((option) => option.value == value)?.name}</h6>
                 </SelectValue>
             </SelectTrigger>
             <SelectContent>
                 <SelectGroup>
                     <SelectItem value={"none"} className="hover:bg-secondary">
-                        {name}
+                        {displayName}
                     </SelectItem>
                     {options.map((option, i) => (
                         <SelectItem value={option.value.toString()} key={i}>

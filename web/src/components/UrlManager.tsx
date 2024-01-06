@@ -1,34 +1,16 @@
 "use client";
 import { useEffect } from "react";
-import { useAccount, useNetwork } from "wagmi";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { watchAccount } from "@wagmi/core";
+import useUpdateSearchParams from "@/hooks/useUpdateSearchParam";
 
 export default function UrlManager() {
-    const router = useRouter();
-    const pathname = usePathname();
-    const searchParams = useSearchParams();
-
-    const { address } = useAccount();
-    const { chain } = useNetwork();
+    const updateSearchParams = useUpdateSearchParams();
 
     useEffect(() => {
-        const params = new URLSearchParams(Array.from(searchParams.entries()));
-        if (chain != undefined) {
-            params.set("chain", chain.id.toString());
-        } else {
-            params.delete("chain");
-        }
-
-        if (address != undefined) {
-            params.set("address", address);
-        } else {
-            params.delete("address");
-        }
-
-        if (params.toString() != searchParams.toString()) {
-            router.replace(`${pathname}?${params}`);
-        }
-    }, [address, chain, pathname, router, searchParams]);
+        watchAccount((account) => {
+            updateSearchParams([{ name: "address", value: account.address ?? null }]);
+        });
+    });
 
     return <></>;
 }

@@ -12,16 +12,21 @@ export default function useUpdateSearchParams(): (params: { name: string; value:
         (params: { name: string; value: string | null }[]) => {
             const newParams = new URLSearchParams(Array.from(searchParams.entries()));
 
+            let shouldUpdate = false;
             for (const param of params) {
-                if (param.value == null) {
-                    newParams.delete(param.name);
-                } else {
-                    newParams.set(param.name, param.value);
+                if (param.value != searchParams.get(param.name)) {
+                    shouldUpdate = true;
+                    if (param.value == null) {
+                        newParams.delete(param.name);
+                    } else {
+                        newParams.set(param.name, param.value);
+                    }
                 }
             }
 
-            if (newParams.toString() != searchParams.toString()) {
-                router.replace(`${pathname}?${newParams}`, { scroll: false });
+            if (shouldUpdate) {
+                // router.replace(`${pathname}?${newParams}`, { scroll: false });
+                window.history.replaceState(null, "", `${pathname}?${newParams}`);
             }
         },
         [router, searchParams, pathname]

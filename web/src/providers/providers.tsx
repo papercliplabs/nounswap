@@ -57,9 +57,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
                 <TooltipProvider>
                     <ToastProvider>{children}</ToastProvider>
                 </TooltipProvider>
-                <Suspense fallback={<LoadingSpinner />}>
-                    <UrlManager />
-                </Suspense>
+                <UrlManager />
             </RainbowKitProvider>
         </WagmiConfig>
     );

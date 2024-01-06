@@ -6,6 +6,9 @@ const nextConfig = {
           level: "verbose"
         },
       },
+      experimental: {
+        windowHistorySupport: true,
+      },
 }
 
 module.exports = nextConfig

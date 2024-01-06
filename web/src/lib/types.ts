@@ -29,9 +29,9 @@ export interface SwapNounProposal {
 }
 
 export enum NounFeatureFilterOption {
-    Background = "Background",
-    Body = "Body",
-    Accessory = "Accessory",
-    Head = "Head",
-    Glasses = "Glasses",
+    Head = "head",
+    Glasses = "glasses",
+    Accessory = "accessory",
+    Body = "body",
+    Background = "background",
 }
