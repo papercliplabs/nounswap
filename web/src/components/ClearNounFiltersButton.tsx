@@ -9,13 +9,16 @@ export default function ClearNounFiltersButton() {
         <button
             className="text-accent hover:brightness-[85%]"
             onClick={() => {
-                updateSearchParams([
-                    { name: NounFeatureFilterOption.Head, value: null },
-                    { name: NounFeatureFilterOption.Glasses, value: null },
-                    { name: NounFeatureFilterOption.Accessory, value: null },
-                    { name: NounFeatureFilterOption.Body, value: null },
-                    { name: NounFeatureFilterOption.Background, value: null },
-                ]);
+                updateSearchParams(
+                    [
+                        { name: NounFeatureFilterOption.Head, value: null },
+                        { name: NounFeatureFilterOption.Glasses, value: null },
+                        { name: NounFeatureFilterOption.Accessory, value: null },
+                        { name: NounFeatureFilterOption.Body, value: null },
+                        { name: NounFeatureFilterOption.Background, value: null },
+                    ],
+                    true
+                );
             }}
         >
             Clear filters

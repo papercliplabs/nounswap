@@ -109,7 +109,7 @@ function FilterSelect({ name, options }: FilterSelectProps) {
 
     return (
         <Select
-            onValueChange={(value) => updateSearchParams([{ name, value: value == "none" ? null : value }])}
+            onValueChange={(value) => updateSearchParams([{ name, value: value == "none" ? null : value }], true)}
             value={value}
         >
             <SelectTrigger
