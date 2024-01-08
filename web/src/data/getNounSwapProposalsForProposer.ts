@@ -9,24 +9,26 @@ import { goerli } from "viem/chains"; // TODO: need to remember to update!
 import { washChainId } from "../lib/chainSpecificData";
 
 const query = gql(`
-    query NounSwapProposalsForDelegate($id: ID!) {
-        delegate(id: $id) {
-            proposals(where: { title_contains: "NounSwap" }, first: 1000, orderBy: id, orderDirection: desc) {
-                id
-                title
-                description
-                status
-                quorumVotes
-                forVotes
-                againstVotes
-                endBlock
-                startBlock
-            }
+    query NounSwapProposalsForProposer($proposerAsString: String!, $proposerAsBytes: Bytes!) {
+        proposals(where: { proposer: $proposerAsString, title_contains: "NounSwap" }, first: 1000, orderBy: id, orderDirection: desc) {
+            id
+            title
+            description
+            status
+            quorumVotes
+            forVotes
+            againstVotes
+            endBlock
+            startBlock
+        }
+        proposalCandidates(where: { proposer: $proposerAsBytes, slug_contains: "nounswap" }, first: 1000, orderBy: id, orderDirection: desc) {
+            id
+            slug
         }
     }
 `);
 
-export async function getNounSwapProposalsForDelegate(
+export async function getNounSwapProposalsForProposer(
     address?: Address,
     chainId?: number
 ): Promise<SwapNounProposal[]> {
@@ -45,16 +47,20 @@ export async function getNounSwapProposalsForDelegate(
     // Nextjs is caching this...
     const currentBlock = await publicClient.getBlockNumber({ cacheTime: 10_000 });
 
+    const proposer = address.toString().toLowerCase();
+
     const { data: queryResult } = await getClientForChain(washedChainId).query({
         query: query,
-        variables: { id: address.toString().toLowerCase() },
+        variables: { proposerAsString: proposer, proposerAsBytes: proposer },
     });
 
-    if (queryResult.delegate) {
-        const data = queryResult.delegate;
+    if (queryResult) {
+        const proposals = queryResult.proposals;
+        const proposalCandidates = queryResult.proposalCandidates;
 
         const swapNounProposals: SwapNounProposal[] = [];
-        for (let proposal of data.proposals) {
+
+        for (let proposal of proposals) {
             const title = proposal.title;
 
             let v0 = title.match(/NounSwap:/) != null;
@@ -128,9 +134,36 @@ export async function getNounSwapProposalsForDelegate(
             } as SwapNounProposal);
         }
 
-        return swapNounProposals;
+        const swapNounCandidates: SwapNounProposal[] = [];
+        for (let proposalCandidate of proposalCandidates) {
+            // Only v1 supports candidates
+
+            const match = proposalCandidate.slug.match(
+                /nounswap-v1-swap-noun-[0-9]*--[0-9]*\.?[0-9]*?-weth-for-noun-[0-9]*/
+            ); // NounSwap v1: Swap Noun XX + ZZ WETH for Noun YY
+
+            if (match == null || match.length == 0) {
+                continue;
+            }
+
+            const split = match[0].split("-");
+            const fromNounId = split[4];
+            const toNounId = split[10];
+
+            const fromNoun = await getNounById(fromNounId, washedChainId);
+            const toNoun = await getNounById(toNounId, washedChainId);
+
+            swapNounCandidates.push({
+                id: proposalCandidate.id,
+                fromNoun: fromNoun,
+                toNoun: toNoun,
+                state: ProposalState.Candidate,
+            } as SwapNounProposal);
+        }
+
+        return [...swapNounCandidates, ...swapNounProposals];
     } else {
-        console.log(`getNounSwapProposalsForDelegate: no proposals found - ${address}`);
+        console.log(`getNounSwapProposalsForProposer: no proposals found - ${address}`);
         return [];
     }
 }

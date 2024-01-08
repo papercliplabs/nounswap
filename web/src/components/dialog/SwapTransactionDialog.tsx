@@ -1,6 +1,6 @@
 import { Noun } from "../../lib/types";
 import useApproveNoun from "../../hooks/useApproveNoun";
-import { useCreateSwapProp } from "../../hooks/useCreateSwapProp";
+import { useCreateSwapPropOrCandidate } from "../../hooks/useCreateSwapPropOrCandidate";
 import { useEffect, useMemo, useState } from "react";
 import { SendTransactionState } from "../../hooks/useSendTransaction";
 import NounCard from "../NounCard";
@@ -50,7 +50,7 @@ export default function SwapTransactionDialog({ userNoun, treasuryNoun, tip, rea
         onReject: () => setIsOpen(false),
     });
 
-    const createSwapPropTxn = useCreateSwapProp({
+    const createSwapPropTxn = useCreateSwapPropOrCandidate({
         userNoun,
         treasuryNoun,
         tip,
@@ -160,10 +160,10 @@ export default function SwapTransactionDialog({ userNoun, treasuryNoun, tip, rea
                             <>
                                 <SwapNounGraphic fromNoun={userNoun} toNoun={treasuryNoun} />
                                 <div className="flex flex-col justify-center items-center text-center gap-2 ">
-                                    <h4>Create a Swap Prop</h4>
+                                    <h4>Create a Swap Prop {createSwapPropTxn.requiresPropCandidate && "Candidate"}</h4>
                                     <span className="text-secondary">
-                                        This will create a prop in the Nouns DAO to swap Noun {userNoun.id} for Noun{" "}
-                                        {treasuryNoun.id}.
+                                        This will create a prop {createSwapPropTxn.requiresPropCandidate && "candidate"}{" "}
+                                        in the Nouns DAO to swap Noun {userNoun.id} for Noun {treasuryNoun.id}.
                                     </span>
                                 </div>
                             </>
