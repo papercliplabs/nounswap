@@ -19,10 +19,11 @@ export enum ProposalState {
     Vetoed = "VETOED",
     Succeeded = "SUCCEEDED",
     Defeated = "DEFEATED",
+    Candidate = "CANDIDATE",
 }
 
 export interface SwapNounProposal {
-    id: number;
+    id: number | string;
     fromNoun: Noun;
     toNoun: Noun;
     state: ProposalState;

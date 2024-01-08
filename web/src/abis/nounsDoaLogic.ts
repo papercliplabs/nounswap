@@ -63,4 +63,4 @@ export const nounsDoaLogicAbi = [
         name: "ProposalCreated",
         type: "event",
     },
-];
+] as const;

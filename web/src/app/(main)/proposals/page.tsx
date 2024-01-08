@@ -2,7 +2,7 @@ import { Address } from "wagmi";
 import WalletButton from "@/components/WalletButton";
 import SwapNounGraphic from "@/components/SwapNounGraphic";
 import { twMerge } from "tailwind-merge";
-import { getNounSwapProposalsForDelegate } from "@/data/getNounSwapProposalsForDelegate";
+import { getNounSwapProposalsForProposer } from "@/data/getNounSwapProposalsForProposer";
 import { LinkExternal, LinkInternal } from "@/components/ui/link";
 import Link from "next/link";
 import { ProposalState } from "@/lib/types";
@@ -23,7 +23,7 @@ export default function Proposals({ searchParams }: { searchParams: { address?: 
 }
 
 async function ProposalsTable({ address, chain }: { address?: Address; chain?: number }) {
-    const proposals = await getNounSwapProposalsForDelegate(address, chain);
+    const proposals = await getNounSwapProposalsForProposer(address, chain);
     const chainSpecificData = getChainSpecificData(chain);
 
     return (
@@ -50,13 +50,19 @@ async function ProposalsTable({ address, chain }: { address?: Address; chain?: n
                     {proposals.map((proposal, i) => {
                         return (
                             <LinkExternal
-                                href={chainSpecificData.nounsFrontendUrl + "/vote/" + proposal.id}
+                                href={
+                                    proposal.state == ProposalState.Candidate
+                                        ? chainSpecificData.nounsFrontendUrl + "/candidates/" + proposal.id
+                                        : chainSpecificData.nounsFrontendUrl + "/vote/" + proposal.id
+                                }
                                 className="flex flex-col md:flex-row w-full border-2 border-secondary p-6 rounded-2xl text-secondary hover:bg-secondary text-center md:text-start md:justify-start items-center gap-4 "
                                 key={i}
                             >
                                 <SwapNounGraphic fromNoun={proposal.fromNoun} toNoun={proposal.toNoun} />
                                 <div className="flex flex-col justify-center md:justify-start">
-                                    <h4 className="text-primary">Prop {proposal.id}</h4>
+                                    <h4 className="text-primary">
+                                        Prop {proposal.state == ProposalState.Candidate ? "Candidate" : proposal.id}
+                                    </h4>
                                     <div className="text-secondary">
                                         Swap Noun {proposal.fromNoun.id} for Noun {proposal.toNoun.id}
                                     </div>
