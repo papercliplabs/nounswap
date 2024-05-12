@@ -5,8 +5,9 @@ import getClientForChain from "./ApolloClient";
 import { gql } from "./__generated__/gql";
 import { getNounById } from "./getNounById";
 import { ProposalStatus } from "./__generated__/graphql";
-import { goerli } from "viem/chains"; // TODO: need to remember to update!
+import { goerli, mainnet } from "viem/chains"; // TODO: need to remember to update!
 import { washChainId } from "../lib/chainSpecificData";
+import { split } from "postcss/lib/list";
 
 const query = gql(`
     query NounSwapProposalsForProposer($proposerAsString: String!, $proposerAsBytes: Bytes!) {
@@ -39,8 +40,8 @@ export async function getNounSwapProposalsForProposer(
     const washedChainId = washChainId(chainId);
 
     const publicClient = createPublicClient({
-        chain: goerli,
-        transport: http(goerli.rpcUrls.alchemy.http + "/" + process.env.NEXT_PUBLIC_ALCHEMY_ID),
+        chain: mainnet,
+        transport: http(mainnet.rpcUrls.alchemy.http + "/" + process.env.NEXT_PUBLIC_ALCHEMY_ID),
         pollingInterval: 10_000,
     });
 
@@ -77,14 +78,23 @@ export async function getNounSwapProposalsForProposer(
                 fromNounId = split[3];
                 toNounId = split[6];
             } else {
-                const match = title.match(/NounSwap v1: Swap Noun [0-9]* \+ [0-9]*\.?[0-9]*? WETH for Noun [0-9]*/); // NounSwap v1: Swap Noun XX + ZZ WETH for Noun YY
-                if (match == null || match.length == 0) {
-                    continue;
+                let match = title.match(/NounSwap v1: Swap Noun [0-9]* \+ [0-9]*\.?[0-9]*? WETH for Noun [0-9]*/); // NounSwap v1: Swap Noun XX + ZZ WETH for Noun YY
+                if (match != null && match.length != 0) {
+                    const split = match[0].split(" ");
+                    fromNounId = split[4];
+                    toNounId = split[10];
+                } else {
+                    match = title.match(/NounSwap v1: Swap Noun [0-9]* for Noun [0-9]*/); // NounSwap v1: Swap Noun XX for Noun YY (no WETH)
+                    if(match == null || match.length == 0) {
+                        continue
+                    }
+
+                    const split = match[0].split(" ");
+                    fromNounId = split[4]
+                    toNounId = split[7]
                 }
-                const split = match[0].split(" ");
-                fromNounId = split[4];
-                toNounId = split[10];
             }
+
 
             const fromNoun = await getNounById(fromNounId, washedChainId);
             const toNoun = await getNounById(toNounId, washedChainId);
@@ -142,13 +152,23 @@ export async function getNounSwapProposalsForProposer(
                 /nounswap-v1-swap-noun-[0-9]*--[0-9]*\.?[0-9]*?-weth-for-noun-[0-9]*/
             ); // NounSwap v1: Swap Noun XX + ZZ WETH for Noun YY
 
-            if (match == null || match.length == 0) {
-                continue;
+            let fromNounId = "";
+            let toNounId = "";
+            if (match != null && match.length != 0) {
+                const split = match[0].split("-");
+                fromNounId = split[4];
+                toNounId = split[10];
+            } else {
+                const match = proposalCandidate.slug.match(
+                    /nounswap-v1-swap-noun-[0-9]*-for-noun-[0-9]*/
+                ); // NounSwap v1: Swap Noun XX + ZZ WETH for Noun YY
+                if(match == null || match.length == 0) {
+                    continue;
+                }
+                const split = match[0].split("-");
+                fromNounId = split[4];
+                toNounId = split[7];
             }
-
-            const split = match[0].split("-");
-            const fromNounId = split[4];
-            const toNounId = split[10];
 
             const fromNoun = await getNounById(fromNounId, washedChainId);
             const toNoun = await getNounById(toNounId, washedChainId);

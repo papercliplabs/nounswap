@@ -4,6 +4,7 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { Analytics } from "@vercel/analytics/react";
 import { Londrina_Solid } from "next/font/google";
 import localFont from "next/font/local";
+import { getFrameMetadata } from 'frog/next'
 
 import Providers from "@/providers/providers";
 import ToastContainer from "@/components/ToastContainer";
@@ -22,21 +23,30 @@ const londrinaSolidFont = Londrina_Solid({
     variable: "--font-londrina-solid",
 });
 
-export const metadata: Metadata = {
-    title: "NounSwap",
-    description: "Swap your Noun with the Nouns Treasury",
-    metadataBase: new URL("https://www.nounswap.wtf"),
-    openGraph: {
+
+export async function generateMetadata() {
+    const frameMetadata = await getFrameMetadata(`https://frames.paperclip.xyz/nounish-auction/nouns`)
+
+    // Only take fc:frame tags (not og image overrides)
+    const filteredFrameMetadata = Object.fromEntries(Object.entries(frameMetadata).filter(([k]) => k.includes("fc:frame")));
+    return {
         title: "NounSwap",
         description: "Swap your Noun with the Nouns Treasury",
-    },
-    twitter: {
-        card: "summary_large_image",
-        title: "NounSwap",
-        description: "Swap your Noun with the Nouns Treasury",
-    },
-    keywords: ["crypto", "cryptocurrency", "ethereum", "nft", "nouns", "nounsDOA", "paperclip", "labs"],
-};
+        metadataBase: new URL("https://www.nounswap.wtf"),
+        openGraph: {
+            title: "NounSwap",
+            description: "Swap your Noun with the Nouns Treasury",
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: "NounSwap",
+            description: "Swap your Noun with the Nouns Treasury",
+        },
+        keywords: ["crypto", "cryptocurrency", "ethereum", "nft", "nouns", "nounsDOA", "paperclip", "labs"],
+        other: filteredFrameMetadata
+    }
+}
+
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
