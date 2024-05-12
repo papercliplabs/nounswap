@@ -148,11 +148,11 @@ export function useCreateSwapPropOrCandidate({
                 govTxns = [transferUserNounGovTxn, transferTreasuryNounGovTxn];
             }
 
-            const propTitle = `NounSwap v1: Swap Noun ${userNoun.id} + ${formatTokenAmount(
+            const propTitle = `NounSwap v1: Swap Noun ${userNoun.id} ${tip > BigInt(0) ? `+ ${formatTokenAmount(
                 tip,
                 NATIVE_ASSET_DECIMALS,
                 6
-            )} WETH for Noun ${treasuryNoun.id} from the Nouns Treasury`;
+            )} WETH ` : ""}for Noun ${treasuryNoun.id} from the Nouns Treasury`;
 
             const proposeArgs: any = [
                 govTxns.map((txn) => txn.target), // targets
@@ -163,11 +163,11 @@ export function useCreateSwapPropOrCandidate({
 
 ## Summary
                 
-This proposal seeks to swap **Noun ${userNoun.id} + ${formatTokenAmount(
+This proposal seeks to swap **Noun ${userNoun.id}${tip > BigInt(0) ? ` + ${formatTokenAmount(
                     tip,
                     NATIVE_ASSET_DECIMALS,
                     6
-                )} WETH** for **Noun ${treasuryNoun.id}** from the Nouns DAO treasury.
+                )} WETH` : ""}** for **Noun ${treasuryNoun.id}** from the Nouns DAO treasury.
                   
 Noun ${userNoun.id}   
 ![Noun ${userNoun.id}](https://noun-api.com/beta/pfp?background=${userNoun.seed.background}&body=${
