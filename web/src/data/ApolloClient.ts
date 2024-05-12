@@ -7,7 +7,7 @@ export const { getClient: getMainnetSubgraphClient } = registerApolloClient(() =
     return new ApolloClient({
         cache: new InMemoryCache(),
         link: new HttpLink({
-            uri: "https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph",
+            uri: "https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns/prod/gn",
             fetchOptions: { cache: "no-store" },
         }),
     });
