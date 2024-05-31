@@ -2,150 +2,164 @@
 import { useEffect, useMemo, useState } from "react";
 import { TransactionReceipt, TransactionRequest } from "viem";
 import { Hash } from "viem";
-import { usePrepareSendTransaction, useSendTransaction as useWagmiSendTransaction, useWaitForTransaction } from "wagmi";
+import {
+  useSimulateContract,
+  useSendTransaction as useWagmiSendTransaction,
+  useWaitForTransactionReceipt,
+} from "wagmi";
 import useToast from "./useToast";
 import { ToastType } from "@/providers/toast";
 import { track } from "@vercel/analytics";
 
 interface UseSendTransactionParams {
-    request?: TransactionRequest;
-    chainId?: number;
-    successMsg?: string;
-    onSuccess?: () => void;
-    onReject?: () => void;
+  request?: TransactionRequest;
+  chainId?: number;
+  successMsg?: string;
+  onSuccess?: () => void;
+  onReject?: () => void;
 }
 
 export enum SendTransactionState {
-    Idle = "idle",
-    PendingWalletSignature = "pendingWalletSignature",
-    Rejected = "rejected",
-    PendingTransaction = "pendingTransaction",
-    Failed = "failed",
-    Success = "success",
+  Idle = "idle",
+  PendingWalletSignature = "pendingWalletSignature",
+  Rejected = "rejected",
+  PendingTransaction = "pendingTransaction",
+  Failed = "failed",
+  Success = "success",
 }
 
 export interface UseSendTransactionReturnType {
-    state: SendTransactionState;
-    estimatedFeeEth?: bigint;
-    hash?: Hash;
-    receipt?: TransactionReceipt;
-    send?: () => void;
-    reset: () => void;
+  state: SendTransactionState;
+  estimatedFeeEth?: bigint;
+  hash?: Hash;
+  receipt?: TransactionReceipt;
+  send?: () => void;
+  reset: () => void;
 }
 
 export default function useSendTransaction({
-    request,
-    chainId,
-    successMsg,
-    onSuccess,
-    onReject,
+  request,
+  successMsg,
+  onSuccess,
+  onReject,
 }: UseSendTransactionParams): UseSendTransactionReturnType {
-    const [_, setPendingToastId] = useState<number | undefined>(undefined);
-    const { addToast, removeToast } = useToast();
+  const [_, setPendingToastId] = useState<number | undefined>(undefined);
+  const { addToast, removeToast } = useToast();
 
-    const { config } = usePrepareSendTransaction({
-        to: request?.to ?? undefined,
-        data: request?.data,
-        enabled: request != undefined,
-        gas: request?.gas,
-        onError: () => {},
-        chainId,
-    });
+  // const { config } = usePrepareSendTransaction({
+  //   to: request?.to ?? undefined,
+  //   data: request?.data,
+  //   enabled: request != undefined,
+  //   gas: request?.gas,
+  //   onError: () => {},
+  // });
 
-    const {
-        data: sendData,
-        isLoading: pendingWalletSignature,
-        sendTransactionAsync,
-        reset,
-        isError: rejected,
-    } = useWagmiSendTransaction({
-        ...config,
-        onError: (e) => {
-            console.error("SEND ERROR: ", e);
-            onReject?.();
-        },
-        chainId,
-    });
+  const { sendTransaction } = useWagmiSendTransaction();
 
-    const {
-        data: receipt,
-        isLoading: pendingTransaction,
-        isSuccess: success,
-        isError: failed,
-    } = useWaitForTransaction({
-        hash: sendData?.hash,
-        confirmations: 2,
-        onSettled: (data, error) => {
-            console.log("Transaction settled", { data, error });
-        },
-        onSuccess: () => onSuccess?.(),
-    });
+  // const {
+  //   data: sendData,
+  //   sendTransactionAsync,
+  //   reset,
+  //   isError: rejected,
+  // } = useWagmiSendTransaction({
+  //   ...config,
+  //   onError: (e) => {
+  //     console.error("SEND ERROR: ", e);
+  //     onReject?.();
+  //   },
+  // });
 
-    const state = useMemo(() => {
-        if (pendingWalletSignature) {
-            return SendTransactionState.PendingWalletSignature;
-        } else if (rejected) {
-            track("TxRejected");
-            return SendTransactionState.Rejected;
-        } else if (pendingTransaction) {
-            return SendTransactionState.PendingTransaction;
-        } else if (failed) {
-            track("TxFailed");
-            return SendTransactionState.Failed;
-        } else if (success) {
-            track("TxSuccess");
-            return SendTransactionState.Success;
-        } else {
-            return SendTransactionState.Idle;
-        }
-    }, [pendingWalletSignature, pendingTransaction, failed, success, rejected]);
+  const {
+    data: receipt,
+    isLoading: pendingTransaction,
+    isSuccess: success,
+    isError: failed,
+  } = useWaitForTransactionReceipt({
+    // hash: sendData?.hash,
+    confirmations: 2,
+    // onSettled: (data, error) => {
+    //   console.log("Transaction settled", { data, error });
+    // },
+    // onSuccess: () => onSuccess?.(),
+  });
 
-    // Handle toasts
-    useEffect(() => {
-        let pendingToastId: number | undefined = undefined;
+  const state = useMemo(() => {
+    // if (pendingWalletSignature) {
+    //   return SendTransactionState.PendingWalletSignature;
+    // } else if (rejected) {
+    // if (rejected) {
+    //   track("TxRejected");
+    //   return SendTransactionState.Rejected;
+    if (pendingTransaction) {
+      return SendTransactionState.PendingTransaction;
+    } else if (failed) {
+      track("TxFailed");
+      return SendTransactionState.Failed;
+    } else if (success) {
+      track("TxSuccess");
+      return SendTransactionState.Success;
+    } else {
+      return SendTransactionState.Idle;
+    }
+  }, [pendingTransaction, failed, success]);
 
-        switch (state) {
-            case SendTransactionState.Rejected:
-                addToast({
-                    content: "Txn rejected",
-                    type: ToastType.Failure,
-                });
-                break;
-            case SendTransactionState.PendingTransaction:
-                pendingToastId = addToast({
-                    content: "Txn pending",
-                    type: ToastType.Pending,
-                });
-                break;
-            case SendTransactionState.Failed:
-                addToast({
-                    content: "Txn failed",
-                    type: ToastType.Failure,
-                });
-                break;
-            case SendTransactionState.Success:
-                addToast({
-                    content: successMsg ?? "Txn success",
-                    type: ToastType.Success,
-                });
-                break;
-        }
+  // Handle toasts
+  useEffect(() => {
+    let pendingToastId: number | undefined = undefined;
 
-        setPendingToastId((currentId) => {
-            if (currentId != undefined) {
-                removeToast(currentId);
-            }
-
-            return pendingToastId;
+    switch (state) {
+      // case SendTransactionState.Rejected:
+      //   addToast({
+      //     content: "Txn rejected",
+      //     type: ToastType.Failure,
+      //   });
+      //   break;
+      case SendTransactionState.PendingTransaction:
+        pendingToastId = addToast({
+          content: "Txn pending",
+          type: ToastType.Pending,
         });
-    }, [state, addToast, removeToast, setPendingToastId, successMsg]);
+        break;
+      case SendTransactionState.Failed:
+        addToast({
+          content: "Txn failed",
+          type: ToastType.Failure,
+        });
+        break;
+      case SendTransactionState.Success:
+        addToast({
+          content: successMsg ?? "Txn success",
+          type: ToastType.Success,
+        });
+        break;
+    }
 
-    return {
-        state,
-        estimatedFeeEth: config && config.maxFeePerGas && config.gas ? config.maxFeePerGas * config.gas : undefined,
-        hash: sendData?.hash,
-        receipt,
-        send: sendTransactionAsync,
-        reset,
-    };
+    setPendingToastId((currentId) => {
+      if (currentId != undefined) {
+        removeToast(currentId);
+      }
+
+      return pendingToastId;
+    });
+  }, [state, addToast, removeToast, setPendingToastId, successMsg]);
+
+  // return {
+  //   state,
+  //   estimatedFeeEth: config && config.maxFeePerGas && config.gas ? config.maxFeePerGas * config.gas : undefined,
+  //   hash: sendData?.hash,
+  //   receipt,
+  //   send: () => sendTransaction(to: request?.to ?? undefined,
+  //   data: request?.data,
+  //   enabled: request != undefined,
+  //   gas: request?.gas,),
+  //   reset,
+  // };
+  return {
+    state,
+    estimatedFeeEth: undefined,
+    hash: "0x",
+    receipt,
+    send: () => console.log("a"),
+    reset: () => console.log("b"),
+  };
 }
