@@ -11,7 +11,7 @@ export interface Noun {
   id: BigIntString;
   owner: Address;
   traits: {
-    background: NounTrait;
+    background: NounTrait & { color: string };
     body: NounTrait;
     accessory: NounTrait;
     head: NounTrait;

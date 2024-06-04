@@ -1,23 +1,27 @@
-import { CHAIN_CONFIG } from "@/utils/config";
-import { SECONDS_PER_DAY } from "@/utils/constants";
-import { readContract } from "viem/actions";
-import { nounsTokenConfig } from "../generated/wagmi";
-import { unstable_cache } from "next/cache";
 import { getNounById } from "./getNounById";
+import { Noun } from "./types";
+import { getCurrentAuction } from "../auction/getCurrentAuction";
 
-export async function getAllNouns() {
-  const totalSupply = await unstable_cache(
-    async () =>
-      (await readContract(CHAIN_CONFIG.publicClient, { ...nounsTokenConfig, functionName: "totalSupply" })).toString(),
-    ["total-supply"],
-    { revalidate: SECONDS_PER_DAY / 2 }
-  )();
+export async function getAllNouns(): Promise<Noun[]> {
+  // Using auction id since there is a weird bug with Sepolia tokens TotalSupply
+  const currentAuction = await getCurrentAuction();
+  const totalSupply = currentAuction.nounId;
 
   const nouns = await Promise.all(
     Array(Number(totalSupply))
       .fill(0)
-      .map((id) => getNounById(id))
+      .map((_, id) => getNounById(id.toString()))
   );
 
-  return nouns;
+  // Filter out any undefined
+  const nounsFiltered = nouns.filter((noun) => noun !== undefined) as Noun[];
+
+  if (nouns.length !== nounsFiltered.length) {
+    console.error(`getNounsForAddress: some nouns not found - ${nouns.length - nounsFiltered.length}`);
+  }
+
+  // Sort by id, descending
+  nounsFiltered.sort((a, b) => (BigInt(b.id) > BigInt(a.id) ? 1 : -1));
+
+  return nounsFiltered;
 }

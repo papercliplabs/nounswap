@@ -3,15 +3,15 @@ import { Address, fallback } from "viem";
 import { http, WagmiProvider } from "wagmi";
 import { AvatarComponent, RainbowKitProvider, getDefaultConfig } from "@rainbow-me/rainbowkit";
 
-import { CHAIN_CONFIG } from "@/utils/config";
+import { CHAIN_CONFIG } from "@/config";
 import TanstackQueryProvider from "./TanstackQueryProvider";
 import { getLinearGradientForAddress } from "@/utils/utils";
 import Image from "next/image";
 
-const CustomAvatar: AvatarComponent = ({ address, ensImage, size }) => {
+export const CustomAvatar: AvatarComponent = ({ address, ensImage, size }) => {
   const linearGradient = getLinearGradientForAddress(address as Address);
   return ensImage ? (
-    <Image src={ensImage} width={size} height={size} alt="" style={{ borderRadius: 999 }} />
+    <Image src={ensImage} width={size} height={size} alt="" style={{ borderRadius: 999, width: size, height: size }} />
   ) : (
     <div
       style={{

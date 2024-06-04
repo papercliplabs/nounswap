@@ -1,6 +1,6 @@
-import { CHAIN_CONFIG } from "@/utils/config";
+import { CHAIN_CONFIG } from "@/config";
 import { multicall } from "viem/actions";
-import { nounsAuctionHouseConfig } from "../generated/wagmi";
+import { nounsAuctionHouseConfig, nounsDaoLogicConfig } from "../generated/wagmi";
 import { unstable_cache } from "next/cache";
 import { SECONDS_PER_DAY } from "@/utils/constants";
 import { BigIntString } from "@/utils/types";
@@ -8,13 +8,15 @@ import { BigIntString } from "@/utils/types";
 interface ProtocolParams {
   reservePrice: BigIntString;
   minBidIncrementPercentage: number;
+  proposalThreshold: BigIntString;
 }
 
 async function getProtocolParamsUncached(): Promise<ProtocolParams> {
-  const [reservePrice, minBidIncrementPercentage] = await multicall(CHAIN_CONFIG.publicClient, {
+  const [reservePrice, minBidIncrementPercentage, proposalThreshold] = await multicall(CHAIN_CONFIG.publicClient, {
     contracts: [
       { ...nounsAuctionHouseConfig, functionName: "reservePrice" },
       { ...nounsAuctionHouseConfig, functionName: "minBidIncrementPercentage" },
+      { ...nounsDaoLogicConfig, functionName: "proposalThreshold" },
     ],
     allowFailure: false,
   });
@@ -22,6 +24,7 @@ async function getProtocolParamsUncached(): Promise<ProtocolParams> {
   return {
     reservePrice: reservePrice.toString(),
     minBidIncrementPercentage,
+    proposalThreshold: proposalThreshold.toString(),
   };
 }
 

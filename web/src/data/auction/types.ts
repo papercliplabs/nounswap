@@ -12,7 +12,7 @@ export interface Auction {
   startTime: BigIntString;
   endTime: BigIntString;
 
-  settled: boolean;
+  state: "live" | "ended-unsettled" | "ended-settled";
 
   bids: Bid[]; // Ordered most recent to oldest, highest bid is bids[0] (could be empty)
 }

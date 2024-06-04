@@ -8,9 +8,10 @@ import NounCard from "../NounCard";
 import { LinkExternal } from "../ui/link";
 import { useState } from "react";
 import Image from "next/image";
-import { CHAIN_CONFIG } from "@/utils/config";
+import { CHAIN_CONFIG } from "@/config";
 import { useSwitchChain } from "wagmi";
 import { Noun } from "@/data/noun/types";
+import Link from "next/link";
 
 interface UserNounSelectDialogProps {
   connected: boolean;
@@ -51,7 +52,7 @@ export default function UserNounSelectDialog({
         ) : (
           <button
             onClick={() => (connected ? setOpen(true) : openConnectModal?.())}
-            className="flex h-[200px] w-[200px] flex-col items-center justify-center gap-2 rounded-[20px] border-4 border-dashed bg-ternary p-8 text-secondary hover:brightness-[85%]"
+            className="flex h-[200px] w-[200px] flex-col items-center justify-center gap-2 rounded-[20px] border-4 border-dashed bg-background-ternary p-8 text-content-secondary hover:brightness-[85%]"
           >
             <Image src="/noggles.png" width={64} height={64} alt="" />
             <h6>Select your Noun</h6>
@@ -61,18 +62,18 @@ export default function UserNounSelectDialog({
 
       <DialogContent className="flex max-h-[80vh] max-w-[425px] flex-col overflow-y-auto p-0">
         <h4 className="px-6 pt-6">Select your Noun</h4>
-        <div className="flex flex-col [&>ol>li>div]:text-secondary">
+        <div className="flex flex-col [&>ol>li>div]:text-content-secondary">
           {userNouns == undefined ? (
             <Icon icon="pending" size={60} className="animate-spin" />
           ) : userNouns.length == 0 ? (
             <div className="flex h-[244px] w-full flex-col items-center justify-center gap-2 px-8 py-6 text-center">
               <h4>No Nouns available</h4>
-              <div className="text-secondary">
+              <div className="text-content-secondary">
                 {CHAIN_CONFIG.chain.id == 1 ? (
                   <>
                     Don{"'"}t have a noun on Ethereum? Try NounSwap on{" "}
                     <button
-                      className="text-accent hover:brightness-[85%]"
+                      className="text-semantic-accent hover:brightness-[85%]"
                       onClick={async () => {
                         await switchChainAsync?.({ chainId: sepolia.id });
                         router.push("/" + "?" + searchParams.toString());
@@ -84,9 +85,13 @@ export default function UserNounSelectDialog({
                   </>
                 ) : (
                   <>
-                    You don{"'"}t have a noun on Goerli Testnet.
+                    You don{"'"}t have a noun on Testnet.
                     <br />
-                    Get a <LinkExternal href="https://nouns-webapp-nu.vercel.app">Goerli Noun here</LinkExternal>.
+                    Buy a{" "}
+                    <Link href="/" className="text-semantic-accent">
+                      Testnet Noun here
+                    </Link>
+                    .
                   </>
                 )}
               </div>
@@ -94,7 +99,7 @@ export default function UserNounSelectDialog({
           ) : (
             userNouns.map((noun, i) => (
               <button
-                className="flex w-full flex-row items-center gap-6 p-2 px-6 py-3 text-center hover:bg-secondary hover:brightness-[85%]"
+                className="flex w-full flex-row items-center gap-6 p-2 px-6 py-3 text-center hover:bg-background-secondary hover:brightness-[85%]"
                 onClick={() => {
                   selectedNounCallback(noun);
                   setOpen(false);

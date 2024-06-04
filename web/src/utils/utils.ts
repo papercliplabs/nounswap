@@ -1,20 +1,14 @@
-import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
 import { Address, formatUnits } from "viem";
 
-export function cn(...inputs: ClassValue[]) {
-    return twMerge(clsx(inputs));
-}
-
 export function getShortAddress(address: Address) {
-    return address.slice(0, 6) + "..." + address.slice(address.length - 4);
+  return address.slice(0, 6) + "..." + address.slice(address.length - 4);
 }
 
 export function getLinearGradientForAddress(address: Address) {
-    const addr = address.slice(2, 10);
-    const seed = parseInt(addr, 16);
-    const number = Math.ceil(seed % 0xffffff);
-    return `linear-gradient(45deg, #${number.toString(16).padStart(6, "0")}, #FFFFFF)`;
+  const addr = address.slice(2, 10);
+  const seed = parseInt(addr, 16);
+  const number = Math.ceil(seed % 0xffffff);
+  return `linear-gradient(45deg, #${number.toString(16).padStart(6, "0")}, #FFFFFF)`;
 }
 
 /**
@@ -25,43 +19,43 @@ export function getLinearGradientForAddress(address: Address) {
  * @returns nicely formatted number, for example if number is 11023 this will return 1.10K
  */
 export function formatNumber(num: number | string | undefined, decimals: number = 2, prefix: string = ""): string {
-    const suffixes = ["", "", "M", "B", "T"];
+  const suffixes = ["", "", "M", "B", "T"];
 
-    let formattedNum = num;
+  let formattedNum = num;
 
-    if (formattedNum == undefined || isNaN(Number(num))) {
-        return "--";
+  if (formattedNum == undefined || isNaN(Number(num))) {
+    return "--";
+  }
+
+  // If it is represented as a sting, convert to number first
+  if (typeof formattedNum === "string") {
+    formattedNum = parseFloat(formattedNum);
+
+    if (isNaN(formattedNum)) {
+      return num as string; // It isn't a number
     }
+  }
 
-    // If it is represented as a sting, convert to number first
-    if (typeof formattedNum === "string") {
-        formattedNum = parseFloat(formattedNum);
+  let suffixIndex = Math.floor((formattedNum.toFixed(0).toString().length - 1) / 3);
 
-        if (isNaN(formattedNum)) {
-            return num as string; // It isn't a number
-        }
-    }
+  // Clamp to max suffix
+  if (suffixIndex >= suffixes.length) {
+    suffixIndex = 0;
+  }
 
-    let suffixIndex = Math.floor((formattedNum.toFixed(0).toString().length - 1) / 3);
+  // Don't format below 1M
+  if (formattedNum > 1e6) {
+    formattedNum /= 10 ** (3 * suffixIndex);
+  }
 
-    // Clamp to max suffix
-    if (suffixIndex >= suffixes.length) {
-        suffixIndex = 0;
-    }
+  if (formattedNum < 10 ** -decimals && formattedNum > 0) {
+    formattedNum = "<" + prefix + 10 ** -decimals;
+  } else {
+    let nf = new Intl.NumberFormat("en-US", { maximumFractionDigits: decimals });
+    formattedNum = prefix + nf.format(formattedNum);
+  }
 
-    // Don't format below 1M
-    if (formattedNum > 1e6) {
-        formattedNum /= 10 ** (3 * suffixIndex);
-    }
-
-    if (formattedNum < 10 ** -decimals && formattedNum > 0) {
-        formattedNum = "<" + prefix + 10 ** -decimals;
-    } else {
-        let nf = new Intl.NumberFormat("en-US", { maximumFractionDigits: decimals });
-        formattedNum = prefix + nf.format(formattedNum);
-    }
-
-    return formattedNum + suffixes[suffixIndex];
+  return formattedNum + suffixes[suffixIndex];
 }
 
 /**
@@ -71,8 +65,8 @@ export function formatNumber(num: number | string | undefined, decimals: number 
  * @param decimalPrecision nunber of decimals to keep
  */
 export function formatTokenAmount(tokenAmount?: bigint, tokenDecimals?: number, decimalPrecision?: number): string {
-    const tokens =
-        tokenAmount != undefined && tokenDecimals ? formatUnits(tokenAmount as bigint, tokenDecimals) : undefined;
+  const tokens =
+    tokenAmount != undefined && tokenDecimals ? formatUnits(tokenAmount as bigint, tokenDecimals) : undefined;
 
-    return formatNumber(tokens, decimalPrecision);
+  return formatNumber(tokens, decimalPrecision);
 }

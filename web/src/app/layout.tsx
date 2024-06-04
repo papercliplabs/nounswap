@@ -8,7 +8,7 @@ import { getFrameMetadata } from "frog/next";
 
 import Providers from "@/providers/providers";
 import ToastContainer from "@/components/ToastContainer";
-import BetaBanner from "@/components/BetaBanner";
+import TestnetBanner from "@/components/TestnetBanner";
 
 const ptRootUiFont = localFont({
   src: "./pt-root-ui_vf.woff2",
@@ -53,8 +53,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${ptRootUiFont.variable} ${londrinaSolidFont.variable}`}>
       <body>
         <Providers>
-          <div className="flex min-h-screen w-full flex-col justify-between overflow-hidden border-primary">
-            <BetaBanner />
+          <div className="border-border-primary flex min-h-screen w-full flex-col justify-between overflow-hidden">
+            <TestnetBanner />
             {children}
           </div>
           <ToastContainer />

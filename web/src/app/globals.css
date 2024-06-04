@@ -3,60 +3,64 @@
 @tailwind utilities;
 
 @layer base {
-    * {
-        @apply tracking-wide font-pt;
-    }
+  * {
+    @apply font-pt tracking-wide;
+  }
 
-    *,
-    ::before,
-    ::after {
-        @apply border-primary;
-    }
+  *,
+  ::before,
+  ::after {
+    @apply border-border-primary;
+  }
 
-    body {
-        @apply bg-primary text-primary border-primary font-medium;
-    }
+  .title-4 {
+    @apply text-[28px] leading-[36px];
+  }
 
-    h1 {
-        @apply text-[56px] leading-[64px] font-londrina font-normal;
-    }
+  body {
+    @apply border-border-primary text-content-primary bg-background-primary font-medium;
+  }
 
-    h2 {
-        @apply text-[42px] leading-[56px] font-londrina font-normal;
-    }
+  h1 {
+    @apply font-londrina text-[56px] font-normal leading-[64px];
+  }
 
-    h3 {
-        @apply text-[36px] leading-[44px] font-londrina font-normal;
-    }
+  h2 {
+    @apply font-londrina text-[42px] font-normal leading-[56px];
+  }
 
-    h4 {
-        @apply text-[28px] leading-[36px] font-londrina font-normal;
-    }
+  h3 {
+    @apply font-londrina text-[36px] font-normal leading-[44px];
+  }
 
-    h5 {
-        @apply text-[24px] leading-[32px] font-londrina font-normal;
-    }
+  h4 {
+    @apply font-londrina text-[28px] font-normal leading-[36px];
+  }
 
-    h6 {
-        @apply text-[18px] leading-[24px] font-londrina font-normal;
-    }
+  h5 {
+    @apply font-londrina text-[24px] font-normal leading-[32px];
+  }
 
-    span,
-    p {
-        @apply text-[16px] leading-[24px] font-pt font-medium;
-    }
+  h6 {
+    @apply font-londrina text-[18px] font-normal leading-[24px];
+  }
 
-    .caption {
-        @apply text-[14px] leading-[16px] font-pt font-medium;
-    }
+  span,
+  p {
+    @apply font-pt text-[16px] font-medium leading-[24px];
+  }
 
-    ol {
-        list-style-position: outside;
-        list-style-type: decimal;
-        display: inline-block;
-    }
+  .caption {
+    @apply font-pt text-[14px] font-medium leading-[16px];
+  }
 
-    .clickable-active {
-        @apply brightness-[85%] scale-[98%] ease-in-out;
-    }
+  ol {
+    list-style-position: outside;
+    list-style-type: decimal;
+    display: inline-block;
+  }
+
+  .clickable-active {
+    @apply scale-[98%] brightness-[85%] ease-in-out;
+  }
 }

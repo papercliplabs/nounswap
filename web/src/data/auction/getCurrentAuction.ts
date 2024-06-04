@@ -2,7 +2,7 @@
 import { BigIntString } from "@/utils/types";
 import { Auction } from "./types";
 import { readContract } from "viem/actions";
-import { CHAIN_CONFIG } from "@/utils/config";
+import { CHAIN_CONFIG } from "@/config";
 import { nounsAuctionHouseConfig } from "../generated/wagmi";
 import { unstable_cache } from "next/cache";
 import { getProtocolParams } from "../protocol/getProtocolParams";
@@ -31,7 +31,7 @@ export async function getCurrentAuction(): Promise<CurrentAuction> {
   const auction = await getAuctionByIdUncached(id);
 
   if (!auction) {
-    throw new Error("No current auction found");
+    throw new Error(`No current auction found - id:${id}`);
   }
 
   const highestBidAmount = auction.bids.length > 0 ? BigInt(auction.bids[0].amount) : BigInt(0);

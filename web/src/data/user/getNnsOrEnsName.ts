@@ -1,19 +1,26 @@
 "use server";
 import { Address } from "viem";
 import { readContract } from "viem/actions";
-import { nnsEnsResolverConfig } from "../generated/wagmi";
-import { CHAIN_CONFIG } from "@/utils/config";
+import { mainnetPublicClient } from "@/config";
 import { unstable_cache } from "next/cache";
 import { SECONDS_PER_DAY } from "@/utils/constants";
+import { nnsEnsResolverAbi } from "@/abis/nnsEnsResolver";
+import { NNS_ENS_MAINNET_RESOLVER_ADDRESS } from "@/utils/constants";
 
 async function getNnsOrEnsNameForAddressUncached(address: Address): Promise<string | null> {
-  const name = await readContract(CHAIN_CONFIG.publicClient, {
-    ...nnsEnsResolverConfig,
-    functionName: "resolve",
-    args: [address],
-  });
+  try {
+    const name = await readContract(mainnetPublicClient, {
+      abi: nnsEnsResolverAbi,
+      address: NNS_ENS_MAINNET_RESOLVER_ADDRESS,
+      functionName: "resolve",
+      args: [address],
+    });
 
-  return name;
+    return name != "" ? name : null;
+  } catch (e) {
+    console.error("getNnsOrEnsNameForAddressUncached error", e);
+    return null;
+  }
 }
 
 export const getNnsOrEnsNameForAddress = unstable_cache(getNnsOrEnsNameForAddressUncached, ["get-nns-or-ens-name"], {

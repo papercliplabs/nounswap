@@ -1,0 +1,154 @@
+"use client";
+import { AbiFunction, Address, encodeAbiParameters, encodeFunctionData, toFunctionSignature } from "viem";
+import { useAccount } from "wagmi";
+import { erc20TokenAbi } from "@/abis/erc20Token";
+import { formatTokenAmount } from "@/utils/utils";
+import { NATIVE_ASSET_DECIMALS } from "@/utils/constants";
+import { nounsDaoDataAbi } from "@/abis/nounsDaoData";
+import { Noun } from "@/data/noun/types";
+import { UseSendTransactionReturnType, useSendTransaction } from "./useSendTransaction";
+import { CHAIN_CONFIG } from "@/config";
+import { nounsTokenAbi } from "@/abis/nounsToken";
+
+interface GovernanceProposalTransaction {
+  target: Address;
+  value: bigint;
+  functionSignature: string;
+  inputData: `0x${string}`;
+}
+
+interface UseCreateSwapPropCandidateReturnType extends Omit<UseSendTransactionReturnType, "sendTransaction"> {
+  createCandidate: (userNoun: Noun, treasuryNoun: Noun, tip: bigint, reason: string) => void;
+}
+
+export function useCreateSwapPropCandidate(): UseCreateSwapPropCandidateReturnType {
+  const { sendTransaction, ...other } = useSendTransaction();
+  const { address } = useAccount();
+
+  async function createCandidate(userNoun: Noun, treasuryNoun: Noun, tip: bigint, reason: string) {
+    const transferNounFromAbi = nounsTokenAbi.find(
+      (entry) => entry.type == "function" && entry.name == "transferFrom"
+    )! as AbiFunction;
+    const safeTransferNounFromAbi = nounsTokenAbi.find(
+      (entry) => entry.type == "function" && entry.name == "safeTransferFrom"
+    )! as AbiFunction;
+    const erc20TransferFromAbi = erc20TokenAbi.find(
+      (entry) => entry.type == "function" && entry.name == "transferFrom"
+    )! as AbiFunction;
+
+    const userNounToTreasuryTransferFromInputData = encodeAbiParameters(
+      transferNounFromAbi.inputs, // from: address, to: address, tokenId: uint256
+      [userNoun.owner, CHAIN_CONFIG.addresses.nounsTreasury, BigInt(userNoun.id)]
+    );
+
+    const wethTransferToTreasuryInputData = encodeAbiParameters(erc20TransferFromAbi.inputs, [
+      userNoun.owner,
+      CHAIN_CONFIG.addresses.nounsTreasury,
+      tip,
+    ]);
+
+    const treasuryNounToUserSafeTransferFromInputData = encodeAbiParameters(
+      safeTransferNounFromAbi.inputs, // from: address, to: address, tokenId: uint256
+      [CHAIN_CONFIG.addresses.nounsTreasury, userNoun.owner, BigInt(treasuryNoun.id)]
+    );
+
+    const transferUserNounGovTxn: GovernanceProposalTransaction = {
+      target: CHAIN_CONFIG.addresses.nounsToken,
+      value: BigInt(0),
+      functionSignature: toFunctionSignature(transferNounFromAbi),
+      inputData: userNounToTreasuryTransferFromInputData,
+    };
+
+    const transferWethGovTxn: GovernanceProposalTransaction = {
+      target: CHAIN_CONFIG.wrappedNativeTokenAddress,
+      value: BigInt(0),
+      functionSignature: toFunctionSignature(erc20TransferFromAbi),
+      inputData: wethTransferToTreasuryInputData,
+    };
+
+    const transferTreasuryNounGovTxn: GovernanceProposalTransaction = {
+      target: CHAIN_CONFIG.addresses.nounsToken,
+      value: BigInt(0),
+      functionSignature: toFunctionSignature(safeTransferNounFromAbi),
+      inputData: treasuryNounToUserSafeTransferFromInputData,
+    };
+
+    let govTxns: GovernanceProposalTransaction[] = [];
+    if (tip > 0) {
+      govTxns = [transferUserNounGovTxn, transferWethGovTxn, transferTreasuryNounGovTxn];
+    } else {
+      // Exclude the WETH transfer all together if the tip is 0
+      govTxns = [transferUserNounGovTxn, transferTreasuryNounGovTxn];
+    }
+
+    const propTitle = `NounSwap v1: Swap Noun ${userNoun.id} ${
+      tip > BigInt(0) ? `+ ${formatTokenAmount(tip, NATIVE_ASSET_DECIMALS, 6)} WETH ` : ""
+    }for Noun ${treasuryNoun.id} from the Nouns Treasury`;
+
+    const proposeArgs: any = [
+      govTxns.map((txn) => txn.target), // targets
+      govTxns.map((txn) => txn.value), // values
+      govTxns.map((txn) => txn.functionSignature), // signatures
+      govTxns.map((txn) => txn.inputData), // input data
+      `# ${propTitle}
+
+## Summary
+
+This proposal seeks to swap **Noun ${userNoun.id}${
+        tip > BigInt(0) ? ` + ${formatTokenAmount(tip, NATIVE_ASSET_DECIMALS, 6)} WETH` : ""
+      }** for **Noun ${treasuryNoun.id}** from the Nouns DAO treasury.
+
+Noun ${userNoun.id}
+![Noun ${userNoun.id}](https://noun-api.com/beta/pfp?background=${userNoun.traits.background.seed}&body=${
+        userNoun.traits.body.seed
+      }&accessory=${userNoun.traits.accessory.seed}&head=${userNoun.traits.head.seed}&glasses=${userNoun.traits.glasses.seed}&size=200)
+
+Noun ${treasuryNoun.id}
+![Noun ${treasuryNoun.id}](https://noun-api.com/beta/pfp?background=${treasuryNoun.traits.background.seed}&body=${
+        treasuryNoun.traits.body.seed
+      }&accessory=${treasuryNoun.traits.accessory.seed}&head=${treasuryNoun.traits.head.seed}&glasses=${
+        treasuryNoun.traits.glasses.seed
+      }&size=200)
+
+---
+
+## Rationale for Swap
+
+*This rationale is directly from the creator of the proposal*
+${reason ?? "No rationale provided"}
+
+---
+
+## This Prop was created using NounSwap.
+
+[NounSwap](nounswap.wtf) is a tool built for the Nouns communities by [Paperclip Labs](https://paperclip.xyz/). It allows Noun owners to easily create proposals to swap their Noun for a Noun in the DAO treasury. It serves purely as a facilitation tool for proposal creation. NounSwap does not have contracts and does not take custody of any Nouns or tokens at any time.`,
+    ];
+
+    const slug = propTitle
+      .toLowerCase()
+      .replace(/ /g, "-")
+      .replace(/[^\w-]+/g, "");
+
+    // Candidate requires slug and proposalIdToUpdate
+    proposeArgs.push(slug);
+    proposeArgs.push(BigInt(0));
+
+    const propCalldata = encodeFunctionData({
+      abi: nounsDaoDataAbi,
+      functionName: "createProposalCandidate",
+      args: proposeArgs,
+    });
+
+    const request = {
+      to: CHAIN_CONFIG.addresses.nounsDoaDataProxy,
+      from: address,
+      data: propCalldata,
+      value: BigInt(0),
+      gas: BigInt(2000000), // Reasonable default incase gas estimate fails...
+    };
+
+    sendTransaction(request);
+  }
+
+  return { createCandidate, ...other };
+}

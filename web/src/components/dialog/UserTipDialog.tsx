@@ -43,7 +43,7 @@ export default function UserTipDialog({ connected, userBalance, swapUrl, tip, se
           <div className="relative hover:cursor-pointer">
             <button
               onClick={() => setOpen(true)}
-              className="flex h-[200px] w-[200px] flex-col items-center justify-center gap-4 rounded-3xl bg-secondary"
+              className="flex h-[200px] w-[200px] flex-col items-center justify-center gap-4 rounded-3xl bg-background-secondary"
             >
               <Image src="/ethereum-logo.png" width={64} height={64} alt="WETH" />
               <h5>{formatTokenAmount(tip, NATIVE_ASSET_DECIMALS, 6)} WETH</h5>
@@ -58,7 +58,7 @@ export default function UserTipDialog({ connected, userBalance, swapUrl, tip, se
         ) : (
           <button
             onClick={() => (connected ? setOpen(true) : openConnectModal?.())}
-            className="flex h-[200px] w-[200px] flex-col items-center justify-center gap-2 rounded-[20px] border-4 border-dashed bg-ternary p-8 text-secondary hover:brightness-[85%]"
+            className="flex h-[200px] w-[200px] flex-col items-center justify-center gap-2 rounded-[20px] border-4 border-dashed bg-background-ternary p-8 text-content-secondary hover:brightness-[85%]"
           >
             <Image src="/tip.png" width={64} height={64} alt="" />
             <h6>Add a tip</h6>
@@ -89,37 +89,37 @@ export default function UserTipDialog({ connected, userBalance, swapUrl, tip, se
               />
               <div
                 className={twMerge(
-                  "absolute right-5 top-1/2 flex h-full -translate-y-1/2 items-center border-l-2 pl-4 text-secondary",
+                  "absolute right-5 top-1/2 flex h-full -translate-y-1/2 items-center border-l-2 pl-4 text-content-secondary",
                   insufficientBalance && "border-negative"
                 )}
               >
                 WETH
               </div>
             </div>
-            <div className={twMerge("hidden text-negative", insufficientBalance && "flex")}>
+            <div className={twMerge("text-negative hidden", insufficientBalance && "flex")}>
               Insufficient WETH balance.
             </div>
           </div>
-          <div className="text-secondary">
+          <div className="text-content-secondary">
             Balance:{" "}
             <span className="font-bold">
               {userBalance != undefined ? formatTokenAmount(userBalance, NATIVE_ASSET_DECIMALS, 6) : "--"} WETH{" "}
               <button
                 onClick={() => (userBalance != undefined ? setFormattedInputValue(formatEther(userBalance)) : {})}
-                className="text-accent hover:text-accent-dark"
+                className="text-semantic-accent hover:text-semantic-accent-dark"
               >
                 (Max)
               </button>
             </span>
           </div>
 
-          <div className="flex flex-row items-center gap-3 rounded-xl bg-accent-light p-4">
+          <div className="flex flex-row items-center gap-3 rounded-xl bg-semantic-accent-light p-4">
             <Icon icon="questionCircle" size={16} className="shrink-0" />
             <div className="caption">
               Make sure you have enough WETH in your wallet when the prop executes.
               <div className="flex flex-row justify-between pt-2">
                 <Tooltip>
-                  <TooltipTrigger className="text-secondary underline">
+                  <TooltipTrigger className="text-content-secondary underline">
                     <div>Why Wrapped ETH?</div>
                   </TooltipTrigger>
                   <TooltipContent className="flex max-w-[270px] flex-col gap-2">

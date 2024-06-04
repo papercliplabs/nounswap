@@ -1,18 +1,17 @@
-import { NounSeed } from "@nouns/assets/dist/types";
 import { buildSVG } from "@nouns/sdk";
 import { ImageData, getNounData } from "@nouns/assets";
 import { unstable_cache } from "next/cache";
 import { NounTrait } from "./types";
 import { graphql } from "../generated/gql";
 import { graphQLFetchWithFallback } from "../utils/graphQLFetch";
-import { CHAIN_CONFIG } from "@/utils/config";
+import { CHAIN_CONFIG } from "@/config";
 
 const { palette } = ImageData;
 
 interface NounImageAndTraits {
   imageSrc: string;
   traits: {
-    background: NounTrait;
+    background: NounTrait & { color: string };
     body: NounTrait;
     accessory: NounTrait;
     head: NounTrait;
@@ -36,7 +35,7 @@ const query = graphql(/* GraphQL */ `
 `);
 
 async function getNounImageAndTraitsByIdUncached(id: string): Promise<NounImageAndTraits | null> {
-  const result = await graphQLFetchWithFallback(CHAIN_CONFIG.subgraphUrl, query, { id }, { cache: "no-store" });
+  const result = await graphQLFetchWithFallback(CHAIN_CONFIG.subgraphUrl, query, { id }, { next: { revalidate: 0 } });
 
   const seedResult = result.noun?.seed;
   if (!seedResult) {
@@ -70,6 +69,7 @@ async function getNounImageAndTraitsByIdUncached(id: string): Promise<NounImageA
         seed: seed.background,
         name: "Background",
         imageSrc: backgroundImage,
+        color: "#" + background,
       },
       body: {
         seed: seed.body,
@@ -101,7 +101,7 @@ function buildBase64Image(
   }[],
   bgColor?: string | undefined
 ) {
-  const svgBinary = buildSVG([parts[0]], palette, bgColor);
+  const svgBinary = buildSVG(parts, palette, bgColor);
   const svgBase64 = btoa(svgBinary);
   return "data:image/svg+xml;base64," + svgBase64;
 }

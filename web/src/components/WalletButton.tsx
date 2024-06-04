@@ -8,11 +8,10 @@ import { Button } from "./ui/button";
 import { Address } from "viem";
 
 interface WalletButtonProps {
-  hideChainSwitcher?: boolean;
   disableMobileShrink?: boolean;
 }
 
-export default function WalletButton({ hideChainSwitcher, disableMobileShrink }: WalletButtonProps) {
+export default function WalletButton({ disableMobileShrink }: WalletButtonProps) {
   const { address } = useAccount();
   const { data: ensName } = useEnsName({ address, chainId: 1 });
   const { data: ensAvatar } = useEnsAvatar({ name: ensName ?? "", chainId: 1 });
@@ -39,14 +38,6 @@ export default function WalletButton({ hideChainSwitcher, disableMobileShrink }:
 
               return (
                 <div className="flex flex-row gap-2">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className={twMerge(hideChainSwitcher && "hidden")}
-                    onClick={openChainModal}
-                  >
-                    <Image src={chain.iconUrl ?? ""} width={32} height={32} alt="" />
-                  </Button>
                   <Button variant="secondary" onClick={openAccountModal} className="flex flex-row gap-2 px-4 py-3">
                     {ensAvatar ? (
                       <Image src={ensAvatar ?? ""} width={32} height={32} alt="avatar" className="rounded-full" />

@@ -1,6 +1,6 @@
 "use server";
 import { Address } from "viem";
-import { CHAIN_CONFIG } from "../../utils/config";
+import { CHAIN_CONFIG } from "../../config";
 import { graphql } from "../generated/gql";
 import { graphQLFetchWithFallback } from "../utils/graphQLFetch";
 import { Noun } from "./types";

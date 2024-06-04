@@ -1,9 +1,9 @@
 import { nounsTokenAbi } from "@/abis/nounsToken";
 import { defineConfig } from "@wagmi/cli";
-import { CHAIN_CONFIG } from "@/utils/config";
+import { CHAIN_CONFIG } from "@/config";
 import { react } from "@wagmi/cli/plugins";
 import { nounsAuctionHouseAbi } from "@/abis/nounsAuctionHouse";
-import { nnsEnsResolverAbi } from "@/abis/nnsEnsResolver";
+import { nounsDoaLogicAbi } from "@/abis/nounsDoaLogic";
 
 export default defineConfig({
   out: "src/data/generated/wagmi.ts",
@@ -19,9 +19,9 @@ export default defineConfig({
       address: CHAIN_CONFIG.addresses.nounsAuctionHouseProxy,
     },
     {
-      name: "NnsEnsResolver",
-      abi: nnsEnsResolverAbi,
-      address: CHAIN_CONFIG.addresses.nnsEnsResolver,
+      name: "NounsDaoLogic",
+      abi: nounsDoaLogicAbi,
+      address: CHAIN_CONFIG.addresses.nounsDoaProxy,
     },
   ],
   plugins: [react()],

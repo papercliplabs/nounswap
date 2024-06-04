@@ -12,8 +12,10 @@ interface User {
 export async function getUserForAddress(address: Address): Promise<User> {
   const [name, avatar] = await Promise.all([getNnsOrEnsNameForAddress(address), getEnsAvatarForAddress(address)]);
 
-  return {
+  const user = {
     name: name ?? formatAddress(address),
     imageSrc: avatar,
   };
+
+  return user;
 }

@@ -1,6 +1,6 @@
 "use server";
 import { getAddress } from "viem";
-import { CHAIN_CONFIG } from "@/utils/config";
+import { CHAIN_CONFIG } from "@/config";
 import { graphql } from "../generated/gql";
 import { graphQLFetchWithFallback } from "../utils/graphQLFetch";
 import { Noun } from "./types";
@@ -18,7 +18,7 @@ const query = graphql(/* GraphQL */ `
 
 export async function getNounById(id: string): Promise<Noun | undefined> {
   const [result, imageAndTraits] = await Promise.all([
-    graphQLFetchWithFallback(CHAIN_CONFIG.subgraphUrl, query, { id }, { next: { revalidate: 60 } }),
+    graphQLFetchWithFallback(CHAIN_CONFIG.subgraphUrl, query, { id }, { next: { revalidate: 30 } }),
     getNounImageAndTraitsById(id),
   ]);
 

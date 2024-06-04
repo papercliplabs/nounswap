@@ -2,12 +2,13 @@
 import { ProposalState, SwapNounProposal } from "../utils/types";
 import { Address } from "viem";
 import { getNounById } from "./noun/getNounById";
-import { CHAIN_CONFIG } from "../utils/config";
-import { getBlockNumber } from "wagmi/actions";
-import { wagmiConfig } from "@/providers/WalletProvider";
+import { CHAIN_CONFIG } from "../config";
 import { graphql } from "./generated/gql";
 import { ProposalStatus } from "./generated/gql/graphql";
-import { graphQLFetch, graphQLFetchWithFallback } from "./utils/graphQLFetch";
+import { graphQLFetchWithFallback } from "./utils/graphQLFetch";
+import { getBlockNumber } from "viem/actions";
+import { unstable_cache } from "next/cache";
+import { SECONDS_PER_DAY } from "@/utils/constants";
 
 const query = graphql(`
   query NounSwapProposalsForProposer($proposerAsString: String!, $proposerAsBytes: Bytes!) {
@@ -39,15 +40,9 @@ const query = graphql(`
   }
 `);
 
-export async function getNounSwapProposalsForProposer(address?: Address): Promise<SwapNounProposal[]> {
-  if (address == undefined) {
-    return [];
-  }
-
-  // Nextjs is caching this...
-  const currentBlock = await getBlockNumber(wagmiConfig, { cacheTime: 10_000 });
-
+async function getNounSwapProposalsForProposerUncached(address: Address): Promise<SwapNounProposal[]> {
   const proposer = address.toString().toLowerCase();
+  const currentBlock = await getBlockNumber(CHAIN_CONFIG.publicClient);
 
   const queryResult = await graphQLFetchWithFallback(CHAIN_CONFIG.subgraphUrl, query, {
     proposerAsString: proposer,
@@ -63,35 +58,23 @@ export async function getNounSwapProposalsForProposer(address?: Address): Promis
     for (let proposal of proposals) {
       const title = proposal.title;
 
-      let v0 = title.match(/NounSwap:/) != null;
-      let v1 = title.match(/NounSwap v1:/) != null;
-
       let fromNounId = "";
       let toNounId = "";
-      if (v0) {
-        const match = title.match(/NounSwap: Swap Noun [0-9]* for Noun [0-9]*/); // NounSwap: Swap Noun XX for Noun YY
+
+      let match = title.match(/NounSwap v1: Swap Noun [0-9]* \+ [0-9]*\.?[0-9]*? WETH for Noun [0-9]*/); // NounSwap v1: Swap Noun XX + ZZ WETH for Noun YY
+      if (match != null && match.length != 0) {
+        const split = match[0].split(" ");
+        fromNounId = split[4];
+        toNounId = split[10];
+      } else {
+        match = title.match(/NounSwap v1: Swap Noun [0-9]* for Noun [0-9]*/); // NounSwap v1: Swap Noun XX for Noun YY (no WETH)
         if (match == null || match.length == 0) {
           continue;
         }
-        const split = match[0].split(" ");
-        fromNounId = split[3];
-        toNounId = split[6];
-      } else {
-        let match = title.match(/NounSwap v1: Swap Noun [0-9]* \+ [0-9]*\.?[0-9]*? WETH for Noun [0-9]*/); // NounSwap v1: Swap Noun XX + ZZ WETH for Noun YY
-        if (match != null && match.length != 0) {
-          const split = match[0].split(" ");
-          fromNounId = split[4];
-          toNounId = split[10];
-        } else {
-          match = title.match(/NounSwap v1: Swap Noun [0-9]* for Noun [0-9]*/); // NounSwap v1: Swap Noun XX for Noun YY (no WETH)
-          if (match == null || match.length == 0) {
-            continue;
-          }
 
-          const split = match[0].split(" ");
-          fromNounId = split[4];
-          toNounId = split[7];
-        }
+        const split = match[0].split(" ");
+        fromNounId = split[4];
+        toNounId = split[7];
       }
 
       const fromNoun = await getNounById(fromNounId);
@@ -181,3 +164,9 @@ export async function getNounSwapProposalsForProposer(address?: Address): Promis
     return [];
   }
 }
+
+export const getNounSwapProposalsForProposer = unstable_cache(
+  getNounSwapProposalsForProposerUncached,
+  ["noun-swap-proposals-for-proposer"],
+  { revalidate: SECONDS_PER_DAY / 2 }
+);
