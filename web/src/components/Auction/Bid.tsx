@@ -37,7 +37,7 @@ export default function Bid({ nounId, nextMinBid }: BidProps) {
       resetCreateBid();
       setBidAmount("");
     }
-  }, [txnState]);
+  }, [txnState, resetCreateBid]);
 
   const nextMinBidFormatted = useMemo(() => {
     return Math.ceil(Number(formatEther(nextMinBid)) * 10 ** BID_DECIMAL_PRECISION) / 10 ** BID_DECIMAL_PRECISION;
@@ -45,7 +45,7 @@ export default function Bid({ nounId, nextMinBid }: BidProps) {
 
   return (
     <div className="flex w-full flex-col gap-1">
-      <form action={onSubmit} className="flex flex-col gap-4 md:flex-row">
+      <form action={onSubmit} className="flex flex-col gap-2 md:flex-row md:gap-4">
         <Input
           placeholder={`Ξ ${nextMinBidFormatted} or more`}
           className="h-full"
@@ -58,7 +58,7 @@ export default function Bid({ nounId, nextMinBid }: BidProps) {
           Place Bid
         </TransactionButton>
       </form>
-      <div className="text-semantic-negative caption">{createBidError?.message}</div>
+      <div className="text-semantic-negative paragraph-sm">{createBidError?.message}</div>
     </div>
   );
 }

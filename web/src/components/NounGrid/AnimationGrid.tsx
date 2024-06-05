@@ -9,7 +9,7 @@ interface AnimateGridProps {
 
 export default function AnimationGird({ items, disableAnimateIn, disableAnimateOut }: AnimateGridProps) {
   return (
-    <ul className="text-content-secondary grid grow auto-rows-min grid-cols-[repeat(auto-fill,minmax(130px,1fr))] items-stretch justify-stretch gap-6">
+    <ul className="text-content-secondary grid grow auto-rows-min grid-cols-[repeat(auto-fill,minmax(140px,1fr))] items-stretch justify-stretch gap-6">
       <AnimatePresence mode="popLayout">
         {items.map((item, i) => (
           <motion.li

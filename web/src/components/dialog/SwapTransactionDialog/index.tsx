@@ -71,7 +71,7 @@ export default function SwapTransactionDialog({ userNoun, treasuryNoun, tip, rea
               <div className={twMerge("h-1 w-1/3 bg-background-disabled", step > 1 && "bg-semantic-accent")} />
               <ProgressCircle state={step < 2 ? "todo" : "active"} />
             </div>
-            <div className="caption flex w-full flex-row justify-between">
+            <div className="paragraph-sm flex w-full flex-row justify-between">
               <div className="text-semantic-accent">Approve Noun</div>
               <div className={twMerge(step > 0 && "text-semantic-accent")}>Approve WETH</div>
               <div className={twMerge(step > 1 && "text-semantic-accent")}>Create Prop</div>

@@ -115,7 +115,7 @@ export default function UserTipDialog({ connected, userBalance, swapUrl, tip, se
 
           <div className="flex flex-row items-center gap-3 rounded-xl bg-semantic-accent-light p-4">
             <Icon icon="questionCircle" size={16} className="shrink-0" />
-            <div className="caption">
+            <div className="paragraph-sm">
               Make sure you have enough WETH in your wallet when the prop executes.
               <div className="flex flex-row justify-between pt-2">
                 <Tooltip>

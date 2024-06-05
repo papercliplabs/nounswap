@@ -10,7 +10,7 @@ export default function Settle() {
       <TransactionButton onClick={settleCurrentAndCreateNew} txnState={txnState}>
         Start next auction
       </TransactionButton>
-      <div className="text-semantic-negative caption">{error?.message}</div>
+      <div className="text-semantic-negative paragraph-sm">{error?.message}</div>
     </div>
   );
 }

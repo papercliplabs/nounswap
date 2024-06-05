@@ -25,7 +25,11 @@ export default function WalletButton({ disableMobileShrink }: WalletButtonProps)
           <div>
             {(() => {
               if (!connected) {
-                return <Button onClick={openConnectModal}>Connect</Button>;
+                return (
+                  <Button onClick={openConnectModal} variant="secondary">
+                    Connect
+                  </Button>
+                );
               }
 
               if (chain.unsupported) {

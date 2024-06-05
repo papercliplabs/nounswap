@@ -67,7 +67,7 @@ async function getNounImageAndTraitsByIdUncached(id: string): Promise<NounImageA
     traits: {
       background: {
         seed: seed.background,
-        name: "Background",
+        name: seedResult.background == "0" ? "Cool" : "Warm",
         imageSrc: backgroundImage,
         color: "#" + background,
       },

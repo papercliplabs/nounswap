@@ -19,7 +19,7 @@ export function CreatePropCandidate({ userNoun, treasuryNoun, tip, reason, progr
   // Autotrigger on mount
   useEffect(() => {
     createCandidate(userNoun, treasuryNoun, tip, reason);
-  }, []);
+  }, [createCandidate, userNoun, treasuryNoun, tip, reason]);
 
   return (
     <div className="flex flex-col items-center justify-center gap-6">
@@ -39,7 +39,7 @@ export function CreatePropCandidate({ userNoun, treasuryNoun, tip, reason, progr
         >
           Create Prop Candidate
         </TransactionButton>
-        <span className="caption text-semantic-negative">{error?.message}</span>
+        <span className="paragraph-sm text-semantic-negative">{error?.message}</span>
       </div>
     </div>
   );

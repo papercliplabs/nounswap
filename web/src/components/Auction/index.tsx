@@ -1,7 +1,7 @@
 "use client";
 import { CurrentAuction, getCurrentAuction } from "@/data/auction/getCurrentAuction";
 import { getNounById } from "@/data/noun/getNounById";
-import { getUserForAddress } from "@/data/user/getUser";
+import { User, getUserForAddress } from "@/data/user/getUser";
 import { formatTimeLeft } from "@/utils/format";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import Image from "next/image";
@@ -12,7 +12,6 @@ import { Skeleton } from "../ui/skeleton";
 import Settle from "./Settle";
 import Bid from "./Bid";
 import { Auction as AuctionType } from "@/data/auction/types";
-import { Noun } from "@/data/noun/types";
 import { formatNumber } from "@/utils/utils";
 import ViewBidsDialog from "./ViewBidsDialog";
 
@@ -45,14 +44,14 @@ export default function Auction() {
     <div
       className={clsx(
         "flex w-full flex-row justify-center overflow-hidden rounded-3xl border-2 bg-transparent md:h-[380px] md:border-none md:px-4",
-        noun?.traits.background.seed == 1 ? "md:bg-background-nouns-warm" : "md:bg-background-nouns-cool"
+        noun?.traits.background.seed == 1 ? "md:bg-nouns-warm" : "md:bg-nouns-cool"
       )}
     >
       <div className="flex w-full max-w-[900px] flex-col justify-between md:flex-row">
         <div
           className={clsx(
             "flex h-full flex-col items-center md:items-end md:justify-end md:bg-transparent",
-            noun?.traits.background.seed == 1 ? "bg-background-nouns-warm" : "bg-background-nouns-cool"
+            noun?.traits.background.seed == 1 ? "bg-nouns-warm" : "bg-nouns-cool"
           )}
         >
           <Image
@@ -61,41 +60,31 @@ export default function Auction() {
             height={370}
             alt=""
             unoptimized={noun == undefined}
-            className="h-[194px] w-[194px] rounded-3xl bg-background-nouns-cool object-contain object-bottom md:h-[370px] md:w-[370px] md:bg-transparent"
+            className="bg-nouns-cool h-[194px] w-[194px] rounded-3xl object-contain object-bottom md:h-[370px] md:w-[370px] md:bg-transparent"
           />
         </div>
-        <div className="mx-auto flex min-h-[212px] w-full min-w-0 shrink-0 flex-col items-start justify-center gap-3 px-6 py-4 md:w-[400px]">
+        <div className="mx-auto flex min-h-[212px] w-full min-w-0 shrink-0 flex-col items-start justify-center gap-4 p-6 md:w-[400px] md:gap-6">
           {auction && (
             <>
-              {auction.state == "live" && (
-                <div className="flex items-center gap-[10px] text-semantic-accent">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <circle cx="8" cy="8" r="8" fill="#93BFFE" />
-                    <circle cx="8" cy="8" r="4" fill="#0D6EFD" />
-                  </svg>
-                  Live auction
-                </div>
-              )}
+              <div>
+                {auction.state == "live" && (
+                  <div className="flex items-center gap-[10px] text-semantic-accent">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <circle cx="8" cy="8" r="8" fill="#93BFFE" />
+                      <circle cx="8" cy="8" r="4" fill="#0D6EFD" />
+                    </svg>
+                    Live auction
+                  </div>
+                )}
 
-              <h1 className="flex whitespace-pre-wrap">Noun {auction.nounId}</h1>
+                <h1 className="flex whitespace-pre-wrap">Noun {auction.nounId}</h1>
+              </div>
 
               {auction.state == "live" ? (
-                <LiveAuction auction={auction} />
+                <LiveAuction auction={auction} highestBidder={user} />
               ) : (
-                <EndedAuction auction={auction} noun={noun} />
+                <EndedAuction auction={auction} highestBidder={user} />
               )}
-
-              <div className="flex w-full flex-col flex-wrap justify-center whitespace-pre-wrap font-medium text-content-secondary md:items-start md:justify-start">
-                <div className="flex w-full min-w-0 justify-center whitespace-pre-wrap md:justify-start">
-                  <span className="shrink-0">{auction.state == "live" ? "Highest bidder" : "Winner"} </span>
-                  {userIsLoading ? (
-                    <Skeleton className="h-full w-[200px]" />
-                  ) : (
-                    <span className="overflow-hidden text-ellipsis text-nowrap text-content-primary">{user?.name}</span>
-                  )}
-                </div>
-                {auction.bids.length > 0 && <ViewBidsDialog nounId={auction.nounId} bids={auction.bids} />}
-              </div>
             </>
           )}
         </div>
@@ -104,7 +93,7 @@ export default function Auction() {
   );
 }
 
-function LiveAuction({ auction }: { auction: CurrentAuction }) {
+function LiveAuction({ auction, highestBidder }: { auction: CurrentAuction; highestBidder?: User }) {
   const [timeRemainingS, setTimeRemainingS] = useState<number | undefined>(undefined);
 
   useEffect(() => {
@@ -138,18 +127,21 @@ function LiveAuction({ auction }: { auction: CurrentAuction }) {
         }}
       />
       <Bid nounId={BigInt(auction.nounId)} nextMinBid={BigInt(auction.nextMinBid)} />
+
+      {auction.bids.length > 0 &&
+        (highestBidder ? (
+          <ViewBidsDialog nounId={auction.nounId} bids={auction.bids}>
+            Highest bidder {highestBidder?.name}
+          </ViewBidsDialog>
+        ) : (
+          <Skeleton className="h-[20px] w-[200px] whitespace-pre-wrap" />
+        ))}
     </>
   );
 }
 
-function EndedAuction({ auction, noun }: { auction: AuctionType; noun?: Noun }) {
+function EndedAuction({ auction, highestBidder }: { auction: AuctionType; highestBidder?: User }) {
   const winningBid = auction.bids[0];
-
-  const { data: user } = useQuery({
-    queryKey: ["get-user-query", noun?.owner],
-    queryFn: () => getUserForAddress(noun?.owner ?? zeroAddress),
-    enabled: noun != undefined,
-  });
 
   return (
     <>
@@ -159,24 +151,24 @@ function EndedAuction({ auction, noun }: { auction: AuctionType; noun?: Noun }) 
           value: `${formatNumber(formatEther(winningBid ? BigInt(winningBid.amount) : BigInt(0)))} ETH`,
         }}
         item2={{
-          title: "Held by",
+          title: "Won by",
           value: (
             <>
-              {user?.imageSrc && (
+              {highestBidder?.imageSrc && (
                 <Image
-                  src={user.imageSrc}
+                  src={highestBidder.imageSrc}
                   width={36}
                   height={36}
                   alt=""
                   className="h-[36px] w-[36px] rounded-full border border-border-primary"
                 />
               )}
-              {user ? (
+              {highestBidder ? (
                 <span
                   className="overflow-hidden text-ellipsis"
                   style={{ fontSize: "inherit", fontFamily: "inherit", fontWeight: "inherit", lineHeight: "inherit" }}
                 >
-                  {user.name}
+                  {highestBidder.name}
                 </span>
               ) : (
                 <Skeleton className="w-[100px] whitespace-pre-wrap"> </Skeleton>
@@ -186,9 +178,16 @@ function EndedAuction({ auction, noun }: { auction: AuctionType; noun?: Noun }) 
         }}
       />
       {auction.state == "ended-unsettled" && <Settle />}
+      {auction.bids.length > 0 && (
+        <ViewBidsDialog nounId={auction.nounId} bids={auction.bids}>
+          Show all bids
+        </ViewBidsDialog>
+      )}
     </>
   );
 }
+
+const ONE_OFF_MD_FONT = "md:text-[28px] md:font-bold md:leading-[36px]";
 
 function AuctionDetailTemplate({
   item1,
@@ -199,13 +198,18 @@ function AuctionDetailTemplate({
 }) {
   return (
     <div className="flex w-full min-w-0 flex-col gap-2 overflow-hidden md:flex-row md:gap-12">
-      <div className="flex shrink-0 justify-between md:flex-col">
+      <div className="label-md flex shrink-0 justify-between md:flex-col">
         <span className="shrink-0 pr-2 text-content-secondary">{item1.title}</span>
-        <span className="md:title-4 font-pt font-bold opacity-80">{item1.value}</span>
+        <span className={clsx("opacity-80", ONE_OFF_MD_FONT)}>{item1.value}</span>
       </div>
-      <div className="flex min-w-0 justify-between md:flex-col">
+      <div className="label-md flex min-w-0 justify-between md:flex-col">
         <span className="shrink-0 pr-2 text-content-secondary">{item2.title}</span>
-        <div className="md:title-4 flex w-full min-w-0 items-center justify-end whitespace-nowrap font-pt font-bold opacity-80 md:justify-start md:gap-0">
+        <div
+          className={clsx(
+            "flex w-full min-w-0 items-center justify-end whitespace-nowrap opacity-80 md:justify-start md:gap-0",
+            ONE_OFF_MD_FONT
+          )}
+        >
           {item2.value}
         </div>
       </div>

@@ -1,9 +1,9 @@
 "use client";
 import NounCard from "../NounCard";
 import { useMemo } from "react";
-import { LinkInternal } from "@/components/ui/link";
 import { Noun } from "@/data/noun/types";
 import AnimationGird from "./AnimationGrid";
+import { LinkShallow } from "../ui/link";
 
 interface NounGridInterface {
   nouns: Noun[];
@@ -14,9 +14,9 @@ export default function NounGrid({ nouns, onClearAllFilters }: NounGridInterface
   const nounCards = useMemo(() => {
     return nouns.map((noun, i) => ({
       element: (
-        <LinkInternal href={`/swap/${noun.id}`} key={i} className="active:clickable-active">
+        <LinkShallow searchParam={{ name: "nounId", value: noun.id }} key={i} className="h-full w-full">
           <NounCard noun={noun} enableHover key={i} lazyLoad />
-        </LinkInternal>
+        </LinkShallow>
       ) as React.ReactNode,
       id: Number(noun.id),
     }));

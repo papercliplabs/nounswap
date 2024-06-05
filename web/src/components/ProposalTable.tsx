@@ -3,13 +3,14 @@ import WalletButton from "@/components/WalletButton";
 import SwapNounGraphic from "@/components/SwapNounGraphic";
 import { twMerge } from "tailwind-merge";
 import { getNounSwapProposalsForProposer } from "@/data/getNounSwapProposalsForProposer";
-import { LinkExternal, LinkInternal } from "@/components/ui/link";
+import { LinkExternal } from "@/components/ui/link";
 import { ProposalState } from "@/utils/types";
 import { Suspense } from "react";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { CHAIN_CONFIG } from "@/config";
 import { useQuery } from "@tanstack/react-query";
 import { useAccount } from "wagmi";
+import Link from "next/link";
 
 export function ProposalTable() {
   const { address } = useAccount();
@@ -32,9 +33,9 @@ export function ProposalTable() {
           <span>
             You can create one from the{" "}
             <Suspense fallback={<LoadingSpinner />}>
-              <LinkInternal href="/" className="inline text-semantic-accent hover:text-semantic-accent-dark">
+              <Link href="/" className="inline text-semantic-accent hover:text-semantic-accent-dark">
                 Explore Page
-              </LinkInternal>
+              </Link>
             </Suspense>
           </span>
         </div>

@@ -18,7 +18,7 @@ export function ApproveWeth({ amount, progressStepper }: ApproveNounProps) {
   // Autotrigger on mount
   useEffect(() => {
     approveErc20(CHAIN_CONFIG.wrappedNativeTokenAddress, CHAIN_CONFIG.addresses.nounsTreasury, amount);
-  }, []);
+  }, [approveErc20, amount]);
 
   return (
     <div className="flex flex-col items-center justify-center gap-6">
@@ -41,7 +41,7 @@ export function ApproveWeth({ amount, progressStepper }: ApproveNounProps) {
         >
           Approve WETH
         </TransactionButton>
-        <span className="caption text-semantic-negative">{error?.message}</span>
+        <span className="paragraph-sm text-semantic-negative">{error?.message}</span>
       </div>
     </div>
   );

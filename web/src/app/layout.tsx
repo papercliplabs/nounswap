@@ -1,5 +1,4 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import "@/theme/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import { Analytics } from "@vercel/analytics/react";
 import { Londrina_Solid } from "next/font/google";
@@ -30,6 +29,7 @@ export async function generateMetadata() {
   const filteredFrameMetadata = Object.fromEntries(
     Object.entries(frameMetadata).filter(([k]) => k.includes("fc:frame"))
   );
+
   return {
     title: "NounSwap",
     description: "Swap your Noun with the Nouns Treasury",
@@ -53,7 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${ptRootUiFont.variable} ${londrinaSolidFont.variable}`}>
       <body>
         <Providers>
-          <div className="border-border-primary flex min-h-screen w-full flex-col justify-between overflow-hidden">
+          <div className="flex min-h-screen w-full flex-col justify-between overflow-hidden border-border-primary">
             <TestnetBanner />
             {children}
           </div>

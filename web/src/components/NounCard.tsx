@@ -4,6 +4,9 @@ import Image from "next/image";
 import { twMerge } from "tailwind-merge";
 import useIsOnScreen from "@/hooks/useIsOnScreen";
 import { useRef } from "react";
+import { CHAIN_CONFIG } from "@/config";
+import { Tooltip } from "./ui/tooltip";
+import { TooltipContent, TooltipTrigger } from "@radix-ui/react-tooltip";
 
 interface NounCardProps {
   noun: Noun;
@@ -17,11 +20,13 @@ export default function NounCard({ noun, size, enableHover, alwaysShowNumber, la
   const ref = useRef<HTMLInputElement>(null);
   const isVisible = useIsOnScreen(ref);
 
+  const isTreasuryNoun = noun.owner == CHAIN_CONFIG.addresses.nounsTreasury;
+
   return (
     <div
       className={twMerge(
-        "relative flex aspect-square justify-center overflow-hidden rounded-3xl outline outline-[5px] -outline-offset-1 outline-transparent",
-        enableHover && "hover:outline-blue-400 [&>h6]:hover:block",
+        "relative flex aspect-square justify-center overflow-hidden rounded-2xl outline outline-[5px] -outline-offset-1 outline-transparent",
+        enableHover && "hover:outline-content-primary [&>h6]:hover:block",
         alwaysShowNumber && "[&>h6]:block",
         size && size <= 100 && "rounded-xl",
         size && size <= 50 && "rounded-lg"
@@ -38,6 +43,7 @@ export default function NounCard({ noun, size, enableHover, alwaysShowNumber, la
           height={size}
           alt=""
           className="outline outline-4 outline-transparent"
+          draggable={false}
         />
       )}
       <h6
@@ -48,6 +54,25 @@ export default function NounCard({ noun, size, enableHover, alwaysShowNumber, la
       >
         {noun.id}
       </h6>
+      {isTreasuryNoun && enableHover && (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Image
+              src="/swap-icon.svg"
+              width={size ? size / 10 : 30}
+              height={size ? size / 10 : 30}
+              alt=""
+              className="absolute right-2 top-2"
+            />
+          </TooltipTrigger>
+          <TooltipContent sideOffset={10} asChild>
+            {/* TODO: fix the z-index (not working) */}
+            <div className="bg-background-dark max-w-[320px] rounded-2xl p-4 text-white">
+              This Noun is held by the treasury. You can create a swap offer for this Nouns.
+            </div>
+          </TooltipContent>
+        </Tooltip>
+      )}
     </div>
   );
 }

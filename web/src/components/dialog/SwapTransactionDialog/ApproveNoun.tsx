@@ -17,7 +17,7 @@ export function ApproveNoun({ noun, progressStepper }: ApproveNounProps) {
   // Autotrigger on mount
   useEffect(() => {
     approveNoun(BigInt(noun.id), CHAIN_CONFIG.addresses.nounsTreasury);
-  }, []);
+  }, [approveNoun, noun.id]);
 
   return (
     <div className="flex flex-col items-center justify-center gap-6">
@@ -37,7 +37,7 @@ export function ApproveNoun({ noun, progressStepper }: ApproveNounProps) {
         >
           Approve Noun
         </TransactionButton>
-        <span className="caption text-semantic-negative">{error?.message}</span>
+        <span className="paragraph-sm text-semantic-negative">{error?.message}</span>
       </div>
     </div>
   );

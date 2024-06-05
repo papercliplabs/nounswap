@@ -1,22 +1,15 @@
 "use client";
 import { LinkExternal } from "../ui/link";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialogBase";
-import { Button } from "@/components/ui/button";
-import Icon from "../ui/Icon";
 
-export default function HowItWorksDialog() {
+export default function HowItWorksDialog({ children }: { children: React.ReactNode }) {
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="ghost" size="icon" className="gap-2">
-          <h6 className="text-content-secondary hidden md:block">How it works</h6>
-          <Icon icon="questionCircle" size={20} className="fill-gray-600" />
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="flex max-h-[80vh] max-w-[425px] flex-col overflow-y-auto">
         <h4>How it works</h4>
         <div className="[&>ol>li>div]:text-content-secondary flex flex-col">
-          <div className="border-gray-400 border-b-2 pb-6">
+          <div className="border-b-2 border-gray-400 pb-6">
             NounSwap a tool that helps Noun owners create a prop to swap their Noun for another Noun in the treasury. It
             was built by <LinkExternal href="https://paperclip.xyz/">Paperclip Labs</LinkExternal> and inspired by{" "}
             <LinkExternal href="https://warpcast.com/toadyhawk.eth/0x38d070e1">a cast from ToadyHawk.eth</LinkExternal>

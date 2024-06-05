@@ -4,14 +4,19 @@ import { LinkExternal } from "@/components/ui/link";
 import { getAllNouns } from "@/data/noun/getAllNouns";
 import NounExplorer from "@/components/NounExplorer";
 import Auction from "@/components/Auction";
+import NounDialog from "@/components/dialog/NounDialog";
 
 export default function Explore() {
   return (
     <>
       <Auction />
+      <Suspense>
+        {/** Need suspense boundry from use of useSearchParams*/}
+        <NounDialog />
+      </Suspense>
       <div>
-        <h1 className="pb-1">Explore Nouns</h1>
-        <div>
+        <h2 className="pb-1">Explore Nouns</h2>
+        <div className="paragraph-lg">
           See all the Nouns or Swap for one from the{" "}
           <LinkExternal href="https://etherscan.io/tokenholdings?a=0xb1a32FC9F9D8b2cf86C068Cae13108809547ef71">
             Nouns treasury.
@@ -28,5 +33,10 @@ export default function Explore() {
 async function NounExplorerWrapper() {
   const allNouns = await getAllNouns();
 
-  return <NounExplorer nouns={allNouns} />;
+  return (
+    <Suspense>
+      {/* Needs suspense boundry from use of useSearchParams inside */}
+      <NounExplorer nouns={allNouns} />;
+    </Suspense>
+  );
 }

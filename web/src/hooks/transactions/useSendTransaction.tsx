@@ -1,6 +1,6 @@
 "use client";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { BaseError, Hash, InsufficientFundsError, TransactionReceipt, UserRejectedRequestError } from "viem";
 import {
   useAccount,
@@ -63,25 +63,28 @@ export function useSendTransaction(): UseSendTransactionReturnType {
     hash,
   });
 
-  async function sendTransaction(
-    request: MinimalTransactionRequest,
-    validationFn?: () => Promise<CustomTransactionValidationError | null>
-  ) {
-    if (!accountAddress) {
-      openConnectModal?.();
-    } else {
-      if (chainId != CHAIN_CONFIG.chain.id) {
-        await switchChainAsync({ chainId: CHAIN_CONFIG.chain.id });
-      }
+  const sendTransaction = useCallback(
+    async (
+      request: MinimalTransactionRequest,
+      validationFn?: () => Promise<CustomTransactionValidationError | null>
+    ) => {
+      if (!accountAddress) {
+        openConnectModal?.();
+      } else {
+        if (chainId != CHAIN_CONFIG.chain.id) {
+          await switchChainAsync({ chainId: CHAIN_CONFIG.chain.id });
+        }
 
-      const validationError = await validationFn?.();
-      setValidationError(validationError ?? null);
+        const validationError = await validationFn?.();
+        setValidationError(validationError ?? null);
 
-      if (!validationError) {
-        sendTransactionWagmi({ chainId: CHAIN_CONFIG.chain.id, ...request });
+        if (!validationError) {
+          sendTransactionWagmi({ chainId: CHAIN_CONFIG.chain.id, ...request });
+        }
       }
-    }
-  }
+    },
+    [accountAddress, chainId, sendTransactionWagmi, setValidationError, openConnectModal, switchChainAsync]
+  );
 
   function reset() {
     setValidationError(null);

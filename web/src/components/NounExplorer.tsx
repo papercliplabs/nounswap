@@ -1,6 +1,6 @@
 "use client";
 import NounGrid from "./NounGrid/NounGrid";
-import { useCallback, useMemo, useState } from "react";
+import { Suspense, useCallback, useMemo, useState } from "react";
 import NounFilter from "./NounFilter";
 import { ImageData } from "@nouns/assets";
 import { Button } from "./ui/button";

@@ -20,7 +20,7 @@ export default function Select({ name, selectedValue, options, onSelect }: Selec
     <div className="relative flex flex-col">
       <div
         className={twMerge(
-          "text-caption pointer-events-none absolute left-4 top-0 -translate-y-1/2 font-londrina text-content-secondary backdrop-blur-sm transition-all duration-75",
+          "paragraph-sm pointer-events-none absolute left-4 top-0 -translate-y-1/2 font-londrina text-content-secondary backdrop-blur-sm transition-all duration-75",
           selectedValue == -1 && "top-1/2 opacity-0",
           optionsOpen && "text-semantic-accent"
         )}

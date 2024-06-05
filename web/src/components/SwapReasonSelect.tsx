@@ -23,7 +23,7 @@ export default function SwapReasonSelect({ userNoun, treasuryNoun, tip }: SwapRe
       <div className="flex grow flex-col items-center justify-between md:pb-[72px]">
         <div className="flex w-full max-w-[1200px] grow flex-col justify-center gap-6 p-4 md:flex-row">
           <div className="flex flex-[2] flex-col gap-4">
-            <div className="caption flex w-full flex-row items-center gap-2 rounded-2xl bg-semantic-accent-light p-4">
+            <div className="paragraph-sm flex w-full flex-row items-center gap-2 rounded-2xl bg-semantic-accent-light p-4">
               <Icon icon="questionCircle" size={16} className="shrink-0" />
               This will show up in the prop. Be honest and be detailed.
             </div>

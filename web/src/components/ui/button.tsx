@@ -8,9 +8,9 @@ import clsx from "clsx";
 const buttonVariants = cva(
   clsx(
     "inline-flex items-center justify-center whitespace-nowrap rounded-2xl",
-    "transition-all enabled:active:clickable-active",
+    "transition-all enabled:clickable-active",
     "disabled:pointer-events-none disabled:opacity-50 disabled:bg-background-disabled disabled:text-content-primary",
-    "focus-visible:ring-offset-2 focus-visible:ring-2 focus-visible:ring-semantic-accent/50 focus-visible:outline-none ring-offset-white"
+    "focus-visible:ring-offset-2 focus-visible:ring-2 focus-visible:ring-semantic-accent/50 focus-visible:outline-none ring-offset-transparent"
   ),
   {
     variants: {
@@ -45,7 +45,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props}>
         {" "}
-        {typeof children === "string" ? <h6>{children}</h6> : children}{" "}
+        {typeof children === "string" ? <span className="label-md">{children}</span> : children}
       </Comp>
     );
   }

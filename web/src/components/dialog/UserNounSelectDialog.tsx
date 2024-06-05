@@ -3,9 +3,8 @@ import { Dialog, DialogContent } from "@/components/ui/dialogBase";
 import Icon from "../ui/Icon";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { sepolia } from "viem/chains";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import NounCard from "../NounCard";
-import { LinkExternal } from "../ui/link";
 import { useState } from "react";
 import Image from "next/image";
 import { CHAIN_CONFIG } from "@/config";
@@ -31,7 +30,6 @@ export default function UserNounSelectDialog({
 
   const { openConnectModal } = useConnectModal();
   const router = useRouter();
-  const searchParams = useSearchParams();
   const { switchChainAsync } = useSwitchChain();
 
   return (
@@ -76,7 +74,7 @@ export default function UserNounSelectDialog({
                       className="text-semantic-accent hover:brightness-[85%]"
                       onClick={async () => {
                         await switchChainAsync?.({ chainId: sepolia.id });
-                        router.push("/" + "?" + searchParams.toString());
+                        router.push("/");
                       }}
                     >
                       Goerli Testnet

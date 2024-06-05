@@ -30,7 +30,7 @@ export async function graphQLFetch<Result, Variables>(
   const result = (await response.json()) as GraphQLResponse<Result>;
 
   if ("errors" in result) {
-    throw new Error(`CUSTOM ERROR - ${url} - ${result.errors[0].message}`);
+    throw new Error(`CUSTOM ERROR - ${url} - ${result.errors[0].message} - ${query} - ${JSON.stringify(variables)}`);
   }
 
   return result.data;

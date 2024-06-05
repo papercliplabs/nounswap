@@ -1,9 +1,9 @@
 "use client";
 import { usePathname } from "next/navigation";
 import { twMerge } from "tailwind-merge";
-import { LinkInternal } from "@/components/ui/link";
 import { Suspense } from "react";
 import LoadingSpinner from "./LoadingSpinner";
+import Link from "next/link";
 
 interface NavProps {
   navInfo: {
@@ -21,7 +21,7 @@ export default function Nav({ navInfo }: NavProps) {
         const active = info.href == pathName;
         return (
           <Suspense key={i} fallback={<LoadingSpinner />}>
-            <LinkInternal
+            <Link
               href={info.href}
               className={twMerge(
                 "text-content-secondary flex grow flex-row justify-center py-4",
@@ -29,7 +29,7 @@ export default function Nav({ navInfo }: NavProps) {
               )}
             >
               <h6>{info.name}</h6>
-            </LinkInternal>
+            </Link>
           </Suspense>
         );
       })}

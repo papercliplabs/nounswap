@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+const plugin = require("tailwindcss/plugin");
 
 const palette = {
   transparent: "transparent",
@@ -69,6 +70,9 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    screens: {
+      md: "850px",
+    },
     extend: {
       colors: {
         ...palette,
@@ -76,12 +80,8 @@ const config: Config = {
           primary: palette.white,
           secondary: palette.gray[200],
           ternary: palette.gray[100],
+          dark: "#181818",
           disabled: palette.gray[500],
-          nouns: {
-            cool: "#D5D7E1",
-            warm: "#E1D7D5",
-            yellow: palette.yellow[400],
-          },
         },
         content: {
           primary: palette.gray[900],
@@ -113,6 +113,11 @@ const config: Config = {
             light: palette.yellow[100],
           },
         },
+        nouns: {
+          cool: "#D5D7E1",
+          warm: "#E1D7D5",
+          yellow: palette.yellow[400],
+        },
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
@@ -138,7 +143,53 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    plugin(function ({ addUtilities }: { addUtilities: any }) {
+      addUtilities({
+        ".heading-1": {
+          "@apply font-londrina text-[36px] md:text-[56px] font-normal leading-[44px] md:leading-[64px]": {},
+        },
+        ".heading-2": {
+          "@apply font-londrina text-[32px] md:text-[42px] font-normal leading-[40px] md:leading-[56px]": {},
+        },
+        ".heading-3": {
+          "@apply font-londrina text-[36px] font-normal leading-[44px]": {},
+        },
+        ".heading-4": {
+          "@apply font-londrina text-[28px] font-normal leading-[36px]": {},
+        },
+        ".heading-5": {
+          "@apply font-londrina text-[24px] font-normal leading-[32px]": {},
+        },
+        ".heading-6": {
+          "@apply font-londrina text-[18px] font-normal leading-[24px]": {},
+        },
+        ".label-lg": {
+          "@apply font-pt text-[18px] font-bold leading-[24px]": {},
+        },
+        ".label-md": {
+          "@apply font-pt text-[16px] font-bold leading-[24px]": {},
+        },
+        ".label-sm": {
+          "@apply font-pt text-[14px] font-bold leading-[16px]": {},
+        },
+        ".paragraph-lg": {
+          "@apply font-pt text-[18px] font-medium leading-[28px]": {},
+        },
+        ".paragraph-md": {
+          "@apply font-pt text-[16px] font-medium leading-[24px]": {},
+        },
+        ".paragraph-sm": {
+          "@apply font-pt text-[14px] font-medium leading-[20px]": {},
+        },
+        ".clickable-active": {
+          "@apply active:scale-[98%] active:brightness-[85%] active:ease-in-out": {},
+        },
+      });
+      // Add your custom styles here
+    }),
+    require("tailwindcss-animate"),
+  ],
 };
 
 export default config;
