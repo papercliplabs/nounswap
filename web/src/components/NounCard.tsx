@@ -1,41 +1,78 @@
-import { Noun } from "../lib/types";
+"use client";
+import { Noun } from "@/data/noun/types";
 import Image from "next/image";
 import { twMerge } from "tailwind-merge";
+import useIsOnScreen from "@/hooks/useIsOnScreen";
+import { useRef } from "react";
+import { CHAIN_CONFIG } from "@/config";
+import { Tooltip } from "./ui/tooltip";
+import { TooltipContent, TooltipTrigger } from "@radix-ui/react-tooltip";
 
 interface NounCardProps {
-    noun: Noun;
-    size?: number;
-    enableHover: boolean;
-    alwaysShowNumber?: boolean;
+  noun: Noun;
+  size?: number;
+  enableHover: boolean;
+  alwaysShowNumber?: boolean;
+  lazyLoad?: boolean;
 }
 
-export default function NounCard({ noun, size, enableHover, alwaysShowNumber }: NounCardProps) {
-    return (
-        <div
-            className={twMerge(
-                "relative flex justify-center rounded-3xl overflow-hidden outline outline-[5px] outline-transparent -outline-offset-1 aspect-square",
-                enableHover && "hover:outline-blue-400 [&>h6]:hover:block",
-                alwaysShowNumber && "[&>h6]:block",
-                size && size <= 100 && "rounded-xl",
-                size && size <= 50 && "rounded-lg"
-            )}
-        >
+export default function NounCard({ noun, size, enableHover, alwaysShowNumber, lazyLoad }: NounCardProps) {
+  const ref = useRef<HTMLInputElement>(null);
+  const isVisible = useIsOnScreen(ref);
+
+  const isTreasuryNoun = noun.owner == CHAIN_CONFIG.addresses.nounsTreasury;
+
+  return (
+    <div
+      className={twMerge(
+        "relative flex aspect-square justify-center overflow-hidden rounded-2xl outline outline-[5px] -outline-offset-1 outline-transparent",
+        enableHover && "hover:outline-content-primary [&>h6]:hover:block",
+        alwaysShowNumber && "[&>h6]:block",
+        size && size <= 100 && "rounded-xl",
+        size && size <= 50 && "rounded-lg"
+      )}
+      ref={ref}
+    >
+      {!isVisible && lazyLoad ? (
+        <div className="bg-background-secondary aspect-square" />
+      ) : (
+        <Image
+          src={noun.imageSrc}
+          fill={size == undefined}
+          width={size}
+          height={size}
+          alt=""
+          className="outline outline-4 outline-transparent"
+          draggable={false}
+        />
+      )}
+      <h6
+        className={twMerge(
+          "text-content-primary absolute bottom-[8px] hidden rounded-full bg-white px-3 py-0.5 shadow-lg",
+          size && size <= 100 && "bottom-[4px] px-2 text-sm"
+        )}
+      >
+        {noun.id}
+      </h6>
+      {isTreasuryNoun && enableHover && (
+        <Tooltip>
+          <TooltipTrigger asChild>
             <Image
-                src={noun.imageSrc}
-                fill={size == undefined}
-                width={size}
-                height={size}
-                alt=""
-                className="outline outline-4 outline-transparent"
+              src="/swap-icon.svg"
+              width={size ? size / 10 : 30}
+              height={size ? size / 10 : 30}
+              alt=""
+              className="absolute right-2 top-2"
             />
-            <h6
-                className={twMerge(
-                    "absolute bottom-[8px] bg-white rounded-full px-3 py-0.5 hidden text-primary shadow-lg",
-                    size && size <= 100 && "bottom-[4px] px-2 text-sm"
-                )}
-            >
-                {noun.id}
-            </h6>
-        </div>
-    );
+          </TooltipTrigger>
+          <TooltipContent sideOffset={10} asChild>
+            {/* TODO: fix the z-index (not working) */}
+            <div className="bg-background-dark max-w-[320px] rounded-2xl p-4 text-white">
+              This Noun is held by the treasury. You can create a swap offer for this Nouns.
+            </div>
+          </TooltipContent>
+        </Tooltip>
+      )}
+    </div>
+  );
 }
