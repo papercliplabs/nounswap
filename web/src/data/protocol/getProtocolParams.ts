@@ -28,6 +28,10 @@ async function getProtocolParamsUncached(): Promise<ProtocolParams> {
   };
 }
 
-export const getProtocolParams = unstable_cache(getProtocolParamsUncached, ["get-protocol-params"], {
-  revalidate: SECONDS_PER_DAY,
-});
+export const getProtocolParams = unstable_cache(
+  getProtocolParamsUncached,
+  ["get-protocol-params", CHAIN_CONFIG.chain.id.toString()],
+  {
+    revalidate: SECONDS_PER_DAY,
+  }
+);
