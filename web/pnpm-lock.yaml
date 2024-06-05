@@ -59,6 +59,9 @@ importers:
       clsx:
         specifier: ^2.0.1
         version: 2.1.1
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.4.5
       encoding:
         specifier: ^0.1.13
         version: 0.1.13
