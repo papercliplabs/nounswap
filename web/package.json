@@ -30,7 +30,7 @@
         "clsx": "^2.0.1",
         "dotenv": "^16.4.5",
         "encoding": "^0.1.13",
-        "framer-motion": "^11.2.9",
+        "framer-motion": "^11.2.10",
         "frog": "^0.9.4",
         "graphql": "^16.8.1",
         "hono": "^4.3.5",

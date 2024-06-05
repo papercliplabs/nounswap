@@ -5,6 +5,7 @@ import NounFilter from "./NounFilter";
 import { ImageData } from "@nouns/assets";
 import { Button } from "./ui/button";
 import { Noun } from "@/data/noun/types";
+import NounDialog from "./dialog/NounDialog";
 
 interface NounSelectProps {
   nouns: Noun[];
@@ -93,26 +94,29 @@ export default function NounExplorer({ nouns }: NounSelectProps) {
   }, [setBackgroundFilter, setBodyFilter, setAccessoryFilter, setHeadFilter, setGlassesFilter]);
 
   return (
-    <div className="flex w-full flex-col gap-2">
-      <div className="flex flex-row items-end justify-between pb-3">
-        <Button variant="secondary" className="md:hidden" onClick={() => setFilterOpen(!filterOpen)}>
-          Filter
-        </Button>
-        <h6 className="flex w-full justify-end">{filteredNouns.length} nouns</h6>
+    <>
+      <NounDialog nouns={nouns} />
+      <div className="flex w-full flex-col gap-2">
+        <div className="flex flex-row items-end justify-between pb-3">
+          <Button variant="secondary" className="md:hidden" onClick={() => setFilterOpen(!filterOpen)}>
+            Filter
+          </Button>
+          <h6 className="flex w-full justify-end">{filteredNouns.length} nouns</h6>
+        </div>
+        <div className="flex w-full flex-row gap-6">
+          <NounFilter
+            backgroundFilterSelectProps={{ selectedValue: backgroundFilter, ...selectProps.background }}
+            bodyFilterSelectProps={{ selectedValue: bodyFilter, ...selectProps.body }}
+            accessoryFilterSelectProps={{ selectedValue: accessoryFilter, ...selectProps.accessory }}
+            headFilterSelectProps={{ selectedValue: headFilter, ...selectProps.head }}
+            glassesFilterSelectProps={{ selectedValue: glassesFilter, ...selectProps.glasses }}
+            isOpen={filterOpen}
+            onClose={() => setFilterOpen(false)}
+            onClearAllFilters={clearAllFilters}
+          />
+          <NounGrid nouns={filteredNouns} onClearAllFilters={clearAllFilters} />
+        </div>
       </div>
-      <div className="flex w-full flex-row gap-6">
-        <NounFilter
-          backgroundFilterSelectProps={{ selectedValue: backgroundFilter, ...selectProps.background }}
-          bodyFilterSelectProps={{ selectedValue: bodyFilter, ...selectProps.body }}
-          accessoryFilterSelectProps={{ selectedValue: accessoryFilter, ...selectProps.accessory }}
-          headFilterSelectProps={{ selectedValue: headFilter, ...selectProps.head }}
-          glassesFilterSelectProps={{ selectedValue: glassesFilter, ...selectProps.glasses }}
-          isOpen={filterOpen}
-          onClose={() => setFilterOpen(false)}
-          onClearAllFilters={clearAllFilters}
-        />
-        <NounGrid nouns={filteredNouns} onClearAllFilters={clearAllFilters} />
-      </div>
-    </div>
+    </>
   );
 }

@@ -10,9 +10,6 @@ export default function Explore() {
   return (
     <>
       <Auction />
-      <Suspense>
-        <NounDialogWrapper />
-      </Suspense>
       <div>
         <h2 className="pb-1">Explore Nouns</h2>
         <div className="paragraph-lg">
@@ -33,10 +30,4 @@ async function NounExplorerWrapper() {
   const allNouns = await getAllNouns();
 
   return <NounExplorer nouns={allNouns} />;
-}
-
-async function NounDialogWrapper() {
-  const allNouns = await getAllNouns();
-
-  return <NounDialog nouns={allNouns} />;
 }
