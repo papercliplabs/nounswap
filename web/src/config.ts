@@ -81,10 +81,8 @@ const CHAIN_SPECIFIC_CONFIGS: Record<number, ChainSpecificData> = {
     },
     nounsGovernanceUrl: "https://sepolia.nouns.camp/",
     subgraphUrl: {
-      // primary: "https://api.studio.thegraph.com/query/35078/nouns-sepolia/version/latest", // TODO: deploy and use that version
-      // fallback: "https://api.studio.thegraph.com/query/35078/nouns-sepolia/version/latest", // TODO: deploy and use that version
       primary: `https://gateway-arbitrum.network.thegraph.com/api/${process.env.DECENTRALIZED_SUBGRAPH_API_KEY}/deployments/id/QmYZnkWSMeHREiW51ABPqpnssH11nKiV1NBJv46W4Duogn`,
-      fallback: `https://gateway-arbitrum.network.thegraph.com/api/${process.env.DECENTRALIZED_SUBGRAPH_API_KEY}/deployments/id/QmYZnkWSMeHREiW51ABPqpnssH11nKiV1NBJv46W4Duogn`,
+      fallback: `https://api.studio.thegraph.com/query/35078/nouns-sepolia/version/latest`,
     },
     wrappedNativeTokenAddress: getAddress("0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14"),
     swapForWrappedNativeUrl: "",

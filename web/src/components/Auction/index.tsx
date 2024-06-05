@@ -14,6 +14,7 @@ import Bid from "./Bid";
 import { Auction as AuctionType } from "@/data/auction/types";
 import { formatNumber } from "@/utils/utils";
 import ViewBidsDialog from "./ViewBidsDialog";
+import { useNounImage } from "@/hooks/useNounImage";
 
 export default function Auction() {
   const { data: auction, isLoading: auctionIsLoading } = useQuery({
@@ -40,6 +41,8 @@ export default function Auction() {
     ],
   });
 
+  const imageSrc = useNounImage("full", noun);
+
   return (
     <div
       className={clsx(
@@ -55,7 +58,7 @@ export default function Auction() {
           )}
         >
           <Image
-            src={noun ? noun.imageSrc : "/noun-loading-skull.gif"}
+            src={imageSrc ?? "/noun-loading-skull.gif"}
             width={370}
             height={370}
             alt=""
@@ -68,7 +71,7 @@ export default function Auction() {
             <>
               <div>
                 {auction.state == "live" && (
-                  <div className="flex items-center gap-[10px] text-semantic-accent">
+                  <div className="text-semantic-accent label-md flex items-center gap-[10px]">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                       <circle cx="8" cy="8" r="8" fill="#93BFFE" />
                       <circle cx="8" cy="8" r="4" fill="#0D6EFD" />
@@ -160,7 +163,7 @@ function EndedAuction({ auction, highestBidder }: { auction: AuctionType; highes
                   width={36}
                   height={36}
                   alt=""
-                  className="h-[36px] w-[36px] rounded-full border border-border-primary"
+                  className="border-border-primary h-[36px] w-[36px] rounded-full border"
                 />
               )}
               {highestBidder ? (
@@ -199,11 +202,11 @@ function AuctionDetailTemplate({
   return (
     <div className="flex w-full min-w-0 flex-col gap-2 overflow-hidden md:flex-row md:gap-12">
       <div className="label-md flex shrink-0 justify-between md:flex-col">
-        <span className="shrink-0 pr-2 text-content-secondary">{item1.title}</span>
+        <span className="text-content-secondary shrink-0 pr-2">{item1.title}</span>
         <span className={clsx("opacity-80", ONE_OFF_MD_FONT)}>{item1.value}</span>
       </div>
       <div className="label-md flex min-w-0 justify-between md:flex-col">
-        <span className="shrink-0 pr-2 text-content-secondary">{item2.title}</span>
+        <span className="text-content-secondary shrink-0 pr-2">{item2.title}</span>
         <div
           className={clsx(
             "flex w-full min-w-0 items-center justify-end whitespace-nowrap opacity-80 md:justify-start md:gap-0",
