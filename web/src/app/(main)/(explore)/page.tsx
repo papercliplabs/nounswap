@@ -1,18 +1,17 @@
 import { Suspense } from "react";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { LinkExternal } from "@/components/ui/link";
-import { getAllNouns } from "@/data/noun/getAllNouns";
 import NounExplorer from "@/components/NounExplorer";
 import Auction from "@/components/Auction";
 import NounDialog from "@/components/dialog/NounDialog";
+import { getAllNouns } from "@/data/noun/getAllNouns";
 
 export default function Explore() {
   return (
     <>
       <Auction />
       <Suspense>
-        {/** Need suspense boundry from use of useSearchParams*/}
-        <NounDialog />
+        <NounDialogWrapper />
       </Suspense>
       <div>
         <h2 className="pb-1">Explore Nouns</h2>
@@ -33,10 +32,11 @@ export default function Explore() {
 async function NounExplorerWrapper() {
   const allNouns = await getAllNouns();
 
-  return (
-    <Suspense>
-      {/* Needs suspense boundry from use of useSearchParams inside */}
-      <NounExplorer nouns={allNouns} />;
-    </Suspense>
-  );
+  return <NounExplorer nouns={allNouns} />;
+}
+
+async function NounDialogWrapper() {
+  const allNouns = await getAllNouns();
+
+  return <NounDialog nouns={allNouns} />;
 }

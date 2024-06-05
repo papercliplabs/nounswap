@@ -3,33 +3,33 @@
 import { useSearchParams } from "next/navigation";
 import { Dialog, DialogContent } from "../ui/dialogBase";
 import { useQuery } from "@tanstack/react-query";
-import { getNounById } from "@/data/noun/getNounById";
 import clsx from "clsx";
 import Image from "next/image";
-import { NounTrait } from "@/data/noun/types";
+import { Noun, NounTrait } from "@/data/noun/types";
 import { Separator } from "../ui/separator";
 import { useMemo } from "react";
 import { CHAIN_CONFIG } from "@/config";
 import { getUserForAddress } from "@/data/user/getUser";
 import { CustomAvatar } from "@/providers/WalletProvider";
-import { zeroAddress } from "viem";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { Skeleton } from "../ui/skeleton";
 import HowItWorksDialog from "./HowItWorksDialog";
 
-export default function NounDialog() {
+interface NounsDialogProps {
+  nouns: Noun[];
+}
+
+export default function NounDialog({ nouns }: NounsDialogProps) {
   const searchParams = useSearchParams();
   const nounId = searchParams.get("nounId");
 
-  const { data: noun } = useQuery({
-    queryKey: ["noun-query", nounId],
-    queryFn: () => getNounById(nounId!),
-    enabled: nounId != undefined,
-  });
+  const noun = useMemo(() => {
+    return nounId ? nouns.find((noun) => noun.id === nounId) : undefined;
+  }, [nouns, nounId]);
 
   const { data: user } = useQuery({
-    queryKey: ["user-query", nounId],
+    queryKey: ["user-query", noun?.owner],
     queryFn: () => getUserForAddress(noun?.owner!),
     enabled: noun != undefined,
   });
@@ -46,18 +46,23 @@ export default function NounDialog() {
     return noun?.owner == CHAIN_CONFIG.addresses.nounsTreasury;
   }, [noun]);
 
+  if (!noun) {
+    console.error("NounDialog - no noun found", nounId);
+    return null;
+  }
+
   return (
     <Dialog open={nounId != undefined} onOpenChange={handleOpenChange}>
       <DialogContent
         className={clsx(
           "w-[95vw] max-w-[1200px] px-0 pb-0 pt-[70px]",
-          noun?.traits.background.seed == 1 ? "bg-nouns-warm" : "bg-nouns-cool"
+          noun.traits.background.seed == 1 ? "bg-nouns-warm" : "bg-nouns-cool"
         )}
       >
         <div className="flex max-h-[70vh] flex-col gap-6 overflow-y-auto px-6 pb-6 pt-0 md:flex-row md:overflow-hidden md:px-12 md:pb-0">
           <div className="flex flex-[5] justify-center">
             <Image
-              src={noun ? noun.imageSrc : "/noun-loading-skull.gif"}
+              src={noun.imageSrc}
               width={600}
               height={600}
               alt=""
@@ -66,15 +71,17 @@ export default function NounDialog() {
             />
           </div>
           <div className="flex flex-[7] flex-col gap-6 overflow-visible pb-6 pr-2 md:overflow-y-auto">
-            <h1>Noun {noun?.id}</h1>
+            <h1>Noun {noun.id}</h1>
 
             <Separator className="h-[2px]" />
 
             <div className="flex items-center gap-6">
-              <CustomAvatar address={noun?.owner ?? zeroAddress} ensImage={user?.imageSrc} size={40} />
+              <CustomAvatar address={noun.owner} ensImage={user?.imageSrc} size={40} />
               <div className="flex h-full flex-col justify-start">
                 <span className="paragraph-sm text-content-secondary">Held by</span>
-                <span className="label-md">{user?.name}</span>
+                <span className="label-md">
+                  {user ? user.name : <Skeleton className="w-[200px] whitespace-pre-wrap"> </Skeleton>}{" "}
+                </span>
               </div>
             </div>
 
