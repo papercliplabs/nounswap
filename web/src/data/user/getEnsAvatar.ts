@@ -20,6 +20,10 @@ async function getEnsAvatarForAddressUncached(address: Address): Promise<string 
   }
 }
 
-export const getEnsAvatarForAddress = unstable_cache(getEnsAvatarForAddressUncached, ["get-ens-avatar-by-address"], {
-  revalidate: SECONDS_PER_DAY,
-});
+export const getEnsAvatarForAddress = unstable_cache(
+  getEnsAvatarForAddressUncached,
+  ["get-ens-avatar-by-address", CHAIN_CONFIG.chain.id.toString()],
+  {
+    revalidate: SECONDS_PER_DAY,
+  }
+);

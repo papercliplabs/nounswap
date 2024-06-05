@@ -1,7 +1,7 @@
 "use server";
 import { Address } from "viem";
 import { readContract } from "viem/actions";
-import { mainnetPublicClient } from "@/config";
+import { CHAIN_CONFIG, mainnetPublicClient } from "@/config";
 import { unstable_cache } from "next/cache";
 import { SECONDS_PER_DAY } from "@/utils/constants";
 import { nnsEnsResolverAbi } from "@/abis/nnsEnsResolver";
@@ -23,6 +23,10 @@ async function getNnsOrEnsNameForAddressUncached(address: Address): Promise<stri
   }
 }
 
-export const getNnsOrEnsNameForAddress = unstable_cache(getNnsOrEnsNameForAddressUncached, ["get-nns-or-ens-name"], {
-  revalidate: SECONDS_PER_DAY,
-});
+export const getNnsOrEnsNameForAddress = unstable_cache(
+  getNnsOrEnsNameForAddressUncached,
+  ["get-nns-or-ens-name", CHAIN_CONFIG.chain.id.toString()],
+  {
+    revalidate: SECONDS_PER_DAY,
+  }
+);

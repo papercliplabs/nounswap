@@ -22,9 +22,13 @@ async function getCurrentAuctionNounIdUncached(): Promise<BigIntString> {
   return nounId.toString();
 }
 
-const getCurrentAuctionNounId = unstable_cache(getCurrentAuctionNounIdUncached, ["get-current-auction-noun-id"], {
-  revalidate: 5,
-});
+const getCurrentAuctionNounId = unstable_cache(
+  getCurrentAuctionNounIdUncached,
+  ["get-current-auction-noun-id", CHAIN_CONFIG.chain.id.toString()],
+  {
+    revalidate: 5,
+  }
+);
 
 export async function getCurrentAuction(): Promise<CurrentAuction> {
   const [id, params] = await Promise.all([getCurrentAuctionNounId(), getProtocolParams()]);

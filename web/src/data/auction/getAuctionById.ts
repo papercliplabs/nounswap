@@ -72,4 +72,7 @@ export async function getAuctionByIdUncached(id: BigIntString): Promise<Auction 
 }
 
 // Cache forever, meant for historical auctions. See getCurrentAuction for current auctions.
-export const getAuctionById = unstable_cache(getAuctionByIdUncached, ["get-auction-by-id"]);
+export const getAuctionById = unstable_cache(getAuctionByIdUncached, [
+  "get-auction-by-id",
+  CHAIN_CONFIG.chain.id.toString(),
+]);

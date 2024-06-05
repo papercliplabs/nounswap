@@ -52,10 +52,14 @@ async function runPaginatedNounsQueryUncached() {
   return queryNouns;
 }
 
-const runPaginatedNounsQuery = unstable_cache(runPaginatedNounsQueryUncached, ["run-paginated-nouns-query"], {
-  revalidate: SECONDS_PER_HOUR,
-  tags: ["paginated-nouns-query"],
-});
+const runPaginatedNounsQuery = unstable_cache(
+  runPaginatedNounsQueryUncached,
+  ["run-paginated-nouns-query", CHAIN_CONFIG.chain.id.toString()],
+  {
+    revalidate: SECONDS_PER_HOUR,
+    tags: [`paginated-nouns-query-${CHAIN_CONFIG.chain.id.toString()}`],
+  }
+);
 
 function extractNameFromFileName(filename: string) {
   return filename.substring(filename.indexOf("-") + 1);
@@ -107,7 +111,10 @@ export async function transformQueryNounToNounUncached(queryNoun: AllNounsQuery[
 }
 
 // Cache forever
-const transformQueryNounToNoun = unstable_cache(transformQueryNounToNounUncached, ["transform-query-noun-to-noun"]);
+const transformQueryNounToNoun = unstable_cache(transformQueryNounToNounUncached, [
+  "transform-query-noun-to-noun",
+  CHAIN_CONFIG.chain.id.toString(),
+]);
 
 export async function getAllNouns(): Promise<Noun[]> {
   const queryResponse = await runPaginatedNounsQuery();
@@ -122,6 +129,6 @@ export async function getAllNouns(): Promise<Noun[]> {
 export async function checkForAllNounRevalidation(nounId: string) {
   const allNouns = await getAllNouns();
   if (allNouns[allNouns.length - 1].id != nounId) {
-    revalidateTag("paginated-nouns-query");
+    revalidateTag(`paginated-nouns-query-${CHAIN_CONFIG.chain.id.toString()}`);
   }
 }
