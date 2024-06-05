@@ -15,6 +15,7 @@ import { Button } from "../ui/button";
 import { Skeleton } from "../ui/skeleton";
 import HowItWorksDialog from "./HowItWorksDialog";
 import { useNounImage } from "@/hooks/useNounImage";
+import { AspectRatio } from "../ui/aspect-ratio";
 
 interface NounsDialogProps {
   nouns: Noun[];
@@ -61,22 +62,22 @@ export default function NounDialog({ nouns }: NounsDialogProps) {
     <Dialog open={nounId != undefined} onOpenChange={handleOpenChange}>
       <DialogContent
         className={clsx(
-          "w-[95vw] max-w-[1200px] px-0 pb-0 pt-[70px]",
+          "max-h-[80vh] max-w-[95vw] overflow-hidden overflow-y-auto rounded-2xl border-none p-0 md:max-w-[min(85vw,1400px)] md:overflow-y-hidden",
           noun.traits.background.seed == 1 ? "bg-nouns-warm" : "bg-nouns-cool"
         )}
       >
-        <div className="flex max-h-[70vh] flex-col gap-6 overflow-y-auto px-6 pb-6 pt-0 md:flex-row md:overflow-hidden md:px-12 md:pb-0">
-          <div className="flex flex-[5] justify-center">
+        <div className="flex aspect-auto w-full flex-col md:aspect-[100/45] md:flex-row">
+          <div className="flex h-fit w-full justify-center md:h-full md:w-[45%] md:max-w-max">
             <Image
               src={fullImageData ?? "/noun-loading-skull.gif"}
               width={600}
               height={600}
               alt=""
               unoptimized={noun == undefined}
-              className="h-full max-h-[500px] w-full max-w-[500px] object-contain object-top"
+              className="aspect-square h-full max-h-[400px] w-full max-w-[400px] object-contain object-bottom md:max-h-max md:max-w-max"
             />
           </div>
-          <div className="flex flex-[7] flex-col gap-6 overflow-visible pb-6 pr-2 md:overflow-y-auto">
+          <div className="flex flex-auto flex-col gap-6 overflow-visible px-8 pb-6 pt-12 md:h-full md:overflow-y-auto">
             <h1>Noun {noun.id}</h1>
 
             <Separator className="h-[2px]" />
@@ -153,3 +154,64 @@ function NounTraitCard({ type, noun }: { type: NounTraitType; noun?: Noun }) {
     </div>
   );
 }
+
+// <div className="flex h-fit flex-col gap-6 overflow-hidden overflow-y-auto pt-0 md:flex-row md:overflow-hidden md:pb-0">
+//   <div className="flex w-[45%] justify-center pl-8">
+//     <Image
+//       src={fullImageData ?? "/noun-loading-skull.gif"}
+//       width={600}
+//       height={600}
+//       alt=""
+//       unoptimized={noun == undefined}
+//       className="h-full max-h-[500px] w-full max-w-[500px] object-contain object-bottom"
+//     />
+//   </div>
+//   <div className="flex h-full flex-auto flex-col gap-6 overflow-visible pb-6 pr-8 pt-[80px] md:overflow-y-auto">
+//     <h1>Noun {noun.id}</h1>
+
+//     <Separator className="h-[2px]" />
+
+//     <div className="flex items-center gap-6">
+//       <CustomAvatar address={noun.owner} ensImage={user?.imageSrc} size={40} />
+//       <div className="flex h-full flex-col justify-start">
+//         <span className="paragraph-sm text-content-secondary">Held by</span>
+//         <span className="label-md">
+//           {user ? user.name : <Skeleton className="w-[200px] whitespace-pre-wrap"> </Skeleton>}{" "}
+//         </span>
+//       </div>
+//     </div>
+
+//     {heldByTreasury && (
+//       <>
+//         <Link href={`/swap/${noun!.id}`}>
+//           <Button className="w-full">Create a swap offer</Button>
+//         </Link>
+//         <div className="text-content-secondary">
+//           You can create a swap offer for this Noun.{" "}
+//           <HowItWorksDialog>
+//             <span className="text-semantic-accent">
+//               <button>Learn More</button>
+//             </span>
+//           </HowItWorksDialog>
+//         </div>
+//       </>
+//     )}
+
+//     <Separator className="h-[2px]" />
+
+//     <div className="flex flex-col gap-4">
+//       <h5>Traits</h5>
+//       <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+//         <NounTraitCard type="head" noun={noun} />
+//         <NounTraitCard type="glasses" noun={noun} />
+//         <NounTraitCard type="body" noun={noun} />
+//         <NounTraitCard type="accessory" noun={noun} />
+//         <NounTraitCard type="background" noun={noun} />
+//       </div>
+//     </div>
+
+//     <Separator className="h-[2px]" />
+
+//     <span className="paragraph-sm text-content-secondary">One Noun, Every Day, Forever.</span>
+//   </div>
+// </div>

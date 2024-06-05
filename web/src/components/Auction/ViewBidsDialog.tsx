@@ -25,7 +25,7 @@ export default function ViewBidsDialog({ children, nounId, bids }: ViewBidsDialo
   return (
     <Dialog>
       <DialogTrigger className="clickable-active label-sm text-content-secondary underline">{children}</DialogTrigger>
-      <DialogContent className="flex max-h-[80vh] max-w-[425px] flex-col overflow-y-auto p-0">
+      <DialogContent className="flex max-h-[80vh] max-w-[min(425px,95vw)] flex-col overflow-y-auto p-0">
         <h4 className="p-6 pb-0">Bids for Noun {nounId}</h4>
         <div className="flex max-h-[60vh] flex-col gap-6 overflow-y-auto p-6 pb-10">
           {bids.map((bid, i) => {
@@ -40,7 +40,7 @@ export default function ViewBidsDialog({ children, nounId, bids }: ViewBidsDialo
                     <Skeleton className="w-[100px] whitespace-pre-wrap"> </Skeleton>
                   )}
                 </div>
-                <span className="shrink-0 pl-6 text-content-secondary">Ξ {formatEther(BigInt(bid.amount))}</span>
+                <span className="text-content-secondary shrink-0 pl-6">Ξ {formatEther(BigInt(bid.amount))}</span>
               </div>
             );
           })}

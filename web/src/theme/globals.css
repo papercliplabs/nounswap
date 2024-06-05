@@ -11,6 +11,7 @@
 
   body {
     @apply border-border-primary text-content-primary bg-background-primary paragraph-md antialiased;
+    text-rendering: optimizeLegibility;
   }
 
   h1 {

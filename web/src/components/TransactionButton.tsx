@@ -2,7 +2,6 @@ import React from "react";
 import { Button, ButtonProps } from "./ui/button";
 import { TransactionState } from "@/hooks/transactions/types";
 import LoadingSpinner from "./LoadingSpinner";
-import { twMerge } from "tailwind-merge";
 
 export interface TransactionButtonProps extends ButtonProps {
   txnState: TransactionState;
@@ -11,9 +10,7 @@ export interface TransactionButtonProps extends ButtonProps {
 const TransactionButton = React.forwardRef<HTMLButtonElement, TransactionButtonProps>(
   ({ txnState, children, disabled, ...props }, ref) => {
     const content =
-      txnState === "pending-signature" ? (
-        "Pending Signature"
-      ) : txnState == "pending-txn" ? (
+      txnState === "pending-signature" || txnState == "pending-txn" ? (
         <div>
           <LoadingSpinner size={24} />
         </div>

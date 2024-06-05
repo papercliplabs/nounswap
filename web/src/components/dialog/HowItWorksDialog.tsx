@@ -6,7 +6,7 @@ export default function HowItWorksDialog({ children }: { children: React.ReactNo
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="flex max-h-[80vh] max-w-[425px] flex-col overflow-y-auto">
+      <DialogContent className="flex max-h-[80vh] max-w-[min(425px,95vw)] flex-col overflow-y-auto">
         <h4>How it works</h4>
         <div className="[&>ol>li>div]:text-content-secondary flex flex-col">
           <div className="border-b-2 border-gray-400 pb-6">

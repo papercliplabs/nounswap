@@ -25,7 +25,7 @@ export default function NounGrid({ nouns, onClearAllFilters }: NounGridInterface
   return (
     <>
       {nounCards.length == 0 ? (
-        <div className="flex h-fit grow flex-col items-center justify-center gap-2 rounded-3xl border-4 border-gray-200 py-24">
+        <div className="flex h-fit grow flex-col items-center justify-center gap-2 rounded-3xl border-4 border-gray-200 px-4 py-24 text-center">
           <h4>No Nouns found.</h4>
           <button className="text-semantic-accent hover:brightness-[85%]" onClick={onClearAllFilters}>
             <h6>Clear all filters</h6>

@@ -48,13 +48,18 @@ export default function Bid({ nounId, nextMinBid }: BidProps) {
       <form action={onSubmit} className="flex flex-col gap-2 md:flex-row md:gap-4">
         <Input
           placeholder={`Ξ ${nextMinBidFormatted} or more`}
-          className="h-full"
+          className="h-full w-full md:w-[260px]"
           name="bidAmount"
           value={bidAmount}
           onChange={handleBidAmountChange}
           disabled={txnState != "idle"}
         />
-        <TransactionButton type="submit" disabled={nextMinBid == undefined || bidAmount == ""} txnState={txnState}>
+        <TransactionButton
+          type="submit"
+          disabled={nextMinBid == undefined || bidAmount == ""}
+          txnState={txnState}
+          className="w-full md:w-[131px]"
+        >
           Place Bid
         </TransactionButton>
       </form>

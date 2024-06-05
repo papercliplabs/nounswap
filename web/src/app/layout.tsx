@@ -10,8 +10,23 @@ import ToastContainer from "@/components/ToastContainer";
 import TestnetBanner from "@/components/TestnetBanner";
 
 const ptRootUiFont = localFont({
-  src: "./pt-root-ui_vf.woff2",
-  display: "swap",
+  src: [
+    {
+      path: "./fonts/pt-root-ui_regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "./fonts/pt-root-ui_medium.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "./fonts/pt-root-ui_bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+  ],
   variable: "--font-pt-root-ui",
 });
 
@@ -53,7 +68,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${ptRootUiFont.variable} ${londrinaSolidFont.variable}`}>
       <body>
         <Providers>
-          <div className="flex min-h-screen w-full flex-col justify-between overflow-hidden border-border-primary">
+          <div className="border-border-primary flex min-h-screen w-full flex-col justify-between overflow-hidden">
             <TestnetBanner />
             {children}
           </div>

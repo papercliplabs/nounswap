@@ -4,6 +4,7 @@ import TransactionButton from "@/components/TransactionButton";
 import { Noun } from "@/data/noun/types";
 import SwapNounGraphic from "@/components/SwapNounGraphic";
 import { useCreateSwapPropCandidate } from "@/hooks/transactions/useCreateSwapPropCandidate";
+import { useRouter } from "next/navigation";
 
 interface ApproveNounProps {
   userNoun: Noun;
@@ -16,10 +17,19 @@ interface ApproveNounProps {
 export function CreatePropCandidate({ userNoun, treasuryNoun, tip, reason, progressStepper }: ApproveNounProps) {
   const { createCandidate, error, state } = useCreateSwapPropCandidate();
 
+  const router = useRouter();
+
   // Autotrigger on mount
   useEffect(() => {
     createCandidate(userNoun, treasuryNoun, tip, reason);
   }, [createCandidate, userNoun, treasuryNoun, tip, reason]);
+
+  // Push to proposals page on success
+  useEffect(() => {
+    if (state == "success") {
+      router.push(`/proposals`);
+    }
+  }, [state, router]);
 
   return (
     <div className="flex flex-col items-center justify-center gap-6">
@@ -44,21 +54,3 @@ export function CreatePropCandidate({ userNoun, treasuryNoun, tip, reason, progr
     </div>
   );
 }
-
-// TODO: move parsing receipt to the component
-
-// const propNumber = useMemo(() => {
-//     const log = sendTxnData.receipt?.logs.find((log) => true); // First event is ProposalCreated
-//     if (log == undefined) {
-//         return undefined;
-//     }
-
-//     const event = decodeEventLog({
-//         abi: nounsDoaLogicAbi,
-//         eventName: "ProposalCreated",
-//         data: log.data,
-//         topics: log.topics,
-//     });
-
-//     return Number((event.args as any)["id"]);
-// }, [sendTxnData]);

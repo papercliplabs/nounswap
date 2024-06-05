@@ -6,7 +6,7 @@ import { SECONDS_PER_DAY, SECONDS_PER_HOUR } from "@/utils/constants";
 import { AllNounsQuery } from "../generated/gql/graphql";
 import { getNounData } from "@nouns/assets";
 import { getAddress } from "viem";
-import { unstable_cache } from "next/cache";
+import { revalidateTag, unstable_cache } from "next/cache";
 
 const BATCH_SIZE = 1000;
 
@@ -54,6 +54,7 @@ async function runPaginatedNounsQueryUncached() {
 
 const runPaginatedNounsQuery = unstable_cache(runPaginatedNounsQueryUncached, ["run-paginated-nouns-query"], {
   revalidate: SECONDS_PER_HOUR,
+  tags: ["paginated-nouns-query"],
 });
 
 function extractNameFromFileName(filename: string) {
@@ -116,4 +117,11 @@ export async function getAllNouns(): Promise<Noun[]> {
   nouns.sort((a, b) => (BigInt(b.id) > BigInt(a.id) ? 1 : -1));
 
   return nouns;
+}
+
+export async function checkForAllNounRevalidation(nounId: string) {
+  const allNouns = await getAllNouns();
+  if (allNouns[allNouns.length - 1].id != nounId) {
+    revalidateTag("paginated-nouns-query");
+  }
 }

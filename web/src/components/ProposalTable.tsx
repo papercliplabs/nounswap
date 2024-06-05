@@ -21,9 +21,9 @@ export function ProposalTable() {
   });
 
   return (
-    <div className="flex w-full flex-col items-center justify-center gap-4 text-content-secondary">
+    <div className="text-content-secondary flex w-full flex-col items-center justify-center gap-4">
       {address == undefined ? (
-        <div className="flex w-full flex-col items-center justify-center gap-6 rounded-3xl border-4 py-24 text-center">
+        <div className="flex w-full flex-col items-center justify-center gap-6 rounded-3xl border-4 px-4 py-24 text-center">
           <h4 className="text-content-primary">Connect your wallet to view your props</h4>
           <WalletButton />
         </div>
@@ -33,7 +33,7 @@ export function ProposalTable() {
           <span>
             You can create one from the{" "}
             <Suspense fallback={<LoadingSpinner />}>
-              <Link href="/" className="inline text-semantic-accent hover:text-semantic-accent-dark">
+              <Link href="/" className="text-semantic-accent hover:text-semantic-accent-dark inline">
                 Explore Page
               </Link>
             </Suspense>
@@ -49,7 +49,7 @@ export function ProposalTable() {
                     ? CHAIN_CONFIG.nounsGovernanceUrl + "/candidates/" + proposal.id
                     : CHAIN_CONFIG.nounsGovernanceUrl + "/vote/" + proposal.id
                 }
-                className="flex w-full flex-col items-center gap-4 rounded-2xl border-2 border-border-secondary p-6 text-center text-content-secondary hover:bg-background-secondary md:flex-row md:justify-start md:text-start"
+                className="border-border-secondary text-content-secondary hover:bg-background-secondary flex w-full flex-col items-center gap-4 rounded-2xl border-2 p-6 text-center md:flex-row md:justify-start md:text-start"
                 key={i}
               >
                 <SwapNounGraphic fromNoun={proposal.fromNoun} toNoun={proposal.toNoun} />
@@ -63,7 +63,7 @@ export function ProposalTable() {
                 </div>
                 <div
                   className={twMerge(
-                    "ml-auto flex w-full justify-center justify-self-end rounded-2xl bg-background-disabled px-8 py-4 font-londrina text-white md:w-auto",
+                    "bg-background-disabled font-londrina ml-auto flex w-full justify-center justify-self-end rounded-2xl px-8 py-4 text-white md:w-auto",
                     (proposal.state == ProposalState.Active || proposal.state == ProposalState.Pending) &&
                       "bg-semantic-positive",
                     (proposal.state == ProposalState.Defeated || proposal.state == ProposalState.Vetoed) &&

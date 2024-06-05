@@ -45,51 +45,49 @@ export default function Auction() {
   return (
     <div
       className={clsx(
-        "flex w-full flex-row justify-center overflow-hidden rounded-3xl border-2 bg-transparent md:h-[380px] md:border-none md:px-4",
+        "flex w-full flex-col justify-center overflow-hidden rounded-2xl border-2 bg-transparent md:h-[380px] md:flex-row md:border-none md:px-4",
         noun?.traits.background.seed == 1 ? "md:bg-nouns-warm" : "md:bg-nouns-cool"
       )}
     >
-      <div className="flex w-full max-w-[900px] flex-col justify-between md:flex-row">
-        <div
-          className={clsx(
-            "flex h-full flex-col items-center md:items-end md:justify-end md:bg-transparent",
-            noun?.traits.background.seed == 1 ? "bg-nouns-warm" : "bg-nouns-cool"
-          )}
-        >
-          <Image
-            src={imageSrc ?? "/noun-loading-skull.gif"}
-            width={370}
-            height={370}
-            alt=""
-            unoptimized={noun == undefined}
-            className="bg-nouns-cool h-[194px] w-[194px] rounded-3xl object-contain object-bottom md:h-[370px] md:w-[370px] md:bg-transparent"
-          />
-        </div>
-        <div className="mx-auto flex min-h-[212px] w-full min-w-0 shrink-0 flex-col items-start justify-center gap-4 p-6 md:w-[400px] md:gap-6">
-          {auction && (
-            <>
-              <div>
-                {auction.state == "live" && (
-                  <div className="text-semantic-accent label-md flex items-center gap-[10px]">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                      <circle cx="8" cy="8" r="8" fill="#93BFFE" />
-                      <circle cx="8" cy="8" r="4" fill="#0D6EFD" />
-                    </svg>
-                    Live auction
-                  </div>
-                )}
-
-                <h1 className="flex whitespace-pre-wrap">Noun {auction.nounId}</h1>
-              </div>
-
-              {auction.state == "live" ? (
-                <LiveAuction auction={auction} highestBidder={user} />
-              ) : (
-                <EndedAuction auction={auction} highestBidder={user} />
+      <div
+        className={clsx(
+          "flex flex-1 flex-col items-center justify-end md:items-end md:bg-transparent md:pr-[60px]",
+          noun?.traits.background.seed == 1 ? "bg-nouns-warm" : "bg-nouns-cool"
+        )}
+      >
+        <Image
+          src={imageSrc ?? "/noun-loading-skull.gif"}
+          width={370}
+          height={370}
+          alt=""
+          unoptimized={noun == undefined}
+          className="h-[194px] w-[194px] rounded-3xl object-contain object-bottom md:h-[370px] md:w-[370px]"
+        />
+      </div>
+      <div className="flex min-h-[300px] min-w-0 flex-1 p-6 md:min-h-min md:pl-5">
+        {auction && (
+          <div className="flex min-h-[212px] w-full min-w-0 flex-col items-start justify-center gap-4 md:w-fit md:gap-6">
+            <div>
+              {auction.state == "live" && (
+                <div className="text-semantic-accent label-md flex items-center gap-[10px]">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <circle cx="8" cy="8" r="8" fill="#93BFFE" />
+                    <circle cx="8" cy="8" r="4" fill="#0D6EFD" />
+                  </svg>
+                  Live auction
+                </div>
               )}
-            </>
-          )}
-        </div>
+
+              <h1 className="flex whitespace-pre-wrap">Noun {auction.nounId}</h1>
+            </div>
+
+            {auction.state == "live" ? (
+              <LiveAuction auction={auction} highestBidder={user} />
+            ) : (
+              <EndedAuction auction={auction} highestBidder={user} />
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -130,14 +128,16 @@ function LiveAuction({ auction, highestBidder }: { auction: CurrentAuction; high
       />
       <Bid nounId={BigInt(auction.nounId)} nextMinBid={BigInt(auction.nextMinBid)} />
 
-      {auction.bids.length > 0 &&
-        (highestBidder ? (
-          <ViewBidsDialog nounId={auction.nounId} bids={auction.bids}>
-            Highest bidder {highestBidder?.name}
-          </ViewBidsDialog>
-        ) : (
-          <Skeleton className="h-[20px] w-[200px] whitespace-pre-wrap" />
-        ))}
+      <div className="flex w-full justify-center md:justify-start">
+        {auction.bids.length > 0 &&
+          (highestBidder ? (
+            <ViewBidsDialog nounId={auction.nounId} bids={auction.bids}>
+              Highest bidder {highestBidder?.name}
+            </ViewBidsDialog>
+          ) : (
+            <Skeleton className="h-[20px] w-[200px] whitespace-pre-wrap" />
+          ))}
+      </div>
     </>
   );
 }
@@ -180,11 +180,13 @@ function EndedAuction({ auction, highestBidder }: { auction: AuctionType; highes
         }}
       />
       {auction.state == "ended-unsettled" && <Settle />}
-      {auction.bids.length > 0 && (
-        <ViewBidsDialog nounId={auction.nounId} bids={auction.bids}>
-          Show all bids
-        </ViewBidsDialog>
-      )}
+      <div className="flex w-full justify-center md:justify-start">
+        {auction.bids.length > 0 && (
+          <ViewBidsDialog nounId={auction.nounId} bids={auction.bids}>
+            Show all bids
+          </ViewBidsDialog>
+        )}
+      </div>
     </>
   );
 }
@@ -199,7 +201,7 @@ function AuctionDetailTemplate({
   item2: { title: string; value: ReactNode };
 }) {
   return (
-    <div className="flex w-full min-w-0 flex-col gap-2 overflow-hidden md:flex-row md:gap-12">
+    <div className="flex w-full min-w-0 max-w-full flex-col gap-2 overflow-hidden md:w-fit md:flex-row md:gap-12">
       <div className="label-md flex shrink-0 justify-between md:flex-col">
         <span className="text-content-secondary shrink-0 pr-2">{item1.title}</span>
         <span className={clsx("opacity-80", ONE_OFF_MD_FONT)}>{item1.value}</span>

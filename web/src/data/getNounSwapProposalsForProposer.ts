@@ -7,8 +7,6 @@ import { graphql } from "./generated/gql";
 import { ProposalStatus } from "./generated/gql/graphql";
 import { graphQLFetchWithFallback } from "./utils/graphQLFetch";
 import { getBlockNumber } from "viem/actions";
-import { unstable_cache } from "next/cache";
-import { SECONDS_PER_DAY } from "@/utils/constants";
 
 const query = graphql(`
   query NounSwapProposalsForProposer($proposerAsString: String!, $proposerAsBytes: Bytes!) {
@@ -40,7 +38,7 @@ const query = graphql(`
   }
 `);
 
-async function getNounSwapProposalsForProposerUncached(address: Address): Promise<SwapNounProposal[]> {
+export async function getNounSwapProposalsForProposer(address: Address): Promise<SwapNounProposal[]> {
   const proposer = address.toString().toLowerCase();
   const currentBlock = await getBlockNumber(CHAIN_CONFIG.publicClient);
 
@@ -164,9 +162,3 @@ async function getNounSwapProposalsForProposerUncached(address: Address): Promis
     return [];
   }
 }
-
-export const getNounSwapProposalsForProposer = unstable_cache(
-  getNounSwapProposalsForProposerUncached,
-  ["noun-swap-proposals-for-proposer"],
-  { revalidate: SECONDS_PER_DAY / 2 }
-);
