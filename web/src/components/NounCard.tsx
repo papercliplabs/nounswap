@@ -7,6 +7,7 @@ import { CHAIN_CONFIG } from "@/config";
 import { Tooltip } from "./ui/tooltip";
 import { TooltipContent, TooltipTrigger } from "@radix-ui/react-tooltip";
 import { useInView } from "framer-motion";
+import { useNounImage } from "@/hooks/useNounImage";
 
 interface NounCardProps {
   noun: Noun;
@@ -20,6 +21,8 @@ export default function NounCard({ noun, size, enableHover, alwaysShowNumber, la
   const ref = useRef<HTMLInputElement>(null);
   const isInView = useInView(ref, { margin: "500px 0px" });
   const isTreasuryNoun = useMemo(() => noun.owner == CHAIN_CONFIG.addresses.nounsTreasury, [noun.owner]);
+
+  const nounImage = useNounImage("full", noun);
 
   return (
     <div
@@ -37,7 +40,7 @@ export default function NounCard({ noun, size, enableHover, alwaysShowNumber, la
       ) : (
         <>
           <Image
-            src={noun.imageSrc}
+            src={nounImage ?? "/noun-loading-skull.gif"}
             fill={size == undefined}
             width={size}
             height={size}

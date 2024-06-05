@@ -4,12 +4,9 @@ import { graphQLFetchWithFallback } from "../utils/graphQLFetch";
 import { Noun } from "./types";
 import { SECONDS_PER_DAY, SECONDS_PER_HOUR } from "@/utils/constants";
 import { AllNounsQuery } from "../generated/gql/graphql";
-import { ImageData, getNounData } from "@nouns/assets";
-import { buildSVG } from "@nouns/sdk";
+import { getNounData } from "@nouns/assets";
 import { getAddress } from "viem";
 import { unstable_cache } from "next/cache";
-
-const { palette } = ImageData;
 
 const BATCH_SIZE = 1000;
 
@@ -59,17 +56,6 @@ const runPaginatedNounsQuery = unstable_cache(runPaginatedNounsQueryUncached, ["
   revalidate: SECONDS_PER_HOUR,
 });
 
-function buildBase64Image(
-  parts: {
-    data: string;
-  }[],
-  bgColor?: string | undefined
-) {
-  const svgBinary = buildSVG(parts, palette, bgColor);
-  const svgBase64 = btoa(svgBinary);
-  return "data:image/svg+xml;base64," + svgBase64;
-}
-
 function extractNameFromFileName(filename: string) {
   return filename.substring(filename.indexOf("-") + 1);
 }
@@ -91,44 +77,29 @@ async function transformQueryNounToNounUncached(queryNoun: AllNounsQuery["nouns"
   const { parts, background } = getNounData(seed);
   const [bodyPart, accessoryPart, headPart, glassesPart] = parts;
 
-  const backgroundImage = buildBase64Image([{ data: "0x0" }], background);
-  const bodyImage = buildBase64Image([bodyPart], background);
-  const accessoryImage = buildBase64Image([accessoryPart], background);
-  const headImage = buildBase64Image([headPart], background);
-  const glassesImage = buildBase64Image([glassesPart], background);
-
-  const fullImage = buildBase64Image(parts, background);
-
   return {
     id: queryNoun.id,
     owner: getAddress(queryNoun.owner.id),
-    imageSrc: fullImage,
     traits: {
       background: {
         seed: seed.background,
         name: queryNoun.seed.background == "0" ? "Cool" : "Warm",
-        imageSrc: backgroundImage,
-        color: "#" + background,
       },
       body: {
         seed: seed.body,
         name: extractNameFromFileName(bodyPart.filename),
-        imageSrc: bodyImage,
       },
       accessory: {
         seed: seed.accessory,
         name: extractNameFromFileName(accessoryPart.filename),
-        imageSrc: accessoryImage,
       },
       head: {
         seed: seed.head,
         name: extractNameFromFileName(headPart.filename),
-        imageSrc: headImage,
       },
       glasses: {
         seed: seed.glasses,
         name: extractNameFromFileName(glassesPart.filename),
-        imageSrc: glassesImage,
       },
     },
   };

@@ -1,11 +1,10 @@
 "use client";
-
 import { useSearchParams } from "next/navigation";
 import { Dialog, DialogContent } from "../ui/dialogBase";
-import { useQuery } from "@tanstack/react-query";
+import { useQueries } from "@tanstack/react-query";
 import clsx from "clsx";
 import Image from "next/image";
-import { Noun, NounTrait } from "@/data/noun/types";
+import { Noun, NounTraitType } from "@/data/noun/types";
 import { Separator } from "../ui/separator";
 import { useMemo } from "react";
 import { CHAIN_CONFIG } from "@/config";
@@ -15,6 +14,7 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { Skeleton } from "../ui/skeleton";
 import HowItWorksDialog from "./HowItWorksDialog";
+import { useNounImage } from "@/hooks/useNounImage";
 
 interface NounsDialogProps {
   nouns: Noun[];
@@ -28,11 +28,17 @@ export default function NounDialog({ nouns }: NounsDialogProps) {
     return nounId ? nouns.find((noun) => noun.id === nounId) : undefined;
   }, [nouns, nounId]);
 
-  const { data: user } = useQuery({
-    queryKey: ["user-query", noun?.owner],
-    queryFn: () => getUserForAddress(noun?.owner!),
-    enabled: noun != undefined,
+  const [{ data: user }] = useQueries({
+    queries: [
+      {
+        queryKey: ["user-query", noun?.owner],
+        queryFn: () => getUserForAddress(noun?.owner!),
+        enabled: noun != undefined,
+      },
+    ],
   });
+
+  const fullImageData = useNounImage("full", noun);
 
   function handleOpenChange(open: boolean) {
     if (!open) {
@@ -62,7 +68,7 @@ export default function NounDialog({ nouns }: NounsDialogProps) {
         <div className="flex max-h-[70vh] flex-col gap-6 overflow-y-auto px-6 pb-6 pt-0 md:flex-row md:overflow-hidden md:px-12 md:pb-0">
           <div className="flex flex-[5] justify-center">
             <Image
-              src={noun.imageSrc}
+              src={fullImageData ?? "/noun-loading-skull.gif"}
               width={600}
               height={600}
               alt=""
@@ -106,11 +112,11 @@ export default function NounDialog({ nouns }: NounsDialogProps) {
             <div className="flex flex-col gap-4">
               <h5>Traits</h5>
               <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
-                <NounTraitCard type="Head" trait={noun?.traits.head} />
-                <NounTraitCard type="Glasses" trait={noun?.traits.glasses} />
-                <NounTraitCard type="Body" trait={noun?.traits.body} />
-                <NounTraitCard type="Accessory" trait={noun?.traits.accessory} />
-                <NounTraitCard type="Background" trait={noun?.traits.background} />
+                <NounTraitCard type="head" noun={noun} />
+                <NounTraitCard type="glasses" noun={noun} />
+                <NounTraitCard type="body" noun={noun} />
+                <NounTraitCard type="accessory" noun={noun} />
+                <NounTraitCard type="background" noun={noun} />
               </div>
             </div>
 
@@ -124,19 +130,22 @@ export default function NounDialog({ nouns }: NounsDialogProps) {
   );
 }
 
-function NounTraitCard({ type, trait }: { type: string; trait?: NounTrait }) {
+function NounTraitCard({ type, noun }: { type: NounTraitType; noun?: Noun }) {
+  const traitImage = useNounImage(type, noun);
+  const traitName = noun?.traits[type].name;
+
   return (
     <div className="flex gap-4 rounded-xl bg-black/5 p-2">
-      {trait ? (
-        <Image src={trait.imageSrc ?? ""} width={48} height={48} alt="" className="h-12 w-12 rounded-lg" />
+      {traitImage ? (
+        <Image src={traitImage} width={48} height={48} alt="" className="h-12 w-12 rounded-lg" />
       ) : (
         <Skeleton className="h-12 w-12 rounded-lg" />
       )}
       <div className="flex flex-col">
-        <span className="paragraph-sm text-content-secondary">{type}</span>
+        <span className="paragraph-sm text-content-secondary">{type.charAt(0).toUpperCase() + type.slice(1)}</span>
         <span className="label-md">
-          {trait?.name
-            .split("-")
+          {traitName
+            ?.split("-")
             .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
             .join(" ")}
         </span>

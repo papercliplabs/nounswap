@@ -14,6 +14,7 @@ import Bid from "./Bid";
 import { Auction as AuctionType } from "@/data/auction/types";
 import { formatNumber } from "@/utils/utils";
 import ViewBidsDialog from "./ViewBidsDialog";
+import { useNounImage } from "@/hooks/useNounImage";
 
 export default function Auction() {
   const { data: auction, isLoading: auctionIsLoading } = useQuery({
@@ -40,6 +41,8 @@ export default function Auction() {
     ],
   });
 
+  const imageSrc = useNounImage("full", noun);
+
   return (
     <div
       className={clsx(
@@ -55,7 +58,7 @@ export default function Auction() {
           )}
         >
           <Image
-            src={noun ? noun.imageSrc : "/noun-loading-skull.gif"}
+            src={imageSrc ?? "/noun-loading-skull.gif"}
             width={370}
             height={370}
             alt=""
