@@ -1,6 +1,6 @@
 "use client";
 import { CurrentAuction, getCurrentAuction } from "@/data/auction/getCurrentAuction";
-import { getNounById } from "@/data/noun/getNounById";
+import { getNounById, getNounByIdUncached } from "@/data/noun/getNounById";
 import { User, getUserForAddress } from "@/data/user/getUser";
 import { formatTimeLeft } from "@/utils/format";
 import { useQueries, useQuery } from "@tanstack/react-query";
@@ -28,10 +28,9 @@ export default function Auction() {
   const [{ data: noun }, { data: user, isLoading: userIsLoading }] = useQueries({
     queries: [
       {
-        queryKey: ["noun-query", auction?.nounId],
-        queryFn: () => getNounById(auction?.nounId ?? ""),
+        queryKey: ["noun-query-uncached", auction?.nounId],
+        queryFn: () => getNounByIdUncached(auction?.nounId ?? ""),
         enabled: auction != undefined,
-        refetchInterval: 1000 * 30, // Every 30s
       },
       {
         queryKey: ["get-user", highestBid?.bidderAddress],
@@ -209,7 +208,7 @@ function AuctionDetailTemplate({
         <span className="text-content-secondary shrink-0 pr-2">{item2.title}</span>
         <div
           className={clsx(
-            "flex w-full min-w-0 items-center justify-end whitespace-nowrap opacity-80 md:justify-start md:gap-0",
+            "flex w-full min-w-0 items-center justify-end gap-2 whitespace-nowrap opacity-80 md:justify-start",
             ONE_OFF_MD_FONT
           )}
         >

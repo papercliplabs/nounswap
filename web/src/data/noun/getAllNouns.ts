@@ -61,7 +61,7 @@ function extractNameFromFileName(filename: string) {
 }
 
 // Async just so we can cache
-async function transformQueryNounToNounUncached(queryNoun: AllNounsQuery["nouns"][0]): Promise<Noun> {
+export async function transformQueryNounToNounUncached(queryNoun: AllNounsQuery["nouns"][0]): Promise<Noun> {
   if (!queryNoun.seed) {
     throw new Error("Seed not found");
   }
