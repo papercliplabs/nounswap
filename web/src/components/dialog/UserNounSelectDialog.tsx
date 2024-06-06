@@ -2,7 +2,6 @@
 import { Dialog, DialogContent } from "@/components/ui/dialogBase";
 import Icon from "../ui/Icon";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { sepolia } from "viem/chains";
 import { useRouter } from "next/navigation";
 import NounCard from "../NounCard";
 import { useState } from "react";
@@ -11,6 +10,7 @@ import { CHAIN_CONFIG } from "@/config";
 import { useSwitchChain } from "wagmi";
 import { Noun } from "@/data/noun/types";
 import Link from "next/link";
+import { LinkExternal } from "../ui/link";
 
 interface UserNounSelectDialogProps {
   connected: boolean;
@@ -50,7 +50,7 @@ export default function UserNounSelectDialog({
         ) : (
           <button
             onClick={() => (connected ? setOpen(true) : openConnectModal?.())}
-            className="flex h-[200px] w-[200px] flex-col items-center justify-center gap-2 rounded-[20px] border-4 border-dashed bg-background-ternary p-8 text-content-secondary hover:brightness-[85%]"
+            className="bg-background-ternary text-content-secondary flex h-[200px] w-[200px] flex-col items-center justify-center gap-2 rounded-[20px] border-4 border-dashed p-8 hover:brightness-[85%]"
           >
             <Image src="/noggles.png" width={64} height={64} alt="" />
             <h6>Select your Noun</h6>
@@ -60,7 +60,7 @@ export default function UserNounSelectDialog({
 
       <DialogContent className="flex max-h-[80vh] max-w-[425px] flex-col overflow-y-auto p-0">
         <h4 className="px-6 pt-6">Select your Noun</h4>
-        <div className="flex flex-col [&>ol>li>div]:text-content-secondary">
+        <div className="[&>ol>li>div]:text-content-secondary flex flex-col">
           {userNouns == undefined ? (
             <Icon icon="pending" size={60} className="animate-spin" />
           ) : userNouns.length == 0 ? (
@@ -70,15 +70,12 @@ export default function UserNounSelectDialog({
                 {CHAIN_CONFIG.chain.id == 1 ? (
                   <>
                     Don{"'"}t have a noun on Ethereum? Try NounSwap on{" "}
-                    <button
+                    <LinkExternal
                       className="text-semantic-accent hover:brightness-[85%]"
-                      onClick={async () => {
-                        await switchChainAsync?.({ chainId: sepolia.id });
-                        router.push("/");
-                      }}
+                      href="https://sepolia.nounswap.wtf"
                     >
-                      Goerli Testnet
-                    </button>
+                      Sepolia Testnet
+                    </LinkExternal>
                     .
                   </>
                 ) : (
@@ -97,7 +94,7 @@ export default function UserNounSelectDialog({
           ) : (
             userNouns.map((noun, i) => (
               <button
-                className="flex w-full flex-row items-center gap-6 p-2 px-6 py-3 text-center hover:bg-background-secondary hover:brightness-[85%]"
+                className="hover:bg-background-secondary flex w-full flex-row items-center gap-6 p-2 px-6 py-3 text-center hover:brightness-[85%]"
                 onClick={() => {
                   selectedNounCallback(noun);
                   setOpen(false);
