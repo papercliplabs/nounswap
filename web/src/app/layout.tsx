@@ -68,7 +68,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${ptRootUiFont.variable} ${londrinaSolidFont.variable}`}>
       <body>
         <Providers>
-          <div className="border-border-primary flex min-h-screen w-full flex-col justify-between overflow-hidden">
+          <div className="border-border-primary flex min-h-screen w-full flex-col justify-between">
             <TestnetBanner />
             {children}
           </div>

@@ -44,7 +44,7 @@ export function ActiveFilters() {
   }, [searchParams]);
 
   return (
-    <div className="flex min-w-0 flex-row items-center gap-2">
+    <div className="sticky top-[68px] z-[50] flex w-full min-w-0 flex-row items-center gap-2 bg-white py-2 md:top-0 md:py-4">
       <h5>Filters</h5>
       <div className="bg-background-secondary text-content-secondary label-sm mr-2 flex h-6 w-6 items-center justify-center rounded-[4px]">
         {totalCount}

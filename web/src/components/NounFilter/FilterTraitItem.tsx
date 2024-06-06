@@ -18,7 +18,7 @@ export function FilterTraitItem({ traitType, trait }: FilterTraitItemProps) {
     const params = new URLSearchParams(searchParams.toString());
     const traitFilterParams = params.getAll(filterKey);
     return traitFilterParams.includes(trait.seed.toString());
-  }, [searchParams]);
+  }, [searchParams, filterKey, trait.seed]);
 
   const handleCheckChange = useCallback(
     (checked: boolean) => {
@@ -44,7 +44,7 @@ export function FilterTraitItem({ traitType, trait }: FilterTraitItemProps) {
 
       window.history.pushState(null, "", `?${params.toString()}`);
     },
-    [searchParams, filterKey]
+    [searchParams, filterKey, trait.seed]
   );
 
   return (
