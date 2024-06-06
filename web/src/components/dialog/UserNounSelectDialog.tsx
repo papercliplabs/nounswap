@@ -2,12 +2,10 @@
 import { Dialog, DialogContent } from "@/components/ui/dialogBase";
 import Icon from "../ui/Icon";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { useRouter } from "next/navigation";
 import NounCard from "../NounCard";
 import { useState } from "react";
 import Image from "next/image";
 import { CHAIN_CONFIG } from "@/config";
-import { useSwitchChain } from "wagmi";
 import { Noun } from "@/data/noun/types";
 import Link from "next/link";
 import { LinkExternal } from "../ui/link";
@@ -29,8 +27,6 @@ export default function UserNounSelectDialog({
   const [open, setOpen] = useState<boolean>(false);
 
   const { openConnectModal } = useConnectModal();
-  const router = useRouter();
-  const { switchChainAsync } = useSwitchChain();
 
   return (
     <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
