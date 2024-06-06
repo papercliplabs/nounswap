@@ -65,10 +65,10 @@ export async function generateMetadata() {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${ptRootUiFont.variable} ${londrinaSolidFont.variable}`}>
-      <body>
+    <html lang="en" className={`${ptRootUiFont.variable} ${londrinaSolidFont.variable} `}>
+      <body className="overflow-x-hidden">
         <Providers>
-          <div className="border-border-primary flex min-h-screen w-full flex-col justify-between">
+          <div className="border-border-primary flex min-h-screen flex-col justify-between">
             <TestnetBanner />
             {children}
           </div>

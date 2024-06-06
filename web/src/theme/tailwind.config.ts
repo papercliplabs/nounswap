@@ -74,6 +74,9 @@ const config: Config = {
       md: "850px",
     },
     extend: {
+      boxShadow: {
+        overlay: "0px 16px 48px 0px rgba(0, 0, 0, 0.24)",
+      },
       colors: {
         ...palette,
         background: {

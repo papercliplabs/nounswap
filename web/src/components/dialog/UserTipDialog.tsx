@@ -43,7 +43,7 @@ export default function UserTipDialog({ connected, userBalance, swapUrl, tip, se
           <div className="relative hover:cursor-pointer">
             <button
               onClick={() => setOpen(true)}
-              className="flex h-[200px] w-[200px] flex-col items-center justify-center gap-4 rounded-3xl bg-background-secondary"
+              className="bg-background-secondary flex h-[200px] w-[200px] flex-col items-center justify-center gap-4 rounded-3xl"
             >
               <Image src="/ethereum-logo.png" width={64} height={64} alt="WETH" />
               <h5>{formatTokenAmount(tip, NATIVE_ASSET_DECIMALS, 6)} WETH</h5>
@@ -58,7 +58,7 @@ export default function UserTipDialog({ connected, userBalance, swapUrl, tip, se
         ) : (
           <button
             onClick={() => (connected ? setOpen(true) : openConnectModal?.())}
-            className="flex h-[200px] w-[200px] flex-col items-center justify-center gap-2 rounded-[20px] border-4 border-dashed bg-background-ternary p-8 text-content-secondary hover:brightness-[85%]"
+            className="bg-background-ternary text-content-secondary flex h-[200px] w-[200px] flex-col items-center justify-center gap-2 rounded-[20px] border-4 border-dashed p-8 hover:brightness-[85%]"
           >
             <Image src="/tip.png" width={64} height={64} alt="" />
             <h6>Add a tip</h6>
@@ -89,7 +89,7 @@ export default function UserTipDialog({ connected, userBalance, swapUrl, tip, se
               />
               <div
                 className={twMerge(
-                  "absolute right-5 top-1/2 flex h-full -translate-y-1/2 items-center border-l-2 pl-4 text-content-secondary",
+                  "text-content-secondary absolute right-5 top-1/2 flex h-full -translate-y-1/2 items-center border-l-2 pl-4",
                   insufficientBalance && "border-negative"
                 )}
               >
@@ -113,7 +113,7 @@ export default function UserTipDialog({ connected, userBalance, swapUrl, tip, se
             </span>
           </div>
 
-          <div className="flex flex-row items-center gap-3 rounded-xl bg-semantic-accent-light p-4">
+          <div className="bg-semantic-accent-light flex flex-row items-center gap-3 rounded-xl p-4">
             <Icon icon="questionCircle" size={16} className="shrink-0" />
             <div className="paragraph-sm">
               Make sure you have enough WETH in your wallet when the prop executes.
@@ -122,7 +122,7 @@ export default function UserTipDialog({ connected, userBalance, swapUrl, tip, se
                   <TooltipTrigger className="text-content-secondary underline">
                     <div>Why Wrapped ETH?</div>
                   </TooltipTrigger>
-                  <TooltipContent className="flex max-w-[270px] flex-col gap-2">
+                  <TooltipContent className="text-content-primary flex max-w-[270px] flex-col gap-2 bg-white">
                     <h6>Why WETH instead of ETH?</h6>
                     <div>
                       Using ETH as the tip would require sending it with the creation or execution transaction, and

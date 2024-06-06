@@ -1,6 +1,6 @@
 "use client";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useMemo, useState } from "react";
 import { BaseError, Hash, InsufficientFundsError, TransactionReceipt, UserRejectedRequestError } from "viem";
 import {
   useAccount,
@@ -11,9 +11,8 @@ import {
 } from "wagmi";
 import { SendTransactionErrorType, WaitForTransactionReceiptErrorType } from "wagmi/actions";
 import { CustomTransactionValidationError, MinimalTransactionRequest, TransactionState } from "./types";
-import useToast from "../useToast";
-import { ToastType } from "@/providers/toast";
 import { CHAIN_CONFIG } from "@/config";
+import { TransactionListenerContext } from "@/providers/TransactionListener";
 
 export type CustomSendTransactionErrorType =
   | CustomTransactionValidationError
@@ -40,14 +39,13 @@ export function useSendTransaction(): UseSendTransactionReturnType {
   const { openConnectModal } = useConnectModal();
   const { switchChainAsync } = useSwitchChain();
 
-  const [_, setPendingToastId] = useState<number | undefined>(undefined);
-  const { addToast, removeToast } = useToast();
+  const { addTransaction } = useContext(TransactionListenerContext);
 
   const [validationError, setValidationError] = useState<CustomTransactionValidationError | null>(null);
 
   const {
     data: hash,
-    sendTransaction: sendTransactionWagmi,
+    sendTransactionAsync: sendTransactionWagmi,
     reset: resetSendTransaction,
     error: sendTransactionError,
     isPending: pendingSignature,
@@ -79,11 +77,20 @@ export function useSendTransaction(): UseSendTransactionReturnType {
         setValidationError(validationError ?? null);
 
         if (!validationError) {
-          sendTransactionWagmi({ chainId: CHAIN_CONFIG.chain.id, ...request });
+          const hash = await sendTransactionWagmi({ chainId: CHAIN_CONFIG.chain.id, ...request });
+          addTransaction?.(hash);
         }
       }
     },
-    [accountAddress, chainId, sendTransactionWagmi, setValidationError, openConnectModal, switchChainAsync]
+    [
+      accountAddress,
+      chainId,
+      sendTransactionWagmi,
+      setValidationError,
+      openConnectModal,
+      switchChainAsync,
+      addTransaction,
+    ]
   );
 
   function reset() {
@@ -109,40 +116,6 @@ export function useSendTransaction(): UseSendTransactionReturnType {
       return "idle";
     }
   }, [pendingSignature, txnPending, txnFailed, txnSuccess]);
-
-  // Handle toasts
-  useEffect(() => {
-    let pendingToastId: number | undefined = undefined;
-
-    switch (state) {
-      case "pending-txn":
-        pendingToastId = addToast({
-          content: "Txn pending",
-          type: ToastType.Pending,
-        });
-        break;
-      case "failed":
-        addToast({
-          content: "Txn failed",
-          type: ToastType.Failure,
-        });
-        break;
-      case "success":
-        addToast({
-          content: "Txn success",
-          type: ToastType.Success,
-        });
-        break;
-    }
-
-    setPendingToastId((currentId) => {
-      if (currentId != undefined) {
-        removeToast(currentId);
-      }
-
-      return pendingToastId;
-    });
-  }, [state, addToast, removeToast, setPendingToastId]);
 
   return { state, error, hash, receipt, sendTransaction, reset };
 }

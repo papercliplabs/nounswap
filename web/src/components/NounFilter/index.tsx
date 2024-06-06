@@ -93,7 +93,7 @@ export default function NounFilter() {
           <FilterSection traitType="body" traits={BODY_TRAITS} />
           <FilterSection traitType="accessory" traits={ACCESSORY_TRAITS} />
         </Accordion>
-        <div className="fixed bottom-0 left-0 flex w-full justify-between bg-white px-6 py-4 md:hidden">
+        <div className="border-border-secondary fixed bottom-0 left-0 flex w-full justify-between border-t-2 bg-white px-6 py-4 md:hidden">
           <ClearAllFiltersButton className="text-semantic-accent clickable-active">Clear all</ClearAllFiltersButton>
           <Button className="w-fit md:hidden" onClick={() => setIsOpen(false)}>
             Done
