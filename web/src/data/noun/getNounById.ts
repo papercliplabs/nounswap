@@ -1,9 +1,10 @@
 "use server";
 import { Noun } from "./types";
-import { checkForAllNounRevalidation, getAllNouns, transformQueryNounToNounUncached } from "./getAllNouns";
+import { checkForAllNounRevalidation, getAllNouns } from "./getAllNouns";
 import { graphql } from "../generated/gql";
 import { graphQLFetchWithFallback } from "../utils/graphQLFetch";
 import { CHAIN_CONFIG } from "@/config";
+import { transformQueryNounToNoun } from "./helpers";
 
 const query = graphql(/* GraphQL */ `
   query NounById($id: ID!) {
@@ -25,7 +26,7 @@ const query = graphql(/* GraphQL */ `
 
 export async function getNounByIdUncached(id: string): Promise<Noun | undefined> {
   const response = await graphQLFetchWithFallback(CHAIN_CONFIG.subgraphUrl, query, { id }, { next: { revalidate: 0 } });
-  const noun = response ? await transformQueryNounToNounUncached(response.noun as any) : undefined;
+  const noun = response ? transformQueryNounToNoun(response.noun as any) : undefined;
 
   if (noun) {
     // Revalidate all nouns if we have a new noun so will show in explorer on next load
