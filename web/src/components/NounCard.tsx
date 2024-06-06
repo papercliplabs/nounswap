@@ -68,7 +68,8 @@ export default function NounCard({ noun, size, enableHover, alwaysShowNumber, la
                 />
               </TooltipTrigger>
               <TooltipContent>
-                This Noun is held by the treasury. You can create a swap offer for this Noun.
+                This Noun is held by the treasury. <br />
+                You can create a swap offer for this Noun.
               </TooltipContent>
             </Tooltip>
           )}
