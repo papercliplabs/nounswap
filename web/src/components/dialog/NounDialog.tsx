@@ -15,6 +15,7 @@ import { Button } from "../ui/button";
 import { Skeleton } from "../ui/skeleton";
 import HowItWorksDialog from "./HowItWorksDialog";
 import { useNounImage } from "@/hooks/useNounImage";
+import { LinkExternal } from "../ui/link";
 
 interface NounsDialogProps {
   nouns: Noun[];
@@ -84,9 +85,16 @@ export default function NounDialog({ nouns }: NounsDialogProps) {
               <CustomAvatar address={noun.owner} ensImage={user?.imageSrc} size={40} />
               <div className="flex h-full flex-col justify-start">
                 <span className="paragraph-sm text-content-secondary">Held by</span>
-                <span className="label-md">
-                  {user ? user.name : <Skeleton className="w-[200px] whitespace-pre-wrap"> </Skeleton>}{" "}
-                </span>
+                {user ? (
+                  <LinkExternal
+                    className="label-md text-content-primary hover:text-content-primary/80"
+                    href={`${CHAIN_CONFIG.chain.blockExplorers?.default.url}/address/${noun?.owner}`}
+                  >
+                    {user.name}
+                  </LinkExternal>
+                ) : (
+                  <Skeleton className="w-[200px] whitespace-pre-wrap"> </Skeleton>
+                )}{" "}
               </div>
             </div>
 
