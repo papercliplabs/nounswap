@@ -32,3 +32,7 @@ export function formatSendTransactionError(error: SendTransactionErrorType | nul
     return "Unknown error ocurred";
   }
 }
+
+export function capitalizeFirstLetterOfEveryWord(str: string): string {
+  return str.replace(/\b\w/g, (char) => char.toUpperCase());
+}
