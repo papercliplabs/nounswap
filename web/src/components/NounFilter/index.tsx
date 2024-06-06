@@ -60,7 +60,7 @@ export default function NounFilter() {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
-      <div className={cn("sticky top-0 z-[50] w-full bg-white py-2 md:hidden")}>
+      <div className={cn("sticky top-0 z-[50] w-screen bg-white py-2 md:hidden md:w-full")}>
         <Button variant="secondary" className="w-fit" onClick={() => setIsOpen(true)}>
           Filter
         </Button>
