@@ -4,6 +4,7 @@ import { createContext, useCallback, useContext, useState } from "react";
 import { Hex } from "viem";
 import { waitForTransactionReceipt } from "viem/actions";
 import { ToastContext, ToastType } from "./toast";
+import { track } from "@vercel/analytics";
 
 export interface Transaction {
   hash: Hex;
@@ -31,6 +32,7 @@ export function TransactionListenerProvider({ children }: { children: React.Reac
         content: "Transaction Pending",
         type: ToastType.Pending,
       });
+      track("txn-pending", { hash: hash.toString() });
 
       const receipt = await waitForTransactionReceipt(CHAIN_CONFIG.publicClient, { hash });
       if (pendingToastId != undefined) {
@@ -46,6 +48,8 @@ export function TransactionListenerProvider({ children }: { children: React.Reac
         content: `Transaction ${status == "success" ? "Successful" : "Failed"}`,
         type: status == "success" ? ToastType.Success : ToastType.Failure,
       });
+
+      track(`txn-${status}`, { hash: hash.toString() });
     },
     [setTransactions, addToast, removeToast]
   );

@@ -1,5 +1,4 @@
 "use server";
-import { unstable_cache } from "next/cache";
 import { graphql } from "../generated/gql";
 import { graphQLFetchWithFallback } from "../utils/graphQLFetch";
 import { CHAIN_CONFIG } from "@/config";
@@ -33,12 +32,7 @@ const query = graphql(/* GraphQL */ `
 `);
 
 export async function getAuctionByIdUncached(id: BigIntString): Promise<Auction | null> {
-  const { auction } = await graphQLFetchWithFallback(
-    CHAIN_CONFIG.subgraphUrl,
-    query,
-    { id },
-    { next: { revalidate: 0 } }
-  );
+  const { auction } = await graphQLFetchWithFallback(CHAIN_CONFIG.subgraphUrl, query, { id }, { cache: "no-store" });
 
   if (!auction) {
     if (BigInt(id) % BigInt(10) != BigInt(0)) {
@@ -70,9 +64,3 @@ export async function getAuctionByIdUncached(id: BigIntString): Promise<Auction 
     bids,
   } as Auction;
 }
-
-// Cache forever, meant for historical auctions. See getCurrentAuction for current auctions.
-export const getAuctionById = unstable_cache(getAuctionByIdUncached, [
-  "get-auction-by-id",
-  CHAIN_CONFIG.chain.id.toString(),
-]);
