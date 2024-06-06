@@ -84,7 +84,7 @@ export default function NounFilter() {
         <div>
           <TreasuryNounFilter />
           <span className="paragraph-sm text-content-secondary">
-            You can create a swap offer with the Treasury Nouns.
+            Show Nouns held by the Treasury you can create a swap offer for.
           </span>
         </div>
         <Accordion type="multiple">
