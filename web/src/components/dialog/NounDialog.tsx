@@ -15,7 +15,6 @@ import { Button } from "../ui/button";
 import { Skeleton } from "../ui/skeleton";
 import HowItWorksDialog from "./HowItWorksDialog";
 import { useNounImage } from "@/hooks/useNounImage";
-import { AspectRatio } from "../ui/aspect-ratio";
 
 interface NounsDialogProps {
   nouns: Noun[];
@@ -54,7 +53,6 @@ export default function NounDialog({ nouns }: NounsDialogProps) {
   }, [noun]);
 
   if (!noun) {
-    console.error("NounDialog - no noun found", nounId);
     return null;
   }
 

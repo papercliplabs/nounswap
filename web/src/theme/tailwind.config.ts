@@ -185,6 +185,9 @@ const config: Config = {
         ".clickable-active": {
           "@apply active:scale-[98%] active:brightness-[85%] active:ease-in-out": {},
         },
+        ".no-scrollbar::-webkit-scrollbar": {
+          display: "none",
+        },
       });
       // Add your custom styles here
     }),
