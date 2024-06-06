@@ -26,7 +26,7 @@ const getCurrentAuctionNounId = unstable_cache(
   getCurrentAuctionNounIdUncached,
   ["get-current-auction-noun-id", CHAIN_CONFIG.chain.id.toString()],
   {
-    revalidate: 5,
+    revalidate: 2,
   }
 );
 

@@ -1,7 +1,6 @@
 import { useSearchParams } from "next/navigation";
 import { FilterItemButton } from "./FilterItemButton";
 import { useCallback, useMemo } from "react";
-import Image from "next/image";
 import Icon from "../ui/Icon";
 
 export const ONLY_TREASURY_NOUNS_FILTER_KEY = "onlyTreasuryNouns";

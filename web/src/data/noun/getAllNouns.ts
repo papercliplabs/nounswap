@@ -1,8 +1,8 @@
+"use server";
 import { CHAIN_CONFIG } from "@/config";
 import { graphql } from "../generated/gql";
 import { graphQLFetchWithFallback } from "../utils/graphQLFetch";
 import { Noun } from "./types";
-import { SECONDS_PER_DAY, SECONDS_PER_HOUR } from "@/utils/constants";
 import { AllNounsQuery } from "../generated/gql/graphql";
 import { getNounData } from "@nouns/assets";
 import { getAddress } from "viem";
@@ -37,7 +37,7 @@ async function runPaginatedNounsQueryUncached() {
       CHAIN_CONFIG.subgraphUrl,
       query,
       { batchSize: BATCH_SIZE, skip },
-      { next: { revalidate: SECONDS_PER_DAY / 2 } }
+      { next: { revalidate: 0 } }
     );
     const responseNouns = response.nouns;
     queryNouns = queryNouns.concat(responseNouns);
@@ -56,7 +56,6 @@ const runPaginatedNounsQuery = unstable_cache(
   runPaginatedNounsQueryUncached,
   ["run-paginated-nouns-query", CHAIN_CONFIG.chain.id.toString()],
   {
-    revalidate: SECONDS_PER_HOUR,
     tags: [`paginated-nouns-query-${CHAIN_CONFIG.chain.id.toString()}`],
   }
 );
@@ -128,7 +127,8 @@ export async function getAllNouns(): Promise<Noun[]> {
 
 export async function checkForAllNounRevalidation(nounId: string) {
   const allNouns = await getAllNouns();
-  if (allNouns[allNouns.length - 1].id != nounId) {
+  if (allNouns[0]?.id != nounId) {
     revalidateTag(`paginated-nouns-query-${CHAIN_CONFIG.chain.id.toString()}`);
+    getAllNouns(); // Trigger query
   }
 }

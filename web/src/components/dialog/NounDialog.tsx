@@ -72,7 +72,7 @@ export default function NounDialog({ nouns }: NounsDialogProps) {
               width={600}
               height={600}
               alt=""
-              unoptimized={noun == undefined}
+              unoptimized={fullImageData == undefined}
               className="aspect-square h-full max-h-[400px] w-full max-w-[400px] object-contain object-bottom md:max-h-max md:max-w-max"
             />
           </div>

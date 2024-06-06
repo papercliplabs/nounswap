@@ -1,5 +1,7 @@
+"use client";
 import { ButtonHTMLAttributes } from "react";
-import { Checkbox } from "../ui/checkbox";
+import { cn } from "@/utils/shadcn";
+import { Check } from "lucide-react";
 
 interface FilterItemButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   isChecked: boolean;
@@ -12,7 +14,21 @@ export function FilterItemButton({ isChecked, children, ...props }: FilterItemBu
       {...props}
     >
       {children}
-      <Checkbox checked={isChecked} tabIndex={-1} />
+      <ViewOnlyCheckbox checked={isChecked} />
     </button>
+  );
+}
+
+function ViewOnlyCheckbox({ checked }: { checked: boolean }) {
+  return (
+    <div
+      className={cn(
+        "border-border-primary peer flex h-6 w-6 shrink-0 items-center justify-center rounded-md border-2",
+        "ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2",
+        checked && "bg-content-primary border-none text-gray-50"
+      )}
+    >
+      {checked && <Check className="h-4 w-4" strokeWidth={4} />}
+    </div>
   );
 }

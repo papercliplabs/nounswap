@@ -28,9 +28,5 @@ export default function Explore() {
 async function NounExplorerWrapper() {
   const allNouns = await getAllNouns();
 
-  return (
-    <Suspense fallback={<LoadingSpinner />}>
-      <NounExplorer nouns={allNouns} />
-    </Suspense>
-  );
+  return <NounExplorer nouns={allNouns} />;
 }

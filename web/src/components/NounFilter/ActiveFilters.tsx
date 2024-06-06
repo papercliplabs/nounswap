@@ -1,3 +1,4 @@
+"use client";
 import { NounTrait, NounTraitType } from "@/data/noun/types";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";

@@ -60,8 +60,9 @@ export default function Auction() {
           width={370}
           height={370}
           alt=""
-          unoptimized={noun == undefined}
+          unoptimized={imageSrc == undefined}
           className="h-[194px] w-[194px] rounded-3xl object-contain object-bottom md:h-[370px] md:w-[370px]"
+          priority
         />
       </div>
       <div className="flex min-h-[300px] min-w-0 flex-1 p-6 md:min-h-min md:pl-5">
