@@ -77,8 +77,12 @@ export function useSendTransaction(): UseSendTransactionReturnType {
         setValidationError(validationError ?? null);
 
         if (!validationError) {
-          const hash = await sendTransactionWagmi({ chainId: CHAIN_CONFIG.chain.id, ...request });
-          addTransaction?.(hash);
+          try {
+            const hash = await sendTransactionWagmi({ chainId: CHAIN_CONFIG.chain.id, ...request });
+            addTransaction?.(hash);
+          } catch (e) {
+            // Ignore, we handle this below
+          }
         }
       }
     },
@@ -140,11 +144,16 @@ function parseError(
       ) {
         return { raw: sendTransactionError, message: "User rejected transaction request." };
       } else {
-        console.log(sendTransactionError.message, sendTransactionError.shortMessage);
-        return { raw: sendTransactionError, message: sendTransactionError.shortMessage ?? "Unknown error occured." };
+        console.log(
+          `Unknown send txn error: ${sendTransactionError.name} -  ${sendTransactionError.shortMessage} - ${sendTransactionError.message} - ${sendTransactionError.cause}`
+        );
+        return { raw: sendTransactionError, message: "Unknown error occurred, try again." };
       }
     } else {
-      return { raw: sendTransactionError, message: "Unknown error occured." };
+      console.log(
+        `Unknown send txn error: ${sendTransactionError.name} - ${sendTransactionError.message} - ${sendTransactionError.cause}`
+      );
+      return { raw: sendTransactionError, message: "Unknown error occurred, try again.." };
     }
   } else if (waitForReceiptError) {
     return { raw: waitForReceiptError, message: "Error waiting for transaction receipt." };
