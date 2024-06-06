@@ -68,8 +68,9 @@ export default function NounFilter() {
       <div
         className={cn(
           "top-0 h-screen shrink-0 flex-col gap-2 overflow-y-auto pb-[100px]",
-          "fixed left-0 top-0 z-[50] hidden w-full bg-white px-6 pb-[104px] pt-4", // sm
-          "md:sticky md:flex md:max-w-[280px] md:p-0 md:pr-2", // md
+          "fixed left-0 top-0 z-[50] hidden w-full bg-white px-6 pb-[104px] pt-4 transition-all", // sm
+          "animate-in slide-in-from-bottom",
+          "md:sticky md:flex md:max-w-[280px] md:animate-none md:p-0 md:pr-2", // md
           isOpen ? "flex" : "hidden"
         )}
       >
