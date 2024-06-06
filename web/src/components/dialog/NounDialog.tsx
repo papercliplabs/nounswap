@@ -104,7 +104,7 @@ export default function NounDialog({ nouns }: NounsDialogProps) {
                   <Button className="w-full">Create a swap offer</Button>
                 </Link>
                 <div className="text-content-secondary">
-                  Show Nouns held by the Treasury you can create a swap offer for.
+                  You can create a swap offer for this Noun.
                   <HowItWorksDialog>
                     <span className="text-semantic-accent">
                       <button>Learn More</button>

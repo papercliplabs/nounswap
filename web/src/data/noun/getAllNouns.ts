@@ -7,6 +7,7 @@ import { AllNounsQuery } from "../generated/gql/graphql";
 import { getNounData } from "@nouns/assets";
 import { getAddress } from "viem";
 import { revalidateTag, unstable_cache } from "next/cache";
+import { transformQueryNounToNoun } from "./helpers";
 
 const BATCH_SIZE = 1000;
 
@@ -60,64 +61,9 @@ const runPaginatedNounsQuery = unstable_cache(
   }
 );
 
-function extractNameFromFileName(filename: string) {
-  return filename.substring(filename.indexOf("-") + 1);
-}
-
-// Async just so we can cache
-export async function transformQueryNounToNounUncached(queryNoun: AllNounsQuery["nouns"][0]): Promise<Noun> {
-  if (!queryNoun.seed) {
-    throw new Error("Seed not found");
-  }
-
-  const seed = {
-    background: Number(queryNoun.seed.background),
-    body: Number(queryNoun.seed.body),
-    accessory: Number(queryNoun.seed.accessory),
-    head: Number(queryNoun.seed.head),
-    glasses: Number(queryNoun.seed.glasses),
-  };
-
-  const { parts, background } = getNounData(seed);
-  const [bodyPart, accessoryPart, headPart, glassesPart] = parts;
-
-  return {
-    id: queryNoun.id,
-    owner: getAddress(queryNoun.owner.id),
-    traits: {
-      background: {
-        seed: seed.background,
-        name: queryNoun.seed.background == "0" ? "Cool" : "Warm",
-      },
-      body: {
-        seed: seed.body,
-        name: extractNameFromFileName(bodyPart.filename),
-      },
-      accessory: {
-        seed: seed.accessory,
-        name: extractNameFromFileName(accessoryPart.filename),
-      },
-      head: {
-        seed: seed.head,
-        name: extractNameFromFileName(headPart.filename),
-      },
-      glasses: {
-        seed: seed.glasses,
-        name: extractNameFromFileName(glassesPart.filename),
-      },
-    },
-  };
-}
-
-// Cache forever
-const transformQueryNounToNoun = unstable_cache(transformQueryNounToNounUncached, [
-  "transform-query-noun-to-noun",
-  CHAIN_CONFIG.chain.id.toString(),
-]);
-
 export async function getAllNouns(): Promise<Noun[]> {
   const queryResponse = await runPaginatedNounsQuery();
-  const nouns = await Promise.all(queryResponse.map(transformQueryNounToNoun));
+  const nouns = queryResponse.map(transformQueryNounToNoun);
 
   // Sort by id, descending
   nouns.sort((a, b) => (BigInt(b.id) > BigInt(a.id) ? 1 : -1));
