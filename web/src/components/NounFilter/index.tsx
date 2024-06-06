@@ -60,18 +60,21 @@ export default function NounFilter() {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
-      <Button variant="secondary" className="w-fit md:hidden" onClick={() => setIsOpen(true)}>
-        Filter
-      </Button>
+      <div className={cn("sticky top-0 z-[50] w-screen bg-white py-2 md:hidden md:w-full")}>
+        <Button variant="secondary" className="w-fit" onClick={() => setIsOpen(true)}>
+          Filter
+        </Button>
+      </div>
       <div
         className={cn(
-          "shrink-0 flex-col gap-2",
-          "fixed left-0 top-0 z-50 hidden h-full w-full overflow-y-auto bg-white p-6 pb-[104px]", // sm
-          "md:static md:flex md:max-w-[280px] md:overflow-hidden md:p-0", // md
+          "top-0 h-screen shrink-0 flex-col gap-2 overflow-y-auto pb-[100px]",
+          "fixed left-0 top-0 z-[50] hidden w-full bg-white px-6 pb-[104px] pt-4 transition-all", // sm
+          "animate-in slide-in-from-bottom",
+          "md:sticky md:flex md:max-w-[280px] md:animate-none md:p-0 md:pr-2", // md
           isOpen ? "flex" : "hidden"
         )}
       >
-        <div className="flex w-full items-center justify-between">
+        <div className="top-0 z-[100] flex w-full items-center justify-between bg-white pt-3 md:sticky">
           <h3>Filter</h3>
           <ClearAllFiltersButton className="text-semantic-accent clickable-active hidden md:flex">
             Clear all
@@ -91,7 +94,7 @@ export default function NounFilter() {
           <FilterSection traitType="body" traits={BODY_TRAITS} />
           <FilterSection traitType="accessory" traits={ACCESSORY_TRAITS} />
         </Accordion>
-        <div className="fixed bottom-0 left-0 flex w-full justify-between bg-white px-6 py-4 md:hidden">
+        <div className="border-border-secondary fixed bottom-0 left-0 flex w-full justify-between border-t-2 bg-white px-6 py-4 md:hidden">
           <ClearAllFiltersButton className="text-semantic-accent clickable-active">Clear all</ClearAllFiltersButton>
           <Button className="w-fit md:hidden" onClick={() => setIsOpen(false)}>
             Done

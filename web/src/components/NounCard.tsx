@@ -4,8 +4,7 @@ import Image from "next/image";
 import { twMerge } from "tailwind-merge";
 import { useMemo, useRef } from "react";
 import { CHAIN_CONFIG } from "@/config";
-import { Tooltip } from "./ui/tooltip";
-import { TooltipContent, TooltipTrigger } from "@radix-ui/react-tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { useInView } from "framer-motion";
 import { useNounImage } from "@/hooks/useNounImage";
 
@@ -67,11 +66,8 @@ export default function NounCard({ noun, size, enableHover, alwaysShowNumber, la
                   className="absolute right-2 top-2"
                 />
               </TooltipTrigger>
-              <TooltipContent sideOffset={10} asChild>
-                {/* TODO: fix the z-index (not working) */}
-                <div className="bg-background-dark max-w-[320px] rounded-2xl p-4 text-white">
-                  This Noun is held by the treasury. You can create a swap offer for this Nouns.
-                </div>
+              <TooltipContent>
+                This Noun is held by the treasury. You can create a swap offer for this Noun.
               </TooltipContent>
             </Tooltip>
           )}

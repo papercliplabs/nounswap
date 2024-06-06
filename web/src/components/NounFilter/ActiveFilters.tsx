@@ -44,7 +44,7 @@ export function ActiveFilters() {
   }, [searchParams]);
 
   return (
-    <div className="flex min-w-0 flex-row items-center gap-2">
+    <div className="sticky top-[66px] z-[10] flex w-screen min-w-0 -translate-x-1 flex-row items-center gap-2 bg-white py-2 pl-1 md:top-0 md:py-4">
       <h5>Filters</h5>
       <div className="bg-background-secondary text-content-secondary label-sm mr-2 flex h-6 w-6 items-center justify-center rounded-[4px]">
         {totalCount}
@@ -113,7 +113,7 @@ function ActiveFilterItem({ type, seed }: ActiveFilterItemInterface) {
   return (
     <button
       onClick={() => removeFilter(type, seed)}
-      className="bg-background-secondary text-content-secondary label-sm flex items-center justify-center whitespace-pre rounded-[9px] px-[10px] py-2"
+      className="bg-background-secondary text-content-secondary label-sm flex items-center justify-center whitespace-pre rounded-[9px] px-[10px] py-2 hover:brightness-95"
     >
       {type === "treasuryNounOnly" ? (
         <span className="text-content-primary">Only Treasury</span>

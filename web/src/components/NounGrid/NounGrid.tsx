@@ -51,7 +51,7 @@ export default function NounGrid({ nouns }: NounGridInterface) {
   }, [filteredNouns]);
 
   return (
-    <div className="relative w-full">
+    <div className="relative min-h-[calc(100vh-116px)] w-full pb-[100px] md:min-h-[calc(100vh-64px)]">
       <h6 className="absolute -top-[80px] right-0 -translate-y-full">{nounCards.length} nouns</h6>
       {nounCards.length == 0 ? (
         <div className="flex h-fit grow flex-col items-center justify-center gap-2 rounded-3xl border-4 border-gray-200 px-4 py-24 text-center">

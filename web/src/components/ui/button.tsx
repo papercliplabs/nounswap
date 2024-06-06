@@ -7,7 +7,7 @@ import clsx from "clsx";
 
 const buttonVariants = cva(
   clsx(
-    "inline-flex items-center justify-center whitespace-nowrap rounded-2xl",
+    "inline-flex items-center justify-center whitespace-nowrap rounded-xl",
     "transition-all enabled:clickable-active",
     "disabled:pointer-events-none disabled:opacity-50 disabled:bg-background-disabled disabled:text-content-primary",
     "focus-visible:ring-offset-2 focus-visible:ring-2 focus-visible:ring-semantic-accent/50 focus-visible:outline-none ring-offset-transparent"

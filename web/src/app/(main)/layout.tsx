@@ -70,10 +70,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Header />
-      <main className="border-border-primary flex grow flex-col items-start justify-start gap-10 px-4 pb-4 pt-10 md:px-8 md:pb-8">
+      <main className="border-border-primary flex grow flex-col items-start justify-start gap-10 px-4 pb-0 pt-10 md:px-8">
         {children}
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

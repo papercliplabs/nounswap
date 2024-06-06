@@ -14,18 +14,18 @@ interface NounSelectProps {
 export default function NounExplorer({ nouns }: NounSelectProps) {
   return (
     <>
-      <NounDialog nouns={nouns} />
-      <div className="flex w-full flex-col gap-[30px] md:flex-row md:gap-10">
+      <div className="flex w-full flex-col items-start gap-[30px] md:flex-row">
         <Suspense>
           <NounFilter />
         </Suspense>
         <Suspense>
-          <div className="flex w-full min-w-0 flex-col gap-4">
+          <div className="flex w-full min-w-0 flex-col">
             <ActiveFilters />
             <NounGrid nouns={nouns} />
           </div>
         </Suspense>
       </div>
+      <NounDialog nouns={nouns} />
     </>
   );
 }

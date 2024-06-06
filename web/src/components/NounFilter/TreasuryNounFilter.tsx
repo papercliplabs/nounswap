@@ -32,7 +32,7 @@ export default function TreasuryNounFilter() {
     <FilterItemButton isChecked={isChecked} onClick={() => handleOnlyTreasuryNounFilterChange(!isChecked)}>
       <div className="flex items-center gap-2">
         <Icon icon="repeat" size={20} className="fill-content-primary" />
-        <h6>Only Treasury Nouns</h6>
+        <h6>Treasury Nouns</h6>
       </div>
     </FilterItemButton>
   );
