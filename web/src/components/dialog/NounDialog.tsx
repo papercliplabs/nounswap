@@ -16,6 +16,7 @@ import { Skeleton } from "../ui/skeleton";
 import HowItWorksDialog from "./HowItWorksDialog";
 import { useNounImage } from "@/hooks/useNounImage";
 import { LinkExternal } from "../ui/link";
+import Icon from "../ui/Icon";
 
 interface NounsDialogProps {
   nouns: Noun[];
@@ -51,6 +52,10 @@ export default function NounDialog({ nouns }: NounsDialogProps) {
 
   const heldByTreasury = useMemo(() => {
     return noun?.owner == CHAIN_CONFIG.addresses.nounsTreasury;
+  }, [noun]);
+
+  const heldByNounsErc20 = useMemo(() => {
+    return noun?.owner == CHAIN_CONFIG.addresses.nounsErc20;
   }, [noun]);
 
   if (!noun) {
@@ -110,6 +115,21 @@ export default function NounDialog({ nouns }: NounsDialogProps) {
                       <button>Learn More</button>
                     </span>
                   </HowItWorksDialog>
+                </div>
+              </>
+            )}
+
+            {heldByNounsErc20 && (
+              <>
+                <Link href={`/swap/${noun!.id}`}>
+                  <Button className="w-full gap-[10px]">
+                    <Icon icon="lightning" size={20} className="fill-white" />
+                    Instant swap
+                  </Button>
+                </Link>
+                <div className="text-content-secondary">
+                  This Noun can be instantly swapped with any Noun you own. No need for a proposal because its held in
+                  the $nouns contract. Just swap it.
                 </div>
               </>
             )}

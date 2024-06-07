@@ -1,10 +1,10 @@
 import { getNounById } from "@/data/noun/getNounById";
-import { Address } from "viem";
-import { getNounsForAddress } from "@/data/noun/getNounsForAddress";
 import { Suspense } from "react";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import UserNounSelect from "../../../components/UserNounSelect";
 import DynamicSwapLayout from "@/components/DynamicSwapLayout";
+import { isAddressEqual } from "viem";
+import { CHAIN_CONFIG } from "@/config";
 
 export default function UserNounSelectPage({ params }: { params: { chain: number; treasuryNounId: string } }) {
   return (
@@ -26,6 +26,10 @@ async function UserNounSelectContainer({ treasuryNounId }: { treasuryNounId: str
 
   if (!treasuryNoun) {
     return <>No treasury noun exists!</>;
+  }
+
+  if (!isAddressEqual(treasuryNoun.owner, CHAIN_CONFIG.addresses.nounsTreasury)) {
+    return <>Not a treasury noun.</>;
   }
 
   return <UserNounSelect treasuryNoun={treasuryNoun} />;

@@ -27,7 +27,7 @@ export default function UserNounSelect({ treasuryNoun }: NounSwapProps) {
 
   const { data: userBalance } = useBalance({
     address: address,
-    token: CHAIN_CONFIG.wrappedNativeTokenAddress,
+    token: CHAIN_CONFIG.addresses.wrappedNativeToken,
   });
 
   const router = useRouter();

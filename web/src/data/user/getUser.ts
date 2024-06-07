@@ -17,6 +17,12 @@ export async function getUserForAddress(address: Address): Promise<User> {
       name: "The Nouns Treasury",
       imageSrc: "/nouns-treasury.png",
     };
+  } else if (isAddressEqual(address, CHAIN_CONFIG.addresses.nounsErc20)) {
+    // Force for Nouns ERC20
+    return {
+      name: "$nouns ERC-20 contract",
+      imageSrc: "/nouns-erc20.png",
+    };
   } else {
     const [name, avatar] = await Promise.all([getNnsOrEnsNameForAddress(address), getEnsAvatarForAddress(address)]);
 
