@@ -16,6 +16,7 @@ import { Skeleton } from "../ui/skeleton";
 import HowItWorksDialog from "./HowItWorksDialog";
 import { useNounImage } from "@/hooks/useNounImage";
 import { LinkExternal } from "../ui/link";
+import Icon from "../ui/Icon";
 
 interface NounsDialogProps {
   nouns: Noun[];
@@ -53,6 +54,10 @@ export default function NounDialog({ nouns }: NounsDialogProps) {
     return noun?.owner == CHAIN_CONFIG.addresses.nounsTreasury;
   }, [noun]);
 
+  const heldByNounsErc20 = useMemo(() => {
+    return noun?.owner == CHAIN_CONFIG.addresses.nounsErc20;
+  }, [noun]);
+
   if (!noun) {
     return null;
   }
@@ -66,7 +71,7 @@ export default function NounDialog({ nouns }: NounsDialogProps) {
         )}
       >
         <div className="flex aspect-auto w-full flex-col md:aspect-[100/45] md:flex-row">
-          <div className="flex h-fit w-full justify-center md:h-full md:w-[45%] md:max-w-max">
+          <div className="flex h-fit w-full shrink-0 justify-center md:h-full md:w-[45%] md:max-w-max">
             <Image
               src={fullImageData ?? "/noun-loading-skull.gif"}
               width={600}
@@ -76,7 +81,7 @@ export default function NounDialog({ nouns }: NounsDialogProps) {
               className="aspect-square h-full max-h-[400px] w-full max-w-[400px] object-contain object-bottom md:max-h-max md:max-w-max"
             />
           </div>
-          <div className="flex flex-auto flex-col gap-6 overflow-visible px-8 pb-6 pt-12 md:h-full md:overflow-y-auto">
+          <div className="flex flex-auto flex-col gap-6 overflow-visible px-6 pb-6 pt-12 md:h-full md:overflow-y-auto md:px-8">
             <h1>Noun {noun.id}</h1>
 
             <Separator className="h-[2px]" />
@@ -100,7 +105,7 @@ export default function NounDialog({ nouns }: NounsDialogProps) {
 
             {heldByTreasury && (
               <>
-                <Link href={`/swap/${noun!.id}`}>
+                <Link href={`/treasury-swap/${noun.id}`}>
                   <Button className="w-full">Create a swap offer</Button>
                 </Link>
                 <div className="text-content-secondary">
@@ -110,6 +115,21 @@ export default function NounDialog({ nouns }: NounsDialogProps) {
                       <button>Learn More</button>
                     </span>
                   </HowItWorksDialog>
+                </div>
+              </>
+            )}
+
+            {heldByNounsErc20 && (
+              <>
+                <Link href={`/instant-swap/${noun.id}`}>
+                  <Button className="w-full gap-[10px]">
+                    <Icon icon="lightning" size={20} className="fill-white" />
+                    Instant swap
+                  </Button>
+                </Link>
+                <div className="text-content-secondary">
+                  This Noun can be instantly swapped with any Noun you own. No need for a proposal because its held in
+                  the $nouns contract. Just swap it.
                 </div>
               </>
             )}

@@ -5,6 +5,7 @@ import { useCallback, useMemo } from "react";
 import { ONLY_TREASURY_NOUNS_FILTER_KEY } from "./TreasuryNounFilter";
 import { X } from "lucide-react";
 import { ACCESSORY_TRAITS, BACKGROUND_TRAITS, BODY_TRAITS, GLASSES_TRAITS, HEAD_TRAITS } from ".";
+import { INSTANT_SWAP_FILTER_KEY } from "./InstantSwapFilter";
 
 export function ActiveFilters() {
   const searchParams = useSearchParams();
@@ -16,6 +17,7 @@ export function ActiveFilters() {
     bodyFilters,
     accessoryFilters,
     treasuryNounsOnly,
+    instantSwap,
     totalCount,
   } = useMemo(() => {
     const backgroundFilters = searchParams.getAll("background[]");
@@ -24,6 +26,7 @@ export function ActiveFilters() {
     const bodyFilters = searchParams.getAll("body[]");
     const accessoryFilters = searchParams.getAll("accessory[]");
     const treasuryNounsOnly = searchParams.get(ONLY_TREASURY_NOUNS_FILTER_KEY);
+    const instantSwap = searchParams.get(INSTANT_SWAP_FILTER_KEY);
 
     const totalCount =
       backgroundFilters.length +
@@ -31,7 +34,8 @@ export function ActiveFilters() {
       glassesFilters.length +
       bodyFilters.length +
       accessoryFilters.length +
-      (treasuryNounsOnly ? 1 : 0);
+      (treasuryNounsOnly ? 1 : 0) +
+      (instantSwap ? 1 : 0);
 
     return {
       backgroundFilters,
@@ -40,6 +44,7 @@ export function ActiveFilters() {
       bodyFilters,
       accessoryFilters,
       treasuryNounsOnly,
+      instantSwap,
       totalCount,
     };
   }, [searchParams]);
@@ -52,6 +57,7 @@ export function ActiveFilters() {
       </div>
       <div className="no-scrollbar flex w-full min-w-0 flex-row items-center gap-2 overflow-x-auto">
         {treasuryNounsOnly && <ActiveFilterItem seed={"1"} type="treasuryNounOnly" key={"treasuryNounOnly"} />}
+        {instantSwap && <ActiveFilterItem seed={"1"} type="instantSwap" key={"instantSwap"} />}
         {backgroundFilters.map((seed) => (
           <ActiveFilterItem seed={seed} type="background" key={"background" + seed} />
         ))}
@@ -73,7 +79,7 @@ export function ActiveFilters() {
 }
 
 interface ActiveFilterItemInterface {
-  type: NounTraitType | "treasuryNounOnly";
+  type: NounTraitType | "treasuryNounOnly" | "instantSwap";
   seed: string;
 }
 
@@ -81,12 +87,17 @@ function ActiveFilterItem({ type, seed }: ActiveFilterItemInterface) {
   const searchParams = useSearchParams();
 
   const removeFilter = useCallback(
-    (type: NounTraitType | "treasuryNounOnly", seed: string) => {
+    (type: NounTraitType | "treasuryNounOnly" | "instantSwap", seed: string) => {
       const params = new URLSearchParams(searchParams.toString());
 
       if (type == "treasuryNounOnly") {
         if (params.get(ONLY_TREASURY_NOUNS_FILTER_KEY) === "1") {
           params.delete(ONLY_TREASURY_NOUNS_FILTER_KEY);
+          window.history.pushState(null, "", `?${params.toString()}`);
+        }
+      } else if (type == "instantSwap") {
+        if (params.get(INSTANT_SWAP_FILTER_KEY) === "1") {
+          params.delete(INSTANT_SWAP_FILTER_KEY);
           window.history.pushState(null, "", `?${params.toString()}`);
         }
       } else {
@@ -117,7 +128,9 @@ function ActiveFilterItem({ type, seed }: ActiveFilterItemInterface) {
       className="bg-background-secondary text-content-secondary label-sm flex items-center justify-center whitespace-pre rounded-[9px] px-[10px] py-2 hover:brightness-95"
     >
       {type === "treasuryNounOnly" ? (
-        <span className="text-content-primary">Only Treasury</span>
+        <span className="text-content-primary">Treasury Nouns</span>
+      ) : type === "instantSwap" ? (
+        <span className="text-content-primary">Instant Swap</span>
       ) : (
         <>
           <span>{type}: </span>
