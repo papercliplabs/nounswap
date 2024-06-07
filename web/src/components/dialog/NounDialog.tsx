@@ -81,7 +81,7 @@ export default function NounDialog({ nouns }: NounsDialogProps) {
               className="aspect-square h-full max-h-[400px] w-full max-w-[400px] object-contain object-bottom md:max-h-max md:max-w-max"
             />
           </div>
-          <div className="flex flex-auto flex-col gap-6 overflow-visible px-8 pb-6 pt-12 md:h-full md:overflow-y-auto">
+          <div className="flex flex-auto flex-col gap-6 overflow-visible px-6 pb-6 pt-12 md:h-full md:overflow-y-auto md:px-8">
             <h1>Noun {noun.id}</h1>
 
             <Separator className="h-[2px]" />
@@ -105,7 +105,7 @@ export default function NounDialog({ nouns }: NounsDialogProps) {
 
             {heldByTreasury && (
               <>
-                <Link href={`/swap/${noun!.id}`}>
+                <Link href={`/treasury-swap/${noun.id}`}>
                   <Button className="w-full">Create a swap offer</Button>
                 </Link>
                 <div className="text-content-secondary">
@@ -121,7 +121,7 @@ export default function NounDialog({ nouns }: NounsDialogProps) {
 
             {heldByNounsErc20 && (
               <>
-                <Link href={`/swap/${noun!.id}`}>
+                <Link href={`/instant-swap/${noun.id}`}>
                   <Button className="w-full gap-[10px]">
                     <Icon icon="lightning" size={20} className="fill-white" />
                     Instant swap

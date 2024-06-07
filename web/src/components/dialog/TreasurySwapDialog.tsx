@@ -1,18 +1,19 @@
+"use client";
 import { useEffect, useMemo, useState } from "react";
-import ProgressCircle from "../../ProgressCircle";
+import ProgressCircle from "../ProgressCircle";
 import { useRouter } from "next/navigation";
-import { Dialog, DialogContent } from "../../ui/dialogBase";
-import { Button } from "../../ui/button";
+import { Dialog, DialogContent } from "../ui/dialogBase";
+import { Button } from "../ui/button";
 import { twMerge } from "tailwind-merge";
 import { useAccount } from "wagmi";
 import { CHAIN_CONFIG } from "@/config";
 import { Noun } from "@/data/noun/types";
 import { useQuery } from "@tanstack/react-query";
 import { getDoesNounRequireApproval } from "@/data/noun/getDoesNounRequireApproval";
-import { ApproveNoun } from "./ApproveNoun";
+import { ApproveNoun } from "./transactionDialogPages/ApproveNoun";
 import { getDoesErc20RequireApproval } from "@/data/erc20/getDoesNounRequireApproval";
-import { ApproveWeth } from "./ApproveWeth";
-import { CreatePropCandidate } from "./CreatePropCandidate";
+import { ApproveWeth } from "./transactionDialogPages/ApproveWeth";
+import { CreatePropCandidate } from "./transactionDialogPages/CreatePropCandidate";
 
 interface SwapTransactionDialogProps {
   userNoun: Noun;
@@ -21,7 +22,7 @@ interface SwapTransactionDialogProps {
   reason: string;
 }
 
-export default function SwapTransactionDialog({ userNoun, treasuryNoun, tip, reason }: SwapTransactionDialogProps) {
+export default function TreasurySwapDialog({ userNoun, treasuryNoun, tip, reason }: SwapTransactionDialogProps) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { address, isConnected } = useAccount();
@@ -85,12 +86,23 @@ export default function SwapTransactionDialog({ userNoun, treasuryNoun, tip, rea
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
-      <Button onClick={() => setIsOpen(true)} disabled={reason == undefined || reason == ""}>
-        Create Swap Prop
+      <Button
+        className="w-full md:w-fit"
+        onClick={() => setIsOpen(true)}
+        disabled={reason == undefined || reason == ""}
+      >
+        Create Swap Candidate
       </Button>
 
       <DialogContent className="flex max-h-[80vh] max-w-[425px] flex-col overflow-y-auto pt-12">
-        {step == 0 && <ApproveNoun noun={userNoun} progressStepper={progressStepper} />}
+        {step == 0 && (
+          <ApproveNoun
+            noun={userNoun}
+            spender={CHAIN_CONFIG.addresses.nounsTreasury}
+            progressStepper={progressStepper}
+            reason="This will give the Nouns Treasury permission to swap your Noun if the prop passes."
+          />
+        )}
         {step == 1 && <ApproveWeth amount={tip} progressStepper={progressStepper} />}
         {step == 2 && (
           <CreatePropCandidate

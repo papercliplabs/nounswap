@@ -46,7 +46,7 @@ export default function NounCard({ noun, size, enableHover, alwaysShowNumber, la
             width={size}
             height={size}
             alt=""
-            className="outline outline-4 outline-transparent"
+            className="object-contain outline outline-4 outline-transparent"
             unoptimized={nounImage == undefined}
             draggable={false}
           />

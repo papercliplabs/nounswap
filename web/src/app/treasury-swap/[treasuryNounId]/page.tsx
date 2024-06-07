@@ -1,36 +1,38 @@
 import { getNounById } from "@/data/noun/getNounById";
 import { Suspense } from "react";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import UserNounSelect from "../../../components/UserNounSelect";
 import DynamicSwapLayout from "@/components/DynamicSwapLayout";
 import { isAddressEqual } from "viem";
 import { CHAIN_CONFIG } from "@/config";
+import TreasurySwapStepOne from "./TreasurySwapStepOne";
+import { SomethingWentWrong } from "@/components/SomethingWentWrong";
 
-export default function UserNounSelectPage({ params }: { params: { chain: number; treasuryNounId: string } }) {
+export default function TreasurySwapStepOnePage({ params }: { params: { chain: number; treasuryNounId: string } }) {
   return (
     <DynamicSwapLayout
       currentStep={1}
+      numSteps={2}
       title="Create your offer"
       subtitle="Select your Noun and tip."
       backButtonHref="/"
     >
       <Suspense fallback={<LoadingSpinner />}>
-        <UserNounSelectContainer treasuryNounId={params.treasuryNounId} />
+        <DataWrapper treasuryNounId={params.treasuryNounId} />
       </Suspense>
     </DynamicSwapLayout>
   );
 }
 
-async function UserNounSelectContainer({ treasuryNounId }: { treasuryNounId: string }) {
+async function DataWrapper({ treasuryNounId }: { treasuryNounId: string }) {
   const treasuryNoun = await getNounById(treasuryNounId);
 
   if (!treasuryNoun) {
-    return <>No treasury noun exists!</>;
+    return <SomethingWentWrong message={`Noun ${treasuryNounId} doesn't exists.`} returnHref="/" />;
   }
 
   if (!isAddressEqual(treasuryNoun.owner, CHAIN_CONFIG.addresses.nounsTreasury)) {
-    return <>Not a treasury noun.</>;
+    return <SomethingWentWrong message={`Noun ${treasuryNounId} is not owned by the Nouns Treasury.`} returnHref="/" />;
   }
 
-  return <UserNounSelect treasuryNoun={treasuryNoun} />;
+  return <TreasurySwapStepOne treasuryNoun={treasuryNoun} />;
 }

@@ -1,11 +1,11 @@
 import { Suspense } from "react";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { LinkExternal } from "@/components/ui/link";
-import NounExplorer from "@/components/NounExplorer";
 import Auction from "@/components/Auction";
 import { getAllNouns } from "@/data/noun/getAllNouns";
+import Explore from "./Explore";
 
-export default function Explore() {
+export default function ExplorePage() {
   return (
     <>
       <Auction />
@@ -28,5 +28,5 @@ export default function Explore() {
 async function NounExplorerWrapper() {
   const allNouns = await getAllNouns();
 
-  return <NounExplorer nouns={allNouns} />;
+  return <Explore nouns={allNouns} />;
 }

@@ -1,10 +1,10 @@
 import DynamicSwapLayout from "@/components/DynamicSwapLayout";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import SwapReasonSelect from "@/components/SwapReasonSelect";
 import { getNounById } from "@/data/noun/getNounById";
 import { Suspense } from "react";
+import TreasurySwapStepTwo from "./TreasurySwapStepTwo";
 
-export default function SwapReasonPage({
+export default function TreasurySwapStepTwoPage({
   params,
 }: {
   params: { treasuryNounId: string; userNounId: string; tipAmount: bigint };
@@ -12,12 +12,13 @@ export default function SwapReasonPage({
   return (
     <DynamicSwapLayout
       currentStep={2}
+      numSteps={2}
       title="Give a reason"
       subtitle="Share why you want this noun."
-      backButtonHref={`/swap/${params.treasuryNounId}`}
+      backButtonHref={`/treasury-swap/${params.treasuryNounId}`}
     >
       <Suspense fallback={<LoadingSpinner />}>
-        <SwapReasonContainer
+        <DataWrapper
           treasuryNounId={params.treasuryNounId}
           userNounId={params.userNounId}
           tipAmount={params.tipAmount}
@@ -27,7 +28,7 @@ export default function SwapReasonPage({
   );
 }
 
-async function SwapReasonContainer({
+async function DataWrapper({
   treasuryNounId,
   userNounId,
   tipAmount,
@@ -43,5 +44,5 @@ async function SwapReasonContainer({
     return <>Nouns don{"'"}t exists!</>;
   }
 
-  return <SwapReasonSelect userNoun={userNoun} treasuryNoun={treasuryNoun} tip={tipAmount} />;
+  return <TreasurySwapStepTwo userNoun={userNoun} treasuryNoun={treasuryNoun} tip={tipAmount} />;
 }

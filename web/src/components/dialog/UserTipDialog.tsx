@@ -1,40 +1,52 @@
 "use client";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialogBase";
+import { Dialog, DialogContent } from "@/components/ui/dialogBase";
 import Icon from "../ui/Icon";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "@/components/ui/input";
-import { formatEther, formatUnits, parseEther, parseUnits } from "viem";
+import { formatEther, parseEther, parseUnits } from "viem";
 import { NATIVE_ASSET_DECIMALS } from "@/utils/constants";
 import Image from "next/image";
 import { twMerge } from "tailwind-merge";
 import { formatTokenAmount } from "@/utils/utils";
 import { LinkExternal } from "../ui/link";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { useAccount, useBalance } from "wagmi";
+import { CHAIN_CONFIG } from "@/config";
 
 interface UserTipDialogProps {
-  connected: boolean;
-  userBalance?: bigint;
-  swapUrl: string;
-
   tip?: bigint;
   setTipCallback: (amount?: bigint) => void;
 }
 
-export default function UserTipDialog({ connected, userBalance, swapUrl, tip, setTipCallback }: UserTipDialogProps) {
+export default function UserTipDialog({ tip, setTipCallback }: UserTipDialogProps) {
   const [open, setOpen] = useState<boolean>(false);
   const [formattedInputValue, setFormattedInputValue] = useState<string | undefined>(undefined);
+
+  const { address } = useAccount();
+
+  const { data: userBalance } = useBalance({
+    address: address,
+    token: CHAIN_CONFIG.addresses.wrappedNativeToken,
+  });
 
   const { openConnectModal } = useConnectModal();
 
   const insufficientBalance = useMemo(() => {
     if (userBalance != undefined && formattedInputValue != undefined) {
-      return userBalance < parseEther(formattedInputValue);
+      return userBalance.value < parseEther(formattedInputValue);
     } else {
       false;
     }
   }, [userBalance, formattedInputValue]);
+
+  // Clear selection if disconnected
+  useEffect(() => {
+    if (!address) {
+      setTipCallback(undefined);
+    }
+  }, [address, setTipCallback]);
 
   return (
     <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
@@ -57,7 +69,7 @@ export default function UserTipDialog({ connected, userBalance, swapUrl, tip, se
           </div>
         ) : (
           <button
-            onClick={() => (connected ? setOpen(true) : openConnectModal?.())}
+            onClick={() => (address != undefined ? setOpen(true) : openConnectModal?.())}
             className="bg-background-ternary text-content-secondary flex h-[200px] w-[200px] flex-col items-center justify-center gap-2 rounded-[20px] border-4 border-dashed p-8 hover:brightness-[85%]"
           >
             <Image src="/tip.png" width={64} height={64} alt="" />
@@ -103,9 +115,11 @@ export default function UserTipDialog({ connected, userBalance, swapUrl, tip, se
           <div className="text-content-secondary">
             Balance:{" "}
             <span className="font-bold">
-              {userBalance != undefined ? formatTokenAmount(userBalance, NATIVE_ASSET_DECIMALS, 6) : "--"} WETH{" "}
+              {userBalance != undefined ? formatTokenAmount(userBalance?.value, NATIVE_ASSET_DECIMALS, 6) : "--"} WETH{" "}
               <button
-                onClick={() => (userBalance != undefined ? setFormattedInputValue(formatEther(userBalance)) : {})}
+                onClick={() =>
+                  userBalance != undefined ? setFormattedInputValue(formatEther(userBalance?.value)) : {}
+                }
                 className="text-semantic-accent hover:text-semantic-accent-dark"
               >
                 (Max)
@@ -132,7 +146,7 @@ export default function UserTipDialog({ connected, userBalance, swapUrl, tip, se
                       In contrast, WETH can be pre-approved, then the transfer is executed and enforced as a transaction
                       within the proposal.
                     </div>
-                    <LinkExternal href={swapUrl} className="underline">
+                    <LinkExternal href={CHAIN_CONFIG.swapForWrappedNativeUrl} className="underline">
                       Get Wrapped ETH
                     </LinkExternal>
                   </TooltipContent>
