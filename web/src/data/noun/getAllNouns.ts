@@ -8,6 +8,7 @@ import { getNounData } from "@nouns/assets";
 import { getAddress } from "viem";
 import { revalidateTag, unstable_cache } from "next/cache";
 import { transformQueryNounToNoun } from "./helpers";
+import { SECONDS_PER_HOUR } from "@/utils/constants";
 
 const BATCH_SIZE = 1000;
 
@@ -57,6 +58,7 @@ const runPaginatedNounsQuery = unstable_cache(
   runPaginatedNounsQueryUncached,
   ["run-paginated-nouns-query", CHAIN_CONFIG.chain.id.toString()],
   {
+    revalidate: SECONDS_PER_HOUR,
     tags: [`paginated-nouns-query-${CHAIN_CONFIG.chain.id.toString()}`],
   }
 );
@@ -71,10 +73,14 @@ export async function getAllNouns(): Promise<Noun[]> {
   return nouns;
 }
 
+export async function forceAllNounRevalidation() {
+  revalidateTag(`paginated-nouns-query-${CHAIN_CONFIG.chain.id.toString()}`);
+  getAllNouns(); // Trigger query
+}
+
 export async function checkForAllNounRevalidation(nounId: string) {
   const allNouns = await getAllNouns();
   if (allNouns[0]?.id != nounId) {
-    revalidateTag(`paginated-nouns-query-${CHAIN_CONFIG.chain.id.toString()}`);
-    getAllNouns(); // Trigger query
+    forceAllNounRevalidation();
   }
 }

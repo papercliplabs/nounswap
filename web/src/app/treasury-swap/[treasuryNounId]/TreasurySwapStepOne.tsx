@@ -1,50 +1,26 @@
 "use client";
-import { useAccount, useBalance } from "wagmi";
-import NounCard from "./NounCard";
-import { useEffect, useState } from "react";
-import WalletButton from "./WalletButton";
+import NounCard from "@/components/NounCard";
+import { useState } from "react";
+import WalletButton from "@/components/WalletButton";
 import Image from "next/image";
-import Icon from "./ui/Icon";
-import { CHAIN_CONFIG } from "../config";
-import { LinkExternal } from "./ui/link";
-import { Button } from "./ui/button";
-import UserNounSelectDialog from "./dialog/UserNounSelectDialog";
-import UserTipDialog from "./dialog/UserTipDialog";
+import Icon from "@/components/ui/Icon";
+import { CHAIN_CONFIG } from "@/config";
+import { LinkExternal } from "@/components/ui/link";
+import { Button } from "@/components/ui/button";
+import UserNounSelectDialog from "@/components/dialog/UserNounSelectDialog";
+import UserTipDialog from "@/components/dialog/UserTipDialog";
 import { useRouter } from "next/navigation";
 import { Noun } from "@/data/noun/types";
-import { useQuery } from "@tanstack/react-query";
-import { getNounsForAddress } from "@/data/noun/getNounsForAddress";
 
 interface NounSwapProps {
   treasuryNoun: Noun;
 }
 
-export default function UserNounSelect({ treasuryNoun }: NounSwapProps) {
+export default function TreasurySwapStepOne({ treasuryNoun }: NounSwapProps) {
   const [selectedUserNoun, setSelectedUserNoun] = useState<Noun | undefined>(undefined);
   const [tip, setTip] = useState<bigint | undefined>(undefined);
 
-  const { address } = useAccount();
-
-  const { data: userBalance } = useBalance({
-    address: address,
-    token: CHAIN_CONFIG.addresses.wrappedNativeToken,
-  });
-
   const router = useRouter();
-
-  const { data: userNouns } = useQuery({
-    queryKey: ["get-nouns-for-address", address],
-    queryFn: () => getNounsForAddress(address!),
-    enabled: address != undefined,
-  });
-
-  useEffect(() => {
-    // Clear selection if disconnected
-    if (!address) {
-      setSelectedUserNoun(undefined);
-      setTip(undefined);
-    }
-  }, [address, setSelectedUserNoun]);
 
   return (
     <>
@@ -54,19 +30,11 @@ export default function UserNounSelect({ treasuryNoun }: NounSwapProps) {
             <WalletButton disableMobileShrink />
             <div className="flex flex-col items-center justify-center gap-6 lg:flex-row">
               <UserNounSelectDialog
-                connected={address != undefined}
-                userNouns={userNouns}
                 selectedUserNoun={selectedUserNoun}
                 selectedNounCallback={(noun?: Noun) => setSelectedUserNoun(noun)}
               />
               <Icon icon="plus" size={20} className="fill-gray-600" />
-              <UserTipDialog
-                connected={address != undefined}
-                userBalance={userBalance?.value}
-                swapUrl={CHAIN_CONFIG.swapForWrappedNativeUrl}
-                tip={tip}
-                setTipCallback={setTip}
-              />
+              <UserTipDialog tip={tip} setTipCallback={setTip} />
             </div>
             <Icon
               icon="repeat"
@@ -96,7 +64,7 @@ export default function UserNounSelect({ treasuryNoun }: NounSwapProps) {
           <Button
             className="w-full justify-center md:w-auto"
             disabled={selectedUserNoun == undefined || tip == undefined}
-            onClick={() => router.push(`/swap/${treasuryNoun.id}/${selectedUserNoun?.id}/${tip}`)}
+            onClick={() => router.push(`/treasury-swap/${treasuryNoun.id}/${selectedUserNoun?.id}/${tip}`)}
           >
             Next
           </Button>
