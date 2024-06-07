@@ -20,6 +20,7 @@ export function useApproveErc20(): UseApproveErc20ReturnType {
           args: [spender, amount],
         }),
         value: BigInt(0),
+        gasFallback: BigInt(80000), // WETH approve generally ~50k
       };
 
       return sendTransaction(request);

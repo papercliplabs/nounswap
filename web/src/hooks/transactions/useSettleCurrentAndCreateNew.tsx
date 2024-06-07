@@ -20,6 +20,7 @@ export function useSettleCurrentAndCreateNew(): UseCreateBidReturnType {
         functionName: "settleCurrentAndCreateNewAuction",
       }),
       value: BigInt(0),
+      gasFallback: BigInt(600000), // settleCurrentAndCreateNewAuction generally ~400k
     };
 
     return sendTransaction(request);

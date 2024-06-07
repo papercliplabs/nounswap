@@ -1,6 +1,5 @@
 "use client";
 import { AbiFunction, Address, encodeAbiParameters, encodeFunctionData, toFunctionSignature } from "viem";
-import { useAccount } from "wagmi";
 import { erc20TokenAbi } from "@/abis/erc20Token";
 import { formatTokenAmount } from "@/utils/utils";
 import { NATIVE_ASSET_DECIMALS } from "@/utils/constants";
@@ -144,7 +143,7 @@ ${reason ?? "No rationale provided"}
         to: CHAIN_CONFIG.addresses.nounsDoaDataProxy,
         data: propCalldata,
         value: BigInt(0),
-        gas: BigInt(2000000), // Reasonable default incase gas estimate fails...
+        gasFallback: BigInt(2000000), // Reasonable default incase gas estimate fails...
       };
 
       sendTransaction(request);
