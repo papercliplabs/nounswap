@@ -75,7 +75,6 @@ export async function getAllNouns(): Promise<Noun[]> {
 
 export async function forceAllNounRevalidation() {
   revalidateTag(`paginated-nouns-query-${CHAIN_CONFIG.chain.id.toString()}`);
-  getAllNouns(); // Trigger query
 }
 
 export async function checkForAllNounRevalidation(nounId: string) {

@@ -31,14 +31,11 @@ export function useNounsErc20Swap(): UseNounsErc20SwapReturnType {
         // Never should get here, since sendTransaction enforces connected
         return new CustomTransactionValidationError("NOT_CONNECTED", "Wallet not connected.");
       } else if (!isAddressEqual(fromNounOwner, address)) {
-        return new CustomTransactionValidationError(
-          "SENDER_NOT_OWNER",
-          "Sender does no longer owns the swap input Noun."
-        );
+        return new CustomTransactionValidationError("SENDER_NOT_OWNER", "Sender no longer owns the swap input Noun.");
       } else if (!isAddressEqual(toNounOwner, CHAIN_CONFIG.addresses.nounsErc20)) {
         return new CustomTransactionValidationError(
           "NOUNS_ERC20_NOT_OWNER",
-          "The Nouns ERC-20 contract does no longer owns the swap output Noun."
+          "The Nouns ERC-20 contract no longer owns the swap output Noun."
         );
       } else if (!isAddressEqual(currentApprovalAddress, CHAIN_CONFIG.addresses.nounsErc20)) {
         return new CustomTransactionValidationError(
