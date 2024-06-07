@@ -4,6 +4,7 @@ export interface MinimalTransactionRequest {
   to: Address;
   data: Hex;
   value: bigint;
+  gasFallback: bigint; // Upper bound fallback for the gas required for the action, only used when estimation fails
 }
 
 export class CustomTransactionValidationError extends Error {
