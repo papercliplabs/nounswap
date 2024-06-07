@@ -9,6 +9,7 @@ import { isAddressEqual } from "viem";
 import { CHAIN_CONFIG } from "@/config";
 import { ClearAllFiltersButton } from "../NounFilter/ClearAllFiltersButton";
 import { ONLY_TREASURY_NOUNS_FILTER_KEY } from "../NounFilter/TreasuryNounFilter";
+import { INSTANT_SWAP_FILTER_KEY } from "../NounFilter/InstantSwapFilter";
 
 interface NounGridInterface {
   nouns: Noun[];
@@ -24,6 +25,7 @@ export default function NounGrid({ nouns }: NounGridInterface) {
     const bodyFilters = searchParams.getAll("body[]");
     const accessoryFilters = searchParams.getAll("accessory[]");
     const treasuryNounsOnly = searchParams.get(ONLY_TREASURY_NOUNS_FILTER_KEY);
+    const instantSwap = searchParams.get(INSTANT_SWAP_FILTER_KEY);
 
     return nouns.filter((noun) => {
       const backgroundMatch =
@@ -34,8 +36,17 @@ export default function NounGrid({ nouns }: NounGridInterface) {
       const accessoryMatch =
         accessoryFilters.length === 0 || accessoryFilters.includes(noun.traits.accessory.seed.toString());
       const treasuryNounMatch = !treasuryNounsOnly || isAddressEqual(noun.owner, CHAIN_CONFIG.addresses.nounsTreasury);
+      const instantSwapMatch = !instantSwap || isAddressEqual(noun.owner, CHAIN_CONFIG.addresses.nounsErc20);
 
-      return backgroundMatch && headMatch && glassesMatch && bodyMatch && accessoryMatch && treasuryNounMatch;
+      return (
+        backgroundMatch &&
+        headMatch &&
+        glassesMatch &&
+        bodyMatch &&
+        accessoryMatch &&
+        treasuryNounMatch &&
+        instantSwapMatch
+      );
     });
   }, [searchParams, nouns]);
 

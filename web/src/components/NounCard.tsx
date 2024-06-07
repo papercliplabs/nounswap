@@ -7,6 +7,7 @@ import { CHAIN_CONFIG } from "@/config";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { useInView } from "framer-motion";
 import { useNounImage } from "@/hooks/useNounImage";
+import Icon from "./ui/Icon";
 
 interface NounCardProps {
   noun: Noun;
@@ -20,6 +21,7 @@ export default function NounCard({ noun, size, enableHover, alwaysShowNumber, la
   const ref = useRef<HTMLInputElement>(null);
   const isInView = useInView(ref, { margin: "500px 0px" });
   const isTreasuryNoun = useMemo(() => noun.owner == CHAIN_CONFIG.addresses.nounsTreasury, [noun.owner]);
+  const isHeldByNounsErc20 = useMemo(() => noun.owner == CHAIN_CONFIG.addresses.nounsErc20, [noun.owner]);
 
   const nounImage = useNounImage("full", noun);
 
@@ -66,6 +68,20 @@ export default function NounCard({ noun, size, enableHover, alwaysShowNumber, la
                   alt=""
                   className="absolute right-2 top-2"
                 />
+              </TooltipTrigger>
+              <TooltipContent>
+                This Noun is held by the treasury. <br />
+                You can create a swap offer for this Noun.
+              </TooltipContent>
+            </Tooltip>
+          )}
+          {isHeldByNounsErc20 && enableHover && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="absolute left-2 top-2 flex items-center gap-1 rounded-full bg-white px-2 py-[5px] shadow-md">
+                  <Icon icon="lightning" size={size ? size / 10 : 16} />
+                  <span className="label-sm text-content-primary">Swap</span>
+                </div>
               </TooltipTrigger>
               <TooltipContent>
                 This Noun is held by the treasury. <br />

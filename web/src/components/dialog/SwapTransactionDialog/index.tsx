@@ -36,7 +36,7 @@ export default function SwapTransactionDialog({ userNoun, treasuryNoun, tip, rea
     queryKey: ["get-does-erc20-require-approval", userNoun.id, CHAIN_CONFIG.addresses.nounsTreasury],
     queryFn: () =>
       getDoesErc20RequireApproval(
-        CHAIN_CONFIG.wrappedNativeTokenAddress,
+        CHAIN_CONFIG.addresses.wrappedNativeToken,
         userNoun.owner,
         CHAIN_CONFIG.addresses.nounsTreasury,
         tip.toString()
@@ -61,14 +61,14 @@ export default function SwapTransactionDialog({ userNoun, treasuryNoun, tip, rea
 
   const progressStepper = useMemo(
     () => (
-      <div className="flex w-full flex-col items-center justify-center gap-3 pt-3 text-content-secondary">
+      <div className="text-content-secondary flex w-full flex-col items-center justify-center gap-3 pt-3">
         {step != undefined && (
           <>
             <div className="flex w-full flex-row items-center justify-between px-10">
               <ProgressCircle state={step == 0 ? "active" : "completed"} />
-              <div className={twMerge("h-1 w-1/3 bg-background-disabled", step > 0 && "bg-semantic-accent")} />
+              <div className={twMerge("bg-background-disabled h-1 w-1/3", step > 0 && "bg-semantic-accent")} />
               <ProgressCircle state={step == 0 ? "todo" : step == 1 ? "active" : "completed"} />
-              <div className={twMerge("h-1 w-1/3 bg-background-disabled", step > 1 && "bg-semantic-accent")} />
+              <div className={twMerge("bg-background-disabled h-1 w-1/3", step > 1 && "bg-semantic-accent")} />
               <ProgressCircle state={step < 2 ? "todo" : "active"} />
             </div>
             <div className="paragraph-sm flex w-full flex-row justify-between">

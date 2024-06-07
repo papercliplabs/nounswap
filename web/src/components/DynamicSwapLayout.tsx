@@ -12,6 +12,7 @@ interface DynamicSwapLayoutProps {
   subtitle: string;
   backButtonHref: string;
   children: React.ReactNode;
+  // progressSection: React.ReactNode;
 }
 
 export default function DynamicSwapLayout({
@@ -36,7 +37,7 @@ export default function DynamicSwapLayout({
           </div>
           <HowItWorksDialog>
             <Button variant="ghost" size="icon" className="gap-2">
-              <h6 className="hidden text-content-secondary md:block">How it works</h6>
+              <h6 className="text-content-secondary hidden md:block">How it works</h6>
               <Icon icon="questionCircle" size={20} className="fill-gray-600" />
             </Button>
           </HowItWorksDialog>
