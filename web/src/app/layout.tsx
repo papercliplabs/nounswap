@@ -38,7 +38,7 @@ const londrinaSolidFont = Londrina_Solid({
 });
 
 export async function generateMetadata() {
-  const frameMetadata = await getFrameMetadata(`https://frames.paperclip.xyz/nounish-auction/nouns`);
+  const frameMetadata = await getFrameMetadata(`https://frames.paperclip.xyz/nounish-auction/v2/nouns`);
 
   // Only take fc:frame tags (not og image overrides)
   const filteredFrameMetadata = Object.fromEntries(
