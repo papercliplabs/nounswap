@@ -84,8 +84,7 @@ export default function NounCard({ noun, size, enableHover, alwaysShowNumber, la
                 </div>
               </TooltipTrigger>
               <TooltipContent>
-                This Noun is held by the treasury. <br />
-                You can create a swap offer for this Noun.
+                This Noun is held by the $nouns ERC-20 contract. It can be instantly swapped with any Noun you own.
               </TooltipContent>
             </Tooltip>
           )}

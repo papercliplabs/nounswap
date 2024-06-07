@@ -1,7 +1,7 @@
 "use server";
-import { Address } from "viem";
+import { Address, isAddressEqual } from "viem";
 import { CHAIN_CONFIG } from "@/config";
-import { readContract } from "viem/actions";
+import { multicall, readContract } from "viem/actions";
 import { nounsNftTokenConfig } from "../generated/wagmi";
 import { BigIntString } from "@/utils/types";
 
@@ -14,4 +14,30 @@ export async function getDoesNounRequireApproval(nounId: BigIntString, spender: 
   });
 
   return currentApprovalAddress !== spender;
+}
+
+export async function getDoesNounRequireApprovalAndIsOwner(
+  nounId: BigIntString,
+  owner: Address,
+  spender: Address
+): Promise<boolean> {
+  const [actualOwner, currentApprovalAddress] = await multicall(CHAIN_CONFIG.publicClient, {
+    contracts: [
+      {
+        address: nounsNftTokenConfig.address,
+        abi: nounsNftTokenConfig.abi,
+        functionName: "ownerOf",
+        args: [BigInt(nounId)],
+      },
+      {
+        address: nounsNftTokenConfig.address,
+        abi: nounsNftTokenConfig.abi,
+        functionName: "getApproved",
+        args: [BigInt(nounId)],
+      },
+    ],
+    allowFailure: false,
+  });
+
+  return !isAddressEqual(spender, currentApprovalAddress) && isAddressEqual(actualOwner, owner);
 }

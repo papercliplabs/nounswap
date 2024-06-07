@@ -58,7 +58,7 @@ const runPaginatedNounsQuery = unstable_cache(
   runPaginatedNounsQueryUncached,
   ["run-paginated-nouns-query", CHAIN_CONFIG.chain.id.toString()],
   {
-    revalidate: SECONDS_PER_HOUR,
+    revalidate: 60 * 3, // 3 min, keep general state somewhat accurate
     tags: [`paginated-nouns-query-${CHAIN_CONFIG.chain.id.toString()}`],
   }
 );

@@ -2,6 +2,7 @@
 import { ButtonHTMLAttributes, useCallback } from "react";
 import { ONLY_TREASURY_NOUNS_FILTER_KEY } from "./TreasuryNounFilter";
 import { useSearchParams } from "next/navigation";
+import { INSTANT_SWAP_FILTER_KEY } from "./InstantSwapFilter";
 
 export function ClearAllFiltersButton({ ...props }: ButtonHTMLAttributes<HTMLButtonElement>) {
   const searchParams = useSearchParams();
@@ -9,6 +10,7 @@ export function ClearAllFiltersButton({ ...props }: ButtonHTMLAttributes<HTMLBut
   const clearAllFilters = useCallback(() => {
     const params = new URLSearchParams(searchParams.toString());
     params.delete(ONLY_TREASURY_NOUNS_FILTER_KEY);
+    params.delete(INSTANT_SWAP_FILTER_KEY);
     params.delete("background[]");
     params.delete("head[]");
     params.delete("glasses[]");

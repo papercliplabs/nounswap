@@ -9,7 +9,10 @@ import { useAccount } from "wagmi";
 import { CHAIN_CONFIG } from "@/config";
 import { Noun } from "@/data/noun/types";
 import { useQuery } from "@tanstack/react-query";
-import { getDoesNounRequireApproval } from "@/data/noun/getDoesNounRequireApproval";
+import {
+  getDoesNounRequireApproval,
+  getDoesNounRequireApprovalAndIsOwner,
+} from "@/data/noun/getDoesNounRequireApproval";
 import { ApproveNoun } from "./transactionDialogPages/ApproveNoun";
 import { CreateInstantSwap } from "./transactionDialogPages/CreateInstantSwap";
 
@@ -22,33 +25,20 @@ export default function InstantSwapDialog({ fromNoun, toNoun }: InstantSwapDialo
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { address } = useAccount();
 
-  // Latch approval since on transfer will lose approval
-  const [latchedRequiresApprove, setLatchedRequiresApprove] = useState<boolean>(true);
-
   const { data: nounRequiresApproval } = useQuery({
-    queryKey: ["get-does-noun-require-approval", fromNoun?.id, CHAIN_CONFIG.addresses.nounsErc20],
-    queryFn: () => getDoesNounRequireApproval(fromNoun!.id, CHAIN_CONFIG.addresses.nounsErc20),
+    queryKey: ["get-does-noun-require-approval-and-is-owner", fromNoun?.id, address, CHAIN_CONFIG.addresses.nounsErc20],
+    queryFn: () => getDoesNounRequireApprovalAndIsOwner(fromNoun!.id, address!, CHAIN_CONFIG.addresses.nounsErc20),
     refetchInterval: 1000 * 2,
-    enabled: fromNoun != undefined,
+    enabled: fromNoun != undefined && address != undefined,
   });
-
-  // Latch false once no longer required
-  useEffect(() => {
-    setLatchedRequiresApprove((prev) => prev && (nounRequiresApproval ?? true));
-  }, [nounRequiresApproval, setLatchedRequiresApprove]);
-
-  // Clear latch if fromNoun changes
-  useEffect(() => {
-    setLatchedRequiresApprove(true);
-  }, [fromNoun, setLatchedRequiresApprove]);
 
   const step: 0 | 1 | undefined = useMemo(() => {
     if (nounRequiresApproval == undefined) {
       return undefined;
     }
 
-    return latchedRequiresApprove ? 0 : 1;
-  }, [latchedRequiresApprove, nounRequiresApproval]);
+    return nounRequiresApproval ? 0 : 1;
+  }, [nounRequiresApproval]);
 
   const progressStepper = useMemo(
     () => (

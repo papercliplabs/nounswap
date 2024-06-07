@@ -71,7 +71,7 @@ export default function NounDialog({ nouns }: NounsDialogProps) {
         )}
       >
         <div className="flex aspect-auto w-full flex-col md:aspect-[100/45] md:flex-row">
-          <div className="flex h-fit w-full justify-center md:h-full md:w-[45%] md:max-w-max">
+          <div className="flex h-fit w-full shrink-0 justify-center md:h-full md:w-[45%] md:max-w-max">
             <Image
               src={fullImageData ?? "/noun-loading-skull.gif"}
               width={600}

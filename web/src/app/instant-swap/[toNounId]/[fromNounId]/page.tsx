@@ -42,7 +42,7 @@ async function DataWrapper({ fromNounId, toNounId }: { fromNounId: string; toNou
   }
 
   return (
-    <div className="items flex w-full grow flex-col items-center gap-4 p-4 pt-[5vh] text-center md:pt-[20vh]">
+    <div className="items flex w-full grow flex-col items-center gap-4 p-4 pt-[50px] md:pt-[72px] lg:pt-[130px]">
       <SuccessfulNounSwapGraphic fromNoun={fromNoun} toNoun={toNoun} />
       <h1>Swapped!</h1>
       <span className="paragraph-lg">Congratulations you now own Noun {toNounId}!</span>
