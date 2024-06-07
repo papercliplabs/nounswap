@@ -13,6 +13,9 @@ import { SendTransactionErrorType, WaitForTransactionReceiptErrorType } from "wa
 import { CustomTransactionValidationError, MinimalTransactionRequest, TransactionState } from "./types";
 import { CHAIN_CONFIG } from "@/config";
 import { TransactionListenerContext } from "@/providers/TransactionListener";
+import { estimateGas } from "viem/actions";
+
+const GAS_BUFFER = 0.08; // Gives buffer on gas estimate to help prevent out of gas error
 
 export type CustomSendTransactionErrorType =
   | CustomTransactionValidationError
@@ -77,8 +80,21 @@ export function useSendTransaction(): UseSendTransactionReturnType {
         setValidationError(validationError ?? null);
 
         if (!validationError) {
+          let gasEstimateWithBuffer;
           try {
-            const hash = await sendTransactionWagmi({ chainId: CHAIN_CONFIG.chain.id, ...request });
+            const gasEstimate = await estimateGas(CHAIN_CONFIG.publicClient, request);
+            gasEstimateWithBuffer = (gasEstimate * BigInt((1 + GAS_BUFFER) * 1000)) / BigInt(1000);
+          } catch (e) {
+            console.error("Error estimating gas, using default", e);
+            gasEstimateWithBuffer = request.gasFallback; // Use fallback when gas estimation fails
+          }
+
+          try {
+            const hash = await sendTransactionWagmi({
+              chainId: CHAIN_CONFIG.chain.id,
+              gas: gasEstimateWithBuffer,
+              ...request,
+            });
             addTransaction?.(hash);
           } catch (e) {
             // Ignore, we handle this below
