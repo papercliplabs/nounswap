@@ -12,7 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAccount } from "wagmi";
 import Link from "next/link";
 
-export function ProposalTable() {
+export function Proposals() {
   const { address } = useAccount();
   const { data: proposals } = useQuery({
     queryKey: ["noun-swap-proposals-for-proposer", address],

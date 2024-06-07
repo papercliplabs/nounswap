@@ -60,7 +60,7 @@ export function useCreateSwapPropCandidate(): UseCreateSwapPropCandidateReturnTy
       };
 
       const transferWethGovTxn: GovernanceProposalTransaction = {
-        target: CHAIN_CONFIG.wrappedNativeTokenAddress,
+        target: CHAIN_CONFIG.addresses.wrappedNativeToken,
         value: BigInt(0),
         functionSignature: toFunctionSignature(erc20TransferFromAbi),
         inputData: wethTransferToTreasuryInputData,

@@ -17,7 +17,7 @@ export function ApproveWeth({ amount, progressStepper }: ApproveNounProps) {
 
   // Autotrigger on mount
   useEffect(() => {
-    approveErc20(CHAIN_CONFIG.wrappedNativeTokenAddress, CHAIN_CONFIG.addresses.nounsTreasury, amount);
+    approveErc20(CHAIN_CONFIG.addresses.wrappedNativeToken, CHAIN_CONFIG.addresses.nounsTreasury, amount);
   }, [approveErc20, amount]);
 
   return (
@@ -35,7 +35,7 @@ export function ApproveWeth({ amount, progressStepper }: ApproveNounProps) {
         <TransactionButton
           txnState={state}
           onClick={() =>
-            approveErc20(CHAIN_CONFIG.wrappedNativeTokenAddress, CHAIN_CONFIG.addresses.nounsTreasury, amount)
+            approveErc20(CHAIN_CONFIG.addresses.wrappedNativeToken, CHAIN_CONFIG.addresses.nounsTreasury, amount)
           }
           className="w-full"
         >

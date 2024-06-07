@@ -10,6 +10,7 @@ import { ClearAllFiltersButton } from "./ClearAllFiltersButton";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { cn } from "@/utils/shadcn";
+import InstantSwapFilter from "./InstantSwapFilter";
 
 export const BACKGROUND_TRAITS: NounTrait[] = [
   { name: "Cool", seed: 0 },
@@ -79,6 +80,11 @@ export default function NounFilter() {
           <ClearAllFiltersButton className="text-semantic-accent clickable-active hidden md:flex">
             Clear all
           </ClearAllFiltersButton>
+        </div>
+        <Separator className="h-[2px]" />
+        <div>
+          <InstantSwapFilter />
+          <span className="paragraph-sm text-content-secondary">Show Nouns available for instant Swap via $nouns.</span>
         </div>
         <Separator className="h-[2px]" />
         <div>

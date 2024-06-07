@@ -3,30 +3,39 @@ import { Dialog, DialogContent } from "@/components/ui/dialogBase";
 import Icon from "../ui/Icon";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import NounCard from "../NounCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { CHAIN_CONFIG } from "@/config";
 import { Noun } from "@/data/noun/types";
 import Link from "next/link";
 import { LinkExternal } from "../ui/link";
+import { useAccount } from "wagmi";
+import { useQuery } from "@tanstack/react-query";
+import { getNounsForAddress } from "@/data/noun/getNounsForAddress";
 
 interface UserNounSelectDialogProps {
-  connected: boolean;
-  userNouns?: Noun[];
-
   selectedUserNoun?: Noun;
   selectedNounCallback: (noun?: Noun) => void;
 }
 
-export default function UserNounSelectDialog({
-  connected,
-  userNouns,
-  selectedUserNoun,
-  selectedNounCallback,
-}: UserNounSelectDialogProps) {
+export default function UserNounSelectDialog({ selectedUserNoun, selectedNounCallback }: UserNounSelectDialogProps) {
+  const { address } = useAccount();
+  const { data: userNouns } = useQuery({
+    queryKey: ["get-nouns-for-address", address],
+    queryFn: () => getNounsForAddress(address!),
+    enabled: address != undefined,
+  });
+
   const [open, setOpen] = useState<boolean>(false);
 
   const { openConnectModal } = useConnectModal();
+
+  // Clear selection if disconnected
+  useEffect(() => {
+    if (!address) {
+      selectedNounCallback(undefined);
+    }
+  }, [address, selectedNounCallback]);
 
   return (
     <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
@@ -45,7 +54,7 @@ export default function UserNounSelectDialog({
           </div>
         ) : (
           <button
-            onClick={() => (connected ? setOpen(true) : openConnectModal?.())}
+            onClick={() => (address != undefined ? setOpen(true) : openConnectModal?.())}
             className="bg-background-ternary text-content-secondary flex h-[200px] w-[200px] flex-col items-center justify-center gap-2 rounded-[20px] border-4 border-dashed p-8 hover:brightness-[85%]"
           >
             <Image src="/noggles.png" width={64} height={64} alt="" />

@@ -1,7 +1,7 @@
 "use client";
 import { Address, encodeFunctionData } from "viem";
 import { UseSendTransactionReturnType, useSendTransaction } from "./useSendTransaction";
-import { nounsTokenConfig } from "@/data/generated/wagmi";
+import { nounsNftTokenConfig } from "@/data/generated/wagmi";
 import { useCallback } from "react";
 
 interface UseApproveNounReturnType extends Omit<UseSendTransactionReturnType, "sendTransaction"> {
@@ -14,9 +14,9 @@ export function useApproveNoun(): UseApproveNounReturnType {
   const approveNoun = useCallback(
     (nounId: bigint, spender: Address) => {
       const request = {
-        to: nounsTokenConfig.address,
+        to: nounsNftTokenConfig.address,
         data: encodeFunctionData({
-          abi: nounsTokenConfig.abi,
+          abi: nounsNftTokenConfig.abi,
           functionName: "approve",
           args: [spender, nounId],
         }),
