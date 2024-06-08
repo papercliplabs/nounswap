@@ -4,6 +4,22 @@ import { LinkExternal } from "@/components/ui/link";
 import Auction from "@/components/Auction";
 import { getAllNouns } from "@/data/noun/getAllNouns";
 import Explore from "./Explore";
+import { getFrameMetadata } from "frog/next";
+
+export async function generateMetadata({ searchParams }: { searchParams?: Record<string, string> }) {
+  const noFrame = searchParams?.["no-frame"] != undefined;
+  const frameMetadata = await getFrameMetadata(`https://frames.paperclip.xyz/nounish-auction/v2/nouns`);
+
+  // Only take fc:frame tags (not og image overrides)
+  const filteredFrameMetadata = Object.fromEntries(
+    Object.entries(frameMetadata).filter(([k]) => k.includes("fc:frame"))
+  );
+  return {
+    title: "Explore Nouns",
+    description: "See all the Nouns or Swap for one from the Nouns treasury.",
+    other: noFrame ? {} : filteredFrameMetadata,
+  };
+}
 
 export default function ExplorePage() {
   return (
