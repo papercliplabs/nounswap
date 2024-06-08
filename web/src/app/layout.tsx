@@ -38,28 +38,20 @@ const londrinaSolidFont = Londrina_Solid({
 });
 
 export async function generateMetadata() {
-  const frameMetadata = await getFrameMetadata(`https://frames.paperclip.xyz/nounish-auction/v2/nouns`);
-
-  // Only take fc:frame tags (not og image overrides)
-  const filteredFrameMetadata = Object.fromEntries(
-    Object.entries(frameMetadata).filter(([k]) => k.includes("fc:frame"))
-  );
-
   return {
     title: "NounSwap",
-    description: "Swap your Noun with the Nouns Treasury",
+    description: "Bid, explore, and swap Nouns.",
     metadataBase: new URL("https://www.nounswap.wtf"),
     openGraph: {
       title: "NounSwap",
-      description: "Swap your Noun with the Nouns Treasury",
+      description: "Bid, explore, and swap Nouns.",
     },
     twitter: {
       card: "summary_large_image",
       title: "NounSwap",
-      description: "Swap your Noun with the Nouns Treasury",
+      description: "Bid, explore, and swap Nouns.",
     },
     keywords: ["crypto", "cryptocurrency", "ethereum", "nft", "nouns", "nounsDOA", "paperclip", "labs"],
-    other: filteredFrameMetadata,
   };
 }
 
