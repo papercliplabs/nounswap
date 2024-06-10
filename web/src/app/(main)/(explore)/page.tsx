@@ -5,6 +5,7 @@ import Auction from "@/components/Auction";
 import { getAllNouns } from "@/data/noun/getAllNouns";
 import Explore from "./Explore";
 import { getFrameMetadata } from "frog/next";
+import JustSwapItAdvertisingBanner from "@/components/AdvertisingBanner/JustSwapItAdvertisingBanner";
 
 export async function generateMetadata({ searchParams }: { searchParams?: Record<string, string> }) {
   const noFrame = searchParams?.["no-frame"] != undefined;
@@ -24,7 +25,10 @@ export async function generateMetadata({ searchParams }: { searchParams?: Record
 export default function ExplorePage() {
   return (
     <>
-      <Auction />
+      <div className="flex w-full flex-col gap-5">
+        <Auction />
+        <JustSwapItAdvertisingBanner />
+      </div>
       <div>
         <h2 className="pb-1">Explore Nouns</h2>
         <div className="paragraph-lg">
