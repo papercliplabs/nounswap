@@ -1,7 +1,7 @@
 "use client";
 import { Address, fallback } from "viem";
 import { http, WagmiProvider } from "wagmi";
-import { AvatarComponent, RainbowKitProvider, getDefaultConfig } from "@rainbow-me/rainbowkit";
+import { AvatarComponent, DisclaimerComponent, RainbowKitProvider, getDefaultConfig } from "@rainbow-me/rainbowkit";
 
 import { CHAIN_CONFIG } from "@/config";
 import TanstackQueryProvider from "./TanstackQueryProvider";
@@ -37,11 +37,19 @@ export const wagmiConfig = getDefaultConfig({
   ssr: true,
 });
 
+const Disclaimer: DisclaimerComponent = ({ Text, Link }) => (
+  <Text>
+    By connecting your wallet, you agree to the <Link href="/terms">Terms & Conditions</Link>.
+  </Text>
+);
+
 export default function WalletProvider({ children }: { children: React.ReactNode }) {
   return (
     <WagmiProvider config={wagmiConfig}>
       <TanstackQueryProvider>
-        <RainbowKitProvider avatar={CustomAvatar}>{children}</RainbowKitProvider>
+        <RainbowKitProvider avatar={CustomAvatar} appInfo={{ appName: "Noun Swap", disclaimer: Disclaimer }}>
+          {children}
+        </RainbowKitProvider>
       </TanstackQueryProvider>
     </WagmiProvider>
   );
