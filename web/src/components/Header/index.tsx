@@ -9,7 +9,8 @@ import Nav from "./Nav";
 
 const navInfo = [
   { name: "Explore", href: "/" },
-  { name: "My Props", href: "/proposals" },
+  // { name: "My Props", href: "/proposals" },
+  { name: "Convert", href: "/convert" },
 ];
 
 export function Header() {
