@@ -7,22 +7,22 @@ import { ReactNode } from "react";
 export default function ConvertInfo() {
   return (
     <div className="flex flex-col gap-4 pb-8">
-      <InfoSection title="What are $nouns?">
-        1 noun = 1,000,000 $nouns
+      <InfoSection title="What is $nouns?">
+        $nouns is an ERC-20 token that represents fractional Noun ownership. Any Noun can be deposited for 1,000,000
+        $nouns, and conversely, 1,000,000 $nouns can be redeemed to acquire any Noun held by the $nouns contract.
         <br />
         <br />
-        So this tool automatically converts your noun to $nouns, which is then redeemable for the specific noun you want
-        in the token contract.
+        Simply put, <b>1 Noun = 1,000,000 $nouns.</b>
       </InfoSection>
       <Separator className="h-[2px]" />
       <InfoSection title="What happens when I convert my Noun?">
-        You won{"'"}t own your Noun anymore; it will be placed in the $nouns ERC-20 contract, where anyone can buy it.
-        You can exchange any Noun in the $nouns contract for 1,000,000 $nouns tokens.
+        You will receive 1,000,000 $nouns on Ethereum Mainnet. You won't own your Noun anymore; it will be placed in the
+        $nouns ERC-20 contract. Anyone can exchange 1,000,000 $nouns for any Noun held in the $nouns contract.
       </InfoSection>
       <Separator className="h-[2px]" />
       <InfoSection title="Is NounSwap affiliated with $nouns?">
-        No, NounSwap is not affiliated with $nouns. This interface is only a layer over the $nouns contracts. No funds
-        are held in custody by NounSwap at any point.
+        No, NounSwap is not affiliated with $nouns. This interface is only a layer to interact with the $nouns
+        contracts. No funds are held in custody by NounSwap at any point.
       </InfoSection>
       <Separator className="h-[2px]" />
       <div className="flex flex-col gap-4">

@@ -65,10 +65,7 @@ export default function Convert() {
           </TabsContent>
         </div>
       </div>
-      <div className="flex flex-col items-center justify-end gap-6 p-4 text-center md:flex-row">
-        <div className="paragraph-sm text-content-secondary">
-          By using this interface you agree to our Terms & Conditions
-        </div>
+      <div className="flex flex-row items-center justify-end p-4 text-center">
         <TabsContent value="deposit" asChild>
           <NounToErc20Dialog depositNoun={selectedUserNoun} />
         </TabsContent>

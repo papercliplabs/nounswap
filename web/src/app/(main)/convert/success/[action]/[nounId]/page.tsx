@@ -42,7 +42,7 @@ async function DataWrapper({ nounId, action }: { nounId: string; action: string 
       {action === "deposit" ? (
         <span className="paragraph-lg">Congratulations, you deposited Noun {noun.id} for 1,000,000 $nouns!</span>
       ) : (
-        <span className="paragraph-lg">Congratulations, you now own Noun {noun.id}!</span>
+        <span className="paragraph-lg">Congratulations, you redeemed 1,000,000 $nouns for Noun {noun.id}!</span>
       )}
     </div>
   );

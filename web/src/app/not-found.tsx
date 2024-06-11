@@ -1,15 +1,14 @@
-import { Suspense } from "react";
-import LoadingSpinner from "@/components/LoadingSpinner";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function NotFound() {
   return (
-    <div className="flex grow flex-col items-center justify-center">
+    <div className="flex grow flex-col items-center justify-center gap-2 p-4">
       <h2>404 - Not Found</h2>
       <p>Could not find requested resource</p>
-      <Suspense fallback={<LoadingSpinner />}>
-        <Link href="/">Return Home</Link>
-      </Suspense>
+      <Link href="/">
+        <Button>Return Home</Button>
+      </Link>
     </div>
   );
 }
