@@ -3,7 +3,7 @@
 import NounCard from "@/components/NounCard";
 import WalletButton from "@/components/WalletButton";
 import InstantSwapDialog from "@/components/dialog/InstantSwapDialog";
-import UserNounSelectDialog from "@/components/dialog/UserNounSelectDialog";
+import NounSelectDialog from "@/components/dialog/NounSelectDialog";
 import Icon from "@/components/ui/Icon";
 import { Button } from "@/components/ui/button";
 import { LinkExternal } from "@/components/ui/link";
@@ -11,6 +11,7 @@ import { CHAIN_CONFIG } from "@/config";
 import { Noun } from "@/data/noun/types";
 import Image from "next/image";
 import { useState } from "react";
+import { useAccount } from "wagmi";
 
 interface InstantSwapProps {
   toNoun: Noun;
@@ -18,6 +19,7 @@ interface InstantSwapProps {
 
 export function InstantSwap({ toNoun }: InstantSwapProps) {
   const [selectedUserNoun, setSelectedUserNoun] = useState<Noun | undefined>(undefined);
+  const { address } = useAccount();
 
   return (
     <>
@@ -26,7 +28,8 @@ export function InstantSwap({ toNoun }: InstantSwapProps) {
           <div className="border-border-secondary relative flex flex-1 grow flex-col items-center justify-center gap-8 border-b-2 px-8 py-12 md:border-b-0 md:border-r-2">
             <WalletButton disableMobileShrink />
             <div className="flex flex-col items-center justify-center gap-6 lg:flex-row">
-              <UserNounSelectDialog
+              <NounSelectDialog
+                holderAddress={address}
                 selectedUserNoun={selectedUserNoun}
                 selectedNounCallback={(noun?: Noun) => setSelectedUserNoun(noun)}
               />

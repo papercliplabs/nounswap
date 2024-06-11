@@ -9,33 +9,39 @@ import { CHAIN_CONFIG } from "@/config";
 import { Noun } from "@/data/noun/types";
 import Link from "next/link";
 import { LinkExternal } from "../ui/link";
-import { useAccount } from "wagmi";
 import { useQuery } from "@tanstack/react-query";
 import { getNounsForAddress } from "@/data/noun/getNounsForAddress";
+import { Address } from "viem";
 
-interface UserNounSelectDialogProps {
+interface NounSelectDialogProps {
+  holderAddress?: Address;
   selectedUserNoun?: Noun;
   selectedNounCallback: (noun?: Noun) => void;
+  size?: number;
 }
 
-export default function UserNounSelectDialog({ selectedUserNoun, selectedNounCallback }: UserNounSelectDialogProps) {
-  const { address } = useAccount();
+export default function NounSelectDialog({
+  holderAddress,
+  selectedUserNoun,
+  selectedNounCallback,
+  size,
+}: NounSelectDialogProps) {
   const { data: userNouns } = useQuery({
-    queryKey: ["get-nouns-for-address", address],
-    queryFn: () => getNounsForAddress(address!),
-    enabled: address != undefined,
+    queryKey: ["get-nouns-for-address", holderAddress],
+    queryFn: () => getNounsForAddress(holderAddress!),
+    enabled: holderAddress != undefined,
   });
 
   const [open, setOpen] = useState<boolean>(false);
 
   const { openConnectModal } = useConnectModal();
 
-  // Clear selection if disconnected
+  // Clear selection if no address
   useEffect(() => {
-    if (!address) {
+    if (!holderAddress) {
       selectedNounCallback(undefined);
     }
-  }, [address, selectedNounCallback]);
+  }, [holderAddress, selectedNounCallback]);
 
   return (
     <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
@@ -43,7 +49,7 @@ export default function UserNounSelectDialog({ selectedUserNoun, selectedNounCal
         {selectedUserNoun ? (
           <div className="relative flex hover:cursor-pointer">
             <button onClick={() => setOpen(true)}>
-              <NounCard noun={selectedUserNoun} size={200} enableHover={false} alwaysShowNumber />
+              <NounCard noun={selectedUserNoun} size={size ?? 200} enableHover={false} alwaysShowNumber />
             </button>
             <button
               onClick={() => selectedNounCallback(undefined)}
@@ -54,17 +60,18 @@ export default function UserNounSelectDialog({ selectedUserNoun, selectedNounCal
           </div>
         ) : (
           <button
-            onClick={() => (address != undefined ? setOpen(true) : openConnectModal?.())}
-            className="bg-background-ternary text-content-secondary flex h-[200px] w-[200px] flex-col items-center justify-center gap-2 rounded-[20px] border-4 border-dashed p-8 hover:brightness-[85%]"
+            onClick={() => (holderAddress != undefined ? setOpen(true) : openConnectModal?.())}
+            className="bg-background-ternary text-content-secondary flex flex-col items-center justify-center gap-2 rounded-[20px] border-4 border-dashed p-8 hover:brightness-[85%]"
+            style={{ width: size ?? 200, height: size ?? 200 }}
           >
             <Image src="/noggles.png" width={64} height={64} alt="" />
-            <h6>Select your Noun</h6>
+            <h6>Select Noun</h6>
           </button>
         )}
       </>
 
       <DialogContent className="flex max-h-[80vh] max-w-[425px] flex-col overflow-y-auto p-0">
-        <h4 className="px-6 pt-6">Select your Noun</h4>
+        <h4 className="px-6 pt-6">Select Noun</h4>
         <div className="[&>ol>li>div]:text-content-secondary flex flex-col">
           {userNouns == undefined ? (
             <Icon icon="pending" size={60} className="animate-spin" />

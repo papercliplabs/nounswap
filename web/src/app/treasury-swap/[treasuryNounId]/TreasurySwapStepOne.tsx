@@ -7,10 +7,11 @@ import Icon from "@/components/ui/Icon";
 import { CHAIN_CONFIG } from "@/config";
 import { LinkExternal } from "@/components/ui/link";
 import { Button } from "@/components/ui/button";
-import UserNounSelectDialog from "@/components/dialog/UserNounSelectDialog";
+import NounSelectDialog from "@/components/dialog/NounSelectDialog";
 import UserTipDialog from "@/components/dialog/UserTipDialog";
 import { useRouter } from "next/navigation";
 import { Noun } from "@/data/noun/types";
+import { useAccount } from "wagmi";
 
 interface NounSwapProps {
   treasuryNoun: Noun;
@@ -19,6 +20,7 @@ interface NounSwapProps {
 export default function TreasurySwapStepOne({ treasuryNoun }: NounSwapProps) {
   const [selectedUserNoun, setSelectedUserNoun] = useState<Noun | undefined>(undefined);
   const [tip, setTip] = useState<bigint | undefined>(undefined);
+  const { address } = useAccount();
 
   const router = useRouter();
 
@@ -29,7 +31,8 @@ export default function TreasurySwapStepOne({ treasuryNoun }: NounSwapProps) {
           <div className="border-border-secondary relative flex flex-1 grow flex-col items-center justify-center gap-8 border-b-2 px-8 py-12 md:border-b-0 md:border-r-2">
             <WalletButton disableMobileShrink />
             <div className="flex flex-col items-center justify-center gap-6 lg:flex-row">
-              <UserNounSelectDialog
+              <NounSelectDialog
+                holderAddress={address}
                 selectedUserNoun={selectedUserNoun}
                 selectedNounCallback={(noun?: Noun) => setSelectedUserNoun(noun)}
               />
