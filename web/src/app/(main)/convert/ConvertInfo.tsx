@@ -28,7 +28,7 @@ export default function ConvertInfo() {
       <div className="flex flex-col gap-4">
         <h6>Useful links</h6>
         <div className="flex flex-col">
-          <LinkItem href="https://matcha.xyz/tokens/ethereum/0x5c1760c98be951a4067df234695c8014d8e7619c">
+          <LinkItem href="https://app.uniswap.org/swap?chain=mainnet&outputCurrency=0x5c1760c98be951a4067df234695c8014d8e7619c">
             Purchase $nouns
           </LinkItem>
           <LinkItem href="https://superbridge.app/base">Bridge to Base</LinkItem>
