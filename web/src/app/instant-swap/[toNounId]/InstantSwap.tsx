@@ -42,7 +42,7 @@ export function InstantSwap({ toNoun }: InstantSwapProps) {
           </div>
           <div className="border-border-secondary flex flex-1 grow flex-col items-center justify-center gap-8 border-t-2 px-8 py-12 md:border-l-2 md:border-t-0">
             <LinkExternal
-              href={CHAIN_CONFIG.chain.blockExplorers?.default.url + "/address/" + CHAIN_CONFIG.addresses.nounsTreasury}
+              href={CHAIN_CONFIG.chain.blockExplorers?.default.url + "/address/" + CHAIN_CONFIG.addresses.nounsErc20}
             >
               <Button variant="secondary" className="gap-2 px-4 py-4">
                 <Image
