@@ -55,8 +55,9 @@ const CHAIN_SPECIFIC_CONFIGS: Record<number, ChainSpecificData> = {
     },
     nounsGovernanceUrl: "https://nouns.camp/",
     subgraphUrl: {
-      primary: `https://gateway-arbitrum.network.thegraph.com/api/${process.env.DECENTRALIZED_SUBGRAPH_API_KEY}/deployments/id/QmaGTf5zdPhmcxXjUs23bMdhSdFU8LsMyho5saptQXAuCT`,
-      fallback: "https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns/prod/gn",
+      primary: `https://gateway-arbitrum.network.thegraph.com/api/${process.env.DECENTRALIZED_SUBGRAPH_API_KEY}/deployments/id/Qmdfajyi6PSmc45xWpbZoYdses84SAAze6ZcCxuDAhJFzt`,
+      fallback: "https://api.studio.thegraph.com/query/35078/nouns/v1.0.0", // studio
+      // fallback: "https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns/prod/gn", // For now its doesn't have txHash for bids (PR open)
     },
     swapForWrappedNativeUrl:
       "https://app.uniswap.org/swap?outputCurrency=0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2&chain=mainnet",
@@ -85,8 +86,8 @@ const CHAIN_SPECIFIC_CONFIGS: Record<number, ChainSpecificData> = {
     },
     nounsGovernanceUrl: "https://sepolia.nouns.camp/",
     subgraphUrl: {
-      primary: `https://gateway-arbitrum.network.thegraph.com/api/${process.env.DECENTRALIZED_SUBGRAPH_API_KEY}/deployments/id/QmYZnkWSMeHREiW51ABPqpnssH11nKiV1NBJv46W4Duogn`,
-      fallback: `https://api.studio.thegraph.com/query/35078/nouns-sepolia/version/latest`,
+      primary: `https://gateway-arbitrum.network.thegraph.com/api/${process.env.DECENTRALIZED_SUBGRAPH_API_KEY}/deployments/id/QmZNg1ngfNLpYxVQGCqbxWhqNLsiup3oSGbWpkF8tERVa6`,
+      fallback: `https://api.studio.thegraph.com/query/35078/nouns-sepolia/v1.0.0`,
     },
     swapForWrappedNativeUrl: "",
   },

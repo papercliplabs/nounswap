@@ -53,7 +53,7 @@ export default function NounGrid({ nouns }: NounGridInterface) {
   const nounCards = useMemo(() => {
     return filteredNouns.map((noun, i) => ({
       element: (
-        <LinkShallow searchParam={{ name: "nounId", value: noun.id }} key={i} className="h-full w-full">
+        <LinkShallow searchParam={{ name: "nounId", value: noun.id }} key={i} className="aspect-square w-full">
           <NounCard noun={noun} enableHover key={i} lazyLoad />
         </LinkShallow>
       ) as React.ReactNode,

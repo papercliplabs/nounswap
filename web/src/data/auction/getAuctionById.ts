@@ -4,7 +4,7 @@ import { graphQLFetchWithFallback } from "../utils/graphQLFetch";
 import { CHAIN_CONFIG } from "@/config";
 import { BigIntString } from "@/utils/types";
 import { Auction, Bid } from "./types";
-import { getAddress } from "viem";
+import { Hex, getAddress } from "viem";
 
 const query = graphql(/* GraphQL */ `
   query Auction($id: ID!) {
@@ -22,6 +22,7 @@ const query = graphql(/* GraphQL */ `
       clientId
       settled
       bids {
+        txHash
         bidder {
           id
         }
@@ -43,6 +44,7 @@ export async function getAuctionByIdUncached(id: BigIntString): Promise<Auction 
   }
 
   const bids: Bid[] = auction.bids.map((bid: any) => ({
+    transactionHash: bid.txHash as Hex,
     bidderAddress: getAddress(bid.bidder.id),
     amount: bid.amount,
   }));

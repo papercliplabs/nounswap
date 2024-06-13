@@ -7,6 +7,9 @@ import { formatEther } from "viem";
 import { Skeleton } from "../ui/skeleton";
 import { CustomAvatar } from "@/providers/WalletProvider";
 import { ReactNode } from "react";
+import { ExternalLink } from "lucide-react";
+import { LinkExternal } from "../ui/link";
+import { CHAIN_CONFIG } from "@/config";
 
 interface ViewBidsDialogProps {
   nounId: string;
@@ -24,7 +27,9 @@ export default function ViewBidsDialog({ children, nounId, bids }: ViewBidsDialo
 
   return (
     <Dialog>
-      <DialogTrigger className="clickable-active label-sm text-content-secondary underline">{children}</DialogTrigger>
+      <DialogTrigger className="clickable-active label-sm text-content-secondary underline hover:brightness-75">
+        {children}
+      </DialogTrigger>
       <DialogContent className="flex max-h-[80vh] max-w-[min(425px,95vw)] flex-col overflow-y-auto p-0">
         <h4 className="p-6 pb-0">Bids for Noun {nounId}</h4>
         <div className="flex max-h-[60vh] flex-col gap-6 overflow-y-auto p-6 pb-10">
@@ -40,7 +45,16 @@ export default function ViewBidsDialog({ children, nounId, bids }: ViewBidsDialo
                     <Skeleton className="w-[100px] whitespace-pre-wrap"> </Skeleton>
                   )}
                 </div>
-                <span className="text-content-secondary shrink-0 pl-6">Ξ {formatEther(BigInt(bid.amount))}</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-content-secondary shrink-0 pl-6">Ξ {formatEther(BigInt(bid.amount))}</span>
+                  <LinkExternal href={`${CHAIN_CONFIG.chain.blockExplorers?.default.url}/tx/${bid.transactionHash}`}>
+                    <ExternalLink
+                      size={16}
+                      className="stroke-content-secondary clickable-active mb-[2px] hover:brightness-75"
+                      strokeWidth={3}
+                    />
+                  </LinkExternal>
+                </div>
               </div>
             );
           })}

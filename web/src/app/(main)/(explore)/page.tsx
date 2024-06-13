@@ -1,11 +1,15 @@
 import { Suspense } from "react";
-import LoadingSpinner from "@/components/LoadingSpinner";
 import { LinkExternal } from "@/components/ui/link";
 import Auction from "@/components/Auction";
 import { getAllNouns } from "@/data/noun/getAllNouns";
-import Explore from "./Explore";
 import { getFrameMetadata } from "frog/next";
 import JustSwapItAdvertisingBanner from "@/components/AdvertisingBanner/JustSwapItAdvertisingBanner";
+import NounFilter from "@/components/NounFilter";
+import { ActiveFilters } from "@/components/NounFilter/ActiveFilters";
+import NounGrid from "@/components/NounGrid/NounGrid";
+import NounDialog from "@/components/dialog/NounDialog";
+import AnimationGird from "@/components/NounGrid/AnimationGrid";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export async function generateMetadata({ searchParams }: { searchParams?: Record<string, string> }) {
   const noFrame = searchParams?.["no-frame"] != undefined;
@@ -38,15 +42,45 @@ export default function ExplorePage() {
           </LinkExternal>
         </div>
       </div>
-      <Suspense fallback={<LoadingSpinner />}>
-        <NounExplorerWrapper />
-      </Suspense>
+      <div className="flex w-full flex-col items-start gap-[30px] md:flex-row">
+        <Suspense>
+          <NounFilter />
+        </Suspense>
+        <div className="flex w-full min-w-0 flex-col">
+          <Suspense>
+            <ActiveFilters />
+          </Suspense>
+          <div className="pt-2">
+            <Suspense
+              fallback={
+                <AnimationGird
+                  items={Array(40)
+                    .fill(0)
+                    .map((_, i) => ({
+                      element: (
+                        <Skeleton className="bg-background-secondary relative flex aspect-square h-full w-full rounded-2xl" />
+                      ),
+                      id: i,
+                    }))}
+                />
+              }
+            >
+              <NounGridWrapper />
+            </Suspense>
+          </div>
+        </div>
+      </div>
     </>
   );
 }
 
-async function NounExplorerWrapper() {
+async function NounGridWrapper() {
   const allNouns = await getAllNouns();
 
-  return <Explore nouns={allNouns} />;
+  return (
+    <>
+      <NounGrid nouns={allNouns} />
+      <NounDialog nouns={allNouns} />
+    </>
+  );
 }

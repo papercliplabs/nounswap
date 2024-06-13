@@ -42,7 +42,7 @@ export default function WalletButton({ disableMobileShrink }: WalletButtonProps)
 
               return (
                 <div className="flex flex-row gap-2">
-                  <Button variant="secondary" onClick={openAccountModal} className="flex flex-row gap-2 px-4 py-3">
+                  <Button variant="secondary" onClick={openAccountModal} className="flex flex-row gap-2 px-4 py-2">
                     {ensAvatar ? (
                       <Image src={ensAvatar ?? ""} width={32} height={32} alt="avatar" className="rounded-full" />
                     ) : (
