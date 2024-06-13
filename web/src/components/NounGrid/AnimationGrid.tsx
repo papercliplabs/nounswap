@@ -19,6 +19,7 @@ export default function AnimationGird({ items, disableAnimateIn, disableAnimateO
           // exit={disableAnimateOut ? { opacity: 1 } : { opacity: 0 }}
           // layout
           key={item.id}
+          className="flex aspect-square w-full"
         >
           {item.element}
         </li>

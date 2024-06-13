@@ -1,7 +1,8 @@
 import { BigIntString } from "@/utils/types";
-import { Address } from "viem";
+import { Address, Hex } from "viem";
 
 export interface Bid {
+  transactionHash: Hex;
   bidderAddress: Address;
   amount: BigIntString;
 }
