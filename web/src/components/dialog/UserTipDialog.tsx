@@ -64,7 +64,7 @@ export default function UserTipDialog({ tip, setTipCallback }: UserTipDialogProp
               onClick={() => setTipCallback(undefined)}
               className="absolute right-0 top-0 -translate-y-1/2 translate-x-1/2"
             >
-              <Icon icon="xCircle" size={40} className="rounded-full border-4 border-white fill-gray-600" />
+              <Icon icon="circleX" size={40} className="rounded-full border-4 border-white fill-gray-600" />
             </button>
           </div>
         ) : (
@@ -128,7 +128,7 @@ export default function UserTipDialog({ tip, setTipCallback }: UserTipDialogProp
           </div>
 
           <div className="bg-semantic-accent-light flex flex-row items-center gap-3 rounded-xl p-4">
-            <Icon icon="questionCircle" size={16} className="shrink-0" />
+            <Icon icon="circleQuestion" size={16} className="shrink-0" />
             <div className="paragraph-sm">
               Make sure you have enough WETH in your wallet when the prop executes.
               <div className="flex flex-row justify-between pt-2">

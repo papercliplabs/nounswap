@@ -19,6 +19,7 @@ export interface ChainSpecificData {
     nounsAuctionHouseProxy: Address;
     nounsErc20: Address;
     wrappedNativeToken: Address;
+    noundersMultisig: Address;
   };
   nounsGovernanceUrl: string;
   subgraphUrl: {
@@ -52,6 +53,7 @@ const CHAIN_SPECIFIC_CONFIGS: Record<number, ChainSpecificData> = {
       nounsAuctionHouseProxy: getAddress("0x830BD73E4184ceF73443C15111a1DF14e495C706"),
       nounsErc20: getAddress("0x5c1760c98be951A4067DF234695c8014D8e7619C"),
       wrappedNativeToken: getAddress("0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"),
+      noundersMultisig: getAddress("0x2573C60a6D127755aA2DC85e342F7da2378a0Cc5"),
     },
     nounsGovernanceUrl: "https://nouns.camp/",
     subgraphUrl: {
@@ -83,6 +85,7 @@ const CHAIN_SPECIFIC_CONFIGS: Record<number, ChainSpecificData> = {
       nounsAuctionHouseProxy: getAddress("0x488609b7113FCf3B761A05956300d605E8f6BcAf"),
       nounsErc20: getAddress("0x34182d56d905a195524a8F1813180C134687ca34"),
       wrappedNativeToken: getAddress("0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14"),
+      noundersMultisig: getAddress("0x2573C60a6D127755aA2DC85e342F7da2378a0Cc5"), // TODO: update
     },
     nounsGovernanceUrl: "https://sepolia.nouns.camp/",
     subgraphUrl: {

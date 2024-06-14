@@ -3,8 +3,9 @@ import { ButtonHTMLAttributes, useCallback } from "react";
 import { ONLY_TREASURY_NOUNS_FILTER_KEY } from "./TreasuryNounFilter";
 import { useSearchParams } from "next/navigation";
 import { INSTANT_SWAP_FILTER_KEY } from "./InstantSwapFilter";
+import { cn } from "@/utils/shadcn";
 
-export function ClearAllFiltersButton({ ...props }: ButtonHTMLAttributes<HTMLButtonElement>) {
+export function ClearAllFiltersButton({ className, ...props }: ButtonHTMLAttributes<HTMLButtonElement>) {
   const searchParams = useSearchParams();
 
   const clearAllFilters = useCallback(() => {
@@ -19,5 +20,5 @@ export function ClearAllFiltersButton({ ...props }: ButtonHTMLAttributes<HTMLBut
     window.history.pushState(null, "", `?${params.toString()}`);
   }, [searchParams]);
 
-  return <button onClick={() => clearAllFilters()} {...props} />;
+  return <button onClick={() => clearAllFilters()} className={cn("hover:brightness-75", className)} {...props} />;
 }

@@ -14,11 +14,11 @@ export default function ToastContainer() {
           key={i}
         >
           {toast.config.type == ToastType.Success ? (
-            <Icon icon="checkCircle" size={20} className="fill-green-300" />
+            <Icon icon="circleCheck" size={20} className="fill-green-300" />
           ) : toast.config.type == ToastType.Failure ? (
-            <Icon icon="xCircle" size={20} className="fill-red-300" />
+            <Icon icon="circleX" size={20} className="fill-red-300" />
           ) : toast.config.type == ToastType.Pending ? (
-            <Icon icon="pending" size={20} className="animate-spin fill-white" />
+            <Icon icon="spinner" size={20} className="animate-spin fill-white" />
           ) : (
             <></>
           )}

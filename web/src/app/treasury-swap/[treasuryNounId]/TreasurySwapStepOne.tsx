@@ -40,13 +40,14 @@ export default function TreasurySwapStepOne({ treasuryNoun }: NounSwapProps) {
               <UserTipDialog tip={tip} setTipCallback={setTip} />
             </div>
             <Icon
-              icon="repeat"
+              icon="swap"
               size={64}
               className="bg-background-secondary absolute bottom-0 right-1/2 translate-x-1/2 translate-y-1/2 rounded-full border-4 border-white p-3 md:right-0 md:top-1/2 md:-translate-y-1/2 md:translate-x-1/2"
             />
           </div>
           <div className="border-border-secondary flex flex-1 grow flex-col items-center justify-center gap-8 border-t-2 px-8 py-12 md:border-l-2 md:border-t-0">
             <LinkExternal
+              className="brightness-100"
               href={CHAIN_CONFIG.chain.blockExplorers?.default.url + "/address/" + CHAIN_CONFIG.addresses.nounsTreasury}
             >
               <Button variant="secondary" className="gap-2 px-4 py-4">

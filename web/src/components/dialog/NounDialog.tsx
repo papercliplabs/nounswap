@@ -1,22 +1,19 @@
 "use client";
 import { useSearchParams } from "next/navigation";
 import { Dialog, DialogContent } from "../ui/dialogBase";
-import { useQueries } from "@tanstack/react-query";
 import clsx from "clsx";
 import Image from "next/image";
-import { Noun, NounTrait, NounTraitType } from "@/data/noun/types";
+import { Noun, NounTraitType } from "@/data/noun/types";
 import { Separator } from "../ui/separator";
 import { useCallback, useMemo } from "react";
 import { CHAIN_CONFIG } from "@/config";
-import { getUserForAddress } from "@/data/user/getUser";
-import { CustomAvatar } from "@/providers/WalletProvider";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { Skeleton } from "../ui/skeleton";
 import HowItWorksDialog from "./HowItWorksDialog";
 import { useNounImage } from "@/hooks/useNounImage";
-import { LinkExternal } from "../ui/link";
 import Icon from "../ui/Icon";
+import { UserAvatar, UserName, UserRoot } from "../User/UserClient";
 
 interface NounsDialogProps {
   nouns: Noun[];
@@ -29,16 +26,6 @@ export default function NounDialog({ nouns }: NounsDialogProps) {
   const noun = useMemo(() => {
     return nounId ? nouns.find((noun) => noun.id === nounId) : undefined;
   }, [nouns, nounId]);
-
-  const [{ data: user }] = useQueries({
-    queries: [
-      {
-        queryKey: ["user-query", noun?.owner],
-        queryFn: () => getUserForAddress(noun?.owner!),
-        enabled: noun != undefined,
-      },
-    ],
-  });
 
   const fullImageData = useNounImage("full", noun);
 
@@ -66,7 +53,7 @@ export default function NounDialog({ nouns }: NounsDialogProps) {
     <Dialog open={nounId != undefined} onOpenChange={handleOpenChange}>
       <DialogContent
         className={clsx(
-          "max-h-[80vh] max-w-[95vw] overflow-hidden overflow-y-auto rounded-2xl border-none p-0 md:max-w-[min(85vw,1400px)] md:overflow-y-hidden",
+          "max-h-[80vh] min-w-0 max-w-[95vw] overflow-hidden overflow-y-auto rounded-2xl border-none p-0 md:max-w-[min(85vw,1400px)] md:overflow-y-hidden",
           noun.traits.background.seed == 1 ? "bg-nouns-warm" : "bg-nouns-cool"
         )}
       >
@@ -86,22 +73,13 @@ export default function NounDialog({ nouns }: NounsDialogProps) {
 
             <Separator className="h-[2px]" />
 
-            <div className="flex items-center gap-6">
-              <CustomAvatar address={noun.owner} ensImage={user?.imageSrc} size={40} />
-              <div className="flex h-full flex-col justify-start">
+            <UserRoot address={noun.owner} className="w-full max-w-full items-center gap-6">
+              <UserAvatar />
+              <div className="flex h-full min-w-0 flex-col justify-start overflow-hidden">
                 <span className="paragraph-sm text-content-secondary">Held by</span>
-                {user ? (
-                  <LinkExternal
-                    className="label-md text-content-primary hover:text-content-primary/80"
-                    href={`${CHAIN_CONFIG.chain.blockExplorers?.default.url}/address/${noun?.owner}`}
-                  >
-                    {user.name}
-                  </LinkExternal>
-                ) : (
-                  <Skeleton className="w-[200px] whitespace-pre-wrap"> </Skeleton>
-                )}{" "}
+                <UserName className="label-md text-content-primary hover:text-content-primary/80" />
               </div>
-            </div>
+            </UserRoot>
 
             {heldByTreasury && (
               <>
@@ -158,20 +136,32 @@ export default function NounDialog({ nouns }: NounsDialogProps) {
 }
 
 function NounTraitCard({ type, noun }: { type: NounTraitType; noun?: Noun }) {
+  const searchParams = useSearchParams();
   const traitImage = useNounImage(type, noun);
   const trait = noun?.traits[type];
 
   const handleClick = useCallback(() => {
     if (trait) {
+      const currentParams = new URLSearchParams(searchParams.toString());
       const params = new URLSearchParams();
       const filterKey = type + "[]";
 
       // Remove all filters but this one, also will close the card since removing nounId
       params.set(filterKey, trait.seed.toString());
 
+      // Keep auctionId
+      const auctionId = currentParams.get("auctionId");
+      if (auctionId) {
+        params.set("auctionId", auctionId);
+      }
+
       window.history.pushState(null, "", `?${params.toString()}`);
+
+      // Scroll explore section into view
+      var element = document.getElementById("explore-section");
+      element?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-  }, [type, trait]);
+  }, [type, trait, searchParams]);
 
   return (
     <button

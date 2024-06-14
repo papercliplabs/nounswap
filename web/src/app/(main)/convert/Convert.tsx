@@ -46,7 +46,7 @@ export default function Convert() {
             <OneMillionErc20Card />
           </TabsContent>
           <div className="bg-background-secondary absolute bottom-0 right-1/2 flex h-[72px] w-[72px] translate-x-1/2 translate-y-1/2 items-center justify-center rounded-full border-[4px] border-white md:right-0 md:top-1/2 md:-translate-y-1/2">
-            <Icon icon="repeat" size={24} />
+            <Icon icon="swap" />
           </div>
         </div>
         <div className="flex-1 px-4 pb-4 pt-12 md:pb-[88px] md:pt-10">

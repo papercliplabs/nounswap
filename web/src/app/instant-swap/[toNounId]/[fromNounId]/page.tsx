@@ -14,7 +14,7 @@ export default function SwapSuccessPage({ params }: { params: { fromNounId: stri
       <div className="flex w-full items-center justify-between px-4 pb-2 pt-4 md:px-10">
         <Suspense fallback={<LoadingSpinner />}>
           <Link href="/" className="text-content-primary flex shrink grow-0 flex-row gap-2 [&>svg]:hover:rotate-12">
-            <Icon icon="repeat" size={28} className="fill-gray-900 transition-all ease-linear" />
+            <Icon icon="swap" size={28} className="fill-gray-900 transition-all ease-linear" />
             <h5 className="hidden md:flex">NounSwap</h5>
           </Link>
         </Suspense>

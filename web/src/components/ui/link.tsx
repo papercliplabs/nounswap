@@ -1,40 +1,50 @@
 "use client";
-import { cn } from "@/utils/shadcn";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { HTMLAttributes } from "react";
+import { ComponentProps } from "react";
 import { twMerge } from "tailwind-merge";
+import { Button } from "./button";
 
-export function LinkExternal(props: React.ComponentProps<typeof Link>) {
+export function LinkExternal({ ...props }: React.ComponentProps<typeof Link>) {
   return (
     <Link
       {...props}
       target="_blank"
       rel="noopener noreferrer"
-      className={twMerge("text-semantic-accent hover:text-semantic-accent-dark", props.className)}
+      className={twMerge("hover:brightness-75", props.className)}
     />
   );
 }
 
-interface LinkShallowProps extends HTMLAttributes<HTMLButtonElement> {
-  searchParam: { name: string; value: string };
+export function LinkRetainSearchParams(props: React.ComponentProps<typeof Link>) {
+  const searchParams = useSearchParams();
+  return <Link {...props} href={`${props.href}?${searchParams.toString()}`} />;
 }
 
-export function LinkShallow({ searchParam, children, className, ...props }: LinkShallowProps) {
+interface LinkShallowProps extends ComponentProps<typeof Button> {
+  searchParam: { name: string; value: string | null };
+}
+
+export function LinkShallow({ searchParam, children, variant, size, className, ...props }: LinkShallowProps) {
   const searchParams = useSearchParams();
 
   return (
-    <button
+    <Button
       onClick={() => {
         const params = new URLSearchParams(searchParams.toString());
-        params.set(searchParam.name, searchParam.value);
+        if (searchParam.value === null) {
+          params.delete(searchParam.name);
+        } else {
+          params.set(searchParam.name, searchParam.value);
+        }
         window.history.pushState(null, "", `?${params.toString()}`);
-        // router.push(`?${params.toString()}`);
       }}
-      className={cn("clickable-active", className)}
+      className={className}
+      variant={variant ?? "unstyled"}
+      size={size ?? "fit"}
       {...props}
     >
       {children}
-    </button>
+    </Button>
   );
 }
