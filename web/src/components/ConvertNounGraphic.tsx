@@ -15,7 +15,7 @@ export default function ConvertNounGraphic({ noun, action, scale }: ConvertNounG
       <div className="relative">
         {action === "deposit" ? <NounCard noun={noun} size={80} enableHover={false} /> : <Erc20Card />}
         <div className="absolute right-0 top-1/2 z-40 -translate-y-1/2 translate-x-[calc(50%+10px)]">
-          <Icon icon={"repeat"} size={36} className="bg-background-secondary rounded-full border-2 border-white p-2" />
+          <Icon icon={"swap"} size={36} className="bg-background-secondary rounded-full border-2 border-white p-2" />
         </div>
       </div>
       {action === "redeem" ? <NounCard noun={noun} size={80} enableHover={false} /> : <Erc20Card />}

@@ -9,7 +9,7 @@ const buttonVariants = cva(
   clsx(
     "inline-flex items-center justify-center whitespace-nowrap rounded-xl",
     "transition-all enabled:clickable-active",
-    "disabled:pointer-events-none disabled:opacity-50 disabled:bg-background-disabled disabled:text-content-primary",
+    "disabled:pointer-events-none disabled:opacity-50 disabled:bg-background-disabled disabled:text-gray-200 disabled:fill-gray-200",
     "focus-visible:ring-offset-2 focus-visible:ring-2 focus-visible:ring-semantic-accent/50 focus-visible:outline-none ring-offset-transparent"
   ),
   {
@@ -20,10 +20,15 @@ const buttonVariants = cva(
         negative: "bg-semantic-negative text-white hover:bg-semantic-negative-dark",
         positive: "bg-semantic-positive text-white hover:bg-semantic-positive-dark",
         ghost: "bg-transparent text-black hover:bg-background-secondary",
+        "rounded-icon":
+          "bg-background-primary rounded-full border-2 border-background-secondary hover:border-transparent hover:bg-background-secondary disabled:border-transparent",
+        unstyled: "",
       },
       size: {
         default: "px-8 py-3",
-        icon: "p-4",
+        icon: "p-3",
+        "icon-slim": "p-1",
+        fit: "p-0 m-0",
       },
     },
     defaultVariants: {

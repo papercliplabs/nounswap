@@ -18,7 +18,7 @@ function buildBase64Image(
   return "data:image/svg+xml;base64," + svgBase64;
 }
 
-function buildNounImage(noun: Noun, imageType: NounImageType): string {
+export function buildNounImage(noun: Noun, imageType: NounImageType): string {
   const seed = {
     background: noun.traits.background.seed,
     body: noun.traits.body.seed,

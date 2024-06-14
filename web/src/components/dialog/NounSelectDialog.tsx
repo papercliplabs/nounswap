@@ -55,7 +55,7 @@ export default function NounSelectDialog({
               onClick={() => selectedNounCallback(undefined)}
               className="absolute right-0 top-0 -translate-y-1/2 translate-x-1/2"
             >
-              <Icon icon="xCircle" size={40} className="rounded-full border-4 border-white fill-gray-600" />
+              <Icon icon="circleX" size={40} className="rounded-full border-4 border-white fill-gray-600" />
             </button>
           </div>
         ) : (
@@ -74,7 +74,7 @@ export default function NounSelectDialog({
         <h4 className="px-6 pt-6">Select Noun</h4>
         <div className="[&>ol>li>div]:text-content-secondary flex flex-col">
           {userNouns == undefined ? (
-            <Icon icon="pending" size={60} className="animate-spin" />
+            <Icon icon="spinner" size={60} className="animate-spin" />
           ) : userNouns.length == 0 ? (
             <div className="flex h-[244px] w-full flex-col items-center justify-center gap-2 px-8 py-6 text-center">
               <h4>No Nouns available</h4>

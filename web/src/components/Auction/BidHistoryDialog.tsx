@@ -1,0 +1,45 @@
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialogBase";
+import { Bid } from "@/data/auction/types";
+import { formatEther } from "viem";
+import { ReactNode } from "react";
+import { LinkExternal } from "../ui/link";
+import { CHAIN_CONFIG } from "@/config";
+import { UserAvatar, UserName, UserRoot } from "../User/UserClient";
+
+interface BidHistoryDialogProps {
+  nounId: string;
+  bids: Bid[];
+  children: ReactNode;
+}
+
+export function BidHistoryDialog({ children, nounId, bids }: BidHistoryDialogProps) {
+  return (
+    <Dialog>
+      <DialogTrigger className="clickable-active label-sm text-content-secondary flex self-center underline hover:brightness-75 md:self-start">
+        {children}
+      </DialogTrigger>
+      <DialogContent className="flex max-h-[80vh] max-w-[min(425px,95vw)] flex-col overflow-y-auto p-0">
+        <h4 className="p-6 pb-0">Bids for Noun {nounId}</h4>
+        <div className="flex max-h-[60vh] flex-col overflow-y-auto pb-10">
+          {bids.map((bid, i) => {
+            return (
+              <LinkExternal
+                key={i}
+                className="label-lg hover:bg-background-secondary flex w-full min-w-0 items-center justify-between gap-2 px-6 py-3 hover:brightness-100"
+                href={`${CHAIN_CONFIG.chain.blockExplorers?.default.url}/tx/${bid.transactionHash}`}
+              >
+                <UserRoot address={bid.bidderAddress}>
+                  <UserAvatar imgSize={24} className="h-6 w-6" />
+                  <UserName />
+                </UserRoot>
+                <div className="flex items-center gap-2">
+                  <span className="text-content-secondary shrink-0 pl-6">Ξ {formatEther(BigInt(bid.amount))}</span>
+                </div>
+              </LinkExternal>
+            );
+          })}
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}

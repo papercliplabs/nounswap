@@ -25,7 +25,7 @@ export function Header() {
                   href="/"
                   className="text-content-primary flex shrink grow-0 flex-row gap-2 [&>svg]:hover:rotate-12"
                 >
-                  <Icon icon="repeat" size={28} className="fill-gray-900 transition-all ease-linear" />
+                  <Icon icon="swap" size={28} className="fill-gray-900 transition-all ease-linear" />
                   <h5 className="hidden md:flex">NounSwap</h5>
                 </Link>
               </Suspense>
@@ -38,7 +38,7 @@ export function Header() {
             <HowItWorksDialog>
               <Button variant="ghost" size="icon" className="gap-2">
                 <h6 className="text-content-secondary hidden md:block">How it works</h6>
-                <Icon icon="questionCircle" size={20} className="fill-gray-600" />
+                <Icon icon="circleQuestion" size={20} className="fill-gray-600" />
               </Button>
             </HowItWorksDialog>
             <WalletButton />

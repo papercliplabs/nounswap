@@ -79,7 +79,7 @@ export async function forceAllNounRevalidation() {
 
 export async function checkForAllNounRevalidation(nounId: string) {
   const allNouns = await getAllNouns();
-  if (allNouns[0]?.id != nounId) {
+  if (allNouns[0]?.id && BigInt(allNouns[0].id) < BigInt(nounId)) {
     forceAllNounRevalidation();
   }
 }
