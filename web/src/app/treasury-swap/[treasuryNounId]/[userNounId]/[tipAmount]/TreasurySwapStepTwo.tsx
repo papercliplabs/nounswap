@@ -24,7 +24,7 @@ export default function TreasurySwapStepTwo({ userNoun, treasuryNoun, tip }: Swa
         <div className="flex w-full max-w-[1200px] grow flex-col justify-center gap-6 p-4 md:flex-row">
           <div className="flex flex-[2] flex-col gap-4">
             <div className="paragraph-sm bg-semantic-accent-light flex w-full flex-row items-center gap-2 rounded-2xl p-4">
-              <Icon icon="questionCircle" size={16} className="shrink-0" />
+              <Icon icon="circleQuestion" size={16} className="shrink-0" />
               This will show up in the prop. Be honest and be detailed.
             </div>
             <h5 className="pt-2">Why do you want Noun {treasuryNoun.id}?</h5>
@@ -47,7 +47,7 @@ export default function TreasurySwapStepTwo({ userNoun, treasuryNoun, tip }: Swa
                 </div>
               </div>
               <Icon
-                icon="repeat"
+                icon="swap"
                 size={52}
                 className="border-border-secondary bg-background-primary absolute bottom-0 right-1/2 translate-x-1/2 translate-y-1/2 rounded-full border-4 p-3"
               />

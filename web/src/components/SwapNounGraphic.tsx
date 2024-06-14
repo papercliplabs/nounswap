@@ -15,7 +15,7 @@ export default function SwapNounGraphic({ fromNoun, toNoun, instant }: SwapNounG
         <NounCard noun={fromNoun} size={80} enableHover={false} />
         <div className="absolute right-0 top-1/2 z-40 -translate-y-1/2 translate-x-[calc(50%+10px)]">
           <Icon
-            icon={instant ? "lightning" : "repeat"}
+            icon={instant ? "lightning" : "swap"}
             size={36}
             className="bg-background-secondary rounded-full border-2 border-white p-2"
           />

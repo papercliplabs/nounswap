@@ -13,7 +13,11 @@ export interface Auction {
   startTime: BigIntString;
   endTime: BigIntString;
 
+  nextMinBid: BigIntString; // Only relevant for live auctions
+
   state: "live" | "ended-unsettled" | "ended-settled";
 
   bids: Bid[]; // Ordered most recent to oldest, highest bid is bids[0] (could be empty)
+
+  nounderAuction: boolean;
 }

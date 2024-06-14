@@ -11,13 +11,22 @@ export default function HowItWorksDialog({ children }: { children: React.ReactNo
         <div className="[&>ol>li>div]:text-content-secondary flex flex-col">
           <div className="border-b-2 border-gray-400 pb-6">
             NounSwap a tool that helps Noun owners create a prop to swap their Noun for another Noun in the treasury. It
-            was built by <LinkExternal href="https://paperclip.xyz/">Paperclip Labs</LinkExternal> and inspired by{" "}
-            <LinkExternal href="https://warpcast.com/toadyhawk.eth/0x38d070e1">a cast from ToadyHawk.eth</LinkExternal>
+            was built by{" "}
+            <LinkExternal href="https://paperclip.xyz/" className="text-semantic-accent">
+              Paperclip Labs
+            </LinkExternal>{" "}
+            and inspired by{" "}
+            <LinkExternal href="https://warpcast.com/toadyhawk.eth/0x38d070e1" className="text-semantic-accent">
+              a cast from ToadyHawk.eth
+            </LinkExternal>
             .
             <br />
             <br />
             Read about{" "}
-            <LinkExternal href="https://paperclip.xyz/blog/introducing-nounswap">why we built NounSwap</LinkExternal>.
+            <LinkExternal href="https://paperclip.xyz/blog/introducing-nounswap" className="text-semantic-accent">
+              why we built NounSwap
+            </LinkExternal>
+            .
           </div>
           <h5 className="pb-2 pt-6">How to create a Swap Prop</h5>
           <ol className="flex flex-col gap-2 pl-6">

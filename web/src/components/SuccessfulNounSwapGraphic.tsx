@@ -14,7 +14,7 @@ export function SuccessfulNounSwapGraphic({ fromNoun, toNoun }: SuccessfulNounSw
         <NounCard noun={toNoun} enableHover={false} alwaysShowNumber size={200} />
       </div>
       <Icon
-        icon="checkCircle"
+        icon="circleCheck"
         size={64}
         className="absolute -right-4 -top-4 z-[2] rounded-full border-[6px] border-white bg-white fill-green-600"
       />

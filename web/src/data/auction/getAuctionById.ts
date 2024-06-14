@@ -5,6 +5,11 @@ import { CHAIN_CONFIG } from "@/config";
 import { BigIntString } from "@/utils/types";
 import { Auction, Bid } from "./types";
 import { Hex, getAddress } from "viem";
+import { getProtocolParams } from "../protocol/getProtocolParams";
+import { bigIntMax } from "@/utils/bigint";
+import { revalidateTag, unstable_cache } from "next/cache";
+
+const NOUNDER_AUCTION_CUTOFF = BigInt(1820);
 
 const query = graphql(/* GraphQL */ `
   query Auction($id: ID!) {
@@ -32,15 +37,33 @@ const query = graphql(/* GraphQL */ `
   }
 `);
 
-export async function getAuctionByIdUncached(id: BigIntString): Promise<Auction | null> {
-  const { auction } = await graphQLFetchWithFallback(CHAIN_CONFIG.subgraphUrl, query, { id }, { cache: "no-store" });
+export async function getAuctionByIdUncached(id: BigIntString): Promise<Auction | undefined> {
+  if (BigInt(id) <= NOUNDER_AUCTION_CUTOFF && BigInt(id) % BigInt(10) == BigInt(0)) {
+    const nextNoun = await getAuctionByIdUncached((BigInt(id) + BigInt(1)).toString());
+    return {
+      nounId: id,
+
+      startTime: nextNoun?.startTime ?? "0",
+      endTime: nextNoun?.startTime ?? "0",
+
+      nextMinBid: "0",
+
+      state: "ended-settled",
+
+      bids: [],
+
+      nounderAuction: true,
+    };
+  }
+
+  const [{ auction }, params] = await Promise.all([
+    graphQLFetchWithFallback(CHAIN_CONFIG.subgraphUrl, query, { id }, { next: { revalidate: 0 } }),
+    getProtocolParams(),
+  ]);
 
   if (!auction) {
-    if (BigInt(id) % BigInt(10) != BigInt(0)) {
-      // Every 10 goes to nounders, so we expect these to be missing
-      console.error("getAuctionByIdUncached - no auction found", id);
-    }
-    return null;
+    console.error("getAuctionByIdUncached - no auction found", id);
+    return undefined;
   }
 
   const bids: Bid[] = auction.bids.map((bid: any) => ({
@@ -52,6 +75,12 @@ export async function getAuctionByIdUncached(id: BigIntString): Promise<Auction 
   // Sort descending by amount
   bids.sort((a, b) => (BigInt(b.amount) > BigInt(a.amount) ? 1 : -1));
 
+  const highestBidAmount = auction.bids.length > 0 ? BigInt(bids[0].amount) : BigInt(0);
+  const nextMinBid = bigIntMax(
+    BigInt(params.reservePrice),
+    highestBidAmount + (highestBidAmount * BigInt(params.minBidIncrementPercentage)) / BigInt(100)
+  );
+
   const nowS = Date.now() / 1000;
   const ended = nowS > Number(auction.endTime);
 
@@ -61,8 +90,27 @@ export async function getAuctionByIdUncached(id: BigIntString): Promise<Auction 
     startTime: auction.startTime,
     endTime: auction.endTime,
 
+    nextMinBid: nextMinBid.toString(),
+
     state: ended ? (auction.settled ? "ended-settled" : "ended-unsettled") : "live",
 
     bids,
+
+    nounderAuction: false,
   } as Auction;
+}
+
+const getAuctionByIdCached = unstable_cache(getAuctionByIdUncached, ["get-auction-by-id"], {
+  tags: ["get-auction-by-id"],
+});
+
+export async function getAuctionById(id: BigIntString) {
+  const cachedAuction = await getAuctionByIdCached(id);
+
+  if (cachedAuction?.state != "ended-settled") {
+    await revalidateTag("get-auction-by-id");
+    return await getAuctionByIdCached(id);
+  }
+
+  return cachedAuction;
 }

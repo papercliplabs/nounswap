@@ -25,7 +25,10 @@ export default function AdvertisingBanner({
   return (
     <LinkExternal
       href={href}
-      className={cn("bg-background-dark flex h-[136px] w-full justify-between overflow-hidden rounded-2xl", className)}
+      className={cn(
+        "bg-background-dark flex h-[136px] w-full justify-between overflow-hidden rounded-2xl hover:brightness-100",
+        className
+      )}
       {...props}
     >
       <div className="relative flex h-full min-w-fit shrink-0 grow">

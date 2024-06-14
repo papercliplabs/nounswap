@@ -47,7 +47,7 @@ export default function DynamicSwapLayout({
           <HowItWorksDialog>
             <Button variant="ghost" size="icon" className="gap-2">
               <h6 className="text-content-secondary hidden md:block">How it works</h6>
-              <Icon icon="questionCircle" size={20} className="fill-gray-600" />
+              <Icon icon="circleQuestion" size={20} className="fill-gray-600" />
             </Button>
           </HowItWorksDialog>
         </div>
