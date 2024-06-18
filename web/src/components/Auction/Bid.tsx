@@ -15,8 +15,12 @@ interface BidProps {
 export default function Bid({ nounId, nextMinBid }: BidProps) {
   const { createBid, error: createBidError, state: txnState, reset: resetCreateBid } = useCreateBid();
 
+  const nextMinBidFormatted = useMemo(() => {
+    return Math.ceil(Number(formatEther(nextMinBid)) * 10 ** BID_DECIMAL_PRECISION) / 10 ** BID_DECIMAL_PRECISION;
+  }, [nextMinBid]);
+
   // Used to restrict user input
-  const [bidAmount, setBidAmount] = useState("");
+  const [bidAmount, setBidAmount] = useState(nextMinBidFormatted.toString());
   function handleBidAmountChange(event: React.ChangeEvent<HTMLInputElement>) {
     const value = event.target.value;
     const regex = new RegExp(`^\\d*\\.?\\d{0,${BID_DECIMAL_PRECISION}}$`);
@@ -39,24 +43,23 @@ export default function Bid({ nounId, nextMinBid }: BidProps) {
     }
   }, [txnState, resetCreateBid]);
 
-  const nextMinBidFormatted = useMemo(() => {
-    return Math.ceil(Number(formatEther(nextMinBid)) * 10 ** BID_DECIMAL_PRECISION) / 10 ** BID_DECIMAL_PRECISION;
-  }, [nextMinBid]);
-
   return (
     <div className="flex w-full flex-col gap-1">
       <form action={onSubmit} className="flex flex-col gap-2 md:flex-row md:gap-4">
-        <Input
-          placeholder={`Ξ ${nextMinBidFormatted} or more`}
-          className="h-full w-full md:w-[260px]"
-          name="bidAmount"
-          value={bidAmount}
-          onChange={handleBidAmountChange}
-          disabled={txnState != "idle"}
-        />
+        <div className="relative h-full w-full md:w-[260px]">
+          <Input
+            placeholder={`Ξ ${nextMinBidFormatted} or more`}
+            className="h-full w-full pr-[52px]"
+            name="bidAmount"
+            value={bidAmount}
+            onChange={handleBidAmountChange}
+            disabled={txnState != "idle"}
+          />
+          <span className="label-lg absolute right-3 top-1/2 -translate-y-1/2">ETH</span>
+        </div>
         <TransactionButton
           type="submit"
-          disabled={nextMinBid == undefined || bidAmount == ""}
+          disabled={nextMinBid == undefined}
           txnState={txnState}
           className="w-full md:w-[131px]"
         >

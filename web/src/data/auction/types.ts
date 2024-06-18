@@ -5,6 +5,7 @@ export interface Bid {
   transactionHash: Hex;
   bidderAddress: Address;
   amount: BigIntString;
+  timestamp: BigIntString;
 }
 
 export interface Auction {

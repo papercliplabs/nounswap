@@ -9,6 +9,7 @@ import { CHAIN_CONFIG } from "@/config";
 import { bigIntMax } from "@/utils/bigint";
 import { formatNumber } from "@/utils/utils";
 
+const BID_DECIMAL_PRECISION = 2;
 interface UseCreateBidReturnType extends Omit<UseSendTransactionReturnType, "sendTransaction"> {
   createBid: (nounId: bigint, bidAmount: bigint) => void;
 }
@@ -42,9 +43,11 @@ export function useCreateBid(): UseCreateBidReturnType {
       return new CustomTransactionValidationError("AUCTION_ENDED", "This auction has ended.");
     } else if (bidAmount < minNextBid) {
       // Must be above min bid amount
+      const nextMinBidFormatted =
+        Math.ceil(Number(formatEther(minNextBid)) * 10 ** BID_DECIMAL_PRECISION) / 10 ** BID_DECIMAL_PRECISION;
       return new CustomTransactionValidationError(
         "BID_AMOUNT_TOO_LOW",
-        `The bid amount must be ${formatNumber(formatEther(minNextBid), 6)} or more.`
+        `The bid amount must be ${nextMinBidFormatted} or more.`
       );
     }
 

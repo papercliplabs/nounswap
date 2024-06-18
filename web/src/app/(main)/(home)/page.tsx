@@ -8,7 +8,7 @@ import NounFilter from "@/components/NounFilter";
 import { ActiveFilters } from "@/components/NounFilter/ActiveFilters";
 import AnimationGird from "@/components/NounGrid/AnimationGrid";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getAllNouns } from "@/data/noun/getAllNouns";
+import { forceAllNounRevalidation, getAllNouns, getAllNounsUncached } from "@/data/noun/getAllNouns";
 import NounGrid from "@/components/NounGrid/NounGrid";
 import NounDialog from "@/components/dialog/NounDialog";
 
@@ -78,7 +78,7 @@ export default function Page({ searchParams }: { searchParams: { auctionId?: str
 }
 
 async function NounGridWrapper() {
-  const allNouns = await getAllNouns();
+  const allNouns = await getAllNounsUncached();
 
   return (
     <>

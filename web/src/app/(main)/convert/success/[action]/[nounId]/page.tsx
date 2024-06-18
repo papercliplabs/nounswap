@@ -5,6 +5,7 @@ import { SomethingWentWrong } from "@/components/SomethingWentWrong";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import ConvertNounGraphic from "@/components/ConvertNounGraphic";
+import BridgeToBaseDialog from "@/components/dialog/BridgeToBaseDialog";
 
 export default function ConvertSuccessPage({ params }: { params: { nounId: string; action: string } }) {
   return (
@@ -40,7 +41,10 @@ async function DataWrapper({ nounId, action }: { nounId: string; action: string 
       </div>
       <h1>Converted!</h1>
       {action === "deposit" ? (
-        <span className="paragraph-lg">Congratulations, you deposited Noun {noun.id} for 1,000,000 $nouns!</span>
+        <>
+          <span className="paragraph-lg">Congratulations, you deposited Noun {noun.id} for 1,000,000 $nouns!</span>
+          <BridgeToBaseDialog />
+        </>
       ) : (
         <span className="paragraph-lg">Congratulations, you redeemed 1,000,000 $nouns for Noun {noun.id}!</span>
       )}
