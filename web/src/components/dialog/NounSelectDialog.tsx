@@ -30,6 +30,7 @@ export default function NounSelectDialog({
     queryKey: ["get-nouns-for-address", holderAddress],
     queryFn: () => getNounsForAddress(holderAddress!),
     enabled: holderAddress != undefined,
+    staleTime: 0,
   });
 
   const [open, setOpen] = useState<boolean>(false);
@@ -53,9 +54,9 @@ export default function NounSelectDialog({
             </button>
             <button
               onClick={() => selectedNounCallback(undefined)}
-              className="absolute right-0 top-0 -translate-y-1/2 translate-x-1/2"
+              className="absolute right-0 top-0 -translate-y-1/2 translate-x-1/2 rounded-full bg-white"
             >
-              <Icon icon="circleX" size={40} className="rounded-full border-4 border-white fill-gray-600" />
+              <Icon icon="circleX" size={40} className="rounded-full border-2 border-white fill-gray-600" />
             </button>
           </div>
         ) : (

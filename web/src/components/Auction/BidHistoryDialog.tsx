@@ -22,6 +22,13 @@ export function BidHistoryDialog({ children, nounId, bids }: BidHistoryDialogPro
         <h4 className="p-6 pb-0">Bids for Noun {nounId}</h4>
         <div className="flex max-h-[60vh] flex-col overflow-y-auto pb-10">
           {bids.map((bid, i) => {
+            const date = new Intl.DateTimeFormat("en-US", {
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+              hour: "numeric",
+              minute: "numeric",
+            }).format(Number(bid.timestamp) * 1000);
             return (
               <LinkExternal
                 key={i}
@@ -29,8 +36,11 @@ export function BidHistoryDialog({ children, nounId, bids }: BidHistoryDialogPro
                 href={`${CHAIN_CONFIG.chain.blockExplorers?.default.url}/tx/${bid.transactionHash}`}
               >
                 <UserRoot address={bid.bidderAddress}>
-                  <UserAvatar imgSize={24} className="h-6 w-6" />
-                  <UserName />
+                  <UserAvatar imgSize={40} className="h-[40px] w-[40px]" />
+                  <div className="flex flex-col">
+                    <UserName />
+                    <span className="paragraph-sm text-content-secondary">{date}</span>
+                  </div>
                 </UserRoot>
                 <div className="flex items-center gap-2">
                   <span className="text-content-secondary shrink-0 pl-6">Ξ {formatEther(BigInt(bid.amount))}</span>
