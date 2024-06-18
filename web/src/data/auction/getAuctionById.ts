@@ -32,6 +32,7 @@ const query = graphql(/* GraphQL */ `
           id
         }
         amount
+        blockTimestamp
       }
     }
   }
@@ -70,6 +71,7 @@ export async function getAuctionByIdUncached(id: BigIntString): Promise<Auction 
     transactionHash: bid.txHash as Hex,
     bidderAddress: getAddress(bid.bidder.id),
     amount: bid.amount,
+    timestamp: bid.blockTimestamp,
   }));
 
   // Sort descending by amount

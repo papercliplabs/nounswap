@@ -28,6 +28,11 @@ export default function ConvertInfo() {
       <div className="flex flex-col gap-4">
         <h6>Useful links</h6>
         <div className="flex flex-col">
+          <LinkItem href="https://www.buynouns.xyz/">$nouns Leaderboard</LinkItem>
+          <LinkItem href="http://nounscan.wtf/">$nounscan</LinkItem>
+          <LinkItem href="https://docs.google.com/document/d/1Uz4l8bAPaA2_gsUVZsZo_1dAmggAiYIn5sYba1IK10Q/edit#heading=h.krcxuhjg5aem">
+            $nouns Token Spec
+          </LinkItem>
           <LinkItem href="https://etherscan.io/address/0x5c1760c98be951A4067DF234695c8014D8e7619C">
             $nouns Mainnet Contract
           </LinkItem>
@@ -40,10 +45,6 @@ export default function ConvertInfo() {
           </LinkItem>
           <LinkItem href="https://app.uniswap.org/swap?chain=base&outputCurrency=0x0a93a7BE7e7e426fC046e204C44d6b03A302b631">
             Buy $nouns on Base
-          </LinkItem>
-          <LinkItem href="https://www.buynouns.xyz/">$nouns Leaderboard</LinkItem>
-          <LinkItem href="https://docs.google.com/document/d/1Uz4l8bAPaA2_gsUVZsZo_1dAmggAiYIn5sYba1IK10Q/edit#heading=h.krcxuhjg5aem">
-            $nouns Token Spec
           </LinkItem>
           <LinkItem href="https://github.com/verbsteam/nouns-erc20">$nouns Contract Repo</LinkItem>
         </div>

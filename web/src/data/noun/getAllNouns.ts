@@ -31,6 +31,7 @@ const query = graphql(/* GraphQL */ `
 `);
 
 async function runPaginatedNounsQueryUncached() {
+  console.log("CACHE MISS");
   let queryNouns: AllNounsQuery["nouns"] = [];
   let skip = 0;
 
@@ -58,10 +59,20 @@ const runPaginatedNounsQuery = unstable_cache(
   runPaginatedNounsQueryUncached,
   ["run-paginated-nouns-query", CHAIN_CONFIG.chain.id.toString()],
   {
-    revalidate: 60 * 2, // 2 min, keep general state somewhat accurate (also force validation on interactions which will change state)
+    revalidate: 5 * 60, // 5min
     tags: [`paginated-nouns-query-${CHAIN_CONFIG.chain.id.toString()}`],
   }
 );
+
+export async function getAllNounsUncached(): Promise<Noun[]> {
+  const queryResponse = await runPaginatedNounsQueryUncached();
+  const nouns = queryResponse.map(transformQueryNounToNoun);
+
+  // Sort by id, descending
+  nouns.sort((a, b) => (BigInt(b.id) > BigInt(a.id) ? 1 : -1));
+
+  return nouns;
+}
 
 export async function getAllNouns(): Promise<Noun[]> {
   const queryResponse = await runPaginatedNounsQuery();
