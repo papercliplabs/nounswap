@@ -8,11 +8,11 @@ import NounFilter from "@/components/NounFilter";
 import { ActiveFilters } from "@/components/NounFilter/ActiveFilters";
 import AnimationGird from "@/components/NounGrid/AnimationGrid";
 import { Skeleton } from "@/components/ui/skeleton";
-import { forceAllNounRevalidation, getAllNouns, getAllNounsUncached } from "@/data/noun/getAllNouns";
+import { getAllNounsUncached } from "@/data/noun/getAllNouns";
 import NounGrid from "@/components/NounGrid/NounGrid";
 import NounDialog from "@/components/dialog/NounDialog";
 
-export async function generateMetadata() {
+export async function generateMetadata({ searchParams }: { searchParams: { frame?: string } }) {
   const frameMetadata = await getFrameMetadata(`https://frames.paperclip.xyz/nounish-auction/v2/nouns`);
 
   // Only take fc:frame tags (not og image overrides)
@@ -22,7 +22,7 @@ export async function generateMetadata() {
   return {
     title: "Explore Nouns",
     description: "See all the Nouns or Swap for one from the Nouns treasury.",
-    other: filteredFrameMetadata,
+    other: searchParams.frame != undefined ? filteredFrameMetadata : {},
   };
 }
 
