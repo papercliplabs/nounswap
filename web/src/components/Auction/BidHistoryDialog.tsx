@@ -35,7 +35,7 @@ export function BidHistoryDialog({ children, nounId, bids }: BidHistoryDialogPro
                 className="label-lg hover:bg-background-secondary flex w-full min-w-0 items-center justify-between gap-2 px-6 py-3 hover:brightness-100"
                 href={`${CHAIN_CONFIG.chain.blockExplorers?.default.url}/tx/${bid.transactionHash}`}
               >
-                <UserRoot address={bid.bidderAddress}>
+                <UserRoot address={bid.bidderAddress} disableLink>
                   <UserAvatar imgSize={40} className="h-[40px] w-[40px]" />
                   <div className="flex flex-col">
                     <UserName />
