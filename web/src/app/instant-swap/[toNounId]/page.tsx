@@ -1,4 +1,4 @@
-import { getNounById } from "@/data/noun/getNounById";
+import { getNounById, getNounByIdUncached } from "@/data/noun/getNounById";
 import { Suspense } from "react";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import DynamicSwapLayout from "@/components/DynamicSwapLayout";
@@ -24,7 +24,7 @@ export default function UserNounSelectPage({ params }: { params: { toNounId: str
 }
 
 async function DataWrapper({ toNounId }: { toNounId: string }) {
-  const toNoun = await getNounById(toNounId);
+  const toNoun = await getNounByIdUncached(toNounId);
 
   if (!toNoun) {
     return <SomethingWentWrong message={`Noun ${toNounId} doesn't exists.`} returnHref="/" />;

@@ -24,7 +24,10 @@ export function useApproveNoun(): UseApproveNounReturnType {
         gasFallback: BigInt(100000), // NOUN approve generally ~60k
       };
 
-      return sendTransaction(request);
+      return sendTransaction(request, {
+        type: "approve-noun",
+        description: `Approve Noun ${nounId}`,
+      });
     },
     [sendTransaction]
   );

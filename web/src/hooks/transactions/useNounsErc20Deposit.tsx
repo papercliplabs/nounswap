@@ -56,7 +56,9 @@ export function useNounsErc20Deposit(): UseNounsErc20DepositReturnType {
         gasFallback: BigInt(400000), // Deposit generally ~300k
       };
 
-      return sendTransaction(request, () => depositValidation(nounId));
+      return sendTransaction(request, { type: "nouns-deposit", description: `Deposit Noun ${nounId}` }, () =>
+        depositValidation(nounId)
+      );
     },
     [sendTransaction, depositValidation]
   );

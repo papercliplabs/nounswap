@@ -15,3 +15,13 @@ export class CustomTransactionValidationError extends Error {
 }
 
 export type TransactionState = "idle" | "pending-signature" | "pending-txn" | "success" | "failed";
+
+export type TransactionType =
+  | "approve-erc20"
+  | "approve-noun"
+  | "create-bid"
+  | "create-swap-prop"
+  | "nouns-deposit"
+  | "nouns-redeem"
+  | "nouns-swap"
+  | "settle-auction";

@@ -10,7 +10,12 @@ import {
   useWaitForTransactionReceipt,
 } from "wagmi";
 import { SendTransactionErrorType, WaitForTransactionReceiptErrorType } from "wagmi/actions";
-import { CustomTransactionValidationError, MinimalTransactionRequest, TransactionState } from "./types";
+import {
+  CustomTransactionValidationError,
+  MinimalTransactionRequest,
+  TransactionState,
+  TransactionType,
+} from "./types";
 import { CHAIN_CONFIG } from "@/config";
 import { TransactionListenerContext } from "@/providers/TransactionListener";
 import { estimateGas } from "viem/actions";
@@ -31,6 +36,7 @@ export interface UseSendTransactionReturnType {
 
   sendTransaction: (
     request: MinimalTransactionRequest,
+    logging: { type: TransactionType; description: string },
     validationFn?: () => Promise<CustomTransactionValidationError | null>
   ) => void;
   reset: () => void;
@@ -67,6 +73,7 @@ export function useSendTransaction(): UseSendTransactionReturnType {
   const sendTransaction = useCallback(
     async (
       request: MinimalTransactionRequest,
+      logging: { type: TransactionType; description: string },
       validationFn?: () => Promise<CustomTransactionValidationError | null>
     ) => {
       if (!accountAddress) {
@@ -95,7 +102,7 @@ export function useSendTransaction(): UseSendTransactionReturnType {
               gas: gasEstimateWithBuffer,
               ...request,
             });
-            addTransaction?.(hash);
+            addTransaction?.(hash, logging);
           } catch (e) {
             // Ignore, we handle this below
           }

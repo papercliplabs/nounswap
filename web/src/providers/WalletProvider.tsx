@@ -47,7 +47,11 @@ export default function WalletProvider({ children }: { children: React.ReactNode
   return (
     <WagmiProvider config={wagmiConfig}>
       <TanstackQueryProvider>
-        <RainbowKitProvider avatar={CustomAvatar} appInfo={{ appName: "Noun Swap", disclaimer: Disclaimer }}>
+        <RainbowKitProvider
+          avatar={CustomAvatar}
+          appInfo={{ appName: "Noun Swap", disclaimer: Disclaimer }}
+          showRecentTransactions={true}
+        >
           {children}
         </RainbowKitProvider>
       </TanstackQueryProvider>
