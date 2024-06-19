@@ -146,7 +146,7 @@ ${reason ?? "No rationale provided"}
         gasFallback: BigInt(2000000), // Reasonable default incase gas estimate fails...
       };
 
-      sendTransaction(request);
+      sendTransaction(request, { type: "create-swap-prop", description: "Create candidate" });
     },
     [sendTransaction]
   );

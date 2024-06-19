@@ -66,7 +66,9 @@ export function useCreateBid(): UseCreateBidReturnType {
       gasFallback: BigInt(100000), // Bid generally ~60k
     };
 
-    return sendTransaction(request, () => createBidValidation(nounId, bidAmount));
+    return sendTransaction(request, { type: "create-bid", description: "Create bid" }, () =>
+      createBidValidation(nounId, bidAmount)
+    );
   }
 
   return { createBid, ...other };

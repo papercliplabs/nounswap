@@ -58,7 +58,9 @@ export function useNounsErc20Redeem(): UseNounsErc20RedeemProps {
         gasFallback: BigInt(400000), // Deposit generally ~300k
       };
 
-      return sendTransaction(request, () => redeemValidation(nounId));
+      return sendTransaction(request, { type: "nouns-redeem", description: `Redeem $nouns` }, () =>
+        redeemValidation(nounId)
+      );
     },
     [sendTransaction, redeemValidation]
   );
