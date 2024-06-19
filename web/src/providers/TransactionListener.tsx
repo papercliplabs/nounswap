@@ -6,7 +6,6 @@ import { waitForTransactionReceipt } from "viem/actions";
 import { ToastContext, ToastType } from "./toast";
 import { track } from "@vercel/analytics";
 import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
-import { useAccount, useChainId } from "wagmi";
 import { LinkExternal } from "@/components/ui/link";
 
 export interface Transaction {
@@ -66,7 +65,7 @@ export function TransactionListenerProvider({ children }: { children: React.Reac
         type: status == "success" ? ToastType.Success : ToastType.Failure,
       });
 
-      track(`txn-${status}`, { hash: hash.toString() });
+      track(`txn-${status}`, { hash: hash.toString(), type: logging.type });
     },
     [setTransactions, addToast, removeToast, addRecentTransaction]
   );
