@@ -23,7 +23,10 @@ export function useApproveErc20(): UseApproveErc20ReturnType {
         gasFallback: BigInt(80000), // WETH approve generally ~50k
       };
 
-      return sendTransaction(request);
+      return sendTransaction(request, {
+        type: "approve-erc20",
+        description: `Approve ERC-20`,
+      });
     },
     [sendTransaction]
   );

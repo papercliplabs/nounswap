@@ -62,7 +62,11 @@ export function useNounsErc20Swap(): UseNounsErc20SwapReturnType {
         gasFallback: BigInt(300000), // Swap generally ~200k
       };
 
-      return sendTransaction(request, () => swapValidation(fromNounId, toNounId));
+      return sendTransaction(
+        request,
+        { type: "nouns-swap", description: `Swap Noun ${fromNounId} for ${toNounId}` },
+        () => swapValidation(fromNounId, toNounId)
+      );
     },
     [sendTransaction, swapValidation]
   );

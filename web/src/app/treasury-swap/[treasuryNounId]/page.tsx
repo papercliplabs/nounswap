@@ -1,4 +1,4 @@
-import { getNounById } from "@/data/noun/getNounById";
+import { getNounById, getNounByIdUncached } from "@/data/noun/getNounById";
 import { Suspense } from "react";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import DynamicSwapLayout from "@/components/DynamicSwapLayout";
@@ -24,7 +24,7 @@ export default function TreasurySwapStepOnePage({ params }: { params: { chain: n
 }
 
 async function DataWrapper({ treasuryNounId }: { treasuryNounId: string }) {
-  const treasuryNoun = await getNounById(treasuryNounId);
+  const treasuryNoun = await getNounByIdUncached(treasuryNounId);
 
   if (!treasuryNoun) {
     return <SomethingWentWrong message={`Noun ${treasuryNounId} doesn't exists.`} returnHref="/" />;
