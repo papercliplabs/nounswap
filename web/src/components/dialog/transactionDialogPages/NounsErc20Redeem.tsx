@@ -35,7 +35,7 @@ export function NounsErc20Redeem({ noun }: NounsErc20RedeemProps) {
       <ConvertNounGraphic noun={noun} action="redeem" />
       <div className="flex flex-col items-center justify-center gap-2 text-center">
         <h4>Confirm Conversion</h4>
-        <span className="text-content-secondary">This will redeem 1,000,000 $nouns for Noun 730.</span>
+        <span className="text-content-secondary">This will redeem 1,000,000 $nouns for Noun {noun.id}.</span>
       </div>
       <div className="flex w-full flex-col gap-1">
         <TransactionButton txnState={state} onClick={() => redeem(BigInt(noun.id))} className="w-full">
