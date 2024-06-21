@@ -36,7 +36,7 @@ export function NounsErc20DepositNoun({ noun, progressStepper }: NounsErc20Depos
       <div className="flex flex-col items-center justify-center gap-2 text-center">
         <h4>Confirm Conversion</h4>
         <span className="text-content-secondary">
-          This will deposit Noun 730 into the $nouns ERC-20 contract, giving you 1,000,000 $nouns.
+          This will deposit Noun {noun.id} into the $nouns ERC-20 contract, giving you 1,000,000 $nouns.
         </span>
       </div>
       {progressStepper}
