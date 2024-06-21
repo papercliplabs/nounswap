@@ -29,7 +29,7 @@ const query = graphql(`
     proposalCandidates(
       where: { proposer: $proposerAsBytes, slug_contains: "nounswap" }
       first: 1000
-      orderBy: id
+      orderBy: createdTimestamp
       orderDirection: desc
     ) {
       id
@@ -42,10 +42,15 @@ export async function getNounSwapProposalsForProposer(address: Address): Promise
   const proposer = address.toString().toLowerCase();
   const currentBlock = await getBlockNumber(CHAIN_CONFIG.publicClient);
 
-  const queryResult = await graphQLFetchWithFallback(CHAIN_CONFIG.subgraphUrl, query, {
-    proposerAsString: proposer,
-    proposerAsBytes: proposer,
-  });
+  const queryResult = await graphQLFetchWithFallback(
+    CHAIN_CONFIG.subgraphUrl,
+    query,
+    {
+      proposerAsString: proposer,
+      proposerAsBytes: proposer,
+    },
+    { next: { revalidate: 0 } }
+  );
 
   if (queryResult) {
     const proposals = queryResult.proposals;

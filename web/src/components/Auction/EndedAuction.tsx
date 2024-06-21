@@ -1,5 +1,5 @@
 "use client";
-import { Address, formatEther } from "viem";
+import { Address, formatEther, zeroAddress } from "viem";
 import Settle from "./Settle";
 import { Auction } from "@/data/auction/types";
 import { formatNumber } from "@/utils/utils";
@@ -13,7 +13,7 @@ import { UserAvatar, UserName, UserRoot } from "../User/UserClient";
 import { mainnet } from "viem/chains";
 import { BidHistoryDialog } from "./BidHistoryDialog";
 
-export function EndedAuction({ auction, highestBidderAddress }: { auction: Auction; highestBidderAddress?: Address }) {
+export function EndedAuction({ auction }: { auction: Auction }) {
   const winningBid = auction.bids[0];
 
   return (
@@ -29,7 +29,13 @@ export function EndedAuction({ auction, highestBidderAddress }: { auction: Aucti
           title: "Won by",
           value: (
             <div className="flex flex-row items-center gap-2">
-              <UserRoot address={highestBidderAddress}>
+              <UserRoot
+                address={
+                  auction.nounderAuction
+                    ? CHAIN_CONFIG.addresses.noundersMultisig
+                    : auction.bids[0]?.bidderAddress ?? zeroAddress
+                }
+              >
                 <UserAvatar className="h-[20px] w-[20px] md:h-[36px] md:w-[36px]" />
                 <UserName />
               </UserRoot>

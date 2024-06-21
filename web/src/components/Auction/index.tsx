@@ -4,7 +4,7 @@ import { getCurrentAuctionNounId } from "@/data/auction/getCurrentAuctionNounId"
 import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query";
 import { Suspense } from "react";
 import { auctionQuery, currentAuctionIdQuery, nounQuery } from "@/data/tanstackQueries";
-import { getAuctionByIdUncached } from "@/data/auction/getAuctionById";
+import { getAuctionById } from "@/data/auction/getAuctionById";
 import { getNounByIdUncached } from "@/data/noun/getNounById";
 
 export default async function Auction({ initialAuctionId }: { initialAuctionId?: string }) {
@@ -33,7 +33,7 @@ async function AuctionWrapper({ initialAuctionId }: { initialAuctionId?: string 
     }),
     queryClient.prefetchQuery({
       queryKey: auctionQuery(auctionId).queryKey,
-      queryFn: () => getAuctionByIdUncached(auctionId),
+      queryFn: () => getAuctionById(auctionId),
     }),
     queryClient.prefetchQuery({
       queryKey: nounQuery(auctionId).queryKey,

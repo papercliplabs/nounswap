@@ -20,7 +20,7 @@ import { CHAIN_CONFIG } from "@/config";
 import { TransactionListenerContext } from "@/providers/TransactionListener";
 import { estimateGas } from "viem/actions";
 
-const GAS_BUFFER = 0.08; // Gives buffer on gas estimate to help prevent out of gas error
+const GAS_BUFFER = 0.12; // Gives buffer on gas estimate to help prevent out of gas error
 
 export type CustomSendTransactionErrorType =
   | CustomTransactionValidationError
@@ -68,6 +68,7 @@ export function useSendTransaction(): UseSendTransactionReturnType {
     error: waitForReceiptError,
   } = useWaitForTransactionReceipt({
     hash,
+    timeout: 1000 * 60 * 5, // 5min...
   });
 
   const sendTransaction = useCallback(

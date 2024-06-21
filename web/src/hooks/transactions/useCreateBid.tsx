@@ -7,7 +7,6 @@ import { CLIENT_ID } from "@/utils/constants";
 import { multicall } from "viem/actions";
 import { CHAIN_CONFIG } from "@/config";
 import { bigIntMax } from "@/utils/bigint";
-import { formatNumber } from "@/utils/utils";
 
 const BID_DECIMAL_PRECISION = 2;
 interface UseCreateBidReturnType extends Omit<UseSendTransactionReturnType, "sendTransaction"> {
