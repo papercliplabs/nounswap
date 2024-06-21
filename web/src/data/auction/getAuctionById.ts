@@ -38,7 +38,7 @@ const query = graphql(/* GraphQL */ `
   }
 `);
 
-export async function getAuctionByIdUncached(id: BigIntString): Promise<Auction | undefined> {
+async function getAuctionByIdUncached(id: BigIntString): Promise<Auction | undefined> {
   if (BigInt(id) <= NOUNDER_AUCTION_CUTOFF && BigInt(id) % BigInt(10) == BigInt(0)) {
     const nextNoun = await getAuctionByIdUncached((BigInt(id) + BigInt(1)).toString());
     return {
@@ -110,7 +110,7 @@ export async function getAuctionById(id: BigIntString) {
   const cachedAuction = await getAuctionByIdCached(id);
 
   if (cachedAuction?.state != "ended-settled") {
-    await revalidateTag("get-auction-by-id");
+    revalidateTag("get-auction-by-id");
     return await getAuctionByIdCached(id);
   }
 

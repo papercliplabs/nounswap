@@ -5,6 +5,8 @@ import { graphql } from "../generated/gql";
 import { graphQLFetchWithFallback } from "../utils/graphQLFetch";
 import { CHAIN_CONFIG } from "@/config";
 import { transformQueryNounToNoun } from "./helpers";
+import { unstable_cache } from "next/cache";
+import { SECONDS_PER_HOUR } from "@/utils/constants";
 
 const query = graphql(/* GraphQL */ `
   query NounById($id: ID!) {
@@ -28,24 +30,18 @@ export async function getNounByIdUncached(id: string): Promise<Noun | undefined>
   const response = await graphQLFetchWithFallback(CHAIN_CONFIG.subgraphUrl, query, { id }, { next: { revalidate: 0 } });
   const noun = response ? transformQueryNounToNoun(response.noun as any) : undefined;
 
+  checkForAllNounRevalidation(id);
+
   return noun;
 }
 
-// Use all nouns for cached version (minimized queries)
+const getNounByIdCached = unstable_cache(getNounByIdUncached, ["get-noun-by-id"], { revalidate: SECONDS_PER_HOUR });
+
 export async function getNounById(id: string): Promise<Noun | undefined> {
-  const allNouns = await getAllNouns();
-  let noun = allNouns.find((noun) => noun.id === id);
+  const noun = await getNounByIdCached(id);
 
-  if (!noun) {
-    // Revalidate all nouns if we have a new noun so will show in explorer on next load
-    await checkForAllNounRevalidation(id);
-    const allNouns = await getAllNouns();
-    noun = allNouns.find((noun) => noun.id === id);
-  }
-
-  if (!noun) {
-    console.error("getNounById - Error can't find Noun", id);
-  }
+  // Kickoff a check to revalidate all in grid (when its a new Noun)
+  checkForAllNounRevalidation(id);
 
   return noun;
 }

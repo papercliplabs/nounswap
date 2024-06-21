@@ -4,11 +4,8 @@ import { graphql } from "../generated/gql";
 import { graphQLFetchWithFallback } from "../utils/graphQLFetch";
 import { Noun } from "./types";
 import { AllNounsQuery } from "../generated/gql/graphql";
-import { getNounData } from "@nouns/assets";
-import { getAddress } from "viem";
 import { revalidateTag, unstable_cache } from "next/cache";
 import { transformQueryNounToNoun } from "./helpers";
-import { SECONDS_PER_HOUR } from "@/utils/constants";
 
 const BATCH_SIZE = 1000;
 
@@ -31,7 +28,6 @@ const query = graphql(/* GraphQL */ `
 `);
 
 async function runPaginatedNounsQueryUncached() {
-  console.log("CACHE MISS");
   let queryNouns: AllNounsQuery["nouns"] = [];
   let skip = 0;
 

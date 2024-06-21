@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import ProgressCircle from "../ProgressCircle";
 import { useRouter } from "next/navigation";
-import { Dialog, DialogContent } from "../ui/dialogBase";
+import { Dialog, DialogContent, DialogTrigger } from "../ui/dialogBase";
 import { Button } from "../ui/button";
 import { twMerge } from "tailwind-merge";
 import { useAccount } from "wagmi";
@@ -24,7 +24,6 @@ interface SwapTransactionDialogProps {
 
 export default function TreasurySwapDialog({ userNoun, treasuryNoun, tip, reason }: SwapTransactionDialogProps) {
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const { address, isConnected } = useAccount();
 
   const { data: nounRequiresApproval } = useQuery({
@@ -85,16 +84,17 @@ export default function TreasurySwapDialog({ userNoun, treasuryNoun, tip, reason
   );
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
-      <Button
-        className="w-full md:w-fit"
-        onClick={() => setIsOpen(true)}
-        disabled={reason == undefined || reason == ""}
-      >
-        Create Swap Candidate
-      </Button>
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button className="w-full md:w-fit" disabled={reason == undefined || reason == ""}>
+          Create Swap Candidate
+        </Button>
+      </DialogTrigger>
 
-      <DialogContent className="flex max-h-[80vh] max-w-[425px] flex-col overflow-y-auto pt-12">
+      <DialogContent
+        className="flex max-h-[80vh] max-w-[425px] flex-col overflow-y-auto pt-12"
+        onInteractOutside={(event) => event.preventDefault()}
+      >
         {step == 0 && (
           <ApproveNoun
             noun={userNoun}

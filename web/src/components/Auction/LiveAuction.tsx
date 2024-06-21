@@ -10,7 +10,7 @@ import { Auction } from "@/data/auction/types";
 import { BidHistoryDialog } from "./BidHistoryDialog";
 import { UserName, UserRoot } from "../User/UserClient";
 
-export function LiveAuction({ auction, highestBidderAddress }: { auction: Auction; highestBidderAddress?: Address }) {
+export function LiveAuction({ auction }: { auction: Auction }) {
   const [timeRemainingS, setTimeRemainingS] = useState<number | undefined>(undefined);
 
   useEffect(() => {

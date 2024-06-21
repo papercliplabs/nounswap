@@ -20,7 +20,7 @@ export default function Bid({ nounId, nextMinBid }: BidProps) {
   }, [nextMinBid]);
 
   // Used to restrict user input
-  const [bidAmount, setBidAmount] = useState(nextMinBidFormatted.toString());
+  const [bidAmount, setBidAmount] = useState<string>(nextMinBidFormatted.toString());
   function handleBidAmountChange(event: React.ChangeEvent<HTMLInputElement>) {
     const value = event.target.value;
     const regex = new RegExp(`^\\d*\\.?\\d{0,${BID_DECIMAL_PRECISION}}$`);
@@ -29,6 +29,14 @@ export default function Bid({ nounId, nextMinBid }: BidProps) {
       setBidAmount(value);
     }
   }
+
+  // Update prefilled bid if minBid changes
+  useEffect(() => {
+    setBidAmount((prev) => {
+      const prevNum = Number(prev);
+      return prevNum < nextMinBidFormatted ? nextMinBidFormatted.toString() : prev;
+    });
+  }, [nextMinBidFormatted]);
 
   async function onSubmit(formData: FormData) {
     const parsedBidAmount = parseEther(formData.get("bidAmount") as string);

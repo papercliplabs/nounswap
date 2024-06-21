@@ -1,18 +1,15 @@
 "use client";
 import { useNounImage } from "@/hooks/useNounImage";
 import clsx from "clsx";
-import { debounce } from "lodash";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import NavButtons from "./NavButtons";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { auctionQuery, currentAuctionIdQuery, nounQuery, userAvatarQuery, userNameQuery } from "@/data/tanstackQueries";
 import { Auction } from "@/data/auction/types";
 import { LiveAuction } from "./LiveAuction";
 import { EndedAuction } from "./EndedAuction";
-import { CHAIN_CONFIG } from "@/config";
-import { zeroAddress } from "viem";
 
 const PREFETCH_DISTANCE = 3;
 
@@ -24,37 +21,23 @@ export default function AuctionClient() {
     return searchParams.get("auctionId");
   }, [searchParams]);
 
-  const { data: currentAuctionId } = useQuery({
+  const { data: currentAuctionId, refetch: refetchCurrentAuctionId } = useQuery({
     ...currentAuctionIdQuery(),
-    refetchInterval: 1000 * 2,
   });
-
-  const [debouncedAuctionId, setDebouncedAuctionId] = useState<string | undefined>(
-    requestedAuctionId ?? currentAuctionId
-  );
 
   const auctionId = useMemo(() => {
     return requestedAuctionId ?? currentAuctionId;
   }, [requestedAuctionId, currentAuctionId]);
 
-  useEffect(() => {
-    const auctionIdDebounce = debounce((id: string | undefined) => {
-      setDebouncedAuctionId(id);
-    }, 200);
-
-    auctionIdDebounce(auctionId);
-    return () => auctionIdDebounce.cancel();
-  }, [auctionId]);
-
   const { data: auction } = useQuery({
-    ...auctionQuery(debouncedAuctionId),
-    enabled: !!debouncedAuctionId,
-    refetchInterval: 1000 * 2, // 2 sec
+    ...auctionQuery(auctionId),
+    enabled: !!auctionId,
+    refetchInterval: auctionId == currentAuctionId ? 1000 : undefined, // 1 sec
   });
 
   const { data: noun } = useQuery({
-    ...nounQuery(debouncedAuctionId),
-    enabled: !!debouncedAuctionId,
+    ...nounQuery(auctionId),
+    enabled: !!auctionId,
   });
   const nounImgSrc = useNounImage("full", noun);
 
@@ -72,6 +55,24 @@ export default function AuctionClient() {
     }
   }, [auction?.endTime]);
 
+  // Update current auction once it settles
+  useEffect(() => {
+    let interval: NodeJS.Timeout | undefined = undefined;
+    if (auctionId == currentAuctionId) {
+      interval = setInterval(() => {
+        if (auction?.state == "ended-settled" && auctionId == currentAuctionId) {
+          refetchCurrentAuctionId();
+        }
+      }, 500);
+    }
+
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [auctionId, currentAuctionId, auction?.state, refetchCurrentAuctionId]);
+
   // Set to current if at or above current
   useEffect(() => {
     if (requestedAuctionId && currentAuctionId && Number(requestedAuctionId) >= Number(currentAuctionId)) {
@@ -84,8 +85,8 @@ export default function AuctionClient() {
   // Prefetch auctions on either side
   useEffect(() => {
     async function prefetch() {
-      if (debouncedAuctionId && currentAuctionId) {
-        const id = Number(debouncedAuctionId);
+      if (auctionId && currentAuctionId) {
+        const id = Number(auctionId);
         for (
           let i = Math.max(0, id - PREFETCH_DISTANCE);
           i < Math.min(Number(currentAuctionId), id + PREFETCH_DISTANCE);
@@ -108,16 +109,7 @@ export default function AuctionClient() {
     }
 
     prefetch();
-  }, [debouncedAuctionId, currentAuctionId, queryClient]);
-
-  const highestBidderAddress = useMemo(() => {
-    if (auction?.nounderAuction) {
-      return CHAIN_CONFIG.addresses.noundersMultisig;
-    } else {
-      const highestBid = auction?.bids[0];
-      return highestBid?.bidderAddress ?? zeroAddress;
-    }
-  }, [auction?.nounderAuction, auction?.bids]);
+  }, [auctionId, currentAuctionId, queryClient]);
 
   return (
     <>
@@ -148,12 +140,7 @@ export default function AuctionClient() {
           </div>
         </div>
 
-        {auction &&
-          (auction.state == "live" ? (
-            <LiveAuction auction={auction} highestBidderAddress={highestBidderAddress} />
-          ) : (
-            <EndedAuction auction={auction} highestBidderAddress={highestBidderAddress} />
-          ))}
+        {auction && (auction.state == "live" ? <LiveAuction auction={auction} /> : <EndedAuction auction={auction} />)}
       </div>
     </>
   );
