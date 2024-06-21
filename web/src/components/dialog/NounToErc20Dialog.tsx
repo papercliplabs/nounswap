@@ -1,20 +1,15 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import ProgressCircle from "../ProgressCircle";
-import { useRouter } from "next/navigation";
-import { Dialog, DialogContent } from "../ui/dialogBase";
+import { Dialog, DialogContent, DialogTrigger } from "../ui/dialogBase";
 import { Button } from "../ui/button";
 import { twMerge } from "tailwind-merge";
 import { useAccount } from "wagmi";
 import { CHAIN_CONFIG } from "@/config";
 import { Noun } from "@/data/noun/types";
 import { useQuery } from "@tanstack/react-query";
-import {
-  getDoesNounRequireApproval,
-  getDoesNounRequireApprovalAndIsOwner,
-} from "@/data/noun/getDoesNounRequireApproval";
+import { getDoesNounRequireApprovalAndIsOwner } from "@/data/noun/getDoesNounRequireApproval";
 import { ApproveNoun } from "./transactionDialogPages/ApproveNoun";
-import { CreateInstantSwap } from "./transactionDialogPages/CreateInstantSwap";
 import { NounsErc20DepositNoun } from "./transactionDialogPages/NounsErc20DepositNoun";
 
 interface NounToErc20DialogProps {
@@ -22,7 +17,6 @@ interface NounToErc20DialogProps {
 }
 
 export default function NounToErc20Dialog({ depositNoun }: NounToErc20DialogProps) {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const { address } = useAccount();
 
   const { data: nounRequiresApproval } = useQuery({
@@ -78,15 +72,16 @@ export default function NounToErc20Dialog({ depositNoun }: NounToErc20DialogProp
   );
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
-      <Button
-        className="w-full md:w-fit"
-        onClick={() => setIsOpen(true)}
-        disabled={depositNoun == undefined || address == undefined}
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button className="w-full md:w-fit" disabled={depositNoun == undefined || address == undefined}>
+          Convert to $nouns
+        </Button>
+      </DialogTrigger>
+      <DialogContent
+        className="flex max-h-[80vh] max-w-[425px] flex-col overflow-y-auto pt-12"
+        onInteractOutside={(event) => event.preventDefault()}
       >
-        Convert to $nouns
-      </Button>
-      <DialogContent className="flex max-h-[80vh] max-w-[425px] flex-col overflow-y-auto pt-12">
         {depositNoun && step == 0 && (
           <ApproveNoun
             noun={depositNoun}

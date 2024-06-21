@@ -26,9 +26,16 @@ export function CreatePropCandidate({ userNoun, treasuryNoun, tip, reason, progr
 
   // Push to proposals page on success
   useEffect(() => {
+    let timeout: NodeJS.Timeout | undefined = undefined;
     if (state == "success") {
-      router.push(`/proposals`);
+      timeout = setTimeout(() => {
+        router.push(`/proposals`);
+      }, 4000); // delay transition so subgraph can index
     }
+
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
   }, [state, router]);
 
   return (

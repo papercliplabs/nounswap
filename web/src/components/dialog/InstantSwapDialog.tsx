@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import ProgressCircle from "../ProgressCircle";
 import { useRouter } from "next/navigation";
-import { Dialog, DialogContent } from "../ui/dialogBase";
+import { Dialog, DialogContent, DialogTrigger } from "../ui/dialogBase";
 import { Button } from "../ui/button";
 import { twMerge } from "tailwind-merge";
 import { useAccount } from "wagmi";
@@ -22,7 +22,6 @@ interface InstantSwapDialogProps {
 }
 
 export default function InstantSwapDialog({ fromNoun, toNoun }: InstantSwapDialogProps) {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const { address } = useAccount();
 
   const { data: nounRequiresApproval } = useQuery({
@@ -73,15 +72,16 @@ export default function InstantSwapDialog({ fromNoun, toNoun }: InstantSwapDialo
   );
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
-      <Button
-        className="w-full md:w-fit"
-        onClick={() => setIsOpen(true)}
-        disabled={fromNoun == undefined || address == undefined}
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button className="w-full md:w-fit" disabled={fromNoun == undefined || address == undefined}>
+          Swap
+        </Button>
+      </DialogTrigger>
+      <DialogContent
+        className="flex max-h-[80vh] max-w-[425px] flex-col overflow-y-auto pt-12"
+        onInteractOutside={(event) => event.preventDefault()}
       >
-        Swap
-      </Button>
-      <DialogContent className="flex max-h-[80vh] max-w-[425px] flex-col overflow-y-auto pt-12">
         {fromNoun && step == 0 && (
           <ApproveNoun
             noun={fromNoun}

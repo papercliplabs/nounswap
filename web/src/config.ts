@@ -58,8 +58,7 @@ const CHAIN_SPECIFIC_CONFIGS: Record<number, ChainSpecificData> = {
     nounsGovernanceUrl: "https://nouns.camp/",
     subgraphUrl: {
       primary: `https://gateway-arbitrum.network.thegraph.com/api/${process.env.DECENTRALIZED_SUBGRAPH_API_KEY}/deployments/id/Qmdfajyi6PSmc45xWpbZoYdses84SAAze6ZcCxuDAhJFzt`,
-      fallback: "https://api.studio.thegraph.com/query/35078/nouns/v1.0.0", // studio
-      // fallback: "https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns/prod/gn", // For now its doesn't have txHash for bids (PR open)
+      fallback: "https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns/prod/gn",
     },
     swapForWrappedNativeUrl:
       "https://app.uniswap.org/swap?outputCurrency=0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2&chain=mainnet",
