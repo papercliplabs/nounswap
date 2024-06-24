@@ -13,12 +13,15 @@ import NounGrid from "@/components/NounGrid/NounGrid";
 import NounDialog from "@/components/dialog/NounDialog";
 
 export async function generateMetadata({ searchParams }: { searchParams: { frame?: string } }) {
-  const frameMetadata = await getFrameMetadata(`https://frames.paperclip.xyz/nounish-auction/v2/nouns`);
+  let filteredFrameMetadata: Record<string, string> = {};
+  try {
+    const frameMetadata = await getFrameMetadata(`https://frames.paperclip.xyz/nounish-auction/v2/nouns`);
 
-  // Only take fc:frame tags (not og image overrides)
-  const filteredFrameMetadata = Object.fromEntries(
-    Object.entries(frameMetadata).filter(([k]) => k.includes("fc:frame"))
-  );
+    // Only take fc:frame tags (not og image overrides)
+    filteredFrameMetadata = Object.fromEntries(Object.entries(frameMetadata).filter(([k]) => k.includes("fc:frame")));
+  } catch (e) {
+    console.error("Failed to fetch frame metadata", e);
+  }
   return {
     title: "Explore Nouns",
     description: "See all the Nouns or Swap for one from the Nouns treasury.",
