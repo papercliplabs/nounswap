@@ -1,5 +1,6 @@
 import { GraphQLError } from "graphql";
-import { TypedDocumentString } from "../generated/gql/graphql";
+import { TypedDocumentString as SubgraphTypedDocumentString } from "../generated/gql/graphql";
+import { TypedDocumentString as PonderTypedDocumentString } from "../generated/ponder/graphql";
 
 type GraphQLResponse<Data> = { data: Data } | { errors: GraphQLError[] };
 
@@ -10,7 +11,7 @@ export interface CacheConfig {
 
 export async function graphQLFetch<Result, Variables>(
   url: string,
-  query: TypedDocumentString<Result, Variables>,
+  query: SubgraphTypedDocumentString<Result, Variables> | PonderTypedDocumentString<Result, Variables>,
   variables?: Variables,
   cacheConfig?: CacheConfig
 ): Promise<Result> {
@@ -38,7 +39,7 @@ export async function graphQLFetch<Result, Variables>(
 
 export async function graphQLFetchWithFallback<Result, Variables>(
   url: { primary: string; fallback: string },
-  query: TypedDocumentString<Result, Variables>,
+  query: SubgraphTypedDocumentString<Result, Variables> | PonderTypedDocumentString<Result, Variables>,
   variables?: Variables,
   cacheConfig?: CacheConfig
 ): Promise<Result> {

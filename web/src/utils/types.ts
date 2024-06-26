@@ -21,3 +21,5 @@ export interface SwapNounProposal {
   toNoun: Noun;
   state: ProposalState;
 }
+
+export type Unit = "%" | "$";

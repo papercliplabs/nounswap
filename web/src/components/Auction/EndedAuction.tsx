@@ -1,8 +1,8 @@
 "use client";
-import { Address, formatEther, zeroAddress } from "viem";
+import { formatEther, zeroAddress } from "viem";
 import Settle from "./Settle";
 import { Auction } from "@/data/auction/types";
-import { formatNumber } from "@/utils/utils";
+import { formatNumber } from "@/utils/format";
 import { AuctionDetailTemplate } from "./AuctionDetailsTemplate";
 import { Button } from "../ui/button";
 import { LinkExternal, LinkShallow } from "../ui/link";
@@ -23,7 +23,10 @@ export function EndedAuction({ auction }: { auction: Auction }) {
           title: "Winning bid",
           value: auction.nounderAuction
             ? "n/a"
-            : `${formatNumber(formatEther(winningBid ? BigInt(winningBid.amount) : BigInt(0)))} ETH`,
+            : formatNumber({
+                input: Number(formatEther(winningBid ? BigInt(winningBid.amount) : BigInt(0))),
+                unit: "ETH",
+              }),
         }}
         item2={{
           title: "Won by",

@@ -26,7 +26,6 @@ const TooltipContent = React.forwardRef<
     {...props}
   >
     {props.children}
-    <TooltipPrimitive.Arrow height={8} width={16} />
   </TooltipPrimitive.Content>
 ));
 TooltipContent.displayName = TooltipPrimitive.Content.displayName;
