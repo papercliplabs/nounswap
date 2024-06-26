@@ -194,7 +194,6 @@ const config: Config = {
           display: "none",
         },
       });
-      // Add your custom styles here
     }),
     require("tailwindcss-animate"),
   ],
