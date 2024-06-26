@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Address, formatEther } from "viem";
 import { Skeleton } from "../ui/skeleton";
 import Bid from "./Bid";
-import { formatNumber } from "@/utils/utils";
+import { formatNumber } from "@/utils/format";
 import { AuctionDetailTemplate } from "./AuctionDetailsTemplate";
 import { Auction } from "@/data/auction/types";
 import { BidHistoryDialog } from "./BidHistoryDialog";
@@ -28,7 +28,10 @@ export function LiveAuction({ auction }: { auction: Auction }) {
       <AuctionDetailTemplate
         item1={{
           title: "Current bid",
-          value: `${formatNumber(formatEther(highestBid ? BigInt(highestBid.amount) : BigInt(0)), 2)} ETH`,
+          value: formatNumber({
+            input: Number(formatEther(highestBid ? BigInt(highestBid.amount) : BigInt(0))),
+            unit: "ETH",
+          }),
         }}
         item2={{
           title: "Time left",

@@ -1,5 +1,6 @@
 import { Address, BaseError, InsufficientFundsError, UserRejectedRequestError } from "viem";
 import { SendTransactionErrorType } from "wagmi/actions";
+import { Unit } from "./types";
 
 export function formatAddress(address: Address, amount: number = 4): string {
   return `${address.slice(0, amount)}...${address?.slice(address.length - amount, address.length)}`;
@@ -35,4 +36,35 @@ export function formatSendTransactionError(error: SendTransactionErrorType | nul
 
 export function capitalizeFirstLetterOfEveryWord(str: string): string {
   return str.replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+type FormatNumberParams = {
+  input: number | bigint;
+  compact?: boolean;
+  maxFractionDigits?: number;
+  maxSignificantDigits?: number;
+  forceSign?: boolean;
+  percent?: boolean;
+  unit?: "USD" | string;
+};
+
+export function formatNumber({
+  input,
+  compact,
+  maxFractionDigits,
+  maxSignificantDigits,
+  forceSign,
+  percent,
+  unit,
+}: FormatNumberParams): string {
+  const prefix = unit ? (unit == "USD" ? "$" : unit == "Ξ" ? "Ξ" : "") : "";
+  const postfix = unit ? (unit != "USD" && unit != "Ξ" ? ` ${unit}` : "") : "";
+  const formattedNumber = Intl.NumberFormat("en", {
+    notation: (input > 9999 || input < -9999) && compact ? "compact" : "standard",
+    maximumFractionDigits: maxFractionDigits ?? 2,
+    maximumSignificantDigits: maxSignificantDigits,
+    style: percent ? "percent" : "decimal",
+    signDisplay: forceSign ? "exceptZero" : "auto",
+  }).format(input);
+  return prefix + formattedNumber + postfix;
 }
