@@ -26,6 +26,7 @@ export interface ChainSpecificData {
     primary: string;
     fallback: string;
   };
+  ponderIndexerUrl: string;
   swapForWrappedNativeUrl: string;
 }
 
@@ -60,6 +61,7 @@ const CHAIN_SPECIFIC_CONFIGS: Record<number, ChainSpecificData> = {
       primary: `https://gateway-arbitrum.network.thegraph.com/api/${process.env.DECENTRALIZED_SUBGRAPH_API_KEY}/deployments/id/Qmdfajyi6PSmc45xWpbZoYdses84SAAze6ZcCxuDAhJFzt`,
       fallback: "https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns/prod/gn",
     },
+    ponderIndexerUrl: process.env.LOCAL_INDEXER_URL ?? "https://indexer.nounswap.wtf",
     swapForWrappedNativeUrl:
       "https://app.uniswap.org/swap?outputCurrency=0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2&chain=mainnet",
   },
@@ -91,6 +93,7 @@ const CHAIN_SPECIFIC_CONFIGS: Record<number, ChainSpecificData> = {
       primary: `https://gateway-arbitrum.network.thegraph.com/api/${process.env.DECENTRALIZED_SUBGRAPH_API_KEY}/deployments/id/QmZNg1ngfNLpYxVQGCqbxWhqNLsiup3oSGbWpkF8tERVa6`,
       fallback: `https://api.studio.thegraph.com/query/35078/nouns-sepolia/v1.0.0`,
     },
+    ponderIndexerUrl: process.env.LOCAL_INDEXER_URL ?? "https://sepolia.indexer.nounswap.wtf",
     swapForWrappedNativeUrl: "",
   },
 };
