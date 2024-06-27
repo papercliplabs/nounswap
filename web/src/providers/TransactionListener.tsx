@@ -4,9 +4,9 @@ import { createContext, useCallback, useContext, useState } from "react";
 import { Hex, TransactionType } from "viem";
 import { waitForTransactionReceipt } from "viem/actions";
 import { ToastContext, ToastType } from "./toast";
-import { track } from "@vercel/analytics";
 import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
 import { LinkExternal } from "@/components/ui/link";
+import { trackEvent } from "@/utils/analytics";
 
 export interface Transaction {
   hash: Hex;
@@ -41,7 +41,7 @@ export function TransactionListenerProvider({ children }: { children: React.Reac
         ),
         type: ToastType.Pending,
       });
-      track("txn-pending", { hash: hash.toString(), type: logging.type });
+      trackEvent(`${logging.type}-txn-pending`, { hash: hash.toString() });
 
       addRecentTransaction({ hash, description: logging.description });
 
@@ -65,7 +65,7 @@ export function TransactionListenerProvider({ children }: { children: React.Reac
         type: status == "success" ? ToastType.Success : ToastType.Failure,
       });
 
-      track(`txn-${status}`, { hash: hash.toString(), type: logging.type });
+      trackEvent(`${logging.type}-txn-${status}`, { hash: hash.toString() });
     },
     [setTransactions, addToast, removeToast, addRecentTransaction]
   );

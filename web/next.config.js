@@ -1,27 +1,27 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-      webpack: (config) => {
-        config.resolve.fallback = { fs: false };
+  webpack: (config) => {
+    config.resolve.fallback = { fs: false };
 
-        return config;
+    return config;
+  },
+  reactStrictMode: false,
+  logging: {
+    fetches: {
+      fullUrl: true,
+      level: "verbose"
+    },
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*",
+        port: "",
+        pathname: "/**"
       },
-      reactStrictMode: false,
-      logging: {
-        fetches: {
-          fullUrl: true,
-          level: "verbose"
-        },
-      },
-      images: {
-        remotePatterns: [
-          {
-            protocol: "https",
-            hostname: "*",
-            port: "",
-            pathname: "/**"
-          },
-        ]
-      }
+    ]
+  },
 }
 
 module.exports = nextConfig
