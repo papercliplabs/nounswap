@@ -1,13 +1,13 @@
 import "@/theme/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
-import { Analytics } from "@vercel/analytics/react";
 import { Londrina_Solid } from "next/font/google";
 import localFont from "next/font/local";
-import { getFrameMetadata } from "frog/next";
+import Script from "next/script";
 
 import Providers from "@/providers/providers";
 import ToastContainer from "@/components/ToastContainer";
 import TestnetBanner from "@/components/TestnetBanner";
+import { CHAIN_CONFIG } from "@/config";
 
 const ptRootUiFont = localFont({
   src: [
@@ -66,7 +66,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
           <ToastContainer />
         </Providers>
-        <Analytics />
+        {process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID && (
+          <Script
+            defer
+            src="https://analytics.paperclip.xyz/script.js"
+            data-website-id={process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID}
+          />
+        )}
       </body>
     </html>
   );
