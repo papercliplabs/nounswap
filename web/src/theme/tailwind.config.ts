@@ -72,6 +72,7 @@ const config: Config = {
   theme: {
     screens: {
       md: "850px",
+      lg: "1100px",
     },
     extend: {
       boxShadow: {

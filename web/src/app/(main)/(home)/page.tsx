@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { getAllNounsUncached } from "@/data/noun/getAllNouns";
 import NounGrid from "@/components/NounGrid/NounGrid";
 import NounDialog from "@/components/dialog/NounDialog";
+import FeatureHighlight from "@/components/FeatureHighlight";
 
 export async function generateMetadata({ searchParams }: { searchParams: { frame?: string } }) {
   let filteredFrameMetadata: Record<string, string> = {};
@@ -23,7 +24,7 @@ export async function generateMetadata({ searchParams }: { searchParams: { frame
     console.error("Failed to fetch frame metadata", e);
   }
   return {
-    title: "Explore Nouns",
+    title: "NounSwap",
     description: "See all the Nouns or Swap for one from the Nouns treasury.",
     other: searchParams.frame != undefined ? filteredFrameMetadata : {},
   };
@@ -35,6 +36,7 @@ export default function Page({ searchParams }: { searchParams: { auctionId?: str
       <div className="flex w-full flex-col gap-5">
         <Auction initialAuctionId={searchParams.auctionId} />
         <JustSwapItAdvertisingBanner />
+        <FeatureHighlight />
       </div>
       <div>
         <h2 className="pb-1">Explore Nouns</h2>
