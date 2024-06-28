@@ -62,6 +62,7 @@ export default function Bid({ nounId, nextMinBid }: BidProps) {
             value={bidAmount}
             onChange={handleBidAmountChange}
             disabled={txnState != "idle"}
+            inputMode="decimal"
           />
           <span className="label-lg absolute right-3 top-1/2 -translate-y-1/2">ETH</span>
         </div>

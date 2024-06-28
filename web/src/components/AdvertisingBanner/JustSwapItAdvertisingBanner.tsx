@@ -22,14 +22,14 @@ export default function JustSwapItAdvertisingBanner() {
             width={227}
             height={40}
             alt="Just Swap It"
-            className="hidden md:block"
+            className="hidden h-auto w-auto md:block"
           />
           <Image
             src="/advertising/just-swap-it-mint/mobile/just-swap-it.png"
             width={182}
             height={32}
             alt="Just Swap It"
-            className="block md:hidden"
+            className="block h-auto w-auto md:hidden"
           />
         </>
         <div className="text-background-dark label-sm rounded-full bg-white px-4 py-1.5 hover:brightness-90">
