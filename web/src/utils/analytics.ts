@@ -8,6 +8,7 @@ umami.init({
 
 const plausible = Plausible({
   domain: process.env.NEXT_PUBLIC_PLAUSIBLE_DATA_DOMAIN,
+  apiHost: "https://plausible.paperclip.xyz",
 });
 
 export async function trackEvent(name: string, payload: UmamiEventData) {
