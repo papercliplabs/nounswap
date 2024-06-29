@@ -3,8 +3,9 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import FeatureCard from "./FeatureCard";
 import { useCallback } from "react";
-import { INSTANT_SWAP_FILTER_KEY } from "../NounFilter/InstantSwapFilter";
-import { ONLY_TREASURY_NOUNS_FILTER_KEY } from "../NounFilter/TreasuryNounFilter";
+import { INSTANT_SWAP_FILTER_KEY } from "../NounExplorer/NounFilter/InstantSwapFilter";
+import { ONLY_TREASURY_NOUNS_FILTER_KEY } from "../NounExplorer/NounFilter/TreasuryNounFilter";
+import { scrollToNounExplorer } from "@/utils/scroll";
 
 export default function FeatureHighlight() {
   const searchParams = useSearchParams();
@@ -22,8 +23,7 @@ export default function FeatureHighlight() {
 
     // Add filter and scroll to explore
     window.history.pushState(null, "", `?${params.toString()}`);
-    var element = document.getElementById("explore-section");
-    element?.scrollIntoView({ behavior: "smooth", block: "start" });
+    scrollToNounExplorer();
   }, [searchParams]);
 
   const handleTreasurySwapClick = useCallback(() => {
@@ -38,8 +38,7 @@ export default function FeatureHighlight() {
 
     // Add filter and scroll to explore
     window.history.pushState(null, "", `?${params.toString()}`);
-    var element = document.getElementById("explore-section");
-    element?.scrollIntoView({ behavior: "smooth", block: "start" });
+    scrollToNounExplorer();
   }, [searchParams]);
 
   return (

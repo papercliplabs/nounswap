@@ -14,6 +14,7 @@ import HowItWorksDialog from "./HowItWorksDialog";
 import { useNounImage } from "@/hooks/useNounImage";
 import Icon from "../ui/Icon";
 import { UserAvatar, UserName, UserRoot } from "../User/UserClient";
+import { scrollToNounExplorer } from "@/utils/scroll";
 
 interface NounsDialogProps {
   nouns: Noun[];
@@ -158,8 +159,7 @@ function NounTraitCard({ type, noun }: { type: NounTraitType; noun?: Noun }) {
       window.history.pushState(null, "", `?${params.toString()}`);
 
       // Scroll explore section into view
-      var element = document.getElementById("explore-section");
-      element?.scrollIntoView({ behavior: "smooth", block: "start" });
+      scrollToNounExplorer();
     }
   }, [type, trait, searchParams]);
 

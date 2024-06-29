@@ -1,6 +1,6 @@
 "use client";
 import { AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Input } from "../ui/input";
+import { Input } from "../../ui/input";
 import { FilterTraitItem } from "./FilterTraitItem";
 import { NounTrait, NounTraitType } from "@/data/noun/types";
 import { capitalizeFirstLetterOfEveryWord } from "@/utils/format";

@@ -6,80 +6,45 @@ import { ONLY_TREASURY_NOUNS_FILTER_KEY } from "./TreasuryNounFilter";
 import { X } from "lucide-react";
 import { ACCESSORY_TRAITS, BACKGROUND_TRAITS, BODY_TRAITS, GLASSES_TRAITS, HEAD_TRAITS } from ".";
 import { INSTANT_SWAP_FILTER_KEY } from "./InstantSwapFilter";
+import { useNounFilters } from "@/hooks/useNounFilters";
+import clsx from "clsx";
+import { scrollToNounExplorer } from "@/utils/scroll";
 
-export function ActiveFilters() {
-  const searchParams = useSearchParams();
-
-  const {
-    backgroundFilters,
-    headFilters,
-    glassesFilters,
-    bodyFilters,
-    accessoryFilters,
-    treasuryNounsOnly,
-    instantSwap,
-    totalCount,
-  } = useMemo(() => {
-    const backgroundFilters = searchParams.getAll("background[]");
-    const headFilters = searchParams.getAll("head[]");
-    const glassesFilters = searchParams.getAll("glasses[]");
-    const bodyFilters = searchParams.getAll("body[]");
-    const accessoryFilters = searchParams.getAll("accessory[]");
-    const treasuryNounsOnly = searchParams.get(ONLY_TREASURY_NOUNS_FILTER_KEY);
-    const instantSwap = searchParams.get(INSTANT_SWAP_FILTER_KEY);
-
-    const totalCount =
-      backgroundFilters.length +
-      headFilters.length +
-      glassesFilters.length +
-      bodyFilters.length +
-      accessoryFilters.length +
-      (treasuryNounsOnly ? 1 : 0) +
-      (instantSwap ? 1 : 0);
-
-    return {
-      backgroundFilters,
-      headFilters,
-      glassesFilters,
-      bodyFilters,
-      accessoryFilters,
-      treasuryNounsOnly,
-      instantSwap,
-      totalCount,
-    };
-  }, [searchParams]);
+export function ActiveFilters({ numNouns }: { numNouns: number }) {
+  const { background, head, glasses, body, accessory, heldByTreasury, heldByNounsErc20, totalCount } = useNounFilters();
 
   return (
-    <div className="sticky top-[66px] z-[10] flex w-screen min-w-0 -translate-x-1 flex-row items-center gap-2 bg-white py-2 pl-1 md:top-0 md:py-4">
-      <h5>Filters</h5>
-      <div className="bg-background-secondary text-content-secondary label-sm mr-2 flex h-6 w-6 items-center justify-center rounded-[4px]">
+    <div className={clsx("flex items-center gap-2 bg-white md:py-4", totalCount > 0 ? "py-2" : "py-0")}>
+      <h5 className="hidden md:flex">Filters</h5>
+      <div className="bg-background-secondary text-content-secondary label-sm mr-2 hidden h-6 w-6 items-center justify-center rounded-[4px] md:flex">
         {totalCount}
       </div>
       <div className="no-scrollbar flex w-full min-w-0 flex-row items-center gap-2 overflow-x-auto">
-        {treasuryNounsOnly && <ActiveFilterItem seed={"1"} type="treasuryNounOnly" key={"treasuryNounOnly"} />}
-        {instantSwap && <ActiveFilterItem seed={"1"} type="instantSwap" key={"instantSwap"} />}
-        {backgroundFilters.map((seed) => (
+        {heldByTreasury && <ActiveFilterItem seed={"1"} type="heldByTreasury" key={"heldByTreasury"} />}
+        {heldByNounsErc20 && <ActiveFilterItem seed={"1"} type="heldByNounsErc20" key={"heldByNounsErc20"} />}
+        {background.map((seed) => (
           <ActiveFilterItem seed={seed} type="background" key={"background" + seed} />
         ))}
-        {headFilters.map((seed) => (
+        {head.map((seed) => (
           <ActiveFilterItem seed={seed} type="head" key={"head" + seed} />
         ))}
-        {glassesFilters.map((seed) => (
+        {glasses.map((seed) => (
           <ActiveFilterItem seed={seed} type="glasses" key={"glasses" + seed} />
         ))}
-        {bodyFilters.map((seed) => (
+        {body.map((seed) => (
           <ActiveFilterItem seed={seed} type="body" key={"body" + seed} />
         ))}
-        {accessoryFilters.map((seed) => (
+        {accessory.map((seed) => (
           <ActiveFilterItem seed={seed} type="accessory" key={"accessory" + seed} />
         ))}
       </div>
+      <h6 className="hidden shrink-0 pl-4 md:flex">{numNouns} nouns</h6>
     </div>
   );
 }
 
 interface ActiveFilterItemInterface {
-  type: NounTraitType | "treasuryNounOnly" | "instantSwap";
+  type: NounTraitType | "heldByNounsErc20" | "heldByTreasury";
   seed: string;
 }
 
@@ -87,15 +52,15 @@ function ActiveFilterItem({ type, seed }: ActiveFilterItemInterface) {
   const searchParams = useSearchParams();
 
   const removeFilter = useCallback(
-    (type: NounTraitType | "treasuryNounOnly" | "instantSwap", seed: string) => {
+    (type: NounTraitType | "heldByNounsErc20" | "heldByTreasury", seed: string) => {
       const params = new URLSearchParams(searchParams.toString());
 
-      if (type == "treasuryNounOnly") {
+      if (type == "heldByTreasury") {
         if (params.get(ONLY_TREASURY_NOUNS_FILTER_KEY) === "1") {
           params.delete(ONLY_TREASURY_NOUNS_FILTER_KEY);
           window.history.pushState(null, "", `?${params.toString()}`);
         }
-      } else if (type == "instantSwap") {
+      } else if (type == "heldByNounsErc20") {
         if (params.get(INSTANT_SWAP_FILTER_KEY) === "1") {
           params.delete(INSTANT_SWAP_FILTER_KEY);
           window.history.pushState(null, "", `?${params.toString()}`);
@@ -118,6 +83,7 @@ function ActiveFilterItem({ type, seed }: ActiveFilterItemInterface) {
           window.history.pushState(null, "", `?${params.toString()}`);
         }
       }
+      scrollToNounExplorer();
     },
     [searchParams]
   );
@@ -127,9 +93,9 @@ function ActiveFilterItem({ type, seed }: ActiveFilterItemInterface) {
       onClick={() => removeFilter(type, seed)}
       className="bg-background-secondary text-content-secondary label-sm flex items-center justify-center whitespace-pre rounded-[9px] px-[10px] py-2 hover:brightness-95"
     >
-      {type === "treasuryNounOnly" ? (
+      {type === "heldByTreasury" ? (
         <span className="text-content-primary">Treasury Nouns</span>
-      ) : type === "instantSwap" ? (
+      ) : type === "heldByNounsErc20" ? (
         <span className="text-content-primary">Instant Swap</span>
       ) : (
         <>

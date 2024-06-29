@@ -1,7 +1,8 @@
 import { useSearchParams } from "next/navigation";
 import { FilterItemButton } from "./FilterItemButton";
 import { useCallback, useMemo } from "react";
-import Icon from "../ui/Icon";
+import Icon from "../../ui/Icon";
+import { scrollToNounExplorer } from "@/utils/scroll";
 
 export const ONLY_TREASURY_NOUNS_FILTER_KEY = "onlyTreasuryNouns";
 
@@ -13,7 +14,7 @@ export default function TreasuryNounFilter() {
     return params.get(ONLY_TREASURY_NOUNS_FILTER_KEY) === "1";
   }, [searchParams]);
 
-  const handleOnlyTreasuryNounFilterChange = useCallback(
+  const handleOnlyInstantSwapFilterChange = useCallback(
     (checked: boolean) => {
       const params = new URLSearchParams(searchParams.toString());
       if (!checked) {
@@ -23,12 +24,13 @@ export default function TreasuryNounFilter() {
       }
 
       window.history.pushState(null, "", `?${params.toString()}`);
+      scrollToNounExplorer();
     },
     [searchParams]
   );
 
   return (
-    <FilterItemButton isChecked={isChecked} onClick={() => handleOnlyTreasuryNounFilterChange(!isChecked)}>
+    <FilterItemButton isChecked={isChecked} onClick={() => handleOnlyInstantSwapFilterChange(!isChecked)}>
       <div className="flex items-center gap-2">
         <Icon icon="swap" size={20} className="fill-content-primary" />
         <h6>Treasury Nouns</h6>

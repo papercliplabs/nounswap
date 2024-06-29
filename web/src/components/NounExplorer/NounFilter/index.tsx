@@ -4,13 +4,14 @@ import { NounTrait } from "@/data/noun/types";
 import { capitalizeFirstLetterOfEveryWord } from "@/utils/format";
 import { ImageData } from "@nouns/assets";
 import { FilterSection } from "./FilterSection";
-import { Separator } from "../ui/separator";
+import { Separator } from "../../ui/separator";
 import TreasuryNounFilter from "./TreasuryNounFilter";
 import { ClearAllFiltersButton } from "./ClearAllFiltersButton";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { Suspense, useState } from "react";
 import { cn } from "@/utils/shadcn";
 import InstantSwapFilter from "./InstantSwapFilter";
+import { useNounFilters } from "@/hooks/useNounFilters";
 
 export const BACKGROUND_TRAITS: NounTrait[] = [
   { name: "Cool", seed: 0 },
@@ -57,25 +58,34 @@ export const ACCESSORY_TRAITS: NounTrait[] = ImageData.images.accessories.map((i
   seed: i,
 }));
 
-export default function NounFilter() {
+export default function NounFilter({ numNouns }: { numNouns: number }) {
   const [isOpen, setIsOpen] = useState(false);
+  const { totalCount } = useNounFilters();
   return (
     <>
-      <div className={cn("sticky top-0 z-[50] w-screen -translate-x-1 bg-white py-2 md:hidden md:w-full")}>
+      <div
+        className={cn(
+          "label-sm top-0 z-[50] flex w-screen items-end justify-between bg-white py-2 md:hidden md:w-full"
+        )}
+      >
         <Button variant="secondary" className="w-fit" onClick={() => setIsOpen(true)}>
-          Filter
+          Filters • {totalCount}
         </Button>
+        <div>
+          <h6>{numNouns} nouns</h6>
+        </div>
       </div>
       <div
         className={cn(
-          "top-0 h-screen shrink-0 flex-col gap-2 overflow-y-auto pb-[100px]",
-          "fixed left-0 top-0 z-[50] hidden w-full bg-white px-6 pb-[104px] pt-4 transition-all", // sm
+          "shrink-0 flex-col gap-2 overflow-y-auto",
+          "fixed left-0 top-0 z-[50] hidden h-full w-full bg-white px-6 pb-[104px] pt-4 transition-all", // sm
           "animate-in slide-in-from-bottom",
-          "md:sticky md:flex md:max-w-[280px] md:animate-none md:p-0 md:pr-2", // md
-          isOpen ? "flex" : "hidden"
+          "md:static md:flex md:max-w-[280px] md:animate-none md:p-0 md:pr-2", // md
+          isOpen ? "flex" : "hidden",
+          "md:flex"
         )}
       >
-        <div className="top-0 z-[100] flex w-full items-center justify-between bg-white pt-3 md:sticky">
+        <div className="top-0 z-[100] flex w-full items-center justify-between bg-white pt-3">
           <h3>Filter</h3>
           <ClearAllFiltersButton className="text-semantic-accent clickable-active hidden md:flex">
             Clear all

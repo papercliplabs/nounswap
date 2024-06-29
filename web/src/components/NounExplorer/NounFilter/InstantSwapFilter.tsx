@@ -1,8 +1,9 @@
 import { useSearchParams } from "next/navigation";
 import { FilterItemButton } from "./FilterItemButton";
 import { useCallback, useMemo } from "react";
-import Icon from "../ui/Icon";
+import Icon from "../../ui/Icon";
 import { Zap } from "lucide-react";
+import { scrollToNounExplorer } from "@/utils/scroll";
 
 export const INSTANT_SWAP_FILTER_KEY = "instantSwap";
 
@@ -24,6 +25,7 @@ export default function InstantSwapFilter() {
       }
 
       window.history.pushState(null, "", `?${params.toString()}`);
+      scrollToNounExplorer();
     },
     [searchParams]
   );
