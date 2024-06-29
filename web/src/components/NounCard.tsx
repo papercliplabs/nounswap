@@ -8,6 +8,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { useInView } from "framer-motion";
 import { useNounImage } from "@/hooks/useNounImage";
 import Icon from "./ui/Icon";
+import clsx from "clsx";
 
 interface NounCardProps {
   noun: Noun;
@@ -28,9 +29,7 @@ export default function NounCard({ noun, size, enableHover, alwaysShowNumber, la
   return (
     <div
       className={twMerge(
-        "relative flex aspect-square justify-center overflow-hidden rounded-2xl outline outline-[5px] -outline-offset-1 outline-transparent",
-        enableHover && "hover:outline-content-primary [&>h6]:hover:block",
-        alwaysShowNumber && "[&>h6]:block",
+        "group relative flex aspect-square justify-center overflow-hidden rounded-2xl bg-transparent",
         size && size <= 100 && "rounded-xl",
         size && size <= 50 && "rounded-lg"
       )}
@@ -53,7 +52,9 @@ export default function NounCard({ noun, size, enableHover, alwaysShowNumber, la
           <h6
             className={twMerge(
               "text-content-primary absolute bottom-[8px] hidden rounded-full bg-white px-3 py-0.5 shadow-lg",
-              size && size <= 100 && "bottom-[4px] px-2 text-sm"
+              size && size <= 100 && "bottom-[4px] px-2 text-sm",
+              enableHover && "group-hover:block",
+              alwaysShowNumber && "block"
             )}
           >
             {noun.id}
@@ -88,6 +89,12 @@ export default function NounCard({ noun, size, enableHover, alwaysShowNumber, la
               </TooltipContent>
             </Tooltip>
           )}
+          <div
+            className={clsx(
+              "z-[2] hidden h-full w-full rounded-[inherit] shadow-[inset_0_0_0_4px_rgba(0,0,0,1)]",
+              enableHover && "group-hover:block"
+            )}
+          />
         </>
       )}
     </div>

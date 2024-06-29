@@ -3,6 +3,7 @@ import { NounTrait, NounTraitType } from "@/data/noun/types";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import { FilterItemButton } from "./FilterItemButton";
+import { scrollToNounExplorer } from "@/utils/scroll";
 
 export interface FilterTraitItemProps {
   traitType: NounTraitType;
@@ -43,6 +44,7 @@ export function FilterTraitItem({ traitType, trait }: FilterTraitItemProps) {
       });
 
       window.history.pushState(null, "", `?${params.toString()}`);
+      scrollToNounExplorer();
     },
     [searchParams, filterKey, trait.seed]
   );

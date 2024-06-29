@@ -4,14 +4,12 @@ import { getFrameMetadata } from "frog/next";
 import React from "react";
 import { Suspense } from "react";
 import { LinkExternal } from "@/components/ui/link";
-import NounFilter from "@/components/NounFilter";
-import { ActiveFilters } from "@/components/NounFilter/ActiveFilters";
-import AnimationGird from "@/components/NounGrid/AnimationGrid";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getAllNounsUncached } from "@/data/noun/getAllNouns";
-import NounGrid from "@/components/NounGrid/NounGrid";
 import NounDialog from "@/components/dialog/NounDialog";
 import FeatureHighlight from "@/components/FeatureHighlight";
+import NounExplorer from "@/components/NounExplorer";
+import AnimationGird from "@/components/NounExplorer/NounGrid/AnimationGrid";
 
 export async function generateMetadata({ searchParams }: { searchParams: { frame?: string } }) {
   let filteredFrameMetadata: Record<string, string> = {};
@@ -50,44 +48,34 @@ export default function Page({ searchParams }: { searchParams: { auctionId?: str
           </LinkExternal>
         </div>
       </div>
-      <div className="flex w-full flex-col items-start gap-[30px] md:flex-row" id="explore-section">
-        <Suspense>
-          <NounFilter />
-        </Suspense>
-        <div className="flex w-full min-w-0 flex-col">
-          <Suspense>
-            <ActiveFilters />
-          </Suspense>
-          <div className="pt-2">
-            <Suspense
-              fallback={
-                <AnimationGird
-                  items={Array(40)
-                    .fill(0)
-                    .map((_, i) => ({
-                      element: (
-                        <Skeleton className="bg-background-secondary relative flex aspect-square h-full w-full rounded-2xl" />
-                      ),
-                      id: i,
-                    }))}
-                />
-              }
-            >
-              <NounGridWrapper />
-            </Suspense>
+      <Suspense
+        fallback={
+          <div className="w-full">
+            <AnimationGird
+              items={Array(40)
+                .fill(0)
+                .map((_, i) => ({
+                  element: (
+                    <Skeleton className="bg-background-secondary relative flex aspect-square h-full w-full rounded-2xl" />
+                  ),
+                  id: i,
+                }))}
+            />
           </div>
-        </div>
-      </div>
+        }
+      >
+        <NounExplorerWrapper />
+      </Suspense>
     </>
   );
 }
 
-async function NounGridWrapper() {
+async function NounExplorerWrapper() {
   const allNouns = await getAllNounsUncached();
 
   return (
     <>
-      <NounGrid nouns={allNouns} />
+      <NounExplorer nouns={allNouns} />
       <NounDialog nouns={allNouns} />
     </>
   );
