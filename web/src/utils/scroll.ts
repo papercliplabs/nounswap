@@ -3,9 +3,11 @@ export function scrollToNounExplorer() {
   const destinationScrollY = element?.offsetTop;
   const currentScrollY = document.documentElement.scrollTop || document.body.scrollTop;
 
+  console.log("scrollToNounExplorer", { destinationScrollY, currentScrollY });
+
   // Slight delay to prevent scroll glitches as the page is resizing
   setTimeout(() => {
-    document.body.scrollTo({
+    window.scrollTo({
       top: destinationScrollY,
       behavior: destinationScrollY && destinationScrollY > currentScrollY ? "smooth" : "instant",
     });

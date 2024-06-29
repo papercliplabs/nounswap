@@ -47,14 +47,14 @@ export default function NounExplorer({ nouns }: NounExplorerProps) {
 
   return (
     <div className="flex w-full flex-col md:flex-row md:gap-8" id="explore-section">
-      <div className="sticky top-0 z-[10] flex max-h-screen min-h-[60px] shrink-0 md:h-auto md:pb-[0px]">
+      <div className="sticky top-0 z-[10] flex max-h-[100dvh] min-h-[60px] shrink-0 md:h-auto md:pb-[0px]">
         <NounFilter numNouns={filteredNouns.length} />
       </div>
       <div className="flex min-w-0 flex-[2] flex-col">
         <div className="sticky top-[60px] z-[8] bg-green-300 md:top-0">
           <ActiveFilters numNouns={filteredNouns.length} />
         </div>
-        <div className="overflow-hidden pb-[0px]">
+        <div className="min-h-[calc(100dvh-108px)] overflow-hidden pb-[0px] md:min-h-[calc(100vh-64px)]">
           <NounGrid nouns={filteredNouns} />
         </div>
       </div>

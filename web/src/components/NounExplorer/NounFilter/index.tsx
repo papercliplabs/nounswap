@@ -8,7 +8,7 @@ import { Separator } from "../../ui/separator";
 import TreasuryNounFilter from "./TreasuryNounFilter";
 import { ClearAllFiltersButton } from "./ClearAllFiltersButton";
 import { Button } from "../../ui/button";
-import { Suspense, useState } from "react";
+import { useState } from "react";
 import { cn } from "@/utils/shadcn";
 import InstantSwapFilter from "./InstantSwapFilter";
 import { useNounFilters } from "@/hooks/useNounFilters";
