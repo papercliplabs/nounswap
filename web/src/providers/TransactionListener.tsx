@@ -4,7 +4,6 @@ import { createContext, useCallback, useContext, useState } from "react";
 import { Hex, TransactionType } from "viem";
 import { waitForTransactionReceipt } from "viem/actions";
 import { ToastContext, ToastType } from "./toast";
-import { useAddRecentTransaction } from "@rainbow-me/rainbowkit";
 import { LinkExternal } from "@/components/ui/link";
 import { trackEvent } from "@/utils/analytics";
 
@@ -26,7 +25,6 @@ export const TransactionListenerContext = createContext<TransactionListenerConte
 export function TransactionListenerProvider({ children }: { children: React.ReactNode }) {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const { addToast, removeToast } = useContext(ToastContext);
-  const addRecentTransaction = useAddRecentTransaction();
 
   const addTransaction = useCallback(
     async (hash: Hex, logging: { type: TransactionType; description: string }) => {
@@ -42,8 +40,6 @@ export function TransactionListenerProvider({ children }: { children: React.Reac
         type: ToastType.Pending,
       });
       trackEvent(`${logging.type}-txn-pending`, { hash: hash.toString() });
-
-      addRecentTransaction({ hash, description: logging.description });
 
       const receipt = await waitForTransactionReceipt(CHAIN_CONFIG.publicClient, { hash });
       if (pendingToastId != undefined) {
@@ -67,7 +63,7 @@ export function TransactionListenerProvider({ children }: { children: React.Reac
 
       trackEvent(`${logging.type}-txn-${status}`, { hash: hash.toString() });
     },
-    [setTransactions, addToast, removeToast, addRecentTransaction]
+    [setTransactions, addToast, removeToast]
   );
 
   return (

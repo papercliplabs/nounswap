@@ -1,7 +1,6 @@
 "use client";
 import { Dialog, DialogContent } from "@/components/ui/dialogBase";
 import Icon from "../ui/Icon";
-import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +13,7 @@ import { LinkExternal } from "../ui/link";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { useAccount, useBalance } from "wagmi";
 import { CHAIN_CONFIG } from "@/config";
+import { useWeb3Modal } from "@web3modal/wagmi/react";
 
 interface UserTipDialogProps {
   tip?: bigint;
@@ -31,7 +31,7 @@ export default function UserTipDialog({ tip, setTipCallback }: UserTipDialogProp
     token: CHAIN_CONFIG.addresses.wrappedNativeToken,
   });
 
-  const { openConnectModal } = useConnectModal();
+  const { open: openConnectModal } = useWeb3Modal();
 
   const insufficientBalance = useMemo(() => {
     if (userBalance != undefined && formattedInputValue != undefined) {

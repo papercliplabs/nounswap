@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss";
 const plugin = require("tailwindcss/plugin");
 
-const palette = {
+export const palette = {
   transparent: "transparent",
   white: "#ffffff",
   black: "#000000",

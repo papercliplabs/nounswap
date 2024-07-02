@@ -3,10 +3,11 @@ import { ToastProvider } from "./toast";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import WalletProvider from "./WalletProvider";
 import { TransactionListenerProvider } from "./TransactionListener";
+import { State } from "wagmi";
 
-export default function Providers({ children }: { children: React.ReactNode }) {
+export default function Providers({ children, initialState }: { children: React.ReactNode; initialState?: State }) {
   return (
-    <WalletProvider>
+    <WalletProvider initialState={initialState}>
       <ToastProvider>
         <TransactionListenerProvider>
           <TooltipProvider>{children}</TooltipProvider>

@@ -1,60 +1,35 @@
 "use client";
-import { Address, fallback } from "viem";
-import { http, WagmiProvider } from "wagmi";
-import { AvatarComponent, DisclaimerComponent, RainbowKitProvider, getDefaultConfig } from "@rainbow-me/rainbowkit";
-
-import { CHAIN_CONFIG } from "@/config";
+import { State, WagmiProvider } from "wagmi";
+import { createWeb3Modal } from "@web3modal/wagmi/react";
 import TanstackQueryProvider from "./TanstackQueryProvider";
-import { getLinearGradientForAddress } from "@/utils/utils";
-import Image from "next/image";
+import { palette } from "@/theme/tailwind.config";
+import { PROJECT_ID, wagmiConfig } from "./wagmiConfig";
 
-export const CustomAvatar: AvatarComponent = ({ address, ensImage, size }) => {
-  const linearGradient = getLinearGradientForAddress(address as Address);
-  return ensImage ? (
-    <Image src={ensImage} width={size} height={size} alt="" style={{ borderRadius: 999, width: size, height: size }} />
-  ) : (
-    <div
-      style={{
-        background: linearGradient,
-        borderRadius: 999,
-        height: size,
-        width: size,
-      }}
-    />
-  );
-};
-
-export const wagmiConfig = getDefaultConfig({
-  appName: "Noun Swap",
-  projectId: "cb75b98c5532821d721e6275da3e7006",
-  chains: [CHAIN_CONFIG.chain],
-  transports: {
-    [CHAIN_CONFIG.publicClient.chain!.id]: fallback([
-      http(CHAIN_CONFIG.rpcUrl.primary),
-      http(CHAIN_CONFIG.rpcUrl.fallback),
-    ]),
+createWeb3Modal({
+  wagmiConfig,
+  projectId: PROJECT_ID,
+  enableAnalytics: true,
+  enableOnramp: true,
+  allowUnsupportedChain: true,
+  termsConditionsUrl: "https://www.nounswap.wtf/terms",
+  themeMode: "light",
+  themeVariables: {
+    "--w3m-font-family": "var(--font-pt-root-ui)",
+    "--w3m-accent": palette.gray[900],
+    "--w3m-color-mix-strength": 0,
   },
-  ssr: true,
 });
 
-const Disclaimer: DisclaimerComponent = ({ Text, Link }) => (
-  <Text>
-    By connecting your wallet, you agree to the <Link href="/terms">Terms & Conditions</Link>.
-  </Text>
-);
-
-export default function WalletProvider({ children }: { children: React.ReactNode }) {
+export default function WalletProvider({
+  children,
+  initialState,
+}: {
+  children: React.ReactNode;
+  initialState?: State;
+}) {
   return (
-    <WagmiProvider config={wagmiConfig}>
-      <TanstackQueryProvider>
-        <RainbowKitProvider
-          avatar={CustomAvatar}
-          appInfo={{ appName: "Noun Swap", disclaimer: Disclaimer }}
-          showRecentTransactions={true}
-        >
-          {children}
-        </RainbowKitProvider>
-      </TanstackQueryProvider>
+    <WagmiProvider config={wagmiConfig} initialState={initialState}>
+      <TanstackQueryProvider>{children}</TanstackQueryProvider>
     </WagmiProvider>
   );
 }

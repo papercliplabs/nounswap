@@ -2,7 +2,7 @@
 import NounCard from "@/components/NounCard";
 import { Noun } from "@/data/noun/types";
 import { useApproveNoun } from "@/hooks/transactions/useApproveNoun";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useCallback, useEffect } from "react";
 import TransactionButton from "@/components/TransactionButton";
 import { Address } from "viem";
 
@@ -16,10 +16,15 @@ interface ApproveNounProps {
 export function ApproveNoun({ noun, progressStepper, reason, spender }: ApproveNounProps) {
   const { approveNoun, error, state } = useApproveNoun();
 
-  // Autotrigger on mount
-  useEffect(() => {
+  const approveCallback = useCallback(() => {
     approveNoun(BigInt(noun.id), spender);
   }, [approveNoun, noun.id, spender]);
+
+  // Autotrigger on mount
+  /* eslint-disable react-hooks/exhaustive-deps */
+  useEffect(() => {
+    approveCallback();
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center gap-6">
@@ -30,7 +35,7 @@ export function ApproveNoun({ noun, progressStepper, reason, spender }: ApproveN
       </div>
       {progressStepper}
       <div className="flex w-full flex-col gap-1">
-        <TransactionButton txnState={state} onClick={() => approveNoun(BigInt(noun.id), spender)} className="w-full">
+        <TransactionButton txnState={state} onClick={approveCallback} className="w-full">
           Approve Noun
         </TransactionButton>
         <span className="paragraph-sm text-semantic-negative">{error?.message}</span>

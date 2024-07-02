@@ -1,7 +1,6 @@
 "use client";
 import { Dialog, DialogContent } from "@/components/ui/dialogBase";
 import Icon from "../ui/Icon";
-import { useConnectModal } from "@rainbow-me/rainbowkit";
 import NounCard from "../NounCard";
 import { useEffect, useState } from "react";
 import Image from "next/image";
@@ -12,6 +11,7 @@ import { LinkExternal } from "../ui/link";
 import { useQuery } from "@tanstack/react-query";
 import { getNounsForAddress } from "@/data/noun/getNounsForAddress";
 import { Address } from "viem";
+import { useWeb3Modal } from "@web3modal/wagmi/react";
 
 interface NounSelectDialogProps {
   holderAddress?: Address;
@@ -34,8 +34,7 @@ export default function NounSelectDialog({
   });
 
   const [open, setOpen] = useState<boolean>(false);
-
-  const { openConnectModal } = useConnectModal();
+  const { open: openConnectModal } = useWeb3Modal();
 
   // Clear selection if no address
   useEffect(() => {
