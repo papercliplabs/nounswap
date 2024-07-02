@@ -10,7 +10,7 @@ export const wagmiConfig = defaultWagmiConfig({
   metadata: {
     name: "Noun Swap",
     description: "Bid, explore, and swap Nouns.",
-    url: "https://nounswap.wtf",
+    url: process.env.NEXT_PUBLIC_URL!,
     icons: [], // TODO
   },
   chains: [CHAIN_CONFIG.chain],
