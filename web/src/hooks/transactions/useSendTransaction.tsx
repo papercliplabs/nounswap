@@ -19,7 +19,7 @@ import { TransactionListenerContext } from "@/providers/TransactionListener";
 import { estimateGas } from "viem/actions";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
 
-const GAS_BUFFER = 0.12; // Gives buffer on gas estimate to help prevent out of gas error
+const GAS_BUFFER = 0.2; // Gives buffer on gas estimate to help prevent out of gas error
 
 export type CustomSendTransactionErrorType =
   | CustomTransactionValidationError
