@@ -1,6 +1,6 @@
 "use client";
 import { Noun } from "@/data/noun/types";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useCallback, useEffect } from "react";
 import TransactionButton from "@/components/TransactionButton";
 import SwapNounGraphic from "@/components/SwapNounGraphic";
 import { useNounsErc20Swap } from "@/hooks/transactions/useNounsErc20Swap";
@@ -15,13 +15,17 @@ interface CreateInstantSwapProps {
 
 export function CreateInstantSwap({ fromNoun, toNoun, progressStepper }: CreateInstantSwapProps) {
   const { swap, error, state, hash } = useNounsErc20Swap();
-
   const router = useRouter();
 
-  // Autotrigger on mount
-  useEffect(() => {
+  const createSwapCallback = useCallback(() => {
     swap(BigInt(fromNoun.id), BigInt(toNoun.id));
   }, [fromNoun.id, toNoun.id, swap]);
+
+  // Autotrigger on mount
+  /* eslint-disable react-hooks/exhaustive-deps */
+  useEffect(() => {
+    createSwapCallback();
+  }, []);
 
   // Push to swap success page
   useEffect(() => {
@@ -42,11 +46,7 @@ export function CreateInstantSwap({ fromNoun, toNoun, progressStepper }: CreateI
       </div>
       {progressStepper}
       <div className="flex w-full flex-col gap-1">
-        <TransactionButton
-          txnState={state}
-          onClick={() => swap(BigInt(fromNoun.id), BigInt(toNoun.id))}
-          className="w-full"
-        >
+        <TransactionButton txnState={state} onClick={createSwapCallback} className="w-full">
           Swap
         </TransactionButton>
         <span className="paragraph-sm text-semantic-negative">{error?.message}</span>

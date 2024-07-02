@@ -1,7 +1,7 @@
 "use client";
 import NounCard from "@/components/NounCard";
 import { Noun } from "@/data/noun/types";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useCallback, useEffect } from "react";
 import TransactionButton from "@/components/TransactionButton";
 import { useNounsErc20Deposit } from "@/hooks/transactions/useNounsErc20Deposit";
 import { forceAllNounRevalidation } from "@/data/noun/getAllNouns";
@@ -17,10 +17,15 @@ export function NounsErc20DepositNoun({ noun, progressStepper }: NounsErc20Depos
   const { deposit, error, state } = useNounsErc20Deposit();
   const router = useRouter();
 
-  // Autotrigger on mount
-  useEffect(() => {
+  const depositCallback = useCallback(() => {
     deposit(BigInt(noun.id));
   }, [deposit, noun.id]);
+
+  // Autotrigger on mount
+  /* eslint-disable react-hooks/exhaustive-deps */
+  useEffect(() => {
+    depositCallback();
+  }, []);
 
   // Push to swap success page
   useEffect(() => {
@@ -41,7 +46,7 @@ export function NounsErc20DepositNoun({ noun, progressStepper }: NounsErc20Depos
       </div>
       {progressStepper}
       <div className="flex w-full flex-col gap-1">
-        <TransactionButton txnState={state} onClick={() => deposit(BigInt(noun.id))} className="w-full">
+        <TransactionButton txnState={state} onClick={depositCallback} className="w-full">
           Convert
         </TransactionButton>
         <span className="paragraph-sm text-semantic-negative">{error?.message}</span>

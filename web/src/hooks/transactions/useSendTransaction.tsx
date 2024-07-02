@@ -1,10 +1,8 @@
 "use client";
-import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useCallback, useContext, useMemo, useState } from "react";
 import { BaseError, Hash, InsufficientFundsError, TransactionReceipt, UserRejectedRequestError } from "viem";
 import {
   useAccount,
-  useChainId,
   useSendTransaction as useSendTransactionWagmi,
   useSwitchChain,
   useWaitForTransactionReceipt,
@@ -19,6 +17,7 @@ import {
 import { CHAIN_CONFIG } from "@/config";
 import { TransactionListenerContext } from "@/providers/TransactionListener";
 import { estimateGas } from "viem/actions";
+import { useWeb3Modal } from "@web3modal/wagmi/react";
 
 const GAS_BUFFER = 0.12; // Gives buffer on gas estimate to help prevent out of gas error
 
@@ -44,10 +43,8 @@ export interface UseSendTransactionReturnType {
 
 export function useSendTransaction(): UseSendTransactionReturnType {
   const { address: accountAddress } = useAccount();
-  const chainId = useChainId();
-  const { openConnectModal } = useConnectModal();
+  const { open: openConnectModal } = useWeb3Modal();
   const { switchChainAsync } = useSwitchChain();
-
   const { addTransaction } = useContext(TransactionListenerContext);
 
   const [validationError, setValidationError] = useState<CustomTransactionValidationError | null>(null);
@@ -78,11 +75,10 @@ export function useSendTransaction(): UseSendTransactionReturnType {
       validationFn?: () => Promise<CustomTransactionValidationError | null>
     ) => {
       if (!accountAddress) {
-        openConnectModal?.();
+        openConnectModal();
       } else {
-        if (chainId != CHAIN_CONFIG.chain.id) {
-          await switchChainAsync({ chainId: CHAIN_CONFIG.chain.id });
-        }
+        // Call all the time
+        await switchChainAsync({ chainId: CHAIN_CONFIG.chain.id });
 
         const validationError = await validationFn?.();
         setValidationError(validationError ?? null);
@@ -110,15 +106,7 @@ export function useSendTransaction(): UseSendTransactionReturnType {
         }
       }
     },
-    [
-      accountAddress,
-      chainId,
-      sendTransactionWagmi,
-      setValidationError,
-      openConnectModal,
-      switchChainAsync,
-      addTransaction,
-    ]
+    [accountAddress, sendTransactionWagmi, setValidationError, openConnectModal, switchChainAsync, addTransaction]
   );
 
   function reset() {

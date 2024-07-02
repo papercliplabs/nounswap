@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useCallback, useEffect } from "react";
 import { CHAIN_CONFIG } from "@/config";
 import { useApproveErc20 } from "@/hooks/transactions/useApproveErc20";
 import Image from "next/image";
@@ -15,10 +15,15 @@ interface ApproveNounProps {
 export function ApproveWeth({ amount, progressStepper }: ApproveNounProps) {
   const { approveErc20, error, state } = useApproveErc20();
 
-  // Autotrigger on mount
-  useEffect(() => {
+  const approveCallback = useCallback(() => {
     approveErc20(CHAIN_CONFIG.addresses.wrappedNativeToken, CHAIN_CONFIG.addresses.nounsTreasury, amount);
   }, [approveErc20, amount]);
+
+  // Autotrigger on mount
+  /* eslint-disable react-hooks/exhaustive-deps */
+  useEffect(() => {
+    approveCallback();
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center gap-6">
@@ -32,13 +37,7 @@ export function ApproveWeth({ amount, progressStepper }: ApproveNounProps) {
       </div>
       {progressStepper}
       <div className="flex w-full flex-col gap-1">
-        <TransactionButton
-          txnState={state}
-          onClick={() =>
-            approveErc20(CHAIN_CONFIG.addresses.wrappedNativeToken, CHAIN_CONFIG.addresses.nounsTreasury, amount)
-          }
-          className="w-full"
-        >
+        <TransactionButton txnState={state} onClick={approveCallback} className="w-full">
           Approve WETH
         </TransactionButton>
         <span className="paragraph-sm text-semantic-negative">{error?.message}</span>

@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useCallback, useEffect } from "react";
 import TransactionButton from "@/components/TransactionButton";
 import { Noun } from "@/data/noun/types";
 import SwapNounGraphic from "@/components/SwapNounGraphic";
@@ -19,10 +19,15 @@ export function CreatePropCandidate({ userNoun, treasuryNoun, tip, reason, progr
 
   const router = useRouter();
 
-  // Autotrigger on mount
-  useEffect(() => {
+  const createCandidateCallback = useCallback(() => {
     createCandidate(userNoun, treasuryNoun, tip, reason);
   }, [createCandidate, userNoun, treasuryNoun, tip, reason]);
+
+  // Autotrigger on mount
+  /* eslint-disable react-hooks/exhaustive-deps */
+  useEffect(() => {
+    createCandidateCallback();
+  }, []);
 
   // Push to proposals page on success
   useEffect(() => {
@@ -49,11 +54,7 @@ export function CreatePropCandidate({ userNoun, treasuryNoun, tip, reason, progr
       </div>
       {progressStepper}
       <div className="flex w-full flex-col gap-1">
-        <TransactionButton
-          txnState={state}
-          onClick={() => createCandidate(userNoun, treasuryNoun, tip, reason)}
-          className="w-full"
-        >
+        <TransactionButton txnState={state} onClick={createCandidateCallback} className="w-full">
           Create Prop Candidate
         </TransactionButton>
         <span className="paragraph-sm text-semantic-negative">{error?.message}</span>

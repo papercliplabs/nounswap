@@ -1,7 +1,7 @@
 "use client";
 import NounCard from "@/components/NounCard";
 import { Noun } from "@/data/noun/types";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useCallback, useEffect } from "react";
 import TransactionButton from "@/components/TransactionButton";
 import { useNounsErc20Deposit } from "@/hooks/transactions/useNounsErc20Deposit";
 import { forceAllNounRevalidation } from "@/data/noun/getAllNouns";
@@ -17,10 +17,15 @@ export function NounsErc20Redeem({ noun }: NounsErc20RedeemProps) {
   const { redeem, error, state } = useNounsErc20Redeem();
   const router = useRouter();
 
-  // Autotrigger on mount
-  useEffect(() => {
+  const redeemCallback = useCallback(() => {
     redeem(BigInt(noun.id));
   }, [redeem, noun.id]);
+
+  // Autotrigger on mount
+  /* eslint-disable react-hooks/exhaustive-deps */
+  useEffect(() => {
+    redeemCallback();
+  }, []);
 
   // Push to swap success page
   useEffect(() => {
@@ -38,7 +43,7 @@ export function NounsErc20Redeem({ noun }: NounsErc20RedeemProps) {
         <span className="text-content-secondary">This will redeem 1,000,000 $nouns for Noun {noun.id}.</span>
       </div>
       <div className="flex w-full flex-col gap-1">
-        <TransactionButton txnState={state} onClick={() => redeem(BigInt(noun.id))} className="w-full">
+        <TransactionButton txnState={state} onClick={redeemCallback} className="w-full">
           Convert
         </TransactionButton>
         <span className="paragraph-sm text-semantic-negative">{error?.message}</span>
