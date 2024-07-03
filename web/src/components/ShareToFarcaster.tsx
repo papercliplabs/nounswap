@@ -21,7 +21,7 @@ export default function ShareToFarcaster({ text, embeds }: ShareToFarcasterProps
       <Slottable>
         <LinkExternal
           href={`${BASE_COMPOSE_URL}?${searchParams.toString()}`}
-          className="label-md flex w-fit items-center gap-3"
+          className="label-md flex items-center gap-3"
         >
           <Image src="/farcaster-arch.svg" width={20} height={20} className="h-[20px] w-[20px]" alt="" />
           Share to Farcaster

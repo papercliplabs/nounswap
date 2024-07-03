@@ -31,7 +31,7 @@ export function CreateInstantSwap({ fromNoun, toNoun, progressStepper }: CreateI
   useEffect(() => {
     if (state == "success") {
       forceAllNounRevalidation(); // Force revalidation so will update explore
-      router.push(`/instant-swap/${toNoun.id}/${fromNoun.id}/${hash}`);
+      router.push(`/success/${hash}/swap/${fromNoun.id}/${toNoun.id}`);
     }
   }, [state, hash, router, fromNoun.id, toNoun.id]);
 
