@@ -14,7 +14,7 @@ export default function ConvertPage() {
         </div>
         <Convert />
       </div>
-      <div className="flex w-full flex-[3]">
+      <div className="flex w-full flex-[3] pb-[80px] md:pb-0">
         <ConvertInfo />
       </div>
     </div>
