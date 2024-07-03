@@ -5,18 +5,18 @@ import Icon from "../ui/Icon";
 import HowItWorksDialog from "../dialog/HowItWorksDialog";
 import { Button } from "../ui/button";
 import WalletButton from "../WalletButton";
-import Nav from "./Nav";
+import Nav, { NavProps } from "./Nav";
 
-const navInfo = [
-  { name: "Explore", href: "/" },
+const navInfo: NavProps["navInfo"] = [
+  { name: "Explore", icon: "layers", href: "/" },
   // { name: "My Props", href: "/proposals" },
-  { name: "Convert", href: "/convert" },
+  { name: "Convert", icon: "arrowLeftRight", href: "/convert" },
 ];
 
 export function Header() {
   return (
     <>
-      <header className="border-border-secondary flex w-full flex-col items-center justify-between gap-4 border-b-2 px-4 pb-2 pt-4 md:px-10">
+      <header className="border-border-secondary flex w-full flex-col items-center justify-between gap-4 border-b-2 px-4 py-2 md:px-10">
         <div className="flex w-full flex-row justify-between">
           <div className="flex items-center gap-6 md:flex-1">
             <div className="border-border-secondary pr-6 md:border-r-2">
@@ -30,9 +30,7 @@ export function Header() {
                 </Link>
               </Suspense>
             </div>
-            <span className="hidden md:flex">
-              <Nav navInfo={navInfo} />
-            </span>
+            <Nav navInfo={navInfo} />
           </div>
           <div className="flex flex-1 items-center justify-end gap-1 text-gray-600">
             <HowItWorksDialog>
@@ -43,9 +41,6 @@ export function Header() {
             </HowItWorksDialog>
             <WalletButton />
           </div>
-        </div>
-        <div className="bg-background-secondary flex w-full justify-between rounded-2xl p-1 md:hidden">
-          <Nav navInfo={navInfo} />
         </div>
       </header>
     </>

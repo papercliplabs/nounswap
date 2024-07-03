@@ -22,7 +22,7 @@ export default function WalletButton({ disableMobileShrink }: WalletButtonProps)
 
   if (!isConnected) {
     return (
-      <Button onClick={() => open({ view: "Connect" })} variant="secondary">
+      <Button onClick={() => open({ view: "Connect" })} variant="secondary" className="py-[10px]">
         Connect
       </Button>
     );
@@ -38,7 +38,11 @@ export default function WalletButton({ disableMobileShrink }: WalletButtonProps)
 
   return (
     <div className="flex flex-row gap-2">
-      <Button variant="secondary" onClick={() => open({ view: "Account" })} className="flex flex-row gap-2 px-4 py-2">
+      <Button
+        variant="secondary"
+        onClick={() => open({ view: "Account" })}
+        className="flex flex-row gap-2 px-4 py-[6px]"
+      >
         {ensAvatar ? (
           <Image src={ensAvatar ?? ""} width={32} height={32} alt="avatar" className="rounded-full" />
         ) : (
