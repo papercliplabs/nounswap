@@ -14,7 +14,7 @@ interface NounsErc20RedeemProps {
 }
 
 export function NounsErc20Redeem({ noun }: NounsErc20RedeemProps) {
-  const { redeem, error, state } = useNounsErc20Redeem();
+  const { redeem, error, state, hash } = useNounsErc20Redeem();
   const router = useRouter();
 
   const redeemCallback = useCallback(() => {
@@ -31,9 +31,9 @@ export function NounsErc20Redeem({ noun }: NounsErc20RedeemProps) {
   useEffect(() => {
     if (state == "success") {
       forceAllNounRevalidation(); // Force revalidation so will update explore
-      router.push(`/convert/success/redeem/${noun.id}`);
+      router.push(`/success/${hash}/redeem/${noun.id}`);
     }
-  }, [state, router, noun.id]);
+  }, [state, router, noun.id, hash]);
 
   return (
     <div className="flex flex-col items-center justify-center gap-6">

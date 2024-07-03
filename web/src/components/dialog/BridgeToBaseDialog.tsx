@@ -9,7 +9,7 @@ export default function BridgeToBaseDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="w-full gap-2 md:w-fit">
+        <Button className="w-full gap-2 py-[10px]" variant="secondary">
           <Image src="/base.png" width={20} height={20} className="h-5 w-5" alt="" />
           Bridge to Base
         </Button>

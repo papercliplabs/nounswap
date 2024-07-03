@@ -14,7 +14,7 @@ interface NounsErc20DepositNounProps {
 }
 
 export function NounsErc20DepositNoun({ noun, progressStepper }: NounsErc20DepositNounProps) {
-  const { deposit, error, state } = useNounsErc20Deposit();
+  const { deposit, error, state, hash } = useNounsErc20Deposit();
   const router = useRouter();
 
   const depositCallback = useCallback(() => {
@@ -31,9 +31,9 @@ export function NounsErc20DepositNoun({ noun, progressStepper }: NounsErc20Depos
   useEffect(() => {
     if (state == "success") {
       forceAllNounRevalidation(); // Force revalidation so will update explore
-      router.push(`/convert/success/deposit/${noun.id}`);
+      router.push(`/success/${hash}/deposit/${noun.id}`);
     }
-  }, [state, router, noun.id]);
+  }, [state, router, noun.id, hash]);
 
   return (
     <div className="flex flex-col items-center justify-center gap-6">
