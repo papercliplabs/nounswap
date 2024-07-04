@@ -6,9 +6,6 @@ import Providers from "@/providers/providers";
 import ToastContainer from "@/components/ToastContainer";
 import TestnetBanner from "@/components/TestnetBanner";
 import Analytics from "@/components/Analytics";
-import { cookieToInitialState } from "wagmi";
-import { headers } from "next/headers";
-import { wagmiConfig } from "@/providers/wagmiConfig";
 
 const ptRootUiFont = localFont({
   src: [
@@ -57,11 +54,10 @@ export async function generateMetadata() {
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const initialState = cookieToInitialState(wagmiConfig, headers().get("cookie"));
   return (
     <html lang="en" className={`${ptRootUiFont.variable} ${londrinaSolidFont.variable} `}>
       <body className="overflow-x-hidden">
-        <Providers initialState={initialState}>
+        <Providers>
           <div className="border-border-primary flex min-h-screen flex-col justify-between">
             <TestnetBanner />
             {children}
