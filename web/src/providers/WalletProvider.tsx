@@ -1,71 +1,65 @@
 "use client";
 import TanstackQueryProvider from "./TanstackQueryProvider";
-import { ConnectKitProvider, Types } from "connectkit";
-import { fallback, zeroAddress } from "viem";
-import { http, WagmiProvider, createConfig } from "wagmi";
+import { Address, fallback } from "viem";
+import { http, WagmiProvider } from "wagmi";
 import { CHAIN_CONFIG } from "@/config";
-import { getDefaultConfig, useModal } from "connectkit";
-import Link from "next/link";
 import { getLinearGradientForAddress } from "@/utils/utils";
 import Image from "next/image";
+import { getDefaultConfig, AvatarComponent, RainbowKitProvider, DisclaimerComponent } from "@rainbow-me/rainbowkit";
 
 export const PROJECT_ID = "cb75b98c5532821d721e6275da3e7006";
 
-export const wagmiConfig = createConfig(
-  getDefaultConfig({
-    chains: [CHAIN_CONFIG.chain],
-    transports: {
-      [CHAIN_CONFIG.publicClient.chain!.id]: fallback([
-        http(CHAIN_CONFIG.rpcUrl.primary),
-        http(CHAIN_CONFIG.rpcUrl.fallback),
-      ]),
-    },
-    walletConnectProjectId: PROJECT_ID,
+const config = getDefaultConfig({
+  chains: [CHAIN_CONFIG.chain],
+  transports: {
+    [CHAIN_CONFIG.publicClient.chain!.id]: fallback([
+      http(CHAIN_CONFIG.rpcUrl.primary),
+      http(CHAIN_CONFIG.rpcUrl.fallback),
+    ]),
+  },
+  projectId: "cb75b98c5532821d721e6275da3e7006",
 
-    appName: "NounSwap",
-    appDescription: "Bid, explore, and swap Nouns.",
-    appUrl: process.env.NEXT_PUBLIC_URL!,
-    appIcon: `${process.env.NEXT_PUBLIC_URL}/app-icon.jpeg`,
+  appName: "NounSwap",
+  appDescription: "Bid, explore, and swap Nouns.",
+  appUrl: process.env.NEXT_PUBLIC_URL!,
+  appIcon: `${process.env.NEXT_PUBLIC_URL}/app-icon.jpeg`,
 
-    ssr: true,
-  })
-);
+  ssr: true,
+});
 
-function Disclaimer() {
-  const { setOpen } = useModal();
-  return (
-    <>
-      By connecting your wallet, you agree to our{" "}
-      <Link href="/terms" onClick={() => setOpen(false)}>
-        Terms and conditions
-      </Link>
-    </>
-  );
-}
-
-const CustomAvatar = ({ address, ensImage, ensName, size, radius }: Types.CustomAvatarProps) => {
-  return (
+export const CustomAvatar: AvatarComponent = ({ address, ensImage, size }) => {
+  const linearGradient = getLinearGradientForAddress(address as Address);
+  return ensImage ? (
+    <Image src={ensImage} width={size} height={size} alt="" style={{ borderRadius: 999, width: size, height: size }} />
+  ) : (
     <div
       style={{
-        overflow: "hidden",
-        borderRadius: radius,
+        background: linearGradient,
+        borderRadius: 999,
         height: size,
         width: size,
-        background: getLinearGradientForAddress(address ?? zeroAddress),
       }}
-    >
-      {ensImage && <Image src={ensImage} alt={ensName ?? address ?? zeroAddress} fill />}
-    </div>
+    />
   );
 };
 
+const Disclaimer: DisclaimerComponent = ({ Text, Link }) => (
+  <Text>
+    By connecting your wallet, you agree to the <Link href="/terms">Terms & Conditions</Link>.
+  </Text>
+);
+
 export default function WalletProvider({ children }: { children: React.ReactNode }) {
   return (
-    <WagmiProvider config={wagmiConfig}>
+    <WagmiProvider config={config}>
       <TanstackQueryProvider>
-        <ConnectKitProvider options={{ disclaimer: <Disclaimer />, customAvatar: CustomAvatar }} theme="nouns">
+        <RainbowKitProvider
+          avatar={CustomAvatar}
+          appInfo={{ appName: "Noun Swap", disclaimer: Disclaimer }}
+          showRecentTransactions={true}
+        >
           {children}
-        </ConnectKitProvider>
+        </RainbowKitProvider>
       </TanstackQueryProvider>
     </WagmiProvider>
   );

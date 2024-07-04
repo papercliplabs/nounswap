@@ -6,6 +6,7 @@ import Providers from "@/providers/providers";
 import ToastContainer from "@/components/ToastContainer";
 import TestnetBanner from "@/components/TestnetBanner";
 import Analytics from "@/components/Analytics";
+import "@rainbow-me/rainbowkit/styles.css";
 
 const ptRootUiFont = localFont({
   src: [
