@@ -7,6 +7,7 @@ import { Button } from "./ui/button";
 import { Address } from "viem";
 import { useWeb3Modal, useWeb3ModalState } from "@web3modal/wagmi/react";
 import { CHAIN_CONFIG } from "@/config";
+import { useSwitchChainCustom } from "@/hooks/useSwitchChainCustom";
 
 interface WalletButtonProps {
   disableMobileShrink?: boolean;
@@ -18,8 +19,7 @@ export default function WalletButton({ disableMobileShrink }: WalletButtonProps)
   const { data: ensName } = useEnsName({ address, chainId: 1 });
   const { data: ensAvatar } = useEnsAvatar({ name: ensName ?? "", chainId: 1 });
   const { selectedNetworkId } = useWeb3ModalState();
-  const { switchChainAsync } = useSwitchChain();
-  const { disconnect } = useDisconnect();
+  const { switchChain } = useSwitchChainCustom();
 
   if (!isConnected) {
     return (
@@ -33,12 +33,7 @@ export default function WalletButton({ disableMobileShrink }: WalletButtonProps)
     return (
       <Button
         onClick={async () => {
-          try {
-            await switchChainAsync({ chainId: CHAIN_CONFIG.chain.id });
-          } catch (e) {
-            console.error("Error switching chains, disconnecting...");
-            disconnect();
-          }
+          switchChain({ chainId: CHAIN_CONFIG.chain.id });
         }}
         variant="negative"
       >

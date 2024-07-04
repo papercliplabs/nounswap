@@ -19,6 +19,7 @@ import { CHAIN_CONFIG } from "@/config";
 import { TransactionListenerContext } from "@/providers/TransactionListener";
 import { estimateGas } from "viem/actions";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
+import { useSwitchChainCustom } from "../useSwitchChainCustom";
 
 const GAS_BUFFER = 0.2; // Gives buffer on gas estimate to help prevent out of gas error
 
@@ -48,6 +49,7 @@ export function useSendTransaction(): UseSendTransactionReturnType {
   const { switchChainAsync } = useSwitchChain();
   const { addTransaction } = useContext(TransactionListenerContext);
   const { disconnect } = useDisconnect();
+  const { switchChain } = useSwitchChainCustom();
 
   const [validationError, setValidationError] = useState<CustomTransactionValidationError | null>(null);
 
@@ -80,13 +82,8 @@ export function useSendTransaction(): UseSendTransactionReturnType {
         openConnectModal();
       } else {
         // Call all the time
-        try {
-          await switchChainAsync({ chainId: CHAIN_CONFIG.chain.id });
-        } catch (e) {
-          console.error("Error switching chains, disconnecting...");
-          disconnect();
-          return;
-        }
+        const correctChain = await switchChain({ chainId: CHAIN_CONFIG.chain.id });
+        if (!correctChain) return;
 
         const validationError = await validationFn?.();
         setValidationError(validationError ?? null);
