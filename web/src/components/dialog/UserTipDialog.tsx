@@ -13,7 +13,7 @@ import { LinkExternal } from "../ui/link";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { useAccount, useBalance } from "wagmi";
 import { CHAIN_CONFIG } from "@/config";
-import { useWeb3Modal } from "@web3modal/wagmi/react";
+import { useModal } from "connectkit";
 
 interface UserTipDialogProps {
   tip?: bigint;
@@ -31,7 +31,7 @@ export default function UserTipDialog({ tip, setTipCallback }: UserTipDialogProp
     token: CHAIN_CONFIG.addresses.wrappedNativeToken,
   });
 
-  const { open: openConnectModal } = useWeb3Modal();
+  const { setOpen: setConnectModalOpen } = useModal();
 
   const insufficientBalance = useMemo(() => {
     if (userBalance != undefined && formattedInputValue != undefined) {
@@ -69,7 +69,7 @@ export default function UserTipDialog({ tip, setTipCallback }: UserTipDialogProp
           </div>
         ) : (
           <button
-            onClick={() => (address != undefined ? setOpen(true) : openConnectModal?.())}
+            onClick={() => (address != undefined ? setOpen(true) : setConnectModalOpen(true))}
             className="bg-background-ternary text-content-secondary flex h-[200px] w-[200px] flex-col items-center justify-center gap-2 rounded-[20px] border-4 border-dashed p-8 hover:brightness-[85%]"
           >
             <Image src="/tip.png" width={64} height={64} alt="" />

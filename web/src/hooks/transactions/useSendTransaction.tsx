@@ -1,13 +1,7 @@
 "use client";
 import { useCallback, useContext, useMemo, useState } from "react";
 import { BaseError, Hash, InsufficientFundsError, TransactionReceipt, UserRejectedRequestError } from "viem";
-import {
-  useAccount,
-  useDisconnect,
-  useSendTransaction as useSendTransactionWagmi,
-  useSwitchChain,
-  useWaitForTransactionReceipt,
-} from "wagmi";
+import { useAccount, useSendTransaction as useSendTransactionWagmi, useWaitForTransactionReceipt } from "wagmi";
 import { SendTransactionErrorType, WaitForTransactionReceiptErrorType } from "wagmi/actions";
 import {
   CustomTransactionValidationError,
@@ -18,8 +12,8 @@ import {
 import { CHAIN_CONFIG } from "@/config";
 import { TransactionListenerContext } from "@/providers/TransactionListener";
 import { estimateGas } from "viem/actions";
-import { useWeb3Modal } from "@web3modal/wagmi/react";
 import { useSwitchChainCustom } from "../useSwitchChainCustom";
+import { useModal } from "connectkit";
 
 const GAS_BUFFER = 0.2; // Gives buffer on gas estimate to help prevent out of gas error
 
@@ -45,11 +39,9 @@ export interface UseSendTransactionReturnType {
 
 export function useSendTransaction(): UseSendTransactionReturnType {
   const { address: accountAddress } = useAccount();
-  const { open: openConnectModal } = useWeb3Modal();
-  const { switchChainAsync } = useSwitchChain();
   const { addTransaction } = useContext(TransactionListenerContext);
-  const { disconnect } = useDisconnect();
   const { switchChain } = useSwitchChainCustom();
+  const { setOpen: setConnectModalOpen } = useModal();
 
   const [validationError, setValidationError] = useState<CustomTransactionValidationError | null>(null);
 
@@ -79,7 +71,7 @@ export function useSendTransaction(): UseSendTransactionReturnType {
       validationFn?: () => Promise<CustomTransactionValidationError | null>
     ) => {
       if (!accountAddress) {
-        openConnectModal();
+        setConnectModalOpen(true);
       } else {
         // Call all the time
         const correctChain = await switchChain({ chainId: CHAIN_CONFIG.chain.id });
@@ -111,7 +103,7 @@ export function useSendTransaction(): UseSendTransactionReturnType {
         }
       }
     },
-    [accountAddress, sendTransactionWagmi, setValidationError, openConnectModal, switchChainAsync, addTransaction]
+    [accountAddress, sendTransactionWagmi, setValidationError, setConnectModalOpen, switchChain, addTransaction]
   );
 
   function reset() {
