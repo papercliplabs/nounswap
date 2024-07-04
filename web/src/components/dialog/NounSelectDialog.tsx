@@ -11,7 +11,7 @@ import { LinkExternal } from "../ui/link";
 import { useQuery } from "@tanstack/react-query";
 import { getNounsForAddress } from "@/data/noun/getNounsForAddress";
 import { Address } from "viem";
-import { useModal } from "connectkit";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
 
 interface NounSelectDialogProps {
   holderAddress?: Address;
@@ -34,7 +34,7 @@ export default function NounSelectDialog({
   });
 
   const [open, setOpen] = useState<boolean>(false);
-  const { setOpen: setConnectModalOpen } = useModal();
+  const { openConnectModal } = useConnectModal();
 
   // Clear selection if no address
   useEffect(() => {
@@ -60,7 +60,7 @@ export default function NounSelectDialog({
           </div>
         ) : (
           <button
-            onClick={() => (holderAddress != undefined ? setOpen(true) : setConnectModalOpen(true))}
+            onClick={() => (holderAddress != undefined ? setOpen(true) : openConnectModal?.())}
             className="bg-background-ternary text-content-secondary flex flex-col items-center justify-center gap-2 rounded-[20px] border-4 border-dashed p-8 hover:brightness-[85%]"
             style={{ width: size ?? 200, height: size ?? 200 }}
           >
