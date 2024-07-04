@@ -6,7 +6,7 @@ export default function Settle() {
   const { settleCurrentAndCreateNew, error, state: txnState } = useSettleCurrentAndCreateNew();
 
   return (
-    <div className="flex w-full flex-col gap-1 md:w-[400px]">
+    <div className="flex w-full flex-col gap-1 md:max-w-[400px]">
       <TransactionButton onClick={settleCurrentAndCreateNew} txnState={txnState}>
         Start next auction
       </TransactionButton>

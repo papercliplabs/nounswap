@@ -35,7 +35,7 @@ export function Header() {
           <div className="flex flex-1 items-center justify-end gap-1 text-gray-600">
             <HowItWorksDialog>
               <Button variant="ghost" size="icon" className="gap-2">
-                <h6 className="text-content-secondary hidden md:block">How it works</h6>
+                <span className="text-content-secondary label-md hidden md:block">How it works</span>
                 <Icon icon="circleQuestion" size={20} className="fill-gray-600" />
               </Button>
             </HowItWorksDialog>

@@ -77,6 +77,7 @@ const config: Config = {
     extend: {
       boxShadow: {
         overlay: "0px 16px 48px 0px rgba(0, 0, 0, 0.24)",
+        "fixed-bottom": "0 -2px 6px rgba(0, 0, 0, .05), 0 4px 36px rgba(0, 0, 0, .04);",
       },
       colors: {
         ...palette,

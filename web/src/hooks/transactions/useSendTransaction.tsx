@@ -3,6 +3,7 @@ import { useCallback, useContext, useMemo, useState } from "react";
 import { BaseError, Hash, InsufficientFundsError, TransactionReceipt, UserRejectedRequestError } from "viem";
 import {
   useAccount,
+  useDisconnect,
   useSendTransaction as useSendTransactionWagmi,
   useSwitchChain,
   useWaitForTransactionReceipt,
@@ -46,6 +47,7 @@ export function useSendTransaction(): UseSendTransactionReturnType {
   const { open: openConnectModal } = useWeb3Modal();
   const { switchChainAsync } = useSwitchChain();
   const { addTransaction } = useContext(TransactionListenerContext);
+  const { disconnect } = useDisconnect();
 
   const [validationError, setValidationError] = useState<CustomTransactionValidationError | null>(null);
 
@@ -78,7 +80,13 @@ export function useSendTransaction(): UseSendTransactionReturnType {
         openConnectModal();
       } else {
         // Call all the time
-        await switchChainAsync({ chainId: CHAIN_CONFIG.chain.id });
+        try {
+          await switchChainAsync({ chainId: CHAIN_CONFIG.chain.id });
+        } catch (e) {
+          console.error("Error switching chains, disconnecting...");
+          disconnect();
+          return;
+        }
 
         const validationError = await validationFn?.();
         setValidationError(validationError ?? null);

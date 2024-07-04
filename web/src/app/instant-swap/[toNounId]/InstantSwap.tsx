@@ -45,7 +45,7 @@ export function InstantSwap({ toNoun }: InstantSwapProps) {
               className="hover:brightness-100"
               href={CHAIN_CONFIG.chain.blockExplorers?.default.url + "/address/" + CHAIN_CONFIG.addresses.nounsErc20}
             >
-              <Button variant="secondary" className="gap-2 px-4 py-4">
+              <Button variant="secondary" className="gap-2 px-4 py-[6px]">
                 <Image
                   src="/nouns-erc20.png"
                   width={32}
@@ -53,7 +53,7 @@ export function InstantSwap({ toNoun }: InstantSwapProps) {
                   alt=""
                   className="bg-background-nouns rounded-full p-0.5"
                 />
-                <h6>$nouns ERC-20 Contract</h6>
+                <span className="label-md">$nouns ERC-20 Contract</span>
               </Button>
             </LinkExternal>
             <NounCard noun={toNoun} size={200} enableHover={false} alwaysShowNumber />

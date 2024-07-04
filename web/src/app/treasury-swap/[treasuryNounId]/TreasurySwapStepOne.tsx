@@ -50,7 +50,7 @@ export default function TreasurySwapStepOne({ treasuryNoun }: NounSwapProps) {
               className="brightness-100"
               href={CHAIN_CONFIG.chain.blockExplorers?.default.url + "/address/" + CHAIN_CONFIG.addresses.nounsTreasury}
             >
-              <Button variant="secondary" className="gap-2 px-4 py-4">
+              <Button variant="secondary" className="gap-2 px-4 py-[6px]">
                 <Image
                   src="/nouns-icon.png"
                   width={32}
@@ -58,7 +58,7 @@ export default function TreasurySwapStepOne({ treasuryNoun }: NounSwapProps) {
                   alt=""
                   className="bg-background-nouns rounded-full p-0.5"
                 />
-                <h6>Nouns Treasury</h6>
+                <span className="label-md">Nouns Treasury</span>
               </Button>
             </LinkExternal>
             <NounCard noun={treasuryNoun} size={200} enableHover={false} alwaysShowNumber />
