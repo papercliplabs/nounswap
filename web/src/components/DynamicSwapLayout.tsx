@@ -30,7 +30,9 @@ export default function DynamicSwapLayout({
         <div className="relative flex flex-row justify-between px-6 py-5 md:px-10">
           <Suspense fallback={<LoadingSpinner />}>
             <Link href={backButtonHref}>
-              <Button variant="secondary">Back</Button>
+              <Button variant="secondary" className="py-[10px]">
+                Back
+              </Button>
             </Link>
           </Suspense>
           <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-row items-center justify-center gap-[7px]">
@@ -46,7 +48,7 @@ export default function DynamicSwapLayout({
           </div>
           <HowItWorksDialog>
             <Button variant="ghost" size="icon" className="gap-2">
-              <h6 className="text-content-secondary hidden md:block">How it works</h6>
+              <span className="text-content-secondary label-sm hidden md:block">How it works</span>
               <Icon icon="circleQuestion" size={20} className="fill-gray-600" />
             </Button>
           </HowItWorksDialog>

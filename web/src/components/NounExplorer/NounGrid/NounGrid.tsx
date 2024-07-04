@@ -27,7 +27,7 @@ export default function NounGrid({ nouns }: NounGridInterface) {
   }, [nouns]);
 
   return (
-    <div className="relative w-full pb-[100px]">
+    <div className="relative w-full pb-[100px] pt-[8px] md:pt-0">
       {nounCards.length == 0 ? (
         <div className="flex h-fit grow flex-col items-center justify-center gap-2 rounded-3xl border-4 border-gray-200 px-4 py-24 text-center">
           <h4>No Nouns found.</h4>

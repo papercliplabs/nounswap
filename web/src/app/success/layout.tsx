@@ -15,7 +15,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           <Icon icon="swap" size={28} className="fill-gray-900 transition-all ease-linear" />
           <h5 className="hidden md:flex">NounSwap</h5>
         </Link>
-        <Button variant="secondary" asChild>
+        <Button variant="secondary" className="py-[10px]" asChild>
           <Slottable>
             <Link href="/" className="label-md">
               Exit

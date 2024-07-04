@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useAccount, useEnsAvatar, useEnsName, useSwitchChain } from "wagmi";
+import { useAccount, useDisconnect, useEnsAvatar, useEnsName, useSwitchChain } from "wagmi";
 import { getLinearGradientForAddress, getShortAddress } from "@/utils/utils";
 import { twMerge } from "tailwind-merge";
 import { Button } from "./ui/button";
@@ -18,7 +18,8 @@ export default function WalletButton({ disableMobileShrink }: WalletButtonProps)
   const { data: ensName } = useEnsName({ address, chainId: 1 });
   const { data: ensAvatar } = useEnsAvatar({ name: ensName ?? "", chainId: 1 });
   const { selectedNetworkId } = useWeb3ModalState();
-  const { switchChain } = useSwitchChain();
+  const { switchChainAsync } = useSwitchChain();
+  const { disconnect } = useDisconnect();
 
   if (!isConnected) {
     return (
@@ -30,7 +31,17 @@ export default function WalletButton({ disableMobileShrink }: WalletButtonProps)
 
   if (selectedNetworkId != CHAIN_CONFIG.chain.id.toString()) {
     return (
-      <Button onClick={() => switchChain({ chainId: CHAIN_CONFIG.chain.id })} variant="negative">
+      <Button
+        onClick={async () => {
+          try {
+            await switchChainAsync({ chainId: CHAIN_CONFIG.chain.id });
+          } catch (e) {
+            console.error("Error switching chains, disconnecting...");
+            disconnect();
+          }
+        }}
+        variant="negative"
+      >
         Wrong Network
       </Button>
     );
@@ -53,9 +64,9 @@ export default function WalletButton({ disableMobileShrink }: WalletButtonProps)
             }}
           />
         )}
-        <h6 className={twMerge("md:flex", !disableMobileShrink && "hidden")}>
+        <span className={twMerge("label-md md:flex", !disableMobileShrink && "hidden")}>
           {ensName ?? getShortAddress(address as Address)}
-        </h6>
+        </span>
       </Button>
     </div>
   );
