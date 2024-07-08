@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.20;
 
 import {Script, console} from "forge-std/Script.sol";
-import {NFTSwapper} from "../src/NFTSwapper.sol";
+import {TimelockNFTSwapper} from "../src/TimelockNFTSwapper.sol";
 
-contract NFTSwapperScript is Script {
-    NFTSwapper public nftSwapper;
+contract TimelockNFTSwapperScript is Script {
+    TimelockNFTSwapper public nftSwapper;
 
     function setUp() public {}
 
