@@ -2,3 +2,5 @@
 out/
 cache/
 Cargo.lock
+lcov.info
+.env
