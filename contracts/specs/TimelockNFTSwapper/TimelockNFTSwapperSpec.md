@@ -79,36 +79,41 @@ function swapPrice(
 ) view returns (uint256)
 ```
 
-View function to get the price in Wei to perform a swap from `inputTokenId` to `outputTokenId` based on [swap price curve](#swap-price-curve). This is meant to be used to determine the fee to send when calling `executeSwap`.
+View function to get the price in Wei to perform a swap from `inputTokenId` NFT to `outputTokenId` NFT based on [swap price curve](#swap-price-curve). This is meant to be used to determine the fee to send when calling `executeSwap`.
 
 ### `queueSwap`
 
 ```solidity
-function queueSwap(uint256 inputTokenId, uint256 outputTokenId) payable 
+function queueSwap(uint256 inputTokenId, uint256 outputTokenId) payable returns (uint256)
 ```
 
-Queues a swap for the `inputTokenId` from `msg.sender` with the `outputTokenId` from the `swapPool`. Sends the `queueFee` to the `feeRecipient`.  
+Queues a swap for the `inputTokenId` NFT from `msg.sender` with the `outputTokenId` NFT from the `swapPool`. Sends the `queueFee` to the `feeRecipient`. Returns the `swapId` for the queued swap which is to be used in `executeSwap` after waiting the `queuePeriod`. 
 
 Requirements:
-* This contract must be approved to transfer the `nft` with `inputTokenId` on behalf of `msg.sender`.
-* This contract must be approved to transfer the `nft` with `outputTokenId` on behalf of the `swapPool`
-* `msg.value` must equal `queueFee` 
-* The `nft` with `inputTokenId` must not be involved in a pending swap 
-* The `nft` with `outputTokenId` must not be involved in a pending swap
+* `msg.sender` must own the `inputTokenId` NFT. 
+* `swapPool` must own the `outputTokenId` NFT.
+* This contract must be approved to transfer the `inputTokenId` NFT on behalf of `msg.sender`.
+* This contract must be approved to transfer the `outputTokenId` NFT on behalf of the `swapPool`
+* `msg.value` must equal `queueFee`. 
+* The `inputTokenId` NFT must not be involved in a pending swap.
+* The `outputTokenId` NFT must not be involved in a pending swap.
 
 ### `executeSwap`
 
 ```solidity
-function executeSwap(uint256 inputTokenId, uint256 outputTokenId) payable 
+function executeSwap(uint256 swapId) payable 
 ```
 
-Swaps the `inputTokenId` from `msg.sender` with the `outputTokenId` from the `swapPool`. Sends the swap fee to the `feeRecipient`.  
+Swaps the `inputTokenId` from `msg.sender` with the `outputTokenId` from the `swapPool` for the corresponding queued `swapId`. Sends the swap fee to the `feeRecipient`.  
 
 
 Requirements:
-* This contract must be approved to transfer the `nft` with `inputTokenId` on behalf of `msg.sender`.
-* This contract must be approved to transfer the `nft` with `outputTokenId` on behalf of the `swapPool`
-* The swap must have been previously queued, and gone through the `queuePeriod`
+* `msg.sender` must be the address that queued the swap with `swapId`.
+* `msg.sender` must own the `inputTokenId` NFT. 
+* `swapPool` must own the `outputTokenId` NFT.
+* This contract must be approved to transfer the `inputTokenId` NFT on behalf of `msg.sender`.
+* This contract must be approved to transfer the `outputTokenId` NFT on behalf of the `swapPool`
+* The swap with `swapId` must have been previously queued, and gone through the `queuePeriod`
 * The queued swap must not be expired (waited more than `executionGracePeriod` after it became executable)
 * `msg.value` must equal `swapPrice(inputTokenId, outputTokenId)` 
 
