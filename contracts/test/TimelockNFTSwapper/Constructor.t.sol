@@ -23,11 +23,11 @@ contract ConstructorTest is Test, TimelockNFTSwapperTestHelper {
     function test_constructor() public view {
         assertEq(address(nftSwapper.NFT()), address(nft));
         assertEq(nftSwapper.SWAP_POOL(), SWAP_POOL);
-        assertEq(nftSwapper.FEE_RECEIPIENT(), FEE_RECEIPIENT);
-        assertEq(nftSwapper.SWAP_PRICE_CURVE_BASE(), SWAP_PRICE_CURVE_BASE);
-        assertEq(nftSwapper.SWAP_PRICE_CURVE_SLOPE(), SWAP_PRICE_CURVE_SLOPE);
+        assertEq(nftSwapper.feeRecipient(), FEE_RECEIPIENT);
+        assertEq(nftSwapper.swapPriceCurveBase(), SWAP_PRICE_CURVE_BASE);
+        assertEq(nftSwapper.swapPriceCurveSlope(), SWAP_PRICE_CURVE_SLOPE);
         assertEq(nftSwapper.QUEUE_FEE(), QUEUE_FEE);
-        assertEq(nftSwapper.QUEUE_PERIOD(), QUEUE_PERIOD);
+        assertEq(nftSwapper.queuePeriod(), QUEUE_PERIOD);
         assertEq(nftSwapper.EXECUTION_GRACE_PERIOD(), EXECUTION_GRACE_PERIOD);
     }
 }

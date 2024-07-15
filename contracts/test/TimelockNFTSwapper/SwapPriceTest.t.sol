@@ -30,11 +30,11 @@ contract SwapPriceTest is Test, TimelockNFTSwapperTestHelper {
         nftSwapper = new TimelockNFTSwapper({
             nft: nft,
             swapPool: SWAP_POOL,
-            feeRecipient: FEE_RECEIPIENT,
-            swapPriceCurveBase: swapPriceCurveBase,
-            swapPriceCurveSlope: swapPriceCurveSlope,
+            feeRecipient_: FEE_RECEIPIENT,
+            swapPriceCurveBase_: swapPriceCurveBase,
+            swapPriceCurveSlope_: swapPriceCurveSlope,
             queueFee: QUEUE_FEE,
-            queuePeriod: QUEUE_PERIOD,
+            queuePeriod_: QUEUE_PERIOD,
             executionGracePeriod: EXECUTION_GRACE_PERIOD
         });
     }

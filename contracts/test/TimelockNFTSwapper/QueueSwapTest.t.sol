@@ -26,7 +26,7 @@ contract QueueSwapTest is Test, TimelockNFTSwapperTestHelper {
 
         vm.startPrank(USER_A);
         nft.approve(address(nftSwapper), inputTokenId);
-        _expectEventSwapQueued(USER_A, 0, inputTokenId, outputTokenId, QUEUE_FEE, block.timestamp + QUEUE_PERIOD);
+        _expectEventSwapQueued(USER_A, 0, inputTokenId, outputTokenId, block.timestamp + QUEUE_PERIOD);
         nftSwapper.queueSwap{value: QUEUE_FEE}(inputTokenId, outputTokenId);
     }
 
@@ -211,11 +211,11 @@ contract QueueSwapTest is Test, TimelockNFTSwapperTestHelper {
         TimelockNFTSwapper otherSwapper = new TimelockNFTSwapper({
             nft: nft,
             swapPool: SWAP_POOL,
-            feeRecipient: payable(address(nft)), // Contract without payable fallback
-            swapPriceCurveBase: SWAP_PRICE_CURVE_BASE,
-            swapPriceCurveSlope: SWAP_PRICE_CURVE_SLOPE,
+            feeRecipient_: payable(address(nft)), // Contract without payable fallback
+            swapPriceCurveBase_: SWAP_PRICE_CURVE_BASE,
+            swapPriceCurveSlope_: SWAP_PRICE_CURVE_SLOPE,
             queueFee: QUEUE_FEE,
-            queuePeriod: QUEUE_PERIOD,
+            queuePeriod_: QUEUE_PERIOD,
             executionGracePeriod: EXECUTION_GRACE_PERIOD
         });
 
