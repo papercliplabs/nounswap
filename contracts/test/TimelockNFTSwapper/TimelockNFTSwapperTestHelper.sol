@@ -42,7 +42,6 @@ abstract contract TimelockNFTSwapperTestHelper is Test {
         uint256 indexed swapId,
         uint256 inputTokenId,
         uint256 outputTokenId,
-        uint256 queueFee,
         uint256 queuePeriodEndTimestamp
     );
     event SwapExecuted(
@@ -74,11 +73,11 @@ abstract contract TimelockNFTSwapperTestHelper is Test {
         nftSwapper = new TimelockNFTSwapper({
             nft: nft,
             swapPool: SWAP_POOL,
-            feeRecipient: FEE_RECEIPIENT,
-            swapPriceCurveBase: SWAP_PRICE_CURVE_BASE,
-            swapPriceCurveSlope: SWAP_PRICE_CURVE_SLOPE,
+            feeRecipient_: FEE_RECEIPIENT,
+            swapPriceCurveBase_: SWAP_PRICE_CURVE_BASE,
+            swapPriceCurveSlope_: SWAP_PRICE_CURVE_SLOPE,
             queueFee: QUEUE_FEE,
-            queuePeriod: QUEUE_PERIOD,
+            queuePeriod_: QUEUE_PERIOD,
             executionGracePeriod: EXECUTION_GRACE_PERIOD
         });
         vm.stopPrank();
@@ -139,11 +138,10 @@ abstract contract TimelockNFTSwapperTestHelper is Test {
         uint256 swapId,
         uint256 inputTokenId,
         uint256 outputTokenId,
-        uint256 queueFee,
         uint256 queuePeriodEndTimestamp
     ) internal {
         vm.expectEmit(true, true, true, true);
-        emit SwapQueued(swapper, swapId, inputTokenId, outputTokenId, queueFee, queuePeriodEndTimestamp);
+        emit SwapQueued(swapper, swapId, inputTokenId, outputTokenId, queuePeriodEndTimestamp);
     }
 
     function _expectEventSwapExecuted(

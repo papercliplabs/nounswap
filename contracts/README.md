@@ -48,12 +48,12 @@ forge snapshot
 
 Test coverage summary
 ```bash
-force coverage --report summary
+forge coverage --report summary
 ```
 
 Test coverage lcov
 ```bash
-force coverage --report lcov
+forge coverage --report lcov
 ```
 
 Deploy

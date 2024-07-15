@@ -2,11 +2,16 @@
 
 - [TimelockNFTSwapper Spec](#timelocknftswapper-spec)
   - [Overview](#overview)
-  - [Function Interface](#function-interface)
+  - [Interface](#interface)
     - [`constructor`](#constructor)
-    - [`swapPrice`](#swapprice)
-    - [`queueSwap`](#queueswap)
-    - [`executeSwap`](#executeswap)
+    - [Swap Functions](#swap-functions)
+      - [`swapPrice`](#swapprice)
+      - [`queueSwap`](#queueswap)
+      - [`executeSwap`](#executeswap)
+    - [Setter Functions](#setter-functions)
+      - [`setFeeRecipient`](#setfeerecipient)
+      - [`setSwapPriceCurveParams`](#setswappricecurveparams)
+      - [`setQueuePeriod`](#setqueueperiod)
   - [Swap Price Curve](#swap-price-curve)
   - [Approval Considerations](#approval-considerations)
   - [Why is the Timelock Required?](#why-is-the-timelock-required)
@@ -15,7 +20,7 @@
 
 The TimelockNFTSwapper contract enables permissionless timelocked swapping between NFT's within an ERC721 collection. 
 
-This contract is immutable with no owner. No NFTs or funds are ever held by this contract, instead it just facilitates the permissionless swap process. 
+This contract is non-upgradable and immutable. No NFTs or funds are ever held by this contract, instead it just facilitates the permissionless swap process. 
 
 The designed use case is for enabling Nounish DAOs to earn revenue by allowing holders to permissionlessly swap their governance NFT for one held within the DAOs Treasury to obtain one that they vibe with most. 
 
@@ -44,7 +49,7 @@ sequenceDiagram
 ---
 
 
-## Function Interface
+## Interface
 
 ### `constructor`
 
@@ -57,7 +62,7 @@ constructor(
     uint256 swapPriceCurveSlope,
     uint256 queueFee,
     uint256 queuePeriod,
-    uint256 executionGracePeriod
+    uint256 executionGracePeriod,
 )
 ```
 
@@ -70,7 +75,9 @@ constructor(
 * `queuePeriod`: time in seconds a swap must be queued before it can be executed (see [Why is the Timelock Required?](#why-is-the-timelock-required))
 * `executionGracePeriod`: time in seconds before an executable swap will expire 
 
-### `swapPrice`
+### Swap Functions
+
+#### `swapPrice`
 
 ```solidity
 function swapPrice(
@@ -81,7 +88,7 @@ function swapPrice(
 
 View function to get the price in Wei to perform a swap from `inputTokenId` NFT to `outputTokenId` NFT based on [swap price curve](#swap-price-curve). This is meant to be used to determine the fee to send when calling `executeSwap`.
 
-### `queueSwap`
+#### `queueSwap`
 
 ```solidity
 function queueSwap(uint256 inputTokenId, uint256 outputTokenId) payable returns (uint256)
@@ -98,7 +105,7 @@ Requirements:
 * The `inputTokenId` NFT must not be involved in a pending swap.
 * The `outputTokenId` NFT must not be involved in a pending swap.
 
-### `executeSwap`
+#### `executeSwap`
 
 ```solidity
 function executeSwap(uint256 swapId) payable 
@@ -116,6 +123,34 @@ Requirements:
 * The swap with `swapId` must have been previously queued, and gone through the `queuePeriod`
 * The queued swap must not be expired (waited more than `executionGracePeriod` after it became executable)
 * `msg.value` must equal `swapPrice(inputTokenId, outputTokenId)` 
+
+### Setter Functions
+
+`msg.sender` must be the `owner` to call any setter function.
+
+#### `setFeeRecipient`
+
+```solidity
+function setFeeRecipient(uint256 feeRecipient_) 
+```
+
+Sets the fee recipient.
+
+#### `setSwapPriceCurveParams`
+
+```solidity
+function setSwapPriceCurveParameters(uint256 swapPriceCurveBase_, uint256 swapPriceCurveSlope_)  
+```
+
+Sets the price curve parameters.
+
+#### `setQueuePeriod`
+
+```solidity
+function setQueuePeriod(uint256 queuePeriod_) 
+```
+
+Sets the queue period.
 
 ## Swap Price Curve 
 
