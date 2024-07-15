@@ -16,27 +16,7 @@ contract SwapPriceTest is Test, TimelockNFTSwapperTestHelper {
     ////
 
     function setUp() public {
-        _setupDeal();
-        _setupNft();
-
-        // must call _deploySwapperWithSlopeParams to setup the nftSwapper
-    }
-
-    ////
-    // Helpers
-    ////
-
-    function _deploySwapperWithSlopeParams(uint256 swapPriceCurveBase, uint256 swapPriceCurveSlope) internal {
-        nftSwapper = new TimelockNFTSwapper({
-            nft: nft,
-            swapPool: SWAP_POOL,
-            feeRecipient_: FEE_RECEIPIENT,
-            swapPriceCurveBase_: swapPriceCurveBase,
-            swapPriceCurveSlope_: swapPriceCurveSlope,
-            queueFee: QUEUE_FEE,
-            queuePeriod_: QUEUE_PERIOD,
-            executionGracePeriod: EXECUTION_GRACE_PERIOD
-        });
+        _basicSetup();
     }
 
     ////
@@ -49,7 +29,8 @@ contract SwapPriceTest is Test, TimelockNFTSwapperTestHelper {
         uint256 inputTokenId,
         uint256 outputTokenId
     ) public {
-        _deploySwapperWithSlopeParams(swapPriceCurveBase, swapPriceCurveSlope);
+        vm.prank(DEPLOYER);
+        nftSwapper.setSwapPriceCurveParameters(swapPriceCurveBase, swapPriceCurveSlope);
 
         uint256 clampedDiff = inputTokenId > outputTokenId ? inputTokenId - outputTokenId : 0;
 
