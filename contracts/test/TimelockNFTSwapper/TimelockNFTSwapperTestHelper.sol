@@ -70,6 +70,7 @@ abstract contract TimelockNFTSwapperTestHelper is Test {
         _setupNft();
 
         // Deploy swapper
+        vm.prank(DEPLOYER);
         nftSwapper = new TimelockNFTSwapper({
             nft: nft,
             swapPool: SWAP_POOL,
@@ -80,7 +81,6 @@ abstract contract TimelockNFTSwapperTestHelper is Test {
             queuePeriod_: QUEUE_PERIOD,
             executionGracePeriod: EXECUTION_GRACE_PERIOD
         });
-        vm.stopPrank();
 
         // Approve all tokens from swapPool for swapper
         vm.prank(SWAP_POOL);
@@ -126,6 +126,7 @@ abstract contract TimelockNFTSwapperTestHelper is Test {
             for (uint256 i = 0; i < SWAP_POOL_INITIAL_TOKEN_IDS.length; i++) {
                 mockNft.mint(SWAP_POOL, SWAP_POOL_INITIAL_TOKEN_IDS[i]);
             }
+            vm.stopPrank();
         }
     }
 
