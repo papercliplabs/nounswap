@@ -161,6 +161,8 @@ ageDiff = inputTokenId - outputTokenId
 price = swapPriceCurveBase + swapPriceCurveSlope * max(0, ageDiff)
 ```
 
+The plot below shows examples of a few different parameter sets:
+
 ![](img/age-difference-price-curve.png)
 
 ## Approval Considerations
