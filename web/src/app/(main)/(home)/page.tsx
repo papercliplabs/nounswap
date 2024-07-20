@@ -33,7 +33,7 @@ export default function Page({ searchParams }: { searchParams: { auctionId?: str
     <>
       <div className="flex w-full flex-col gap-5">
         <Auction initialAuctionId={searchParams.auctionId} />
-        <JustSwapItAdvertisingBanner />
+        {/* <JustSwapItAdvertisingBanner /> */}
         <FeatureHighlight />
       </div>
       <div>
