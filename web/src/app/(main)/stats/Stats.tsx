@@ -103,7 +103,7 @@ export default function Stats({ data }: StatsProps) {
           {formatNumber({
             input: treasuryBalance[treasuryBalance.length - 1].value,
             unit: currencySelector,
-            maxFractionDigits: 0,
+            maxFractionDigits: currencySelector == "USD" ? 0 : 2,
           })}
         </div>
         <div
@@ -136,6 +136,7 @@ export default function Stats({ data }: StatsProps) {
           {formatNumber({
             input: cumulativeProfit,
             unit: currencySelector,
+            maxFractionDigits: currencySelector == "USD" ? 0 : 2,
           })}
         </div>
         <div className="h-[200px] w-full py-4">

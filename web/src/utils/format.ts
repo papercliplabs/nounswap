@@ -66,5 +66,5 @@ export function formatNumber({
     style: percent ? "percent" : "decimal",
     signDisplay: forceSign ? "exceptZero" : "auto",
   }).format(input);
-  return prefix + formattedNumber + postfix;
+  return (input < 0 ? "-" : "") + prefix + formattedNumber.replace("-", "") + postfix;
 }
