@@ -99,7 +99,7 @@ export default function TreasuryStats({ data }: StatsProps) {
           The current balance of the Nouns Treasury. This tracks changes over time, including deposits, withdrawals, and
           any adjustments from treasury activities.
         </TitlePopover>
-        <div className="font-bold">
+        <div className="label-lg">
           {formatNumber({
             input: treasuryBalance[treasuryBalance.length - 1].value,
             unit: currencySelector,
@@ -107,7 +107,10 @@ export default function TreasuryStats({ data }: StatsProps) {
           })}
         </div>
         <div
-          className={clsx("pb-3 pt-2", balancePercentDiff < 0 ? "text-semantic-negative" : "text-semantic-positive")}
+          className={clsx(
+            "paragraph-sm pb-3 pt-2",
+            balancePercentDiff < 0 ? "text-semantic-negative" : "text-semantic-positive"
+          )}
         >
           {formatNumber({ input: balancePercentDiff, percent: true, forceSign: true })} (
           {formatNumber({ input: balanceChange, unit: currencySelector, maxFractionDigits: 0 })})
@@ -132,7 +135,7 @@ export default function TreasuryStats({ data }: StatsProps) {
           Cumulative auction revenue and proposal spending, indicating whether the inflows were positive or negative
           over time.
         </TitlePopover>
-        <div className="font-bold">
+        <div className="label-lg">
           {formatNumber({
             input: cumulativeProfit,
             unit: currencySelector,
@@ -143,8 +146,12 @@ export default function TreasuryStats({ data }: StatsProps) {
           <TimeSeriesChart
             data={cumulativeRevenueVsCostData}
             lineConfigs={[
-              { dataKey: "revenue", style: { lineColor: "green", areaGradient: false }, name: "Auction Revenue" },
-              { dataKey: "cost", style: { lineColor: "red", areaGradient: false }, name: "Prop Spending" },
+              {
+                dataKey: "revenue",
+                style: { lineColor: palette.green[600], areaGradient: false },
+                name: "Auction Revenue",
+              },
+              { dataKey: "cost", style: { lineColor: palette.red[500], areaGradient: false }, name: "Prop Spending" },
             ]}
             unit={currencySelector == "ETH" ? "Ξ" : currencySelector} // Condensed ETH version
             showLegend={true}
