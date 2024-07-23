@@ -21,7 +21,7 @@ export default function Nav({ navInfo }: NavProps) {
   return (
     <div className="border-border-secondary shadow-fixed-bottom fixed bottom-0 left-0 right-0 z-[12] flex flex-row gap-2 border-t-2 bg-white px-4 py-2 md:static md:w-auto md:gap-12 md:border-none md:p-0 md:shadow-none">
       {navInfo.map((info, i) => {
-        const active = info.href == pathName;
+        const active = info.href == "/" ? pathName == info.href : pathName.includes(info.href);
         return (
           <Suspense key={i} fallback={<LoadingSpinner />}>
             <Link

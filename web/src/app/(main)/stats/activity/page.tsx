@@ -1,0 +1,71 @@
+import { Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+import ActivityStats from "./ActivityStats";
+import Link from "next/link";
+import ActivitySelector from "@/components/selectors/ActivitySelector";
+import { getActivity } from "@/data/ponder/activity/getActivity";
+import { getAllNouns } from "@/data/noun/getAllNouns";
+import { readContract } from "viem/actions";
+import { CHAIN_CONFIG } from "@/config";
+import { erc721Abi } from "viem";
+
+export default function ActivityPage() {
+  return (
+    <>
+      <div className="flex flex-col justify-between md:flex-row">
+        <div>
+          <h4>Activity</h4>
+          <div>
+            Activity around{" "}
+            <Link href="/convert" className="underline">
+              $nouns ERC-20
+            </Link>
+            .
+          </div>
+        </div>
+        <div className="flex w-full justify-start gap-2 bg-white py-2 md:w-fit md:justify-end md:self-end md:py-0">
+          <Suspense>
+            <ActivitySelector />
+          </Suspense>
+        </div>
+      </div>
+      <Suspense
+        fallback={
+          <>
+            <div className="flex h-[196px] flex-col gap-4 md:h-[97px] md:flex-row">
+              {Array(2)
+                .fill(0)
+                .map((_, i) => (
+                  <Skeleton className="w-full flex-1 rounded-2xl md:h-full md:w-auto" key={i} />
+                ))}
+            </div>
+            {Array(10)
+              .fill(0)
+              .map((_, i) => (
+                <Skeleton className="h-[48px] rounded-2xl" key={i} />
+              ))}
+          </>
+        }
+      >
+        <ActivityDataWrapper />
+      </Suspense>
+    </>
+  );
+}
+
+async function ActivityDataWrapper() {
+  const [activity, allNouns, swappableNounCount] = await Promise.all([
+    getActivity(),
+    getAllNouns(),
+    readContract(CHAIN_CONFIG.publicClient, {
+      abi: erc721Abi,
+      address: CHAIN_CONFIG.addresses.nounsToken,
+      functionName: "balanceOf",
+      args: [CHAIN_CONFIG.addresses.nounsErc20],
+    }),
+  ]);
+
+  return <ActivityStats data={activity} nouns={allNouns} swappableNounCount={Number(swappableNounCount)} />;
+}
+
+export const revalidate = 900; // Every 15 min, want to pickup latest activity

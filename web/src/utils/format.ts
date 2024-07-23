@@ -1,6 +1,6 @@
 import { Address, BaseError, InsufficientFundsError, UserRejectedRequestError } from "viem";
 import { SendTransactionErrorType } from "wagmi/actions";
-import { Unit } from "./types";
+import { SECONDS_PER_DAY, SECONDS_PER_HOUR, SECONDS_PER_MONTH, SECONDS_PER_YEAR } from "./constants";
 
 export function formatAddress(address: Address, amount: number = 4): string {
   return `${address.slice(0, amount)}...${address?.slice(address.length - amount, address.length)}`;
@@ -67,4 +67,33 @@ export function formatNumber({
     signDisplay: forceSign ? "exceptZero" : "auto",
   }).format(input);
   return (input < 0 ? "-" : "") + prefix + formattedNumber.replace("-", "") + postfix;
+}
+
+export function formatTimeSinceNow(timestamp: number) {
+  const now = new Date();
+  const timestampDate = new Date(timestamp * 1000);
+
+  const deltaS = (now.getTime() - timestampDate.getTime()) / 1000;
+
+  let val;
+
+  const years = Math.floor(deltaS / SECONDS_PER_YEAR);
+  if (years > 0) {
+    val = years + "y";
+  } else {
+    const days = Math.floor(deltaS / SECONDS_PER_DAY);
+    if (days > 0) {
+      val = days + "d";
+    } else {
+      const hours = Math.floor(deltaS / SECONDS_PER_HOUR);
+      if (hours > 0) {
+        val = hours + "h";
+      } else {
+        const minutes = Math.floor(deltaS / 60);
+        val = minutes + "m";
+      }
+    }
+  }
+
+  return val;
 }

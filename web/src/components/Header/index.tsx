@@ -11,7 +11,7 @@ const navInfo: NavProps["navInfo"] = [
   { name: "Explore", icon: "layers", href: "/" },
   // { name: "My Props", href: "/proposals" },
   { name: "Convert", icon: "arrowLeftRight", href: "/convert" },
-  { name: "Stats", icon: "stats", href: "/stats/treasury" },
+  { name: "Stats", icon: "stats", href: "/stats" },
 ];
 
 export function Header() {
