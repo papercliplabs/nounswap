@@ -22,6 +22,15 @@ const nextConfig = {
       },
     ]
   },
+  redirects: () => {
+    return [
+      {
+        source: '/stats',
+        destination: '/stats/treasury',
+        permanent: true,
+      },
+    ]
+  }
 }
 
 module.exports = nextConfig

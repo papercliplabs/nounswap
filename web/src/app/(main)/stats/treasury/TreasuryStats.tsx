@@ -15,7 +15,7 @@ interface StatsProps {
   data: Awaited<ReturnType<typeof getDailyFinancialSnapshots>>;
 }
 
-export default function Stats({ data }: StatsProps) {
+export default function TreasuryStats({ data }: StatsProps) {
   const currencySelector = useCurrencySelector();
   const timeSelector = useTimeSelector();
 
