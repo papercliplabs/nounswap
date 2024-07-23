@@ -7,7 +7,7 @@ import clsx from "clsx";
 const NAV_INFO = [
   { name: "Treasury", href: "/stats/treasury" },
   { name: "Leaderboard", href: "/stats/leaderboard" },
-  //   { name: "Activity", href: "/stats/activity" },
+  { name: "Activity", href: "/stats/activity" },
 ];
 
 export default function StatsNav() {

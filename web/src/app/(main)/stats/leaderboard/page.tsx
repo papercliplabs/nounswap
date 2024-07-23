@@ -43,4 +43,4 @@ async function LeaderboardDataWrapper() {
   );
 }
 
-export const revalidate = SECONDS_PER_DAY / 2;
+export const revalidate = 43200; // Every 12 hrs
