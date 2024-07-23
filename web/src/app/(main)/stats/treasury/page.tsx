@@ -2,17 +2,18 @@ import { LinkExternal } from "@/components/ui/link";
 import { CHAIN_CONFIG } from "@/config";
 import TimeSelector from "@/components/selectors/TimeSelector";
 import CurrencySelector from "@/components/selectors/CurrencySelector";
-import Stats from "./Stats";
 import { getDailyFinancialSnapshots } from "@/data/ponder/financial/getDailyFinancialSnapshots";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import TreasuryStats from "./TreasuryStats";
+import { SECONDS_PER_DAY } from "@/utils/constants";
 
-export default function TestPage() {
+export default function TreasuryPage() {
   return (
-    <div className="flex w-full max-w-[800px] flex-col gap-4 self-center pb-[90px] md:gap-6">
+    <>
       <div className="flex flex-col justify-between md:flex-row">
         <div>
-          <h2>Stats</h2>
+          <h4>Treasury Stats</h4>
           <span>
             Data and insights for the{" "}
             <LinkExternal
@@ -52,21 +53,15 @@ export default function TestPage() {
           </>
         }
       >
-        <StatsWrapper />
+        <TreasuryDataWrapper />
       </Suspense>
-    </div>
+    </>
   );
 }
 
-async function StatsWrapper() {
-  if (CHAIN_CONFIG.chain.testnet) {
-    return (
-      <div className="label-lg flex w-full items-center justify-center self-center">
-        Stats are not available yet on testnet.
-      </div>
-    );
-  }
-
+async function TreasuryDataWrapper() {
   const data = await getDailyFinancialSnapshots();
-  return <Stats data={data} />;
+  return <TreasuryStats data={data} />;
 }
+
+export const revalidate = SECONDS_PER_DAY / 2;
