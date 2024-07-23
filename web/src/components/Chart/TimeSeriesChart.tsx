@@ -70,6 +70,7 @@ export default function TimeSeriesChart<DataEntry extends BaseDataEntry>({
           tickLine={false}
           tickMargin={10}
           allowDataOverflow={true}
+          className="paragraph-sm"
           // stroke={tailwindFullTheme.theme.colors.content.secondary}
         />
         <YAxis
@@ -83,6 +84,7 @@ export default function TimeSeriesChart<DataEntry extends BaseDataEntry>({
             formatNumber({ input: v, unit: unit, compact: true, maxFractionDigits: 1, maxSignificantDigits: 3 })
           }
           tickCount={4}
+          className="paragraph-sm"
           // stroke={tailwindFullTheme.theme.colors.content.secondary}
         />
         {lineConfigs.map((config, i) => (
@@ -104,9 +106,9 @@ export default function TimeSeriesChart<DataEntry extends BaseDataEntry>({
             align="left"
             offset="2px"
             formatter={(value: string) => {
-              return <span className="text-content-primary label-sm h-full pr-4">{value}</span>;
+              return <span className="text-content-primary label-sm h-full pr-2">{value}</span>;
             }}
-            wrapperStyle={{ bottom: -10 }}
+            wrapperStyle={{ bottom: -8 }}
           />
         )}
         <Tooltip
