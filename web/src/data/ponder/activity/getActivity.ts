@@ -3,6 +3,7 @@ import { ActivitySelector } from "@/components/selectors/ActivitySelector";
 import { getDeposits } from "./getDeposits";
 import { getRedeems } from "./getRedeems";
 import { getSwaps } from "./getSwaps";
+import { unstable_cache } from "next/cache";
 
 type DepositActivity = { type: "deposit" } & Awaited<ReturnType<typeof getDeposits>>[0];
 type RedeemActivity = { type: "redeem" } & Awaited<ReturnType<typeof getRedeems>>[0];
@@ -10,7 +11,7 @@ type SwapActivity = { type: "swap" } & Awaited<ReturnType<typeof getSwaps>>[0];
 
 export type ActivityEntry = DepositActivity | RedeemActivity | SwapActivity;
 
-export async function getActivity(): Promise<ActivityEntry[]> {
+async function getActivityUncached(): Promise<ActivityEntry[]> {
   const [deposits, redeems, swaps] = await Promise.all([getDeposits(), getRedeems(), getSwaps()]);
 
   const data: ActivityEntry[] = [
@@ -23,3 +24,6 @@ export async function getActivity(): Promise<ActivityEntry[]> {
 
   return data;
 }
+
+// Every 15min, want this to be more real time
+export const getActivity = unstable_cache(getActivityUncached, ["get-activity"], { revalidate: 60 * 15 });

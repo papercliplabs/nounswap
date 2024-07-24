@@ -71,6 +71,7 @@ export default function TimeSeriesChart<DataEntry extends BaseDataEntry>({
           tickMargin={10}
           allowDataOverflow={true}
           className="paragraph-sm"
+          padding={{ right: 1 }} // Makes last point show on longer range graphs (for some reason)
           // stroke={tailwindFullTheme.theme.colors.content.secondary}
         />
         <YAxis

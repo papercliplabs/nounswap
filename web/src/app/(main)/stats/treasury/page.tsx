@@ -6,7 +6,6 @@ import { getDailyFinancialSnapshots } from "@/data/ponder/financial/getDailyFina
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import TreasuryStats from "./TreasuryStats";
-import { SECONDS_PER_DAY } from "@/utils/constants";
 
 export default function TreasuryPage() {
   return (
@@ -63,5 +62,3 @@ async function TreasuryDataWrapper() {
   const data = await getDailyFinancialSnapshots();
   return <TreasuryStats data={data} />;
 }
-
-export const revalidate = 43200; // Every 12 hrs

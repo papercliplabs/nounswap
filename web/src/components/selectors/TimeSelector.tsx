@@ -1,5 +1,5 @@
 "use client";
-import { SECONDS_PER_MONTH, SECONDS_PER_YEAR } from "@/utils/constants";
+import { SECONDS_PER_DAY, SECONDS_PER_MONTH, SECONDS_PER_YEAR } from "@/utils/constants";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
@@ -8,27 +8,28 @@ export type TimeSelector = "1M" | "3M" | "6M" | "1Y" | "MAX";
 
 export const TIME_SELECTOR_FILTER_KEY = "time";
 
+// 1 day margin on all time frames
 export const DATA_FOR_TIME_SELECTOR: Record<
   TimeSelector,
   { rangeS: number | undefined; name: string; shortName: string }
 > = {
   "1M": {
-    rangeS: SECONDS_PER_MONTH,
+    rangeS: SECONDS_PER_MONTH + SECONDS_PER_DAY,
     name: "Last 30 days",
     shortName: "30d",
   },
   "3M": {
-    rangeS: SECONDS_PER_MONTH * 3,
+    rangeS: SECONDS_PER_MONTH * 3 + SECONDS_PER_DAY,
     name: "Last 90 days",
     shortName: "90d",
   },
   "6M": {
-    rangeS: SECONDS_PER_MONTH * 6,
+    rangeS: SECONDS_PER_MONTH * 6 + SECONDS_PER_DAY,
     name: "Last 180 days",
     shortName: "180d",
   },
   "1Y": {
-    rangeS: SECONDS_PER_YEAR,
+    rangeS: SECONDS_PER_YEAR + SECONDS_PER_DAY,
     name: "Last 1 year",
     shortName: "1y",
   },
