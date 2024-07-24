@@ -61,7 +61,7 @@ async function ActivityDataWrapper() {
     unstable_cache(
       async () => {
         return Number(
-          readContract(CHAIN_CONFIG.publicClient, {
+          await readContract(CHAIN_CONFIG.publicClient, {
             abi: erc721Abi,
             address: CHAIN_CONFIG.addresses.nounsToken,
             functionName: "balanceOf",
