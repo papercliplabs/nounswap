@@ -8,6 +8,7 @@ import { getAllNouns } from "@/data/noun/getAllNouns";
 import { readContract } from "viem/actions";
 import { CHAIN_CONFIG } from "@/config";
 import { erc721Abi } from "viem";
+import { unstable_cache } from "next/cache";
 
 export default function ActivityPage() {
   return (
@@ -57,15 +58,21 @@ async function ActivityDataWrapper() {
   const [activity, allNouns, swappableNounCount] = await Promise.all([
     getActivity(),
     getAllNouns(),
-    readContract(CHAIN_CONFIG.publicClient, {
-      abi: erc721Abi,
-      address: CHAIN_CONFIG.addresses.nounsToken,
-      functionName: "balanceOf",
-      args: [CHAIN_CONFIG.addresses.nounsErc20],
-    }),
+    unstable_cache(
+      async () => {
+        return Number(
+          readContract(CHAIN_CONFIG.publicClient, {
+            abi: erc721Abi,
+            address: CHAIN_CONFIG.addresses.nounsToken,
+            functionName: "balanceOf",
+            args: [CHAIN_CONFIG.addresses.nounsErc20],
+          })
+        );
+      },
+      ["swappable-noun-count"],
+      { revalidate: 60 * 15 }
+    )(),
   ]);
 
-  return <ActivityStats data={activity} nouns={allNouns} swappableNounCount={Number(swappableNounCount)} />;
+  return <ActivityStats data={activity} nouns={allNouns} swappableNounCount={swappableNounCount} />;
 }
-
-export const revalidate = 900; // Every 15 min, want to pickup latest activity

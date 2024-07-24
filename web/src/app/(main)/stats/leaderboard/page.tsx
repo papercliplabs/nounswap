@@ -3,7 +3,6 @@ import LeaderboardStats from "./LeaderboardStats";
 import { getAccountLeaderboard } from "@/data/ponder/leaderboard/getAccountLeaderboard";
 import { getCurrentAuctionNounId } from "@/data/auction/getCurrentAuctionNounId";
 import { Skeleton } from "@/components/ui/skeleton";
-import { SECONDS_PER_DAY } from "@/utils/constants";
 
 export default function LeaderboardPage() {
   return (
@@ -42,5 +41,3 @@ async function LeaderboardDataWrapper() {
     <LeaderboardStats accountLeaderboardData={accountLeaderboardData} totalNounsCount={Number(currentAuctionId)} />
   );
 }
-
-export const revalidate = 43200; // Every 12 hrs
