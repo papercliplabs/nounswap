@@ -71,13 +71,19 @@ export async function getNounSwapProposalsForProposer(address: Address): Promise
         toNounId = split[10];
       } else {
         match = title.match(/NounSwap v1: Swap Noun [0-9]* for Noun [0-9]*/); // NounSwap v1: Swap Noun XX for Noun YY (no WETH)
-        if (match == null || match.length == 0) {
-          continue;
+        if (match != null && match.length != 0) {
+          const split = match[0].split(" ");
+          fromNounId = split[4];
+          toNounId = split[7];
+        } else {
+          match = title.match(/NounSwap: Swap Noun [0-9]* for Noun [0-9]*/); // NounSwap: Swap Noun XX for Noun YY
+          if (match == null || match.length == 0) {
+            continue;
+          }
+          const split = match[0].split(" ");
+          fromNounId = split[3];
+          toNounId = split[6];
         }
-
-        const split = match[0].split(" ");
-        fromNounId = split[4];
-        toNounId = split[7];
       }
 
       const fromNoun = await getNounById(fromNounId);
@@ -142,12 +148,19 @@ export async function getNounSwapProposalsForProposer(address: Address): Promise
         toNounId = split[10];
       } else {
         const match = proposalCandidate.slug.match(/nounswap-v1-swap-noun-[0-9]*-for-noun-[0-9]*/); // NounSwap v1: Swap Noun XX + ZZ WETH for Noun YY
-        if (match == null || match.length == 0) {
-          continue;
+        if (match != null && match.length != 0) {
+          const split = match[0].split("-");
+          fromNounId = split[4];
+          toNounId = split[7];
+        } else {
+          const match = proposalCandidate.slug.match(/nounswap-swap-noun-[0-9]*-for-noun-[0-9]*/); // NounSwap v1: Swap Noun XX + ZZ WETH for Noun YY
+          if (match == null || match.length == 0) {
+            continue;
+          }
+          const split = match[0].split("-");
+          fromNounId = split[3];
+          toNounId = split[6];
         }
-        const split = match[0].split("-");
-        fromNounId = split[4];
-        toNounId = split[7];
       }
 
       const fromNoun = await getNounById(fromNounId);
