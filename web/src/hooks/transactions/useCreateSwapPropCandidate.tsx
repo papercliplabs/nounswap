@@ -81,9 +81,7 @@ export function useCreateSwapPropCandidate(): UseCreateSwapPropCandidateReturnTy
         govTxns = [transferUserNounGovTxn, transferTreasuryNounGovTxn];
       }
 
-      const propTitle = `NounSwap v1: Swap Noun ${userNoun.id} ${
-        tip > BigInt(0) ? `+ ${formatTokenAmount(tip, NATIVE_ASSET_DECIMALS, 6)} WETH ` : ""
-      }for Noun ${treasuryNoun.id} from the Nouns Treasury`;
+      const propTitle = `NounSwap: Swap Noun ${userNoun.id} for Noun ${treasuryNoun.id}`;
 
       const proposeArgs: any = [
         govTxns.map((txn) => txn.target), // targets
@@ -112,16 +110,15 @@ Noun ${treasuryNoun.id}
 
 ---
 
-## Rationale for Swap
+## Rationale for Swap 
 
-*This rationale is directly from the creator of the proposal*
 ${reason ?? "No rationale provided"}
 
 ---
 
 ## This Prop was created using NounSwap.
 
-[NounSwap](nounswap.wtf) is a tool built for the Nouns communities by [Paperclip Labs](https://paperclip.xyz/). It allows Noun owners to easily create proposals to swap their Noun for a Noun in the DAO treasury. It serves purely as a facilitation tool for proposal creation. NounSwap does not have contracts and does not take custody of any Nouns or tokens at any time.`,
+[NounSwap](nounswap.wtf) is a tool built for the Nouns community by [Paperclip Labs](https://paperclip.xyz/). It allows Noun owners to easily create proposals to swap their Noun for a Noun in the DAO treasury.`,
       ];
 
       const slug = propTitle
