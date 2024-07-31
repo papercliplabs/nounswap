@@ -1,4 +1,3 @@
-import JustSwapItAdvertisingBanner from "@/components/AdvertisingBanner/JustSwapItAdvertisingBanner";
 import Auction from "@/components/Auction";
 import { getFrameMetadata } from "frog/next";
 import React from "react";
@@ -10,6 +9,7 @@ import NounDialog from "@/components/dialog/NounDialog";
 import FeatureHighlight from "@/components/FeatureHighlight";
 import NounExplorer from "@/components/NounExplorer";
 import AnimationGird from "@/components/NounExplorer/NounGrid/AnimationGrid";
+import SharkPickleConeAdvertisingBanner from "@/components/AdvertisingBanner/SharkPickleConeAdvertisingBanner";
 
 export async function generateMetadata({ searchParams }: { searchParams: { frame?: string } }) {
   let filteredFrameMetadata: Record<string, string> = {};
@@ -33,7 +33,7 @@ export default function Page({ searchParams }: { searchParams: { auctionId?: str
     <>
       <div className="flex w-full flex-col gap-5">
         <Auction initialAuctionId={searchParams.auctionId} />
-        {/* <JustSwapItAdvertisingBanner /> */}
+        <SharkPickleConeAdvertisingBanner />
         <FeatureHighlight />
       </div>
       <div>
