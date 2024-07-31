@@ -1,9 +1,13 @@
 "use client";
 import { NounTrait, NounTraitType } from "@/data/noun/types";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import { FilterItemButton } from "./FilterItemButton";
 import { scrollToNounExplorer } from "@/utils/scroll";
+import Image from "next/image";
+import { buildNounTraitImage } from "@/utils/nounImage";
+import { useInView } from "framer-motion";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export interface FilterTraitItemProps {
   traitType: NounTraitType;
@@ -12,6 +16,9 @@ export interface FilterTraitItemProps {
 
 export function FilterTraitItem({ traitType, trait }: FilterTraitItemProps) {
   const searchParams = useSearchParams();
+
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { margin: "500px 0px" });
 
   const filterKey = useMemo(() => traitType + "[]", [traitType]);
 
@@ -49,9 +56,14 @@ export function FilterTraitItem({ traitType, trait }: FilterTraitItemProps) {
     [searchParams, filterKey, trait.seed]
   );
 
+  const traitImg = buildNounTraitImage(traitType, trait.seed);
+
   return (
     <FilterItemButton isChecked={isChecked} onClick={() => handleCheckChange(!isChecked)}>
-      {trait.name}
+      <div className="flex items-center gap-2" ref={ref}>
+        {isInView ? <Image src={traitImg} width={32} height={32} alt={trait.name} /> : <Skeleton className="h-8 w-8" />}
+        <span className="overflow-hidden overflow-ellipsis whitespace-nowrap pr-2">{trait.name}</span>
+      </div>
     </FilterItemButton>
   );
 }
