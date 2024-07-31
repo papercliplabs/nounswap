@@ -1,5 +1,5 @@
 import { getNounById } from "@/data/noun/getNounById";
-import { buildNounImage } from "@/hooks/useNounImage";
+import { buildNounImage } from "@/utils/nounImage";
 import { cn } from "@/utils/shadcn";
 import Image from "next/image";
 import { ComponentProps, Suspense } from "react";
@@ -22,7 +22,7 @@ async function NounImageInternal({ nounId, ...props }: NounImageProps) {
     throw Error(`NounImageInternal - no Noun found - ${nounId}`);
   }
 
-  const imageSrc = buildNounImage(noun, "full");
+  const imageSrc = buildNounImage(noun.traits, "full");
   return <NounImageImg src={imageSrc} alt="" {...props} />;
 }
 
