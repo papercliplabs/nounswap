@@ -5,8 +5,6 @@ import { useQueries } from "@tanstack/react-query";
 import { CHAIN_CONFIG } from "@/config";
 import { HTMLAttributes, ReactNode, createContext, useContext, useMemo } from "react";
 import { cn } from "@/utils/shadcn";
-import { getUserName } from "@/data/user/getUserName";
-import { getUserAvatar } from "@/data/user/getUserAvatar";
 import { UserAvatarComponent, UserNameComponent } from ".";
 import { userAvatarQuery, userNameQuery } from "@/data/tanstackQueries";
 

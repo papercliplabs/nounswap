@@ -3,9 +3,11 @@ import AuctionClient from "./AuctionClient";
 import { getCurrentAuctionNounId } from "@/data/auction/getCurrentAuctionNounId";
 import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query";
 import { Suspense } from "react";
-import { auctionQuery, currentAuctionIdQuery, nounQuery } from "@/data/tanstackQueries";
+import { auctionQuery, currentAuctionIdQuery, nounQuery, userAvatarQuery, userNameQuery } from "@/data/tanstackQueries";
 import { getAuctionById } from "@/data/auction/getAuctionById";
 import { getNounByIdUncached } from "@/data/noun/getNounById";
+import { Auction as AuctionType } from "@/data/auction/types";
+import { getUserName } from "@/data/user/getUserName";
 
 export default async function Auction({ initialAuctionId }: { initialAuctionId?: string }) {
   return (
@@ -40,6 +42,15 @@ async function AuctionWrapper({ initialAuctionId }: { initialAuctionId?: string 
       queryFn: () => getNounByIdUncached(auctionId),
     }),
   ]);
+
+  const auction = (await queryClient.getQueryData(auctionQuery(auctionId).queryKey)) as AuctionType | undefined;
+  const bidderAddress = auction?.bids[0].bidderAddress;
+  if (bidderAddress) {
+    await queryClient.prefetchQuery({
+      queryKey: userNameQuery(bidderAddress).queryKey,
+      queryFn: () => getUserName(bidderAddress),
+    });
+  }
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
