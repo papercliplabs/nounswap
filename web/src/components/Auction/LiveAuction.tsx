@@ -1,5 +1,5 @@
 "use client";
-import { formatTimeLeft } from "@/utils/format";
+import { formatTimeLeft, formatTimestamp } from "@/utils/format";
 import { useEffect, useState } from "react";
 import { formatEther } from "viem";
 import { Skeleton } from "../ui/skeleton";
@@ -14,6 +14,7 @@ export function LiveAuction({ auction }: { auction: Auction }) {
   const [timeRemainingS, setTimeRemainingS] = useState<number | undefined>(
     Math.max(Number(auction.endTime) - Date.now() / 1000, 0)
   );
+  const [showLocalTime, setShowLocalTime] = useState<boolean>(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -36,16 +37,23 @@ export function LiveAuction({ auction }: { auction: Auction }) {
           }),
         }}
         item2={{
-          title: "Time left",
+          title: showLocalTime
+            ? `Ends on ${formatTimestamp({ timestamp: Number(auction.endTime) * 1000, showMonth: true, showDay: true })} at`
+            : "Time left",
           value: (
             <>
               {timeRemainingS != undefined ? (
-                <span suppressHydrationWarning>{formatTimeLeft(timeRemainingS)}</span>
+                <span suppressHydrationWarning className="flex w-full">
+                  {showLocalTime
+                    ? formatTimestamp({ timestamp: Number(auction.endTime) * 1000, showTime: true })
+                    : formatTimeLeft(timeRemainingS)}
+                </span>
               ) : (
                 <Skeleton className="w-[100px] whitespace-pre-wrap"> </Skeleton>
               )}
             </>
           ),
+          onClick: () => setShowLocalTime((prev) => !prev),
         }}
       />
       <Bid nounId={BigInt(auction.nounId)} nextMinBid={BigInt(auction.nextMinBid)} />
