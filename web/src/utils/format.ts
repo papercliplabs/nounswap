@@ -69,6 +69,23 @@ export function formatNumber({
   return (input < 0 ? "-" : "") + prefix + formattedNumber.replace("-", "") + postfix;
 }
 
+interface FormatTimestampParams {
+  timestamp: number;
+  showMonth?: boolean;
+  showDay?: boolean;
+  showTime?: boolean;
+}
+
+export function formatTimestamp({ timestamp, showMonth, showDay, showTime }: FormatTimestampParams) {
+  return Intl.DateTimeFormat("en", {
+    day: showDay ? "numeric" : undefined,
+    month: showMonth ? "short" : undefined,
+    hour: showTime ? "numeric" : undefined,
+    minute: showTime ? "numeric" : undefined,
+    second: showTime ? "numeric" : undefined,
+  }).format(timestamp);
+}
+
 export function formatTimeSinceNow(timestamp: number) {
   const now = new Date();
   const timestampDate = new Date(timestamp * 1000);
