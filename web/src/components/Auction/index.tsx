@@ -44,7 +44,7 @@ async function AuctionWrapper({ initialAuctionId }: { initialAuctionId?: string 
   ]);
 
   const auction = (await queryClient.getQueryData(auctionQuery(auctionId).queryKey)) as AuctionType | undefined;
-  const bidderAddress = auction?.bids[0].bidderAddress;
+  const bidderAddress = auction?.bids[0]?.bidderAddress;
   if (bidderAddress) {
     await queryClient.prefetchQuery({
       queryKey: userNameQuery(bidderAddress).queryKey,
