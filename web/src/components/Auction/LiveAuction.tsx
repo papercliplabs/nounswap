@@ -1,7 +1,7 @@
 "use client";
 import { formatTimeLeft } from "@/utils/format";
 import { useEffect, useState } from "react";
-import { Address, formatEther } from "viem";
+import { formatEther } from "viem";
 import { Skeleton } from "../ui/skeleton";
 import Bid from "./Bid";
 import { formatNumber } from "@/utils/format";
@@ -11,7 +11,9 @@ import { BidHistoryDialog } from "./BidHistoryDialog";
 import { UserName, UserRoot } from "../User/UserClient";
 
 export function LiveAuction({ auction }: { auction: Auction }) {
-  const [timeRemainingS, setTimeRemainingS] = useState<number | undefined>(undefined);
+  const [timeRemainingS, setTimeRemainingS] = useState<number | undefined>(
+    Math.max(Number(auction.endTime) - Date.now() / 1000, 0)
+  );
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -38,7 +40,7 @@ export function LiveAuction({ auction }: { auction: Auction }) {
           value: (
             <>
               {timeRemainingS != undefined ? (
-                formatTimeLeft(timeRemainingS)
+                <span suppressHydrationWarning>{formatTimeLeft(timeRemainingS)}</span>
               ) : (
                 <Skeleton className="w-[100px] whitespace-pre-wrap"> </Skeleton>
               )}
