@@ -34,7 +34,9 @@ async function runPaginatedQuery() {
       query,
       { cursor },
       {
-        cache: "no-cache",
+        next: {
+          revalidate: 0,
+        },
       }
     );
     items = items.concat(data.nounsErc20Swaps.items);

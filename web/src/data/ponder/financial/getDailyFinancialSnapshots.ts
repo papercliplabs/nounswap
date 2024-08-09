@@ -30,6 +30,7 @@ const query = graphql(/* GraphQL */ `
 `);
 
 async function runPaginatedQueryUncached() {
+  console.log("CACHE BUSTED");
   let cursor: string | undefined | null = undefined;
   let items: DailyFinancialSnapshotsQuery["dailyFinancialSnapshots"]["items"] = [];
   while (true) {
@@ -38,9 +39,7 @@ async function runPaginatedQueryUncached() {
       query,
       { cursor },
       {
-        next: {
-          revalidate: 0,
-        },
+        next: { revalidate: 0 },
       }
     );
     items = items.concat(data.dailyFinancialSnapshots.items);
