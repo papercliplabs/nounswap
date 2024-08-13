@@ -50,7 +50,26 @@ export async function generateMetadata() {
       title: "NounSwap",
       description: "Bid, explore, and swap Nouns.",
     },
-    keywords: ["crypto", "cryptocurrency", "ethereum", "nft", "nouns", "nounsDOA", "paperclip", "labs"],
+    keywords: [
+      "Nouns",
+      "Nouns DAO",
+      "Nouns NFTs",
+      "NFT",
+      "NFT Auction",
+      "Nouns Swap",
+      "Nouns Marketplace",
+      "Governance",
+      "DeFi",
+      "Ethereum",
+      "NFT Marketplace",
+      "Blockchain",
+      "Decentralized Exchange",
+      "Buy Nouns",
+      "Swap Nouns",
+      "Web3",
+      "Crypto",
+      "Paperclip Labs",
+    ],
   };
 }
 
