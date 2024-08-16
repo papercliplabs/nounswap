@@ -62,3 +62,6 @@ async function TreasuryDataWrapper() {
   const data = await getDailyFinancialSnapshots();
   return <TreasuryStats data={data} />;
 }
+
+export const revalidate = 43200; // Half day
+export const dynamic = "force-static";

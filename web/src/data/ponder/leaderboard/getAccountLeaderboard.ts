@@ -2,10 +2,8 @@
 import { graphql } from "@/data/generated/ponder";
 import { graphQLFetch } from "@/data/utils/graphQLFetch";
 import { AccountLeaderboardQuery } from "@/data/generated/ponder/graphql";
-import { SECONDS_PER_DAY } from "@/utils/constants";
 import { CHAIN_CONFIG } from "@/config";
 import { getAddress, isAddressEqual } from "viem";
-import { unstable_cache } from "next/cache";
 
 const MAINNET_BASE_BRIDGE_CONTRACT_ADDRESS = "0x3154Cf16ccdb4C6d922629664174b904d80F2C35";
 
@@ -31,7 +29,7 @@ const query = graphql(/* GraphQL */ `
   }
 `);
 
-async function runPaginatedQueryUncached() {
+async function runPaginatedQuery() {
   let cursor: string | undefined | null = undefined;
   let items: AccountLeaderboardQuery["accounts"]["items"] = [];
   while (true) {
@@ -63,12 +61,6 @@ async function runPaginatedQueryUncached() {
 
   return items;
 }
-
-const runPaginatedQuery = unstable_cache(
-  runPaginatedQueryUncached,
-  ["get-account-leaderboard", CHAIN_CONFIG.chain.id.toString()],
-  { revalidate: SECONDS_PER_DAY / 2 }
-);
 
 export async function getAccountLeaderboard() {
   const data = await runPaginatedQuery();

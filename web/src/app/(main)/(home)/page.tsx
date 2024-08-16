@@ -21,6 +21,7 @@ export async function generateMetadata({ searchParams }: { searchParams: { frame
   } catch (e) {
     console.error("Failed to fetch frame metadata", e);
   }
+
   return {
     title: "NounSwap",
     description: "See all the Nouns or Swap for one from the Nouns treasury.",

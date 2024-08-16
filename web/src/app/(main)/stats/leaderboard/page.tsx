@@ -41,3 +41,6 @@ async function LeaderboardDataWrapper() {
     <LeaderboardStats accountLeaderboardData={accountLeaderboardData} totalNounsCount={Number(currentAuctionId)} />
   );
 }
+
+export const revalidate = 43200; // Half day
+export const dynamic = "force-static";
