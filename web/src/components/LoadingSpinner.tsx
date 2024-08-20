@@ -7,11 +7,13 @@ interface LoadingProps extends SVGProps<SVGSVGElement> {
 
 export default function LoadingSpinner({ size, ...props }: LoadingProps) {
   return (
-    <Icon
-      {...props}
-      icon="spinner"
-      size={size ?? 60}
-      className={twMerge("flex w-full animate-spin justify-center", props.className)}
-    />
+    <div className="h-fit w-fit self-center">
+      <Icon
+        {...props}
+        icon="spinner"
+        size={size ?? 60}
+        className={twMerge("flex w-full animate-spin justify-center", props.className)}
+      />
+    </div>
   );
 }

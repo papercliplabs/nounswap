@@ -54,11 +54,11 @@ export default function NounDialog({ nouns }: NounsDialogProps) {
     <Dialog open={nounId != undefined} onOpenChange={handleOpenChange}>
       <DialogContent
         className={clsx(
-          "max-h-[80vh] min-w-0 max-w-[95vw] overflow-hidden overflow-y-auto rounded-2xl border-none p-0 md:max-w-[min(85vw,1400px)] md:overflow-y-hidden",
+          "h-full max-h-[90dvh] w-full min-w-0 max-w-[95vw] overflow-hidden rounded-2xl border-none p-0 md:h-auto md:max-w-[min(85vw,1400px)]",
           noun.traits.background.seed == 1 ? "bg-nouns-warm" : "bg-nouns-cool"
         )}
       >
-        <div className="flex aspect-auto w-full flex-col md:aspect-[100/45] md:flex-row">
+        <div className="absolute bottom-0 left-0 right-0 top-0 flex aspect-auto h-full w-full flex-col overflow-y-auto md:static md:aspect-[100/45] md:flex-row md:overflow-hidden">
           <div className="flex h-fit w-full shrink-0 justify-center md:h-full md:w-[45%]">
             <Image
               src={fullImageData ?? "/noun-loading-skull.gif"}
@@ -66,7 +66,7 @@ export default function NounDialog({ nouns }: NounsDialogProps) {
               height={600}
               alt=""
               unoptimized={fullImageData == undefined}
-              className="aspect-square h-full max-h-[400px] w-full max-w-[400px] object-contain object-bottom md:max-h-none md:max-w-none"
+              className="aspect-square h-full max-h-[400px] w-full max-w-[min(70%,400px)] object-contain object-bottom md:max-h-none md:max-w-none"
             />
           </div>
           <div className="flex flex-auto flex-col gap-6 overflow-visible px-6 pb-6 pt-12 md:h-full md:overflow-y-auto md:px-8">
