@@ -51,7 +51,7 @@ const DialogContent = React.forwardRef<
         asChild
         className="absolute right-4 top-4 ring-offset-white transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-gray-950 focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-gray-100 data-[state=open]:text-gray-500 dark:ring-offset-gray-950 dark:focus:ring-gray-300 dark:data-[state=open]:bg-gray-800 dark:data-[state=open]:text-gray-400"
       >
-        <Button variant="ghost" size="icon">
+        <Button variant="ghost" size="icon" className="rounded-full bg-white">
           <Icon icon="x" size={20} />
           <span className="sr-only">Close</span>
         </Button>

@@ -9,12 +9,6 @@
     @apply border-border-primary;
   }
 
-  html,
-  body {
-    width: 100vw;
-    /* overflow: auto; */
-  }
-
   body {
     @apply border-border-primary text-content-primary bg-background-primary paragraph-md antialiased;
     text-rendering: optimizeLegibility;

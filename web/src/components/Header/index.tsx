@@ -17,7 +17,7 @@ const navInfo: NavProps["navInfo"] = [
 export function Header() {
   return (
     <>
-      <header className="border-border-secondary flex w-full flex-col items-center justify-between gap-4 border-b-2 px-4 py-2 md:px-10">
+      <header className="border-border-secondary flex w-full flex-col items-center justify-between gap-4 border-b-2 px-4 py-2 md:px-8">
         <div className="flex w-full flex-row justify-between">
           <div className="flex items-center gap-6 md:flex-1">
             <div className="border-border-secondary pr-6 md:border-r-2">
