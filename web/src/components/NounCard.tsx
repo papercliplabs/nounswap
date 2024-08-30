@@ -9,6 +9,8 @@ import { useInView } from "framer-motion";
 import { useNounImage } from "@/hooks/useNounImage";
 import Icon from "./ui/Icon";
 import clsx from "clsx";
+import { formatNumber } from "@/utils/format";
+import { formatTokenAmount } from "@/utils/utils";
 
 interface NounCardProps {
   noun: Noun;
@@ -61,14 +63,10 @@ export default function NounCard({ noun, size, enableHover, alwaysShowNumber, la
           </h6>
           {isTreasuryNoun && enableHover && (
             <Tooltip>
-              <TooltipTrigger asChild>
-                <Image
-                  src="/swap-icon.svg"
-                  width={size ? size / 10 : 30}
-                  height={size ? size / 10 : 30}
-                  alt=""
-                  className="absolute right-2 top-2"
-                />
+              <TooltipTrigger className="absolute left-2 top-2 z-[6]">
+                <div className="rounded-full bg-white p-[5px] shadow-md">
+                  <Icon icon="treasury" size={size ? size / 10 : 20} />
+                </div>
               </TooltipTrigger>
               <TooltipContent>
                 This Noun is held by the treasury. <br />
@@ -78,15 +76,26 @@ export default function NounCard({ noun, size, enableHover, alwaysShowNumber, la
           )}
           {isHeldByNounsErc20 && enableHover && (
             <Tooltip>
-              <TooltipTrigger asChild>
-                <div className="absolute left-2 top-2 flex items-center gap-1 rounded-full bg-white px-2 py-[5px] shadow-md">
-                  <Icon icon="lightning" size={size ? size / 10 : 16} />
+              <TooltipTrigger className="absolute left-2 top-2 z-[6]">
+                <div className="flex items-center gap-1 rounded-full bg-white px-2 py-[5px] shadow-md">
+                  <Icon icon="swap" size={size ? size / 10 : 20} />
                   <span className="label-sm text-content-primary">Swap</span>
                 </div>
               </TooltipTrigger>
               <TooltipContent>
                 This Noun is held by the $nouns ERC-20 contract. It can be instantly swapped with any Noun you own.
               </TooltipContent>
+            </Tooltip>
+          )}
+          {noun.secondaryListing && enableHover && (
+            <Tooltip>
+              <TooltipTrigger className="absolute right-2 top-2 z-[6]">
+                <div className="label-sm flex items-center gap-1 rounded-full bg-[#212529]/40 py-[5px] pl-1.5 pr-2 text-center text-white backdrop-blur-[2px]">
+                  <Image src="/ethereum-logo.png" width={20} height={20} alt="Ξ" />
+                  <span>{formatTokenAmount(BigInt(noun.secondaryListing.priceRaw), 18)}</span>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>This Noun is listed on the secondary market.</TooltipContent>
             </Tooltip>
           )}
           <div

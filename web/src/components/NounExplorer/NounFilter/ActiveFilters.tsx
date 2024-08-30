@@ -9,9 +9,11 @@ import { INSTANT_SWAP_FILTER_KEY } from "./InstantSwapFilter";
 import { useNounFilters } from "@/hooks/useNounFilters";
 import clsx from "clsx";
 import { scrollToNounExplorer } from "@/utils/scroll";
+import { BUY_NOW_FILTER_KEY } from "./BuyNowFilter";
 
 export function ActiveFilters({ numNouns }: { numNouns: number }) {
-  const { background, head, glasses, body, accessory, heldByTreasury, heldByNounsErc20, totalCount } = useNounFilters();
+  const { background, head, glasses, body, accessory, heldByTreasury, heldByNounsErc20, buyNow, totalCount } =
+    useNounFilters();
 
   return (
     <div className={clsx("flex items-center gap-2 bg-white md:py-4", totalCount > 0 ? "py-2" : "py-0")}>
@@ -22,6 +24,7 @@ export function ActiveFilters({ numNouns }: { numNouns: number }) {
       <div className="no-scrollbar flex w-full min-w-0 flex-row items-center gap-2 overflow-x-auto">
         {heldByTreasury && <ActiveFilterItem seed={"1"} type="heldByTreasury" key={"heldByTreasury"} />}
         {heldByNounsErc20 && <ActiveFilterItem seed={"1"} type="heldByNounsErc20" key={"heldByNounsErc20"} />}
+        {buyNow && <ActiveFilterItem seed={"1"} type="buyNow" key={"buyNow"} />}
         {background.map((seed) => (
           <ActiveFilterItem seed={seed} type="background" key={"background" + seed} />
         ))}
@@ -44,7 +47,7 @@ export function ActiveFilters({ numNouns }: { numNouns: number }) {
 }
 
 interface ActiveFilterItemInterface {
-  type: NounTraitType | "heldByNounsErc20" | "heldByTreasury";
+  type: NounTraitType | "heldByNounsErc20" | "heldByTreasury" | "buyNow";
   seed: string;
 }
 
@@ -52,7 +55,7 @@ function ActiveFilterItem({ type, seed }: ActiveFilterItemInterface) {
   const searchParams = useSearchParams();
 
   const removeFilter = useCallback(
-    (type: NounTraitType | "heldByNounsErc20" | "heldByTreasury", seed: string) => {
+    (type: ActiveFilterItemInterface["type"], seed: string) => {
       const params = new URLSearchParams(searchParams.toString());
 
       if (type == "heldByTreasury") {
@@ -63,6 +66,11 @@ function ActiveFilterItem({ type, seed }: ActiveFilterItemInterface) {
       } else if (type == "heldByNounsErc20") {
         if (params.get(INSTANT_SWAP_FILTER_KEY) === "1") {
           params.delete(INSTANT_SWAP_FILTER_KEY);
+          window.history.pushState(null, "", `?${params.toString()}`);
+        }
+      } else if (type == "buyNow") {
+        if (params.get(BUY_NOW_FILTER_KEY) === "1") {
+          params.delete(BUY_NOW_FILTER_KEY);
           window.history.pushState(null, "", `?${params.toString()}`);
         }
       } else {
@@ -97,6 +105,8 @@ function ActiveFilterItem({ type, seed }: ActiveFilterItemInterface) {
         <span className="text-content-primary">Treasury Nouns</span>
       ) : type === "heldByNounsErc20" ? (
         <span className="text-content-primary">Instant Swap</span>
+      ) : type === "buyNow" ? (
+        <span className="text-content-primary">Buy Now</span>
       ) : (
         <>
           <span>{type}: </span>

@@ -4,23 +4,23 @@ import { useCallback, useMemo } from "react";
 import Icon from "../../ui/Icon";
 import { scrollToNounExplorer } from "@/utils/scroll";
 
-export const ONLY_TREASURY_NOUNS_FILTER_KEY = "onlyTreasuryNouns";
+export const BUY_NOW_FILTER_KEY = "buyNow";
 
-export default function TreasuryNounFilter() {
+export default function BuyNowFilter() {
   const searchParams = useSearchParams();
 
   const isChecked = useMemo(() => {
     const params = new URLSearchParams(searchParams.toString());
-    return params.get(ONLY_TREASURY_NOUNS_FILTER_KEY) === "1";
+    return params.get(BUY_NOW_FILTER_KEY) === "1";
   }, [searchParams]);
 
-  const handleOnlyInstantSwapFilterChange = useCallback(
+  const handleBuyNowFilterChange = useCallback(
     (checked: boolean) => {
       const params = new URLSearchParams(searchParams.toString());
       if (!checked) {
-        params.delete(ONLY_TREASURY_NOUNS_FILTER_KEY);
+        params.delete(BUY_NOW_FILTER_KEY);
       } else {
-        params.set(ONLY_TREASURY_NOUNS_FILTER_KEY, "1");
+        params.set(BUY_NOW_FILTER_KEY, "1");
       }
 
       window.history.pushState(null, "", `?${params.toString()}`);
@@ -30,10 +30,10 @@ export default function TreasuryNounFilter() {
   );
 
   return (
-    <FilterItemButton isChecked={isChecked} onClick={() => handleOnlyInstantSwapFilterChange(!isChecked)}>
+    <FilterItemButton isChecked={isChecked} onClick={() => handleBuyNowFilterChange(!isChecked)}>
       <div className="flex items-center gap-2">
-        <Icon icon="treasury" size={20} className="fill-content-primary" />
-        <h6>Treasury Nouns</h6>
+        <Icon icon="lightning" size={20} className="fill-content-primary" />
+        <h6>Buy Now</h6>
       </div>
     </FilterItemButton>
   );

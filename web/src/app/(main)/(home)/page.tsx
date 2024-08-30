@@ -10,6 +10,7 @@ import FeatureHighlight from "@/components/FeatureHighlight";
 import NounExplorer from "@/components/NounExplorer";
 import AnimationGird from "@/components/NounExplorer/NounGrid/AnimationGrid";
 import ExternalFeaturedCarousel from "@/components/ExternalFeaturedCarousel";
+import { getSecondaryFloorListing } from "@/data/noun/getSecondaryNounListings";
 
 export async function generateMetadata({ searchParams }: { searchParams: { frame?: string } }) {
   let filteredFrameMetadata: Record<string, string> = {};
@@ -72,12 +73,12 @@ export default function Page({ searchParams }: { searchParams: { auctionId?: str
 }
 
 async function NounExplorerWrapper() {
-  const allNouns = await getAllNounsUncached();
+  const [allNouns, secondaryFloorListing] = await Promise.all([getAllNounsUncached(), getSecondaryFloorListing()]);
 
   return (
     <>
       <NounExplorer nouns={allNouns} />
-      <NounDialog nouns={allNouns} />
+      <NounDialog nouns={allNouns} secondaryFloorListing={secondaryFloorListing} />
     </>
   );
 }

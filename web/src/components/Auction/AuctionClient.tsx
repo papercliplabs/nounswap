@@ -6,7 +6,14 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo } from "react";
 import NavButtons from "./NavButtons";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { auctionQuery, currentAuctionIdQuery, nounQuery, userAvatarQuery, userNameQuery } from "@/data/tanstackQueries";
+import {
+  auctionQuery,
+  currentAuctionIdQuery,
+  nounQuery,
+  secondaryFloorListingQuery,
+  userAvatarQuery,
+  userNameQuery,
+} from "@/data/tanstackQueries";
 import { Auction } from "@/data/auction/types";
 import { LiveAuction } from "./LiveAuction";
 import { EndedAuction } from "./EndedAuction";
@@ -23,6 +30,10 @@ export default function AuctionClient() {
 
   const { data: currentAuctionId, refetch: refetchCurrentAuctionId } = useQuery({
     ...currentAuctionIdQuery(),
+  });
+
+  const { data: secondaryFloorListing } = useQuery({
+    ...secondaryFloorListingQuery(),
   });
 
   const auctionId = useMemo(() => {
@@ -46,7 +57,7 @@ export default function AuctionClient() {
       const endTimeMs = Number(auction.endTime) * 1000;
       const endDate = new Date(endTimeMs);
       return new Intl.DateTimeFormat("en-US", {
-        month: "long",
+        month: "short",
         day: "numeric",
         year: "numeric",
       }).format(endDate);
@@ -123,14 +134,14 @@ export default function AuctionClient() {
           src={nounImgSrc ?? "/noun-loading-skull.gif"}
           width={370}
           height={370}
-          className="z-10 flex h-[194px] w-[194px] flex-1 select-none items-end justify-end rounded-3xl object-contain object-bottom md:h-[370px] md:w-[370px]"
+          className="z-10 flex h-[194px] w-[194px] flex-1 grow-0 select-none items-end justify-end rounded-3xl object-contain object-bottom md:h-[370px] md:w-[370px]"
           draggable={false}
           unoptimized={nounImgSrc == undefined}
           alt=""
         />
       </div>
-      <div className="z-10 flex min-h-[377px] w-full min-w-0 flex-1 flex-col items-start justify-start gap-4 bg-white p-6 md:w-fit md:gap-6 md:bg-transparent">
-        <div className="flex w-full flex-col gap-4">
+      <div className="z-10 flex min-h-[389px] w-full min-w-0 flex-1 flex-col items-start justify-start gap-4 bg-white p-6 md:w-fit md:gap-6 md:bg-transparent">
+        <div className="flex w-full flex-col gap-2">
           <div className="flex w-full flex-row-reverse items-center justify-between gap-3 md:flex-row md:justify-start">
             {auctionId && currentAuctionId && <NavButtons auctionId={auctionId} currentAuctionId={currentAuctionId} />}
             <span className="label-md text-content-secondary">{date}</span>
@@ -140,7 +151,12 @@ export default function AuctionClient() {
           </div>
         </div>
 
-        {auction && (auction.state == "live" ? <LiveAuction auction={auction} /> : <EndedAuction auction={auction} />)}
+        {auction &&
+          (auction.state == "live" ? (
+            <LiveAuction auction={auction} secondaryFloorListing={secondaryFloorListing ?? null} />
+          ) : (
+            <EndedAuction auction={auction} />
+          ))}
       </div>
     </>
   );

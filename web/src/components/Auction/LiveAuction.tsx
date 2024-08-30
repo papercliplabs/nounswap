@@ -9,8 +9,16 @@ import { AuctionDetailTemplate } from "./AuctionDetailsTemplate";
 import { Auction } from "@/data/auction/types";
 import { BidHistoryDialog } from "./BidHistoryDialog";
 import { UserName, UserRoot } from "../User/UserClient";
+import { SecondaryNounListing } from "@/data/noun/types";
+import SecondaryFloor from "../SecondaryFloor";
 
-export function LiveAuction({ auction }: { auction: Auction }) {
+export function LiveAuction({
+  auction,
+  secondaryFloorListing,
+}: {
+  auction: Auction;
+  secondaryFloorListing: SecondaryNounListing | null;
+}) {
   const [timeRemainingS, setTimeRemainingS] = useState<number | undefined>(
     Math.max(Number(auction.endTime) - Date.now() / 1000, 0)
   );
@@ -28,34 +36,37 @@ export function LiveAuction({ auction }: { auction: Auction }) {
 
   return (
     <>
-      <AuctionDetailTemplate
-        item1={{
-          title: "Current bid",
-          value: formatNumber({
-            input: Number(formatEther(highestBid ? BigInt(highestBid.amount) : BigInt(0))),
-            unit: "ETH",
-          }),
-        }}
-        item2={{
-          title: showLocalTime
-            ? `Ends on ${formatTimestamp({ timestamp: Number(auction.endTime) * 1000, showMonth: true, showDay: true })} at`
-            : "Time left",
-          value: (
-            <>
-              {timeRemainingS != undefined ? (
-                <span suppressHydrationWarning className="flex w-full">
-                  {showLocalTime
-                    ? formatTimestamp({ timestamp: Number(auction.endTime) * 1000, showTime: true })
-                    : formatTimeLeft(timeRemainingS)}
-                </span>
-              ) : (
-                <Skeleton className="w-[100px] whitespace-pre-wrap"> </Skeleton>
-              )}
-            </>
-          ),
-          onClick: () => setShowLocalTime((prev) => !prev),
-        }}
-      />
+      <div className="flex w-full flex-col gap-2 md:w-fit">
+        <AuctionDetailTemplate
+          item1={{
+            title: "Current bid",
+            value: formatNumber({
+              input: Number(formatEther(highestBid ? BigInt(highestBid.amount) : BigInt(0))),
+              unit: "ETH",
+            }),
+          }}
+          item2={{
+            title: showLocalTime
+              ? `Ends on ${formatTimestamp({ timestamp: Number(auction.endTime) * 1000, showMonth: true, showDay: true })} at`
+              : "Time left",
+            value: (
+              <>
+                {timeRemainingS != undefined ? (
+                  <span suppressHydrationWarning className="flex w-full">
+                    {showLocalTime
+                      ? formatTimestamp({ timestamp: Number(auction.endTime) * 1000, showTime: true })
+                      : formatTimeLeft(timeRemainingS)}
+                  </span>
+                ) : (
+                  <Skeleton className="w-[100px] whitespace-pre-wrap"> </Skeleton>
+                )}
+              </>
+            ),
+            onClick: () => setShowLocalTime((prev) => !prev),
+          }}
+        />
+        <SecondaryFloor listing={secondaryFloorListing} redThreshold={BigInt(auction.nextMinBid)} />
+      </div>
       <Bid nounId={BigInt(auction.nounId)} nextMinBid={BigInt(auction.nextMinBid)} />
       {auction.bids.length > 0 && (
         <BidHistoryDialog nounId={auction.nounId} bids={auction.bids}>

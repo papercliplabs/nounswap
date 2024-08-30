@@ -28,6 +28,7 @@ export interface ChainSpecificData {
   };
   ponderIndexerUrl: string;
   swapForWrappedNativeUrl: string;
+  reservoirApiUrl: string;
 }
 
 export const mainnetPublicClient = createClient({
@@ -64,6 +65,7 @@ const CHAIN_SPECIFIC_CONFIGS: Record<number, ChainSpecificData> = {
     ponderIndexerUrl: process.env.LOCAL_INDEXER_URL ?? "https://indexer.nounswap.wtf",
     swapForWrappedNativeUrl:
       "https://app.uniswap.org/swap?outputCurrency=0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2&chain=mainnet",
+    reservoirApiUrl: "https://api.reservoir.tools",
   },
   [sepolia.id]: {
     chain: sepolia,
@@ -95,6 +97,7 @@ const CHAIN_SPECIFIC_CONFIGS: Record<number, ChainSpecificData> = {
     },
     ponderIndexerUrl: process.env.LOCAL_INDEXER_URL ?? "https://indexer.nounswap.wtf", // mainnet for now, didn't deploy for sepolia yet, don't use for testnet but this satisfies codegen
     swapForWrappedNativeUrl: "",
+    reservoirApiUrl: "https://api-sepolia.reservoir.tools",
   },
 };
 

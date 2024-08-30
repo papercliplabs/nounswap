@@ -2,7 +2,6 @@ import { useSearchParams } from "next/navigation";
 import { FilterItemButton } from "./FilterItemButton";
 import { useCallback, useMemo } from "react";
 import Icon from "../../ui/Icon";
-import { Zap } from "lucide-react";
 import { scrollToNounExplorer } from "@/utils/scroll";
 
 export const INSTANT_SWAP_FILTER_KEY = "instantSwap";
@@ -33,7 +32,7 @@ export default function InstantSwapFilter() {
   return (
     <FilterItemButton isChecked={isChecked} onClick={() => handleOnlyTreasuryNounFilterChange(!isChecked)}>
       <div className="flex items-center gap-2">
-        <Icon icon="lightning" size={20} className="fill-content-primary" />
+        <Icon icon="swap" size={20} className="fill-content-primary" />
         <h6>Instant Swap</h6>
       </div>
     </FilterItemButton>
