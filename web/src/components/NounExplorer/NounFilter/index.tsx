@@ -13,6 +13,7 @@ import { cn } from "@/utils/shadcn";
 import InstantSwapFilter from "./InstantSwapFilter";
 import { useNounFilters } from "@/hooks/useNounFilters";
 import clsx from "clsx";
+import BuyNowFilter from "./BuyNowFilter";
 
 export const BACKGROUND_TRAITS: NounTrait[] = [
   { name: "Cool", seed: 0 },
@@ -92,6 +93,13 @@ export default function NounFilter({ numNouns }: { numNouns: number }) {
             <ClearAllFiltersButton className="text-semantic-accent clickable-active hidden md:flex">
               Clear all
             </ClearAllFiltersButton>
+          </div>
+          <Separator className="h-[2px]" />
+          <div>
+            <BuyNowFilter />
+            <span className="paragraph-sm text-content-secondary">
+              Show Nouns that are listed on secondary that you you can buy now.
+            </span>
           </div>
           <Separator className="h-[2px]" />
           <div>

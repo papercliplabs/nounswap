@@ -1,6 +1,6 @@
 import { BigIntString } from "@/utils/types";
 import { Auction } from "./auction/types";
-import { Noun } from "./noun/types";
+import { Noun, SecondaryNounListing } from "./noun/types";
 import { Address } from "viem";
 
 export function currentAuctionIdQuery() {
@@ -35,5 +35,12 @@ export function userAvatarQuery(address?: Address) {
   return {
     queryKey: ["user-avatar", address],
     queryFn: async () => (await (await fetch(`/api/user/${address}/avatar`)).json()) as string | null,
+  };
+}
+
+export function secondaryFloorListingQuery() {
+  return {
+    queryKey: ["secondary-floor-listing"],
+    queryFn: async () => (await (await fetch(`/api/secondary-floor-listing`)).json()) as SecondaryNounListing | null,
   };
 }

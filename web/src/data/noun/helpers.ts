@@ -8,7 +8,7 @@ function extractNameFromFileName(filename: string) {
 }
 
 // Async just so we can cache
-export function transformQueryNounToNoun(queryNoun: AllNounsQuery["nouns"][0]): Noun {
+export function transformQueryNounToNoun(queryNoun: AllNounsQuery["nouns"][0]): Omit<Noun, "secondaryListing"> {
   if (!queryNoun.seed) {
     throw new Error("Seed not found");
   }

@@ -3,7 +3,7 @@ import { useSearchParams } from "next/navigation";
 import { Dialog, DialogContent } from "../ui/dialogBase";
 import clsx from "clsx";
 import Image from "next/image";
-import { Noun, NounTraitType } from "@/data/noun/types";
+import { Noun, NounTraitType, SecondaryNounListing } from "@/data/noun/types";
 import { Separator } from "../ui/separator";
 import { useCallback, useMemo } from "react";
 import { CHAIN_CONFIG } from "@/config";
@@ -15,12 +15,17 @@ import { useNounImage } from "@/hooks/useNounImage";
 import Icon from "../ui/Icon";
 import { UserAvatar, UserName, UserRoot } from "../User/UserClient";
 import { scrollToNounExplorer } from "@/utils/scroll";
+import { formatTokenAmount } from "@/utils/utils";
+import { formatNumber } from "@/utils/format";
+import NounsFloor from "../SecondaryFloor";
+import BuyNounOnSecondaryDialog from "./BuyNounOnSecondaryDialog";
 
 interface NounsDialogProps {
   nouns: Noun[];
+  secondaryFloorListing: SecondaryNounListing | null;
 }
 
-export default function NounDialog({ nouns }: NounsDialogProps) {
+export default function NounDialog({ nouns, secondaryFloorListing }: NounsDialogProps) {
   const searchParams = useSearchParams();
   const nounId = searchParams.get("nounId");
 
@@ -74,7 +79,7 @@ export default function NounDialog({ nouns }: NounsDialogProps) {
 
             <Separator className="h-[2px]" />
 
-            <UserRoot address={noun.owner} className="w-full max-w-full items-center gap-6">
+            <UserRoot address={noun.owner} className="w-fit max-w-full items-center gap-6">
               <UserAvatar />
               <div className="flex h-full min-w-0 flex-col justify-start overflow-hidden">
                 <span className="paragraph-sm text-content-secondary">Held by</span>
@@ -102,13 +107,44 @@ export default function NounDialog({ nouns }: NounsDialogProps) {
               <>
                 <Link href={`/instant-swap/${noun.id}`}>
                   <Button className="w-full gap-[10px]">
-                    <Icon icon="lightning" size={20} className="fill-white" />
+                    <Icon icon="swap" size={20} className="fill-white" />
                     Instant swap
                   </Button>
                 </Link>
                 <div className="text-content-secondary">
                   This Noun can be instantly swapped with any Noun you own. No need for a proposal because its held in
                   the $nouns contract. Just swap it.
+                </div>
+              </>
+            )}
+
+            {noun.secondaryListing && (
+              <>
+                <div className="flex flex-col gap-6 rounded-[20px] bg-white p-4">
+                  <div className="flex items-start justify-between">
+                    <div className="flex flex-col gap-1">
+                      <span className="label-md text-content-secondary">List Price</span>
+                      <span className="font-pt text-content-primary text-[28px] font-bold leading-[36px]">
+                        {formatTokenAmount(BigInt(noun.secondaryListing.priceRaw), 18)} ETH
+                      </span>
+                      {noun.secondaryListing.priceUsd && (
+                        <span className="label-sm text-content-secondary">
+                          {formatNumber({ input: noun.secondaryListing.priceUsd, unit: "USD" })}
+                        </span>
+                      )}
+                    </div>
+                    <Image
+                      src={noun.secondaryListing.marketIcon ?? ""}
+                      width={36}
+                      height={36}
+                      alt={noun.secondaryListing.marketName ?? ""}
+                    />
+                  </div>
+                  <NounsFloor listing={secondaryFloorListing} />
+                  <BuyNounOnSecondaryDialog noun={noun} />
+                </div>
+                <div className="text-content-secondary">
+                  Buy this Noun instantly from the secondary market via NounSwap with no additional fees!
                 </div>
               </>
             )}

@@ -3,11 +3,19 @@ import AuctionClient from "./AuctionClient";
 import { getCurrentAuctionNounId } from "@/data/auction/getCurrentAuctionNounId";
 import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query";
 import { Suspense } from "react";
-import { auctionQuery, currentAuctionIdQuery, nounQuery, userAvatarQuery, userNameQuery } from "@/data/tanstackQueries";
+import {
+  auctionQuery,
+  currentAuctionIdQuery,
+  nounQuery,
+  secondaryFloorListingQuery,
+  userAvatarQuery,
+  userNameQuery,
+} from "@/data/tanstackQueries";
 import { getAuctionById } from "@/data/auction/getAuctionById";
 import { getNounByIdUncached } from "@/data/noun/getNounById";
 import { Auction as AuctionType } from "@/data/auction/types";
 import { getUserName } from "@/data/user/getUserName";
+import { getSecondaryFloorListing } from "@/data/noun/getSecondaryNounListings";
 
 export default async function Auction({ initialAuctionId }: { initialAuctionId?: string }) {
   return (
@@ -40,6 +48,10 @@ async function AuctionWrapper({ initialAuctionId }: { initialAuctionId?: string 
     queryClient.prefetchQuery({
       queryKey: nounQuery(auctionId).queryKey,
       queryFn: () => getNounByIdUncached(auctionId),
+    }),
+    queryClient.prefetchQuery({
+      queryKey: secondaryFloorListingQuery().queryKey,
+      queryFn: () => getSecondaryFloorListing(),
     }),
   ]);
 
