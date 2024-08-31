@@ -36,6 +36,8 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.1",
     "dotenv": "^16.4.5",
+    "embla-carousel-autoplay": "^8.2.0",
+    "embla-carousel-react": "^8.2.0",
     "encoding": "^0.1.13",
     "framer-motion": "^11.2.10",
     "frog": "^0.9.4",

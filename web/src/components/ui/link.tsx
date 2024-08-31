@@ -5,12 +5,15 @@ import { ComponentProps } from "react";
 import { twMerge } from "tailwind-merge";
 import { Button } from "./button";
 
-export function LinkExternal({ ...props }: React.ComponentProps<typeof Link>) {
+export function LinkExternal({
+  includeReferrer,
+  ...props
+}: { includeReferrer?: boolean } & React.ComponentProps<typeof Link>) {
   return (
     <Link
       {...props}
       target="_blank"
-      rel="noopener noreferrer"
+      rel={`noopener ${includeReferrer ? "" : "noreferrer"}`}
       className={twMerge("hover:brightness-75", props.className)}
     />
   );
