@@ -9,7 +9,7 @@ import NounDialog from "@/components/dialog/NounDialog";
 import FeatureHighlight from "@/components/FeatureHighlight";
 import NounExplorer from "@/components/NounExplorer";
 import AnimationGird from "@/components/NounExplorer/NounGrid/AnimationGrid";
-import SharkPickleConeAdvertisingBanner from "@/components/AdvertisingBanner/SharkPickleConeAdvertisingBanner";
+import ExternalFeaturedCarousel from "@/components/ExternalFeaturedCarousel";
 
 export async function generateMetadata({ searchParams }: { searchParams: { frame?: string } }) {
   let filteredFrameMetadata: Record<string, string> = {};
@@ -32,9 +32,9 @@ export async function generateMetadata({ searchParams }: { searchParams: { frame
 export default function Page({ searchParams }: { searchParams: { auctionId?: string } }) {
   return (
     <>
-      <div className="flex w-full flex-col gap-5">
+      <div className="flex w-full flex-col gap-4">
         <Auction initialAuctionId={searchParams.auctionId} />
-        <SharkPickleConeAdvertisingBanner />
+        <ExternalFeaturedCarousel />
         <FeatureHighlight />
       </div>
       <div>
