@@ -5,6 +5,8 @@ import { ReactNode } from "react";
 import { LinkExternal } from "../ui/link";
 import { CHAIN_CONFIG } from "@/config";
 import { UserAvatar, UserName, UserRoot } from "../User/UserClient";
+import { formatTokenAmount } from "@/utils/utils";
+import { formatNumber } from "@/utils/format";
 
 interface BidHistoryDialogProps {
   nounId: string;
@@ -43,7 +45,12 @@ export function BidHistoryDialog({ children, nounId, bids }: BidHistoryDialogPro
                   </div>
                 </UserRoot>
                 <div className="flex items-center gap-2">
-                  <span className="text-content-secondary shrink-0 pl-6">Ξ {formatEther(BigInt(bid.amount))}</span>
+                  <span className="text-content-secondary shrink-0 pl-6">
+                    {formatNumber({
+                      input: Number(formatEther(BigInt(bid.amount))),
+                      unit: "Ξ",
+                    })}
+                  </span>
                 </div>
               </LinkExternal>
             );
