@@ -98,7 +98,7 @@ export default function NounFilter({ numNouns }: { numNouns: number }) {
           <div>
             <BuyNowFilter />
             <span className="paragraph-sm text-content-secondary">
-              Show Nouns that are listed on secondary that you you can buy now.
+              Show Nouns that are listed on secondary that you can buy now.
             </span>
           </div>
           <Separator className="h-[2px]" />
