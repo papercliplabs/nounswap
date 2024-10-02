@@ -25,7 +25,7 @@ export default function SecondaryFloor({ listing, redThreshold }: NounsFloorProp
         searchParam={{ name: "nounId", value: listing.nounId }}
         className="label-sm text-content-secondary hover:text-content-primary whitespace-pre underline"
       >
-        Floor price{" "}
+        Floor price:{" "}
         <span className={clsx(redThreshold && BigInt(listing.priceRaw) < redThreshold && "text-semantic-negative")}>
           {formatTokenAmount(BigInt(listing.priceRaw), 18)} ETH
         </span>

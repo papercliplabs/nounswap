@@ -9,15 +9,18 @@ import { AuctionDetailTemplate } from "./AuctionDetailsTemplate";
 import { Auction } from "@/data/auction/types";
 import { BidHistoryDialog } from "./BidHistoryDialog";
 import { UserName, UserRoot } from "../User/UserClient";
-import { SecondaryNounListing } from "@/data/noun/types";
+import { SecondaryNounListing, SecondaryNounOffer } from "@/data/noun/types";
 import SecondaryFloor from "../SecondaryFloor";
+import SecondaryTopOffer from "../SecondaryTopOffer";
 
 export function LiveAuction({
   auction,
   secondaryFloorListing,
+  secondaryTopOffer,
 }: {
   auction: Auction;
   secondaryFloorListing: SecondaryNounListing | null;
+  secondaryTopOffer: SecondaryNounOffer | null;
 }) {
   const [timeRemainingS, setTimeRemainingS] = useState<number | undefined>(
     Math.max(Number(auction.endTime) - Date.now() / 1000, 0)
@@ -65,7 +68,11 @@ export function LiveAuction({
             onClick: () => setShowLocalTime((prev) => !prev),
           }}
         />
-        <SecondaryFloor listing={secondaryFloorListing} redThreshold={BigInt(auction.nextMinBid)} />
+        <div className="text-content-secondary flex gap-2">
+          <SecondaryFloor listing={secondaryFloorListing} redThreshold={BigInt(auction.nextMinBid)} />
+          <span>•</span>
+          <SecondaryTopOffer offer={secondaryTopOffer} />
+        </div>
       </div>
       <Bid nounId={BigInt(auction.nounId)} nextMinBid={BigInt(auction.nextMinBid)} />
       {auction.bids.length > 0 && (

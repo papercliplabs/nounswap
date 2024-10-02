@@ -8,6 +8,7 @@ import {
   currentAuctionIdQuery,
   nounQuery,
   secondaryFloorListingQuery,
+  secondaryTopOfferQuery,
   userAvatarQuery,
   userNameQuery,
 } from "@/data/tanstackQueries";
@@ -15,7 +16,7 @@ import { getAuctionById } from "@/data/auction/getAuctionById";
 import { getNounByIdUncached } from "@/data/noun/getNounById";
 import { Auction as AuctionType } from "@/data/auction/types";
 import { getUserName } from "@/data/user/getUserName";
-import { getSecondaryFloorListing } from "@/data/noun/getSecondaryNounListings";
+import { getSecondaryFloorListing, getSecondaryTopOffer } from "@/data/noun/getSecondaryNounListings";
 
 export default async function Auction({ initialAuctionId }: { initialAuctionId?: string }) {
   return (
@@ -52,6 +53,10 @@ async function AuctionWrapper({ initialAuctionId }: { initialAuctionId?: string 
     queryClient.prefetchQuery({
       queryKey: secondaryFloorListingQuery().queryKey,
       queryFn: () => getSecondaryFloorListing(),
+    }),
+    queryClient.prefetchQuery({
+      queryKey: secondaryTopOfferQuery().queryKey,
+      queryFn: () => getSecondaryTopOffer(),
     }),
   ]);
 
