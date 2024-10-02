@@ -68,7 +68,7 @@ export function LiveAuction({
             onClick: () => setShowLocalTime((prev) => !prev),
           }}
         />
-        <div className="text-content-secondary flex gap-2">
+        <div className="text-content-secondary flex items-center gap-2">
           <SecondaryFloor listing={secondaryFloorListing} redThreshold={BigInt(auction.nextMinBid)} />
           <span>•</span>
           <SecondaryTopOffer offer={secondaryTopOffer} />

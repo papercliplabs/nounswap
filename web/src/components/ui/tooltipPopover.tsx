@@ -21,5 +21,3 @@ export function TooltipPopover({ trigger, children }: TooltipPopoverProps) {
     </>
   );
 }
-
-export function TooltipPopoverTrigger() {}

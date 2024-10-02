@@ -20,7 +20,7 @@ export default function SecondaryTopOffer({ offer }: NounsFloorProps) {
       <DialogTrigger className="label-sm hover:text-content-primary underline">
         Top offer: {formatNumber({ input: offer.priceEth, unit: "ETH" })}
       </DialogTrigger>
-      <DialogContent className="w-full max-w-[420px]">
+      <DialogContent className="w-full max-w-[min(420px,95%)]">
         <DialogTitle className="heading-4">Top Offer</DialogTitle>
         <div className="flex flex-col gap-6">
           <div className="font-pt border-border-secondary flex h-[92px] w-full items-start justify-between gap-3 rounded-xl border-2 p-4 font-bold">
