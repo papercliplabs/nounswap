@@ -1,7 +1,7 @@
 "use server";
 import { CHAIN_CONFIG } from "@/config";
 import { paths } from "@reservoir0x/reservoir-sdk";
-import { SecondaryNounListing } from "./types";
+import { SecondaryNounListing, SecondaryNounOffer } from "./types";
 import { unstable_cache } from "next/cache";
 
 export async function getSecondaryNounListingsUncached(): Promise<SecondaryNounListing[]> {
@@ -77,4 +77,43 @@ export async function getSecondaryFloorListing(): Promise<SecondaryNounListing |
   return listings.length == 0
     ? null
     : listings.reduce((prev, curr) => (BigInt(curr.priceRaw) < BigInt(prev.priceRaw) ? curr : prev));
+}
+
+export async function getSecondaryTopOffer(): Promise<SecondaryNounOffer | null> {
+  const resp = await fetch(
+    `https://api.reservoir.tools/collections/${CHAIN_CONFIG.addresses.nounsToken}/bids/v1?type=collection&limit=1`,
+    {
+      headers: {
+        "content-type": "application/json",
+        "x-api-key": process.env.RESERVOIR_API_KEY!,
+      },
+      next: {
+        revalidate: 60 * 15, // 15min
+      },
+    }
+  );
+
+  if (!resp.ok) {
+    console.error("Failed to fetch top offer", resp);
+    return null;
+  }
+
+  const data = (await resp.json()) as paths["/collections/{collectionId}/bids/v1"]["get"]["responses"]["200"]["schema"];
+
+  if (data.orders?.length != 1) {
+    return null;
+  }
+
+  const order = data.orders[0];
+  if (order.price?.amount?.native != undefined && order.price?.amount?.usd != undefined) {
+    return {
+      marketName: order.source?.["name"] as string | undefined,
+      marketIcon: order.source?.["icon"] as string | undefined,
+
+      priceEth: order.price.amount.native,
+      priceUsd: order.price.amount.usd,
+    };
+  } else {
+    return null;
+  }
 }

@@ -25,3 +25,11 @@ export interface SecondaryNounListing {
   priceRaw: BigIntString; // in ETH (wei)
   priceUsd?: number;
 }
+
+export interface SecondaryNounOffer {
+  marketName?: string;
+  marketIcon?: string;
+
+  priceEth: number;
+  priceUsd?: number;
+}
