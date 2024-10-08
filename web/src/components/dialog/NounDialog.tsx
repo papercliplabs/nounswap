@@ -56,7 +56,7 @@ export default function NounDialog({ nouns, secondaryFloorListing }: NounsDialog
   }
 
   return (
-    <Dialog open={nounId != undefined} onOpenChange={handleOpenChange}>
+    <Dialog open={nounId != undefined} onOpenChange={handleOpenChange} modal={true}>
       <DialogContent
         className={clsx(
           "h-full max-h-[90dvh] w-full min-w-0 max-w-[95vw] overflow-hidden rounded-2xl border-none p-0 md:h-auto md:max-w-[min(85vw,1400px)]",

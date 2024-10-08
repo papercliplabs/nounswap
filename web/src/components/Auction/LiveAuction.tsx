@@ -70,7 +70,7 @@ export function LiveAuction({
         />
         <div className="text-content-secondary flex items-center gap-2">
           <SecondaryFloor listing={secondaryFloorListing} redThreshold={BigInt(auction.nextMinBid)} />
-          <span>•</span>
+          {secondaryFloorListing && secondaryTopOffer && <span>•</span>}
           <SecondaryTopOffer offer={secondaryTopOffer} />
         </div>
       </div>

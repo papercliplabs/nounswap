@@ -2,7 +2,7 @@
 import { CHAIN_CONFIG } from "@/config";
 import { paths } from "@reservoir0x/reservoir-sdk";
 import { SecondaryNounListing, SecondaryNounOffer } from "./types";
-import { unstable_cache } from "next/cache";
+import { revalidateTag, unstable_cache } from "next/cache";
 
 export async function getSecondaryNounListingsUncached(): Promise<SecondaryNounListing[]> {
   let continuationCursor: string | undefined = undefined;
@@ -63,7 +63,8 @@ export const getSecondaryNounListings = unstable_cache(
   getSecondaryNounListingsUncached,
   ["get-secondary-noun-listings"],
   {
-    revalidate: 60 * 15, // 15 min
+    tags: ["get-secondary-noun-listings"],
+    revalidate: 60 * 1, // 1 min
   }
 );
 
@@ -116,4 +117,8 @@ export async function getSecondaryTopOffer(): Promise<SecondaryNounOffer | null>
   } else {
     return null;
   }
+}
+
+export async function revalidateSecondaryNounListings() {
+  revalidateTag("get-secondary-noun-listings");
 }

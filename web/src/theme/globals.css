@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Allow nested rainbow modals */
+.iekbcc0 {
+  pointer-events: auto;
+}
+
 @layer base {
   *,
   ::before,

@@ -15,7 +15,11 @@ export interface Transaction {
 
 interface TransactionListenerContextType {
   transactions: Transaction[];
-  addTransaction?: (hash: Hex, logging: { type: TransactionType; description: string }) => void;
+  addTransaction?: (
+    hash: Hex,
+    logging: { type: TransactionType; description: string },
+    completionCallback?: (status: "success" | "reverted") => void
+  ) => void;
 }
 
 export const TransactionListenerContext = createContext<TransactionListenerContextType>({
@@ -29,7 +33,11 @@ export function TransactionListenerProvider({ children }: { children: React.Reac
   const addRecentTransaction = useAddRecentTransaction();
 
   const addTransaction = useCallback(
-    async (hash: Hex, logging: { type: TransactionType; description: string }) => {
+    async (
+      hash: Hex,
+      logging: { type: TransactionType; description: string },
+      completionCallback?: (status: "success" | "reverted") => void
+    ) => {
       setTransactions((transactions) => [...transactions, { hash, status: "pending" }]);
       const url = CHAIN_CONFIG.publicClient.chain?.blockExplorers?.default.url + "/tx/" + hash.toString();
       const pendingToastId = addToast?.({
@@ -49,6 +57,8 @@ export function TransactionListenerProvider({ children }: { children: React.Reac
       if (pendingToastId != undefined) {
         removeToast?.(pendingToastId);
       }
+
+      completionCallback?.(receipt.status);
 
       const status = receipt.status;
       setTransactions((transactions) => {

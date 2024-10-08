@@ -1,7 +1,6 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import ProgressCircle from "../ProgressCircle";
-import { useRouter } from "next/navigation";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialogBase";
 import { Button } from "../ui/button";
 import { twMerge } from "tailwind-merge";
@@ -9,10 +8,7 @@ import { useAccount } from "wagmi";
 import { CHAIN_CONFIG } from "@/config";
 import { Noun } from "@/data/noun/types";
 import { useQuery } from "@tanstack/react-query";
-import {
-  getDoesNounRequireApproval,
-  getDoesNounRequireApprovalAndIsOwner,
-} from "@/data/noun/getDoesNounRequireApproval";
+import { getDoesNounRequireApprovalAndIsOwner } from "@/data/noun/getDoesNounRequireApproval";
 import { ApproveNoun } from "./transactionDialogPages/ApproveNoun";
 import { CreateInstantSwap } from "./transactionDialogPages/CreateInstantSwap";
 
