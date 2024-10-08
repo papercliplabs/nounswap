@@ -1,12 +1,19 @@
 import { Address, Client, createClient, fallback, getAddress, http } from "viem";
 import { mainnet, Chain, sepolia } from "viem/chains";
 import dotenv from "dotenv";
+import {
+  reservoirChains,
+  ReservoirClient,
+  createClient as createReservoirClient,
+  ReservoirChain,
+} from "@reservoir0x/reservoir-sdk";
 
 dotenv.config();
 
 export interface ChainSpecificData {
   chain: Chain;
   publicClient: Client;
+  reservoirChain: ReservoirChain;
   rpcUrl: {
     primary: string;
     fallback: string;
@@ -47,6 +54,7 @@ const CHAIN_SPECIFIC_CONFIGS: Record<number, ChainSpecificData> = {
       fallback: `https://mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_API_KEY!}`,
     },
     publicClient: mainnetPublicClient,
+    reservoirChain: { ...reservoirChains.mainnet, active: true },
     addresses: {
       nounsToken: getAddress("0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03"),
       nounsTreasury: getAddress("0xb1a32FC9F9D8b2cf86C068Cae13108809547ef71"),
@@ -80,6 +88,10 @@ const CHAIN_SPECIFIC_CONFIGS: Record<number, ChainSpecificData> = {
         http(`https://sepolia.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_API_KEY!}`),
       ]),
     }),
+    reservoirChain: {
+      ...reservoirChains.sepolia,
+      active: true,
+    },
     addresses: {
       nounsToken: getAddress("0x4C4674bb72a096855496a7204962297bd7e12b85"),
       nounsTreasury: getAddress("0x07e5D6a1550aD5E597A9b0698A474AA080A2fB28"),
@@ -102,3 +114,10 @@ const CHAIN_SPECIFIC_CONFIGS: Record<number, ChainSpecificData> = {
 };
 
 export const CHAIN_CONFIG = CHAIN_SPECIFIC_CONFIGS[Number(process.env.NEXT_PUBLIC_CHAIN_ID!)]!;
+
+export const reservoirClient = createReservoirClient({
+  chains: [CHAIN_CONFIG.reservoirChain],
+  source: "nounswap.wtf",
+  synchronousStepItemExecution: true,
+  apiKey: process.env.NEXT_PUBLIC_RESERVOIR_API_KEY!,
+});

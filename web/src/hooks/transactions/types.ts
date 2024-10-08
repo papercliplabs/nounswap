@@ -24,4 +24,5 @@ export type TransactionType =
   | "nouns-deposit"
   | "nouns-redeem"
   | "nouns-swap"
-  | "settle-auction";
+  | "settle-auction"
+  | "secondary-purchase";
