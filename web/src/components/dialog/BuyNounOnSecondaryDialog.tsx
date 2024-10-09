@@ -74,8 +74,6 @@ export default function BuyNounOnSecondaryDialog({ noun }: BuyOnSecondaryDialogP
       try {
         await reservoirClient.actions.buyToken({
           items: [{ orderId: noun.secondaryListing.orderId }],
-          // items: [{ orderId: "0xf9eca7fee92b270a71e31cc08eb85aa6dd957a6fd7196eee34a94c85b88a9f25" }], // Blur lil Noun
-          // items: [{ orderId: "0xc4aea0198927a5a92b11122699a2250272d483e9887b034c1b11fce4ca980d30" }], // Open sea lil Noun
           wallet: walletClient,
           options: {
             skipBalanceCheck: true,
@@ -95,8 +93,9 @@ export default function BuyNounOnSecondaryDialog({ noun }: BuyOnSecondaryDialogP
             }
 
             if (purchaseStep?.items?.[0].txHashes?.[0].txHash) {
+              const hash = purchaseStep.items[0].txHashes[0].txHash;
               addTransaction?.(
-                purchaseStep.items[0].txHashes[0].txHash,
+                hash,
                 {
                   type: "secondary-purchase",
                   description: `Purchase Noun ${noun.id}`,
@@ -104,7 +103,7 @@ export default function BuyNounOnSecondaryDialog({ noun }: BuyOnSecondaryDialogP
                 () => {
                   setPending(false);
                   revalidateSecondaryNounListings();
-                  router.push("/");
+                  router.push(`/success/${hash}/purchase/${noun.id}`);
                 }
               );
             }
@@ -116,7 +115,17 @@ export default function BuyNounOnSecondaryDialog({ noun }: BuyOnSecondaryDialogP
         setError((e as APIError).message);
       }
     }
-  }, [address, walletClient, openConnectModal, noun.secondaryListing, step]);
+  }, [
+    address,
+    walletClient,
+    openConnectModal,
+    noun.secondaryListing,
+    step,
+    addTransaction,
+    noun.id,
+    router,
+    switchChain,
+  ]);
 
   const progressStepper = useMemo(
     () => (
