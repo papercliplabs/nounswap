@@ -6,6 +6,7 @@ export interface Bid {
   bidderAddress: Address;
   amount: BigIntString;
   timestamp: BigIntString;
+  clientId?: number;
 }
 
 export interface Auction {

@@ -33,6 +33,7 @@
     "@reservoir0x/reservoir-sdk": "^2.4.11",
     "@tanstack/react-query": "^5.45.1",
     "@tanstack/react-query-devtools": "^5.45.1",
+    "@tanstack/react-table": "^8.20.5",
     "@umami/node": "^0.3.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.1",

@@ -33,6 +33,7 @@ const query = graphql(/* GraphQL */ `
         }
         amount
         blockTimestamp
+        clientId
       }
     }
   }
@@ -72,6 +73,7 @@ async function getAuctionByIdUncached(id: BigIntString): Promise<Auction | undef
     bidderAddress: getAddress(bid.bidder.id),
     amount: bid.amount,
     timestamp: bid.blockTimestamp,
+    clientId: bid.clientId ?? undefined,
   }));
 
   // Sort descending by amount
