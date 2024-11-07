@@ -12,15 +12,18 @@ import { UserName, UserRoot } from "../User/UserClient";
 import { SecondaryNounListing, SecondaryNounOffer } from "@/data/noun/types";
 import SecondaryFloor from "../SecondaryFloor";
 import SecondaryTopOffer from "../SecondaryTopOffer";
+import { Client } from "@/data/ponder/client/getClients";
 
 export function LiveAuction({
   auction,
   secondaryFloorListing,
   secondaryTopOffer,
+  clients,
 }: {
   auction: Auction;
   secondaryFloorListing: SecondaryNounListing | null;
   secondaryTopOffer: SecondaryNounOffer | null;
+  clients: Client[];
 }) {
   const [timeRemainingS, setTimeRemainingS] = useState<number | undefined>(
     Math.max(Number(auction.endTime) - Date.now() / 1000, 0)
@@ -76,7 +79,7 @@ export function LiveAuction({
       </div>
       <Bid nounId={BigInt(auction.nounId)} nextMinBid={BigInt(auction.nextMinBid)} />
       {auction.bids.length > 0 && (
-        <BidHistoryDialog nounId={auction.nounId} bids={auction.bids}>
+        <BidHistoryDialog nounId={auction.nounId} bids={auction.bids} clients={clients}>
           <span className="flex w-full whitespace-pre-wrap md:w-fit">
             Highest bidder{" "}
             <UserRoot address={auction.bids[0].bidderAddress} disableLink>

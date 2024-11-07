@@ -12,9 +12,12 @@ import Icon from "../ui/Icon";
 import { UserAvatar, UserName, UserRoot } from "../User/UserClient";
 import { mainnet } from "viem/chains";
 import { BidHistoryDialog } from "./BidHistoryDialog";
+import { Client } from "@/data/ponder/client/getClients";
+import Image from "next/image";
 
-export function EndedAuction({ auction }: { auction: Auction }) {
+export function EndedAuction({ auction, clients }: { auction: Auction; clients: Client[] }) {
   const winningBid = auction.bids[0];
+  const client = clients.find((client) => client.id == winningBid?.clientId);
 
   return (
     <>
@@ -39,7 +42,18 @@ export function EndedAuction({ auction }: { auction: Auction }) {
                     : auction.bids[0]?.bidderAddress ?? zeroAddress
                 }
               >
-                <UserAvatar className="h-[20px] w-[20px] md:h-[36px] md:w-[36px]" />
+                <div className="relative">
+                  <UserAvatar className="h-[20px] w-[20px] md:h-[36px] md:w-[36px]" />
+                  {client?.icon && (
+                    <Image
+                      src={client.icon}
+                      width={16}
+                      height={16}
+                      alt=""
+                      className="bg-background-primary absolute bottom-0 right-0 h-[10px] w-[10px] rounded-full md:h-[16px] md:w-[16px]"
+                    />
+                  )}
+                </div>
                 <UserName />
               </UserRoot>
               {auction.nounderAuction && (
@@ -88,7 +102,7 @@ export function EndedAuction({ auction }: { auction: Auction }) {
         </div>
       )}
       {auction.bids.length > 0 && (
-        <BidHistoryDialog nounId={auction.nounId} bids={auction.bids}>
+        <BidHistoryDialog nounId={auction.nounId} bids={auction.bids} clients={clients}>
           Bid history
         </BidHistoryDialog>
       )}

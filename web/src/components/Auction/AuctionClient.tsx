@@ -18,10 +18,11 @@ import {
 import { Auction } from "@/data/auction/types";
 import { LiveAuction } from "./LiveAuction";
 import { EndedAuction } from "./EndedAuction";
+import { Client } from "@/data/ponder/client/getClients";
 
 const PREFETCH_DISTANCE = 3;
 
-export default function AuctionClient() {
+export default function AuctionClient({ clients }: { clients: Client[] }) {
   const searchParams = useSearchParams();
   const queryClient = useQueryClient();
 
@@ -162,9 +163,10 @@ export default function AuctionClient() {
               auction={auction}
               secondaryFloorListing={secondaryFloorListing ?? null}
               secondaryTopOffer={secondaryTopOffer ?? null}
+              clients={clients}
             />
           ) : (
-            <EndedAuction auction={auction} />
+            <EndedAuction auction={auction} clients={clients} />
           ))}
       </div>
     </>

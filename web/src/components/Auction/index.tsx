@@ -17,6 +17,7 @@ import { getNounByIdUncached } from "@/data/noun/getNounById";
 import { Auction as AuctionType } from "@/data/auction/types";
 import { getUserName } from "@/data/user/getUserName";
 import { getSecondaryFloorListing, getSecondaryTopOffer } from "@/data/noun/getSecondaryNounListings";
+import { getClients } from "@/data/ponder/client/getClients";
 
 export default async function Auction({ initialAuctionId }: { initialAuctionId?: string }) {
   return (
@@ -34,7 +35,7 @@ export default async function Auction({ initialAuctionId }: { initialAuctionId?:
 
 async function AuctionWrapper({ initialAuctionId }: { initialAuctionId?: string }) {
   const queryClient = new QueryClient();
-  const currentAuctionId = await getCurrentAuctionNounId();
+  const [currentAuctionId, clients] = await Promise.all([getCurrentAuctionNounId(), getClients()]);
   const auctionId = initialAuctionId ?? currentAuctionId;
 
   await Promise.all([
@@ -71,7 +72,7 @@ async function AuctionWrapper({ initialAuctionId }: { initialAuctionId?: string 
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <AuctionClient />
+      <AuctionClient clients={clients} />
     </HydrationBoundary>
   );
 }

@@ -8,13 +8,14 @@ const NAV_INFO = [
   { name: "Treasury", href: "/stats/treasury" },
   { name: "Leaderboard", href: "/stats/leaderboard" },
   { name: "Activity", href: "/stats/activity" },
+  { name: "Clients", href: "/stats/clients" },
 ];
 
 export default function StatsNav() {
   const pathname = usePathname();
 
   return (
-    <div className="border-border-secondary sticky top-0 z-50 flex w-full gap-10 border-b-2 bg-white md:static">
+    <div className="border-border-secondary no-scrollbar sticky top-0 z-50 flex w-full max-w-full gap-6 border-b-2 bg-white md:static md:gap-10">
       {NAV_INFO.map((info, i) => {
         const selected = info.href == pathname;
         return (

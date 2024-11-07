@@ -5,16 +5,18 @@ import { ReactNode } from "react";
 import { LinkExternal } from "../ui/link";
 import { CHAIN_CONFIG } from "@/config";
 import { UserAvatar, UserName, UserRoot } from "../User/UserClient";
-import { formatTokenAmount } from "@/utils/utils";
 import { formatNumber } from "@/utils/format";
+import { Client } from "@/data/ponder/client/getClients";
+import Image from "next/image";
 
 interface BidHistoryDialogProps {
   nounId: string;
   bids: Bid[];
   children: ReactNode;
+  clients: Client[];
 }
 
-export function BidHistoryDialog({ children, nounId, bids }: BidHistoryDialogProps) {
+export function BidHistoryDialog({ children, nounId, bids, clients }: BidHistoryDialogProps) {
   return (
     <Dialog>
       <DialogTrigger className="clickable-active label-sm text-content-secondary flex self-center underline hover:brightness-75 md:self-start">
@@ -31,6 +33,9 @@ export function BidHistoryDialog({ children, nounId, bids }: BidHistoryDialogPro
               hour: "numeric",
               minute: "numeric",
             }).format(Number(bid.timestamp) * 1000);
+
+            const client = clients.find((client) => client.id == bid.clientId);
+
             return (
               <LinkExternal
                 key={i}
@@ -38,7 +43,18 @@ export function BidHistoryDialog({ children, nounId, bids }: BidHistoryDialogPro
                 href={`${CHAIN_CONFIG.chain.blockExplorers?.default.url}/tx/${bid.transactionHash}`}
               >
                 <UserRoot address={bid.bidderAddress} disableLink>
-                  <UserAvatar imgSize={40} className="h-[40px] w-[40px]" />
+                  <div className="relative">
+                    <UserAvatar imgSize={40} className="h-[40px] w-[40px]" />
+                    {client?.icon && (
+                      <Image
+                        src={client.icon}
+                        width={16}
+                        height={16}
+                        alt=""
+                        className="bg-background-primary absolute bottom-0 right-0 rounded-full"
+                      />
+                    )}
+                  </div>
                   <div className="flex flex-col">
                     <UserName />
                     <span className="paragraph-sm text-content-secondary">{date}</span>

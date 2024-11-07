@@ -1,0 +1,38 @@
+import { LinkExternal } from "@/components/ui/link";
+import { Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { getClients } from "@/data/ponder/client/getClients";
+import ClientStats from "./ClientStats";
+
+export default function ClientsPage() {
+  return (
+    <>
+      <div className="flex flex-col justify-between md:flex-row">
+        <div>
+          <h4>Client Stats</h4>
+          <span>
+            Data about clients earning{" "}
+            <LinkExternal
+              href="https://mirror.xyz/verbsteam.eth/28ONBDu7kti7cYBFBnEKgktxzuelvhuxu_jtGw9YrdU"
+              className="underline"
+            >
+              Client incentives
+            </LinkExternal>
+            .
+          </span>
+        </div>
+      </div>
+      <Suspense fallback={<Skeleton className="h-[800px] rounded-2xl" />}>
+        <ClientsDataWrapper />
+      </Suspense>
+    </>
+  );
+}
+
+async function ClientsDataWrapper() {
+  const data = await getClients();
+  return <ClientStats clients={data} />;
+}
+
+export const revalidate = 43200; // Half day
+export const dynamic = "force-static";
