@@ -167,5 +167,18 @@ export default createSchema((p) => {
       propSpendInEth: p.float(),
       propSpendInUsd: p.float(),
     }),
+    Client: p.createTable({
+      id: p.int(),
+
+      name: p.string(),
+
+      rewardAmount: p.bigint(),
+
+      auctionsWon: p.int(),
+      proposalsCreated: p.int(),
+      votesCast: p.int(),
+
+      approved: p.boolean(),
+    }),
   };
 });

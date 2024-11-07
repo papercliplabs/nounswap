@@ -9,6 +9,7 @@ import { erc20Abi } from "./abis/erc20";
 import { MAINNET_SEC_PER_BLOCK } from "./src/utils/constants";
 import { nounsAuctionHouseAbi } from "./abis/nounsAuctionHouse";
 import { nounsDoaLogicAbi } from "./abis/nounsDoaLogic";
+import { nounsClientIncentivesAbi } from "./abis/nounsClientIncentives";
 
 export default createConfig({
   networks: {
@@ -62,6 +63,13 @@ export default createConfig({
       startBlock: 12985453,
       maxBlockRange: 1000,
       includeTransactionReceipts: true,
+    },
+    NounsClientIncentives: {
+      abi: nounsClientIncentivesAbi,
+      address: "0x883860178F95d0C82413eDc1D6De530cB4771d55",
+      network: "mainnet",
+      startBlock: 19818566,
+      maxBlockRange: 1000,
     },
   },
   blocks: {
