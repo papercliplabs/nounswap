@@ -12,60 +12,80 @@ const BANNER_ITEMS: BannerItem[] = [
   {
     node: (
       <ExternalFeaturedCard
-        href="https://nounstown.wtf"
+        href="https://www.yellowcollective.xyz/"
         leftImgSrc={{
-          desktop: "/featured/nouns-town/desktop/left.png",
-          mobile: "/featured/nouns-town/mobile/left.png",
+          desktop: "/featured/yellow/desktop/left.png",
+          mobile: "/featured/yellow/mobile/left.png",
         }}
         rightImgSrc={{
-          desktop: "/featured/nouns-town/desktop/right.png",
-          mobile: "/featured/nouns-town/mobile/right.png",
+          desktop: "/featured/yellow/desktop/right.png",
+          mobile: "/featured/yellow/mobile/right.png",
         }}
-        className="bg-[#76CEF6]"
+        className="bg-[#FBCB05]"
       >
-        <div className="label-sm text-[#0949A9]">Featured event</div>
-        <h3>Nouns Town LA</h3>
-        <ExternalFeaturedCardButton>Visit Site</ExternalFeaturedCardButton>
+        <div className="label-sm text-[#0D6EFD]">Featured DAO</div>
+        <h3>Yellow Collective</h3>
+        <ExternalFeaturedCardButton>View Yellow</ExternalFeaturedCardButton>
       </ExternalFeaturedCard>
     ),
   },
   {
     node: (
       <ExternalFeaturedCard
-        href="https://cares.tv/products/noun-swap-staff-t-shirt"
+        href="https://bigshottoyshop.com/products/nounish-friends-blind-box-mini-figure"
         leftImgSrc={{
-          desktop: "/featured/nounswap-shirt/desktop/left.png",
-          mobile: "/featured/nounswap-shirt/mobile/left.png",
+          desktop: "/featured/nounish-toys/desktop/left.png",
+          mobile: "/featured/nounish-toys/mobile/left.png",
         }}
         rightImgSrc={{
-          desktop: "/featured/nounswap-shirt/desktop/right.png",
-          mobile: "/featured/nounswap-shirt/mobile/right.png",
+          desktop: "/featured/nounish-toys/desktop/right.png",
+          mobile: "/featured/nounish-toys/mobile/right.png",
         }}
-        className="bg-[#F6A376]"
+        className="bg-[#DEE2E6]"
       >
-        <div className="label-sm text-[#C42F3D]">Featured product</div>
-        <h3>NounSwap Tee</h3>
-        <ExternalFeaturedCardButton>Get a shirt</ExternalFeaturedCardButton>
+        <div className="label-sm text-[#0D6EFD]">Featured product</div>
+        <h3>NOUNish Toys</h3>
+        <ExternalFeaturedCardButton>Buy toys</ExternalFeaturedCardButton>
       </ExternalFeaturedCard>
     ),
   },
   {
     node: (
       <ExternalFeaturedCard
-        href="https://zora.co/collect/zora:0x665ff4fe759756fe891a6cd92654246d1a1f16d4/3?referrer=0x65599970Af18EeA5f4ec0B82f23B018fd15EBd11"
+        href="https://nns.xyz/"
         leftImgSrc={{
-          desktop: "/featured/shark-pickle-cone/desktop/left.png",
-          mobile: "/featured/shark-pickle-cone/mobile/left.png",
+          desktop: "/featured/nns/desktop/left.png",
+          mobile: "/featured/nns/mobile/left.png",
         }}
         rightImgSrc={{
-          desktop: "/featured/shark-pickle-cone/desktop/right.png",
-          mobile: "/featured/shark-pickle-cone/mobile/right.png",
+          desktop: "/featured/nns/desktop/right.png",
+          mobile: "/featured/nns/mobile/right.png",
+        }}
+        className="bg-[#C496FF]"
+      >
+        <div className="label-sm text-[#0949A9]">Featured product</div>
+        <h3>Nouns Name Service</h3>
+        <ExternalFeaturedCardButton>Get your name</ExternalFeaturedCardButton>
+      </ExternalFeaturedCard>
+    ),
+  },
+  {
+    node: (
+      <ExternalFeaturedCard
+        href="https://nouns.movie"
+        leftImgSrc={{
+          desktop: "/featured/nouns-movie/desktop/left.png",
+          mobile: "/featured/nouns-movie/mobile/left.png",
+        }}
+        rightImgSrc={{
+          desktop: "/featured/nouns-movie/desktop/right.png",
+          mobile: "/featured/nouns-movie/mobile/right.png",
         }}
         className="bg-background-dark"
       >
-        <div className="label-sm text-semantic-warning">Featured mint</div>
-        <h3 className="text-white">Shark, Pickle, Cone</h3>
-        <ExternalFeaturedCardButton>Mint on Zora</ExternalFeaturedCardButton>
+        <div className="label-sm text-semantic-warning">Featured video</div>
+        <h3 className="text-white">Nouns Movie</h3>
+        <ExternalFeaturedCardButton>Watch now</ExternalFeaturedCardButton>
       </ExternalFeaturedCard>
     ),
   },
