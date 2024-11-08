@@ -73,6 +73,7 @@ const config: Config = {
     screens: {
       md: "850px",
       lg: "1100px",
+      pwa: { raw: "(display-mode: standalone)" },
     },
     extend: {
       boxShadow: {
