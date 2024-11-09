@@ -1,13 +1,10 @@
 "use server";
 import { Address } from "viem";
-import { readContract } from "viem/actions";
-import { CHAIN_CONFIG, mainnetPublicClient } from "@/config";
+import { CHAIN_CONFIG } from "@/config";
 import { unstable_cache } from "next/cache";
 import { SECONDS_PER_WEEK } from "@/utils/constants";
-import { nnsEnsResolverAbi } from "@/abis/nnsEnsResolver";
-import { NNS_ENS_MAINNET_RESOLVER_ADDRESS } from "@/utils/constants";
-import { HARDCODED_USERS } from "./constants";
-import { formatAddress } from "@/utils/format";
+import { HARDCODED_USERS, IDENTITY_CONFIG, IDENTITY_RESOLVERS } from "./constants";
+import { getName } from "@paperclip-labs/dapp-kit/identity/api";
 
 async function getUserNameUncached(address: Address): Promise<string> {
   const hardcodedUser = HARDCODED_USERS[address];
@@ -16,19 +13,13 @@ async function getUserNameUncached(address: Address): Promise<string> {
     return hardcodedUser.name;
   }
 
-  try {
-    const name = await readContract(mainnetPublicClient, {
-      abi: nnsEnsResolverAbi,
-      address: NNS_ENS_MAINNET_RESOLVER_ADDRESS,
-      functionName: "resolve",
-      args: [address],
-    });
-
-    return name != "" ? name : formatAddress(address);
-  } catch (e) {
-    console.error("getUserNameUncached error", e);
-    return formatAddress(address);
-  }
+  return (
+    await getName({
+      address,
+      resolvers: IDENTITY_RESOLVERS,
+      config: IDENTITY_CONFIG,
+    })
+  ).value;
 }
 
 export const getUserName = unstable_cache(getUserNameUncached, ["get-user-name", CHAIN_CONFIG.chain.id.toString()], {

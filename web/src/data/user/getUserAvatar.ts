@@ -1,16 +1,10 @@
 "use server";
 import { Address } from "viem";
-import { getEnsName, getEnsAvatar } from "viem/actions";
-import { CHAIN_CONFIG, mainnetPublicClient } from "@/config";
+import { CHAIN_CONFIG } from "@/config";
 import { unstable_cache } from "next/cache";
 import { SECONDS_PER_WEEK } from "@/utils/constants";
-import { normalize } from "viem/ens";
-import { HARDCODED_USERS } from "./constants";
-
-async function getEnsNameForAddressUncached(address: Address): Promise<string | null> {
-  const ensName = await getEnsName(mainnetPublicClient, { address });
-  return ensName;
-}
+import { HARDCODED_USERS, IDENTITY_CONFIG, IDENTITY_RESOLVERS } from "./constants";
+import { getAvatar } from "@paperclip-labs/dapp-kit/identity/api";
 
 async function getUserAvatarUncached(address: Address): Promise<string | null> {
   const hardcodedUser = HARDCODED_USERS[address];
@@ -19,19 +13,13 @@ async function getUserAvatarUncached(address: Address): Promise<string | null> {
     return hardcodedUser.imageSrc;
   }
 
-  try {
-    const ensName = await getEnsNameForAddressUncached(address);
-
-    if (ensName) {
-      const avatar = await getEnsAvatar(mainnetPublicClient, { name: normalize(ensName) });
-      return avatar;
-    } else {
-      return null;
-    }
-  } catch (e) {
-    console.error("getUserAvatarUncached error", e);
-    return null;
-  }
+  return (
+    await getAvatar({
+      address,
+      resolvers: IDENTITY_RESOLVERS,
+      config: IDENTITY_CONFIG,
+    })
+  ).value;
 }
 
 export const getUserAvatar = unstable_cache(
