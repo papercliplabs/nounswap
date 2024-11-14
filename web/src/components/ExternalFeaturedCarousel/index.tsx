@@ -52,7 +52,7 @@ const BANNER_ITEMS: BannerItem[] = [
   {
     node: (
       <ExternalFeaturedCard
-        href="https://nns.xyz/"
+        href="https://nns.xyz?ref=0x65599970af18eea5f4ec0b82f23b018fd15ebd11"
         leftImgSrc={{
           desktop: "/featured/nns/desktop/left.png",
           mobile: "/featured/nns/mobile/left.png",
