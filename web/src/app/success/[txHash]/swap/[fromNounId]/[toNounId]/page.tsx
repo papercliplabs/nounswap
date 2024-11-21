@@ -1,11 +1,12 @@
 import SuccessDynamicLayout from "@/components/SuccessDynamicLayout";
 import { FRAME_SERVER_URL } from "@/utils/constants";
 
-export default function DepositSuccessPage({
-  params,
-}: {
-  params: { txHash: string; fromNounId: string; toNounId: string };
-}) {
+export default async function DepositSuccessPage(
+  props: {
+    params: Promise<{ txHash: string; fromNounId: string; toNounId: string }>;
+  }
+) {
+  const params = await props.params;
   return (
     <SuccessDynamicLayout
       frameUrl={`${FRAME_SERVER_URL}/instant-swap/1/${params.fromNounId}/${params.toNounId}/${params.txHash}`}

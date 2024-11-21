@@ -18,7 +18,7 @@ export function FilterTraitItem({ traitType, trait }: FilterTraitItemProps) {
   const searchParams = useSearchParams();
 
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { margin: "500px 0px" });
+  const isInView = useInView(ref as any, { margin: "500px 0px" });
 
   const filterKey = useMemo(() => traitType + "[]", [traitType]);
 

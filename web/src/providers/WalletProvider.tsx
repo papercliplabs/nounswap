@@ -3,9 +3,9 @@ import TanstackQueryProvider from "./TanstackQueryProvider";
 import { Address, fallback } from "viem";
 import { http, WagmiProvider } from "wagmi";
 import { CHAIN_CONFIG } from "@/config";
-import { getLinearGradientForAddress } from "@/utils/utils";
-import Image from "next/image";
 import { getDefaultConfig, AvatarComponent, RainbowKitProvider, DisclaimerComponent } from "@rainbow-me/rainbowkit";
+import { Avatar } from "@paperclip-labs/dapp-kit/identity";
+import { IDENTITY_RESOLVERS } from "@/components/Identity";
 
 export const PROJECT_ID = "cb75b98c5532821d721e6275da3e7006";
 
@@ -28,19 +28,7 @@ const config = getDefaultConfig({
 });
 
 export const CustomAvatar: AvatarComponent = ({ address, ensImage, size }) => {
-  const linearGradient = getLinearGradientForAddress(address as Address);
-  return ensImage ? (
-    <Image src={ensImage} width={size} height={size} alt="" style={{ borderRadius: 999, width: size, height: size }} />
-  ) : (
-    <div
-      style={{
-        background: linearGradient,
-        borderRadius: 999,
-        height: size,
-        width: size,
-      }}
-    />
-  );
+  return <Avatar address={address as Address} resolvers={IDENTITY_RESOLVERS} size={size} />;
 };
 
 const Disclaimer: DisclaimerComponent = ({ Text, Link }) => (

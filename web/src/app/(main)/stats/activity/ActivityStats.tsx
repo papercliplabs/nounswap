@@ -5,7 +5,6 @@ import TitlePopover from "@/components/TitlePopover";
 import Card from "@/components/ui/card";
 import Icon from "@/components/ui/Icon";
 import { LinkExternal } from "@/components/ui/link";
-import { UserAvatar, UserName, UserRoot } from "@/components/User/UserClient";
 import { CHAIN_CONFIG } from "@/config";
 import { Noun } from "@/data/noun/types";
 import { ActivityEntry } from "@/data/ponder/activity/getActivity";
@@ -14,6 +13,7 @@ import { formatNumber, formatTimeSinceNow } from "@/utils/format";
 import Image from "next/image";
 import { useMemo } from "react";
 import { Address, getAddress } from "viem";
+import Identity from "@/components/Identity";
 
 interface ActivityStatsProps {
   data: ActivityEntry[];
@@ -110,10 +110,7 @@ function RedeemActivity({ redeemer, noun, timestamp }: { redeemer: Address; noun
         <div className="flex min-w-0 flex-col">
           <span className="paragraph-sm text-content-secondary flex gap-1 whitespace-nowrap">
             Redeem by
-            <UserRoot address={redeemer} className="gap-1 font-bold" disableLink>
-              <UserAvatar imgSize={16} className="h-[16px] w-[16px]" />
-              <UserName />
-            </UserRoot>
+            <Identity address={redeemer} avatarSize={16} />
           </span>
           <span className="label-md">Noun {noun.id}</span>
         </div>
@@ -148,10 +145,7 @@ function DepositActivity({ depositor, noun, timestamp }: { depositor: Address; n
         <div className="flex min-w-0 flex-col">
           <span className="paragraph-sm text-content-secondary flex gap-1 whitespace-nowrap">
             Deposit by
-            <UserRoot address={depositor} className="gap-1 font-bold" disableLink>
-              <UserAvatar imgSize={16} className="h-[16px] w-[16px]" />
-              <UserName />
-            </UserRoot>
+            <Identity address={depositor} avatarSize={16} />
           </span>
           <span className="label-md">Noun {noun.id}</span>
         </div>
@@ -205,10 +199,7 @@ function SwapActivity({
         <div className="flex min-w-0 flex-col">
           <span className="paragraph-sm text-content-secondary flex gap-1 whitespace-nowrap">
             Swap by
-            <UserRoot address={swapper} className="gap-1 font-bold" disableLink>
-              <UserAvatar imgSize={16} className="h-[16px] w-[16px]" />
-              <UserName />
-            </UserRoot>
+            <Identity address={swapper} avatarSize={16} />
           </span>
           <div className="label-md flex items-center gap-1.5">
             <span>Noun {inputNoun.id}</span>

@@ -20,8 +20,8 @@ interface NounCardProps {
 }
 
 export default function NounCard({ noun, size, enableHover, alwaysShowNumber, lazyLoad }: NounCardProps) {
-  const ref = useRef<HTMLInputElement>(null);
-  const isInView = useInView(ref, { margin: "500px 0px" });
+  const ref = useRef<HTMLInputElement | null>(null);
+  const isInView = useInView(ref as any, { margin: "500px 0px" });
   const isTreasuryNoun = useMemo(() => noun.owner == CHAIN_CONFIG.addresses.nounsTreasury, [noun.owner]);
   const isHeldByNounsErc20 = useMemo(() => noun.owner == CHAIN_CONFIG.addresses.nounsErc20, [noun.owner]);
 

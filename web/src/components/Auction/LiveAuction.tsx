@@ -8,11 +8,12 @@ import { formatNumber } from "@/utils/format";
 import { AuctionDetailTemplate } from "./AuctionDetailsTemplate";
 import { Auction } from "@/data/auction/types";
 import { BidHistoryDialog } from "./BidHistoryDialog";
-import { UserName, UserRoot } from "../User/UserClient";
 import { SecondaryNounListing, SecondaryNounOffer } from "@/data/noun/types";
 import SecondaryFloor from "../SecondaryFloor";
 import SecondaryTopOffer from "../SecondaryTopOffer";
 import { Client } from "@/data/ponder/client/getClients";
+import { Name } from "@paperclip-labs/dapp-kit/identity";
+import { IDENTITY_RESOLVERS } from "../Identity";
 
 export function LiveAuction({
   auction,
@@ -81,10 +82,7 @@ export function LiveAuction({
       {auction.bids.length > 0 && (
         <BidHistoryDialog nounId={auction.nounId} bids={auction.bids} clients={clients}>
           <span className="flex w-full whitespace-pre-wrap md:w-fit">
-            Highest bidder{" "}
-            <UserRoot address={auction.bids[0].bidderAddress} disableLink>
-              <UserName />
-            </UserRoot>
+            Highest bidder <Name address={auction.bids[0].bidderAddress} resolvers={IDENTITY_RESOLVERS} />
           </span>
         </BidHistoryDialog>
       )}

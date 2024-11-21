@@ -2,6 +2,8 @@ import { BigIntString } from "@/utils/types";
 import { Auction } from "./auction/types";
 import { Noun, SecondaryNounListing, SecondaryNounOffer } from "./noun/types";
 import { Address } from "viem";
+import { fetchAvatar, fetchName } from "@paperclip-labs/dapp-kit/identity/client";
+import { IDENTITY_RESOLVERS } from "@/components/Identity";
 
 export function currentAuctionIdQuery() {
   return {
@@ -24,20 +26,6 @@ export function nounQuery(id?: BigIntString) {
   };
 }
 
-export function userNameQuery(address?: Address) {
-  return {
-    queryKey: ["user-name", address],
-    queryFn: async () => (await (await fetch(`/api/user/${address}/name`)).json()) as string,
-  };
-}
-
-export function userAvatarQuery(address?: Address) {
-  return {
-    queryKey: ["user-avatar", address],
-    queryFn: async () => (await (await fetch(`/api/user/${address}/avatar`)).json()) as string | null,
-  };
-}
-
 export function secondaryFloorListingQuery() {
   return {
     queryKey: ["secondary-floor-listing"],
@@ -49,5 +37,19 @@ export function secondaryTopOfferQuery() {
   return {
     queryKey: ["secondary-top-offer"],
     queryFn: async () => (await (await fetch(`/api/secondary-top-offer`)).json()) as SecondaryNounOffer | null,
+  };
+}
+
+export function userNameQuery(address: Address) {
+  return {
+    queryKey: ["name", { address, resolvers: IDENTITY_RESOLVERS }],
+    queryFn: async () => await fetchName({ address, resolvers: IDENTITY_RESOLVERS }, "/api/dapp-kit"),
+  };
+}
+
+export function userAvatarQuery(address: Address) {
+  return {
+    queryKey: ["avatar", { address, resolvers: IDENTITY_RESOLVERS }],
+    queryFn: async () => await fetchAvatar({ address, resolvers: IDENTITY_RESOLVERS }, "/api/dapp-kit"),
   };
 }

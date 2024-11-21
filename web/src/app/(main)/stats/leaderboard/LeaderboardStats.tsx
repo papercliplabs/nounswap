@@ -7,7 +7,7 @@ import { formatUnits, getAddress } from "viem";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { CHAIN_CONFIG } from "@/config";
 import { TableLinkExternalRow } from "@/components/TableLinkExternalRow";
-import { UserAvatar, UserName, UserRoot } from "@/components/User/UserClient";
+import Identity from "@/components/Identity";
 
 interface LeaderboardStatsProps {
   accountLeaderboardData: Awaited<ReturnType<typeof getAccountLeaderboard>>;
@@ -52,11 +52,7 @@ export default function LeaderboardStats({ accountLeaderboardData, totalNounsCou
               >
                 <TableCell className="label-sm">{i + 1}</TableCell>
                 <TableCell className="label-md">
-                  {/* Using client side user to avoid build time RPC rate limits */}
-                  <UserRoot address={address} disableLink className="flex items-center gap-2 overflow-hidden">
-                    <UserAvatar imgSize={32} />
-                    <UserName />
-                  </UserRoot>
+                  <Identity address={address} avatarSize={32} className="gap-2" />
                 </TableCell>
                 <TableCell className="label-md w-[130px] text-right">
                   <div className="flex items-center justify-end gap-2">

@@ -4,10 +4,11 @@ import { formatEther } from "viem";
 import { ReactNode } from "react";
 import { LinkExternal } from "../ui/link";
 import { CHAIN_CONFIG } from "@/config";
-import { UserAvatar, UserName, UserRoot } from "../User/UserClient";
 import { formatNumber } from "@/utils/format";
 import { Client } from "@/data/ponder/client/getClients";
 import Image from "next/image";
+import { Avatar, Name } from "@paperclip-labs/dapp-kit/identity";
+import { IDENTITY_RESOLVERS } from "../Identity";
 
 interface BidHistoryDialogProps {
   nounId: string;
@@ -42,9 +43,9 @@ export function BidHistoryDialog({ children, nounId, bids, clients }: BidHistory
                 className="label-lg hover:bg-background-secondary flex w-full min-w-0 items-center justify-between gap-2 px-6 py-3 hover:brightness-100"
                 href={`${CHAIN_CONFIG.chain.blockExplorers?.default.url}/tx/${bid.transactionHash}`}
               >
-                <UserRoot address={bid.bidderAddress} disableLink>
+                <div className="flex items-center gap-2">
                   <div className="relative">
-                    <UserAvatar imgSize={40} className="h-[40px] w-[40px]" />
+                    <Avatar address={bid.bidderAddress} resolvers={IDENTITY_RESOLVERS} size={40} />
                     {client?.icon && (
                       <Image
                         src={client.icon}
@@ -56,10 +57,11 @@ export function BidHistoryDialog({ children, nounId, bids, clients }: BidHistory
                     )}
                   </div>
                   <div className="flex flex-col">
-                    <UserName />
+                    <Name address={bid.bidderAddress} resolvers={IDENTITY_RESOLVERS} />
                     <span className="paragraph-sm text-content-secondary">{date}</span>
                   </div>
-                </UserRoot>
+                </div>
+
                 <div className="flex items-center gap-2">
                   <span className="text-content-secondary shrink-0 pl-6">
                     {formatNumber({

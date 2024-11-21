@@ -6,6 +6,9 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { twMerge } from "tailwind-merge";
 import { Button } from "./ui/button";
 import { Address } from "viem";
+import { Avatar, Name } from "@paperclip-labs/dapp-kit/identity";
+import { IDENTITY_RESOLVERS } from "./Identity";
+import { motion } from "framer-motion";
 
 interface WalletButtonProps {
   disableMobileShrink?: boolean;
@@ -43,19 +46,12 @@ export default function WalletButton({ disableMobileShrink }: WalletButtonProps)
               return (
                 <div className="flex flex-row gap-2">
                   <Button variant="secondary" onClick={openAccountModal} className="flex flex-row gap-2 px-4 py-[6px]">
-                    {ensAvatar ? (
-                      <Image src={ensAvatar ?? ""} width={32} height={32} alt="avatar" className="rounded-full" />
-                    ) : (
-                      <div
-                        className="h-[32px] w-[32px] rounded-full"
-                        style={{
-                          background: getLinearGradientForAddress(account.address as Address),
-                        }}
-                      />
-                    )}
-                    <span className={twMerge("label-md md:flex", !disableMobileShrink && "hidden")}>
-                      {ensName ?? getShortAddress(account.address as Address)}
-                    </span>
+                    <Avatar address={account.address as Address} resolvers={IDENTITY_RESOLVERS} size={32} />
+                    <Name
+                      address={account.address as Address}
+                      resolvers={IDENTITY_RESOLVERS}
+                      className="label-md hidden md:block"
+                    />
                   </Button>
                 </div>
               );
