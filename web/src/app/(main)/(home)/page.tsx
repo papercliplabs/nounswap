@@ -12,7 +12,8 @@ import AnimationGird from "@/components/NounExplorer/NounGrid/AnimationGrid";
 import ExternalFeaturedCarousel from "@/components/ExternalFeaturedCarousel";
 import { getSecondaryFloorListing } from "@/data/noun/getSecondaryNounListings";
 
-export async function generateMetadata({ searchParams }: { searchParams: { frame?: string } }) {
+export async function generateMetadata(props: { searchParams: Promise<{ frame?: string }> }) {
+  const searchParams = await props.searchParams;
   let filteredFrameMetadata: Record<string, string> = {};
   try {
     const frameMetadata = await getFrameMetadata(`https://frames.paperclip.xyz/nounish-auction/v2/nouns`);
@@ -30,7 +31,8 @@ export async function generateMetadata({ searchParams }: { searchParams: { frame
   };
 }
 
-export default function Page({ searchParams }: { searchParams: { auctionId?: string } }) {
+export default async function Page(props: { searchParams: Promise<{ auctionId?: string }> }) {
+  const searchParams = await props.searchParams;
   return (
     <>
       <div className="flex w-full flex-col gap-4">

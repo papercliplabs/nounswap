@@ -7,7 +7,8 @@ import { CHAIN_CONFIG } from "@/config";
 import TreasurySwapStepOne from "./TreasurySwapStepOne";
 import { SomethingWentWrong } from "@/components/SomethingWentWrong";
 
-export default function TreasurySwapStepOnePage({ params }: { params: { chain: number; treasuryNounId: string } }) {
+export default async function TreasurySwapStepOnePage(props: { params: Promise<{ chain: number; treasuryNounId: string }> }) {
+  const params = await props.params;
   return (
     <DynamicSwapLayout
       currentStep={1}

@@ -4,11 +4,12 @@ import { getNounById } from "@/data/noun/getNounById";
 import { Suspense } from "react";
 import TreasurySwapStepTwo from "./TreasurySwapStepTwo";
 
-export default function TreasurySwapStepTwoPage({
-  params,
-}: {
-  params: { treasuryNounId: string; userNounId: string; tipAmount: bigint };
-}) {
+export default async function TreasurySwapStepTwoPage(
+  props: {
+    params: Promise<{ treasuryNounId: string; userNounId: string; tipAmount: bigint }>;
+  }
+) {
+  const params = await props.params;
   return (
     <DynamicSwapLayout
       currentStep={2}

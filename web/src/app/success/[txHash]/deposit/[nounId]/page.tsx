@@ -2,7 +2,8 @@ import SuccessDynamicLayout from "@/components/SuccessDynamicLayout";
 import BridgeToBaseDialog from "@/components/dialog/BridgeToBaseDialog";
 import { FRAME_SERVER_URL } from "@/utils/constants";
 
-export default function DepositSuccessPage({ params }: { params: { txHash: string; nounId: string } }) {
+export default async function DepositSuccessPage(props: { params: Promise<{ txHash: string; nounId: string }> }) {
+  const params = await props.params;
   return (
     <SuccessDynamicLayout
       frameUrl={`${FRAME_SERVER_URL}/deposit/1/${params.nounId}/${params.txHash}`}

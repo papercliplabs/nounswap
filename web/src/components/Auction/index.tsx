@@ -9,13 +9,11 @@ import {
   nounQuery,
   secondaryFloorListingQuery,
   secondaryTopOfferQuery,
-  userAvatarQuery,
   userNameQuery,
 } from "@/data/tanstackQueries";
 import { getAuctionById } from "@/data/auction/getAuctionById";
 import { getNounByIdUncached } from "@/data/noun/getNounById";
 import { Auction as AuctionType } from "@/data/auction/types";
-import { getUserName } from "@/data/user/getUserName";
 import { getSecondaryFloorListing, getSecondaryTopOffer } from "@/data/noun/getSecondaryNounListings";
 import { getClients } from "@/data/ponder/client/getClients";
 
@@ -64,10 +62,7 @@ async function AuctionWrapper({ initialAuctionId }: { initialAuctionId?: string 
   const auction = (await queryClient.getQueryData(auctionQuery(auctionId).queryKey)) as AuctionType | undefined;
   const bidderAddress = auction?.bids[0]?.bidderAddress;
   if (bidderAddress) {
-    await queryClient.prefetchQuery({
-      queryKey: userNameQuery(bidderAddress).queryKey,
-      queryFn: () => getUserName(bidderAddress),
-    });
+    queryClient.prefetchQuery(userNameQuery(auction.bids[0].bidderAddress));
   }
 
   return (

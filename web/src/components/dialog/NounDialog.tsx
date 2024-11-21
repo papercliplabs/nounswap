@@ -13,12 +13,14 @@ import { Skeleton } from "../ui/skeleton";
 import HowItWorksDialog from "./HowItWorksDialog";
 import { useNounImage } from "@/hooks/useNounImage";
 import Icon from "../ui/Icon";
-import { UserAvatar, UserName, UserRoot } from "../User/UserClient";
 import { scrollToNounExplorer } from "@/utils/scroll";
 import { formatTokenAmount } from "@/utils/utils";
 import { formatNumber } from "@/utils/format";
 import NounsFloor from "../SecondaryFloor";
 import BuyNounOnSecondaryDialog from "./BuyNounOnSecondaryDialog";
+import { IDENTITY_RESOLVERS } from "../Identity";
+import { Avatar, Name } from "@paperclip-labs/dapp-kit/identity";
+import { LinkExternal } from "../ui/link";
 
 interface NounsDialogProps {
   nouns: Noun[];
@@ -79,13 +81,18 @@ export default function NounDialog({ nouns, secondaryFloorListing }: NounsDialog
 
             <Separator className="h-[2px]" />
 
-            <UserRoot address={noun.owner} className="w-fit max-w-full items-center gap-6">
-              <UserAvatar />
-              <div className="flex h-full min-w-0 flex-col justify-start overflow-hidden">
-                <span className="paragraph-sm text-content-secondary">Held by</span>
-                <UserName className="label-md text-content-primary hover:text-content-primary/80" />
+            <LinkExternal
+              className="flex min-w-0 items-center gap-2 hover:brightness-75"
+              href={`${CHAIN_CONFIG.chain.blockExplorers?.default.url}/address/${noun.owner}`}
+            >
+              <div className="flex w-fit max-w-full items-center gap-6">
+                <Avatar address={noun.owner} resolvers={IDENTITY_RESOLVERS} size={36} />
+                <div className="label-md flex h-full min-w-0 flex-col justify-start overflow-hidden">
+                  <span className="paragraph-sm text-content-secondary">Held by</span>
+                  <Name address={noun.owner} resolvers={IDENTITY_RESOLVERS} />
+                </div>
               </div>
-            </UserRoot>
+            </LinkExternal>
 
             {heldByTreasury && (
               <>

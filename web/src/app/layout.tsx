@@ -1,4 +1,3 @@
-import "@/theme/globals.css";
 import { Londrina_Solid } from "next/font/google";
 import localFont from "next/font/local";
 
@@ -6,7 +5,10 @@ import Providers from "@/providers/providers";
 import ToastContainer from "@/components/ToastContainer";
 import TestnetBanner from "@/components/TestnetBanner";
 import Analytics from "@/components/Analytics";
+
+import "@paperclip-labs/dapp-kit/styles.css";
 import "@rainbow-me/rainbowkit/styles.css";
+import "@/theme/globals.css";
 
 const ptRootUiFont = localFont({
   src: [

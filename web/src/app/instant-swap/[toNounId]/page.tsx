@@ -7,7 +7,8 @@ import { CHAIN_CONFIG } from "@/config";
 import { InstantSwap } from "./InstantSwap";
 import { SomethingWentWrong } from "@/components/SomethingWentWrong";
 
-export default function UserNounSelectPage({ params }: { params: { toNounId: string } }) {
+export default async function UserNounSelectPage(props: { params: Promise<{ toNounId: string }> }) {
+  const params = await props.params;
   return (
     <DynamicSwapLayout
       currentStep={1}

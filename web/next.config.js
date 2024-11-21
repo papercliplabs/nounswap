@@ -1,8 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  webpack: (config) => {
-    config.resolve.fallback = { fs: false };
-
+  webpack: config => {
+    config.externals.push('pino-pretty', 'lokijs', 'encoding');
     return config;
   },
   reactStrictMode: false,
@@ -30,7 +29,10 @@ const nextConfig = {
         permanent: true,
       },
     ]
-  }
+  },
+  experimental: {
+    turbo: {}
+  },
 }
 
 module.exports = nextConfig

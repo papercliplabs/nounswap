@@ -9,15 +9,20 @@ import { LinkExternal, LinkShallow } from "../ui/link";
 import { CHAIN_CONFIG } from "@/config";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import Icon from "../ui/Icon";
-import { UserAvatar, UserName, UserRoot } from "../User/UserClient";
 import { mainnet } from "viem/chains";
 import { BidHistoryDialog } from "./BidHistoryDialog";
 import { Client } from "@/data/ponder/client/getClients";
 import Image from "next/image";
+import { Avatar, Name } from "@paperclip-labs/dapp-kit/identity";
+import { IDENTITY_RESOLVERS } from "../Identity";
 
 export function EndedAuction({ auction, clients }: { auction: Auction; clients: Client[] }) {
   const winningBid = auction.bids[0];
   const client = clients.find((client) => client.id == winningBid?.clientId);
+
+  const address = auction.nounderAuction
+    ? CHAIN_CONFIG.addresses.noundersMultisig
+    : auction.bids[0]?.bidderAddress ?? zeroAddress;
 
   return (
     <>
@@ -35,15 +40,17 @@ export function EndedAuction({ auction, clients }: { auction: Auction; clients: 
           title: "Won by",
           value: (
             <div className="flex flex-row items-center gap-2">
-              <UserRoot
-                address={
-                  auction.nounderAuction
-                    ? CHAIN_CONFIG.addresses.noundersMultisig
-                    : auction.bids[0]?.bidderAddress ?? zeroAddress
-                }
+              <LinkExternal
+                href={CHAIN_CONFIG.chain.blockExplorers?.default.url + `/address/${address}`}
+                className="flex min-w-0 items-center gap-2"
               >
                 <div className="relative">
-                  <UserAvatar className="h-[20px] w-[20px] md:h-[36px] md:w-[36px]" />
+                  <Avatar
+                    address={address}
+                    resolvers={IDENTITY_RESOLVERS}
+                    size={36}
+                    className="!h-[20px] !w-[20px] md:!h-[36px] md:!w-[36px]"
+                  />
                   {client?.icon && (
                     <Image
                       src={client.icon}
@@ -54,8 +61,8 @@ export function EndedAuction({ auction, clients }: { auction: Auction; clients: 
                     />
                   )}
                 </div>
-                <UserName />
-              </UserRoot>
+                <Name address={address} resolvers={IDENTITY_RESOLVERS} />
+              </LinkExternal>
               {auction.nounderAuction && (
                 <Tooltip>
                   <TooltipTrigger>
