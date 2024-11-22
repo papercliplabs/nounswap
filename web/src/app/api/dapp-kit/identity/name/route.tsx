@@ -1,10 +1,10 @@
 import { getName, GetIdentityParametersSchema } from "@paperclip-labs/dapp-kit/identity/server";
 import { HARDCODED_USERS, IDENTITY_API_CONFIG } from "../config";
-import { unstable_cache } from "next/cache";
 import { SECONDS_PER_WEEK } from "@paperclip-labs/dapp-kit";
 import { getAddress } from "viem";
+import { safeUnstableCache } from "@/utils/safeFetch";
 
-const getNameCached = unstable_cache(getName, ["get-user"], { revalidate: SECONDS_PER_WEEK });
+const getNameCached = safeUnstableCache(getName, ["get-user"], { revalidate: SECONDS_PER_WEEK });
 
 export async function POST(req: Request) {
   const payload = await req.json();
