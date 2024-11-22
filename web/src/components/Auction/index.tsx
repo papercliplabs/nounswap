@@ -43,24 +43,25 @@ async function AuctionWrapper({ initialAuctionId }: { initialAuctionId?: string 
     }),
     queryClient.prefetchQuery({
       queryKey: auctionQuery(auctionId).queryKey,
-      queryFn: () => getAuctionById(auctionId),
+      queryFn: async () => await getAuctionById(auctionId),
     }),
     queryClient.prefetchQuery({
       queryKey: nounQuery(auctionId).queryKey,
-      queryFn: () => getNounByIdUncached(auctionId),
+      queryFn: async () => await getNounByIdUncached(auctionId),
     }),
     queryClient.prefetchQuery({
       queryKey: secondaryFloorListingQuery().queryKey,
-      queryFn: () => getSecondaryFloorListing(),
+      queryFn: async () => await getSecondaryFloorListing(),
     }),
     queryClient.prefetchQuery({
       queryKey: secondaryTopOfferQuery().queryKey,
-      queryFn: () => getSecondaryTopOffer(),
+      queryFn: async () => await getSecondaryTopOffer(),
     }),
   ]);
 
   const auction = (await queryClient.getQueryData(auctionQuery(auctionId).queryKey)) as AuctionType | undefined;
   const bidderAddress = auction?.bids[0]?.bidderAddress;
+  console.log("SERVER PRE", auctionId, auction);
   if (bidderAddress) {
     queryClient.prefetchQuery(userNameQuery(auction.bids[0].bidderAddress));
   }
