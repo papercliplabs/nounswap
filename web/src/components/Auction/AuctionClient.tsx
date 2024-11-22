@@ -58,8 +58,6 @@ export default function AuctionClient({ clients }: { clients: Client[] }) {
   });
   const nounImgSrc = useNounImage("full", noun);
 
-  console.log("DEBUG", currentAuctionId, secondaryFloorListing, secondaryTopOffer, auctionId, auction, noun);
-
   const date = useMemo(() => {
     if (auction?.endTime) {
       const endTimeMs = Number(auction.endTime) * 1000;
