@@ -21,6 +21,8 @@ import BuyNounOnSecondaryDialog from "./BuyNounOnSecondaryDialog";
 import { IDENTITY_RESOLVERS } from "../Identity";
 import { Avatar, Name } from "@paperclip-labs/dapp-kit/identity";
 import { LinkExternal } from "../ui/link";
+import { useQuery } from "@tanstack/react-query";
+import { nogsQuery } from "@/data/tanstackQueries";
 
 interface NounsDialogProps {
   nouns: Noun[];
@@ -34,6 +36,11 @@ export default function NounDialog({ nouns, secondaryFloorListing }: NounsDialog
   const noun = useMemo(() => {
     return nounId ? nouns.find((noun) => noun.id === nounId) : undefined;
   }, [nouns, nounId]);
+
+  const { data: nogsValue } = useQuery({
+    ...nogsQuery(nounId!),
+    enabled: !!nounId,
+  });
 
   const fullImageData = useNounImage("full", noun);
 
@@ -167,6 +174,21 @@ export default function NounDialog({ nouns, secondaryFloorListing }: NounsDialog
                 <NounTraitCard type="accessory" noun={noun} />
                 <NounTraitCard type="background" noun={noun} />
               </div>
+            </div>
+
+            <Separator className="h-[2px]" />
+
+            <div className="flex flex-col gap-4">
+              <h5>Info</h5>
+              <LinkExternal
+                href={`https://app.noggles.com/reward/eth/0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03/${nounId}`}
+                className="label-sm flex w-fit items-center gap-2.5 rounded-lg bg-black/5 p-2 hover:bg-black/10 hover:brightness-100"
+              >
+                <Image src="/nogs.png" width={24} height={24} alt="" />
+                <span>
+                  $NOGS: {nogsValue != null && nogsValue != undefined ? formatNumber({ input: nogsValue }) : "-"}
+                </span>
+              </LinkExternal>
             </div>
 
             <Separator className="h-[2px]" />

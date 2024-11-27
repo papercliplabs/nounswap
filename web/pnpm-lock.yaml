@@ -147,6 +147,9 @@ importers:
       recharts:
         specifier: ^2.13.3
         version: 2.13.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      sha256:
+        specifier: ^0.2.0
+        version: 0.2.0
       sharp:
         specifier: ^0.33.4
         version: 0.33.4
@@ -193,6 +196,9 @@ importers:
       '@types/react-dom':
         specifier: npm:types-react-dom@19.0.0-rc.1
         version: types-react-dom@19.0.0-rc.1
+      '@types/sha256':
+        specifier: ^0.2.2
+        version: 0.2.2
       '@wagmi/cli':
         specifier: ^2.1.8
         version: 2.1.8(bufferutil@4.0.8)(typescript@5.4.5)
@@ -3418,6 +3424,9 @@ packages:
   '@types/secp256k1@4.0.6':
     resolution: {integrity: sha512-hHxJU6PAEUn0TP4S/ZOzuTUvJWuZ6eIKeNKb5RBpODvSl6hp1Wrw4s7ATY50rklRCScUDpHzVA/DQdSjJ3UoYQ==}
 
+  '@types/sha256@0.2.2':
+    resolution: {integrity: sha512-uKMaDzyzfcDYGEwTgLh+hmgDMxXWyIVodY8T+qt7A+NYvikW0lmGLMGbQ7BipCB8dzXHa55C9g+Ii/3Lgt1KmA==}
+
   '@types/stack-utils@2.0.3':
     resolution: {integrity: sha512-9aEbYZ3TbYMznPdcdr3SmIrLXwC/AKZXQeCf9Pgao5CKb8CyHuEX5jzWPTkvregvhRJHcpRO6BFoGW9ycaOkYw==}
 
@@ -4317,8 +4326,14 @@ packages:
   constant-case@3.0.4:
     resolution: {integrity: sha512-I2hSBi7Vvs7BEuJDr5dDHfzb/Ruj3FyvFyh7KLilAjNQw3Be+xgqUBA2W6scVEcL0hL1dwPRtIqEPVUCKkSsyQ==}
 
+  convert-hex@0.1.0:
+    resolution: {integrity: sha512-w20BOb1PiR/sEJdS6wNrUjF5CSfscZFUp7R9NSlXH8h2wynzXVEPFPJECAnkNylZ+cvf3p7TyRUHggDmrwXT9A==}
+
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
+
+  convert-string@0.1.0:
+    resolution: {integrity: sha512-1KX9ESmtl8xpT2LN2tFnKSbV4NiarbVi8DVb39ZriijvtTklyrT+4dT1wsGMHKD3CJUjXgvJzstm9qL9ICojGA==}
 
   cookie-es@1.1.0:
     resolution: {integrity: sha512-L2rLOcK0wzWSfSDA33YR+PUHDG10a8px7rUHKWbGLP4YfbsMed2KFUw5fczvDPbT98DDe3LEzviswl810apTEw==}
@@ -7387,6 +7402,9 @@ packages:
   sha.js@2.4.11:
     resolution: {integrity: sha512-QMEp5B7cftE7APOjk5Y6xgrbWu+WkLVQwk8JNjZ8nKRciZaByEW6MubieAiToS7+dwvrjGhH8jRXz3MVd0AYqQ==}
     hasBin: true
+
+  sha256@0.2.0:
+    resolution: {integrity: sha512-kTWMJUaez5iiT9CcMv8jSq6kMhw3ST0uRdcIWl3D77s6AsLXNXRp3heeqqfu5+Dyfu4hwpQnMzhqHh8iNQxw0w==}
 
   shallow-clone@3.0.1:
     resolution: {integrity: sha512-/6KqX+GVUdqPuPPd2LxDDxzX6CAbjJehAAOKlNpqqUpAqPM6HeL8f+o3a+JsyGjn2lv0WY8UsTgUJjU9Ok55NA==}
@@ -12622,6 +12640,10 @@ snapshots:
     dependencies:
       '@types/node': 20.14.2
 
+  '@types/sha256@0.2.2':
+    dependencies:
+      '@types/node': 20.17.6
+
   '@types/stack-utils@2.0.3': {}
 
   '@types/trusted-types@2.0.7': {}
@@ -13934,7 +13956,11 @@ snapshots:
       tslib: 2.8.1
       upper-case: 2.0.2
 
+  convert-hex@0.1.0: {}
+
   convert-source-map@2.0.0: {}
+
+  convert-string@0.1.0: {}
 
   cookie-es@1.1.0: {}
 
@@ -17479,6 +17505,11 @@ snapshots:
     dependencies:
       inherits: 2.0.4
       safe-buffer: 5.2.1
+
+  sha256@0.2.0:
+    dependencies:
+      convert-hex: 0.1.0
+      convert-string: 0.1.0
 
   shallow-clone@3.0.1:
     dependencies:

@@ -53,3 +53,10 @@ export function userAvatarQuery(address: Address) {
     queryFn: async () => await fetchAvatar({ address, resolvers: IDENTITY_RESOLVERS }, "/api/dapp-kit"),
   };
 }
+
+export function nogsQuery(nounId: string) {
+  return {
+    queryKey: ["nogs", nounId],
+    queryFn: async () => (await (await fetch(`/api/noun/${nounId}/nogs`)).json()) as number | null,
+  };
+}
