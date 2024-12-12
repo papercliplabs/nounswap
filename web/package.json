@@ -16,7 +16,7 @@
     "@hookform/resolvers": "^3.4.2",
     "@nouns/assets": "github:nounsDAO/nouns-monorepo#path:packages/nouns-assets",
     "@nouns/sdk": "^0.4.0",
-    "@paperclip-labs/whisk-sdk": "^0.0.5",
+    "@paperclip-labs/whisk-sdk": "^0.0.8",
     "@radix-ui/react-accordion": "^1.2.1",
     "@radix-ui/react-aspect-ratio": "^1.1.0",
     "@radix-ui/react-checkbox": "^1.1.2",
