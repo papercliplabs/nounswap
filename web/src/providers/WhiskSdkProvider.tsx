@@ -9,7 +9,7 @@ export default function WhiskSdkProvider({ children }: { children: ReactNode }) 
     <_WhiskSdkProvider
       config={{
         identity: {
-          resolvers: ["nns", "ens", "farcaster"],
+          resolvers: ["nns", "ens", "farcaster", "base", "uni"],
           overrides: {
             [getAddress(CHAIN_CONFIG.addresses.nounsTreasury)]: {
               name: "The Nouns Treasury",
