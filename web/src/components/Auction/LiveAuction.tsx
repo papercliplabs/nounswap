@@ -12,8 +12,7 @@ import { SecondaryNounListing, SecondaryNounOffer } from "@/data/noun/types";
 import SecondaryFloor from "../SecondaryFloor";
 import SecondaryTopOffer from "../SecondaryTopOffer";
 import { Client } from "@/data/ponder/client/getClients";
-import { Name } from "@paperclip-labs/dapp-kit/identity";
-import { IDENTITY_RESOLVERS } from "../Identity";
+import { Name } from "@paperclip-labs/whisk-sdk/identity";
 
 export function LiveAuction({
   auction,
@@ -82,7 +81,7 @@ export function LiveAuction({
       {auction.bids.length > 0 && (
         <BidHistoryDialog nounId={auction.nounId} bids={auction.bids} clients={clients}>
           <span className="flex w-full whitespace-pre-wrap md:w-fit">
-            Highest bidder <Name address={auction.bids[0].bidderAddress} resolvers={IDENTITY_RESOLVERS} />
+            Highest bidder <Name address={auction.bids[0].bidderAddress} />
           </span>
         </BidHistoryDialog>
       )}

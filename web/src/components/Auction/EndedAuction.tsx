@@ -13,8 +13,7 @@ import { mainnet } from "viem/chains";
 import { BidHistoryDialog } from "./BidHistoryDialog";
 import { Client } from "@/data/ponder/client/getClients";
 import Image from "next/image";
-import { Avatar, Name } from "@paperclip-labs/dapp-kit/identity";
-import { IDENTITY_RESOLVERS } from "../Identity";
+import { Avatar, Name } from "@paperclip-labs/whisk-sdk/identity";
 
 export function EndedAuction({ auction, clients }: { auction: Auction; clients: Client[] }) {
   const winningBid = auction.bids[0];
@@ -45,12 +44,7 @@ export function EndedAuction({ auction, clients }: { auction: Auction; clients: 
                 className="flex min-w-0 items-center gap-2"
               >
                 <div className="relative">
-                  <Avatar
-                    address={address}
-                    resolvers={IDENTITY_RESOLVERS}
-                    size={36}
-                    className="!h-[20px] !w-[20px] md:!h-[36px] md:!w-[36px]"
-                  />
+                  <Avatar address={address} size={36} className="!h-[20px] !w-[20px] md:!h-[36px] md:!w-[36px]" />
                   {client?.icon && (
                     <Image
                       src={client.icon}
@@ -61,7 +55,7 @@ export function EndedAuction({ auction, clients }: { auction: Auction; clients: 
                     />
                   )}
                 </div>
-                <Name address={address} resolvers={IDENTITY_RESOLVERS} />
+                <Name address={address} />
               </LinkExternal>
               {auction.nounderAuction && (
                 <Tooltip>

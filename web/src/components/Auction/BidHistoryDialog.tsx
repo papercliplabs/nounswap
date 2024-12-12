@@ -7,8 +7,7 @@ import { CHAIN_CONFIG } from "@/config";
 import { formatNumber } from "@/utils/format";
 import { Client } from "@/data/ponder/client/getClients";
 import Image from "next/image";
-import { Avatar, Name } from "@paperclip-labs/dapp-kit/identity";
-import { IDENTITY_RESOLVERS } from "../Identity";
+import { Avatar, Name } from "@paperclip-labs/whisk-sdk/identity";
 
 interface BidHistoryDialogProps {
   nounId: string;
@@ -45,7 +44,7 @@ export function BidHistoryDialog({ children, nounId, bids, clients }: BidHistory
               >
                 <div className="flex items-center gap-2">
                   <div className="relative">
-                    <Avatar address={bid.bidderAddress} resolvers={IDENTITY_RESOLVERS} size={40} />
+                    <Avatar address={bid.bidderAddress} size={40} />
                     {client?.icon && (
                       <Image
                         src={client.icon}
@@ -57,7 +56,7 @@ export function BidHistoryDialog({ children, nounId, bids, clients }: BidHistory
                     )}
                   </div>
                   <div className="flex flex-col">
-                    <Name address={bid.bidderAddress} resolvers={IDENTITY_RESOLVERS} />
+                    <Name address={bid.bidderAddress} />
                     <span className="paragraph-sm text-content-secondary">{date}</span>
                   </div>
                 </div>

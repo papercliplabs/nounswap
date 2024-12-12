@@ -6,7 +6,7 @@ import ToastContainer from "@/components/ToastContainer";
 import TestnetBanner from "@/components/TestnetBanner";
 import Analytics from "@/components/Analytics";
 
-import "@paperclip-labs/dapp-kit/styles.css";
+import "@paperclip-labs/whisk-sdk/styles.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import "@/theme/globals.css";
 
@@ -41,16 +41,16 @@ const londrinaSolidFont = Londrina_Solid({
 export async function generateMetadata() {
   return {
     title: "NounSwap",
-    description: "Bid, explore, and swap Nouns.",
+    description: "Bid, explore, buy, and swap to find your forever Noun.",
     metadataBase: new URL("https://www.nounswap.wtf"),
     openGraph: {
       title: "NounSwap",
-      description: "Bid, explore, and swap Nouns.",
+      description: "Bid, explore, buy, and swap to find your forever Noun.",
     },
     twitter: {
       card: "summary_large_image",
       title: "NounSwap",
-      description: "Bid, explore, and swap Nouns.",
+      description: "Bid, explore, buy, and swap to find your forever Noun.",
     },
     keywords: [
       "Nouns",

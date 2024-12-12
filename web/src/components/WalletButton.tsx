@@ -1,14 +1,10 @@
 "use client";
-import Image from "next/image";
 import { useAccount, useEnsAvatar, useEnsName } from "wagmi";
-import { getLinearGradientForAddress, getShortAddress } from "@/utils/utils";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { twMerge } from "tailwind-merge";
 import { Button } from "./ui/button";
 import { Address } from "viem";
-import { Avatar, Name } from "@paperclip-labs/dapp-kit/identity";
-import { IDENTITY_RESOLVERS } from "./Identity";
-import { motion } from "framer-motion";
+import { Avatar, Name } from "@paperclip-labs/whisk-sdk/identity";
+import clsx from "clsx";
 
 interface WalletButtonProps {
   disableMobileShrink?: boolean;
@@ -46,11 +42,10 @@ export default function WalletButton({ disableMobileShrink }: WalletButtonProps)
               return (
                 <div className="flex flex-row gap-2">
                   <Button variant="secondary" onClick={openAccountModal} className="flex flex-row gap-2 px-4 py-[6px]">
-                    <Avatar address={account.address as Address} resolvers={IDENTITY_RESOLVERS} size={32} />
+                    <Avatar address={account.address as Address} size={32} />
                     <Name
                       address={account.address as Address}
-                      resolvers={IDENTITY_RESOLVERS}
-                      className="label-md hidden md:block"
+                      className={clsx("label-md md:block", !disableMobileShrink && "hidden")}
                     />
                   </Button>
                 </div>
