@@ -1,9 +1,8 @@
 import { BigIntString } from "@/utils/types";
 import { Auction } from "./auction/types";
 import { Noun, SecondaryNounListing, SecondaryNounOffer } from "./noun/types";
+import { getAvatar, getName } from "@paperclip-labs/whisk-sdk/identity/core";
 import { Address } from "viem";
-import { fetchAvatar, fetchName } from "@paperclip-labs/dapp-kit/identity/client";
-import { IDENTITY_RESOLVERS } from "@/components/Identity";
 
 export function currentAuctionIdQuery() {
   return {
@@ -40,17 +39,19 @@ export function secondaryTopOfferQuery() {
   };
 }
 
+const IDENTITY_RESOLVERS = ["nns", "ens", "farcaster"];
+
 export function userNameQuery(address: Address) {
   return {
     queryKey: ["name", { address, resolvers: IDENTITY_RESOLVERS }],
-    queryFn: async () => await fetchName({ address, resolvers: IDENTITY_RESOLVERS }, "/api/dapp-kit"),
+    queryFn: async () => await getName("", { address, resolvers: IDENTITY_RESOLVERS as any }),
   };
 }
 
 export function userAvatarQuery(address: Address) {
   return {
     queryKey: ["avatar", { address, resolvers: IDENTITY_RESOLVERS }],
-    queryFn: async () => await fetchAvatar({ address, resolvers: IDENTITY_RESOLVERS }, "/api/dapp-kit"),
+    queryFn: async () => await getAvatar("", { address, resolvers: IDENTITY_RESOLVERS as any }),
   };
 }
 

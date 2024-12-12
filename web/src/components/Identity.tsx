@@ -1,11 +1,8 @@
 "use client";
-import { cn } from "@paperclip-labs/dapp-kit";
-import { Avatar, Name } from "@paperclip-labs/dapp-kit/identity";
-import { GetIdentityParameters } from "node_modules/@paperclip-labs/dapp-kit/dist/identity/shared/types";
+import { cn } from "@/utils/shadcn";
+import { Avatar, Name } from "@paperclip-labs/whisk-sdk/identity";
 import { HTMLAttributes } from "react";
 import { Address } from "viem";
-
-export const IDENTITY_RESOLVERS: GetIdentityParameters["resolvers"] = ["nns", "ens", "farcaster"];
 
 interface IdentityProps extends HTMLAttributes<HTMLDivElement> {
   address: Address;
@@ -15,8 +12,8 @@ interface IdentityProps extends HTMLAttributes<HTMLDivElement> {
 export default function Identity({ address, avatarSize, className, ...props }: IdentityProps) {
   return (
     <div className={cn("flex items-center gap-1 font-bold", className)} {...props}>
-      <Avatar address={address} size={avatarSize} resolvers={IDENTITY_RESOLVERS} />
-      <Name address={address} resolvers={IDENTITY_RESOLVERS} />
+      <Avatar address={address} size={avatarSize} />
+      <Name address={address} />
     </div>
   );
 }
