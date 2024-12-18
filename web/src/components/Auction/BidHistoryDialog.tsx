@@ -42,7 +42,7 @@ export function BidHistoryDialog({ children, nounId, bids, clients }: BidHistory
                 className="label-lg hover:bg-background-secondary flex w-full min-w-0 items-center justify-between gap-2 px-6 py-3 hover:brightness-100"
                 href={`${CHAIN_CONFIG.chain.blockExplorers?.default.url}/tx/${bid.transactionHash}`}
               >
-                <div className="flex items-center gap-2">
+                <div className="flex min-w-0 items-center gap-2">
                   <div className="relative">
                     <Avatar address={bid.bidderAddress} size={40} />
                     {client?.icon && (
@@ -55,7 +55,7 @@ export function BidHistoryDialog({ children, nounId, bids, clients }: BidHistory
                       />
                     )}
                   </div>
-                  <div className="flex flex-col">
+                  <div className="flex min-w-0 flex-col">
                     <Name address={bid.bidderAddress} />
                     <span className="paragraph-sm text-content-secondary">{date}</span>
                   </div>
