@@ -7,6 +7,7 @@ import { CHAIN_CONFIG } from "@/config";
 export default function WhiskSdkProvider({ children }: { children: ReactNode }) {
   return (
     <_WhiskSdkProvider
+      apiKey={process.env.NEXT_PUBLIC_WHISK_API_KEY!}
       config={{
         identity: {
           resolvers: ["nns", "ens", "farcaster", "lens", "base", "uni", "world"],
