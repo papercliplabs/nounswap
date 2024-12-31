@@ -2,7 +2,7 @@ import { ponder } from "@/generated";
 import { getEthAmountInUsd, getTokenAmountInUsd, getUsdAmountInEth } from "./utils/priceOracle";
 import { decodeEventLog, erc20Abi, getAddress, isAddressEqual } from "viem";
 import { nounDaoExecutorAbi } from "../abis/nounsDaoExecutor";
-import { mergeAbis } from "@ponder/core";
+import { mergeAbis } from "ponder";
 import { USDC_TOKEN } from "./utils/tokens";
 import { nounsPayerAbi } from "../abis/nounsPayer";
 import { NOUNS_TREASURY_ADDRESS, PREVIOUS_NOUNS_TREASURY_ADDRESS } from "./utils/addresses";

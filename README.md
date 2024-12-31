@@ -9,3 +9,15 @@ An application that allows anyone to swap their Noun for one from the Nouns trea
 -   [Contracts](./contracts/): NounSwap specific contracts 
 
 > See the individual folders for more details
+
+## Development
+
+Install Dependencies
+```bash
+bun i
+```
+
+Run web app
+```bash
+bun dev:web
+```
