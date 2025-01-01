@@ -14,7 +14,7 @@ export function LinkExternal({
       {...props}
       target="_blank"
       rel={`noopener ${includeReferrer ? "" : "noreferrer"}`}
-      className={twMerge("hover:brightness-75", props.className)}
+      className={twMerge("hover:brightness-75 transition-all", props.className)}
     />
   );
 }

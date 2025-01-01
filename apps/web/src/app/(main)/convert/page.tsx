@@ -6,10 +6,14 @@ import ConvertInfo from "./ConvertInfo";
 
 export default function ConvertPage() {
   return (
-    <div className="flex w-full max-w-[1600px] flex-col justify-between gap-[55px] self-center md:flex-row">
+    <div className="flex w-full max-w-[1680px] flex-col justify-between gap-[55px] p-6 md:flex-row md:p-10">
       <div className="flex w-full flex-[7] flex-col gap-4">
-        <div className="paragraph-sm flex gap-[10px] rounded-xl bg-yellow-100 p-4">
-          <Icon icon="circleInfo" size={20} className="fill-content-primary shrink-0" />
+        <div className="flex gap-[10px] rounded-xl bg-yellow-100 p-4 paragraph-sm">
+          <Icon
+            icon="circleInfo"
+            size={20}
+            className="shrink-0 fill-content-primary"
+          />
           <span>The $nouns contracts are unaudited use at your own risk. </span>
         </div>
         <Convert />

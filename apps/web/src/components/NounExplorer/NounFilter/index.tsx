@@ -20,58 +20,70 @@ export const BACKGROUND_TRAITS: NounTrait[] = [
   { name: "Warm", seed: 1 },
 ];
 
-export const GLASSES_TRAITS: NounTrait[] = ImageData.images.glasses.map((item, i) => ({
-  name: capitalizeFirstLetterOfEveryWord(
-    item.filename
-      .substring(item.filename.indexOf("-") + 1)
-      .split("-")
-      .join(" ")
-  ),
-  seed: i,
-}));
+export const GLASSES_TRAITS: NounTrait[] = ImageData.images.glasses.map(
+  (item, i) => ({
+    name: capitalizeFirstLetterOfEveryWord(
+      item.filename
+        .substring(item.filename.indexOf("-") + 1)
+        .split("-")
+        .join(" "),
+    ),
+    seed: i,
+  }),
+);
 
-export const HEAD_TRAITS: NounTrait[] = ImageData.images.heads.map((item, i) => ({
-  name: capitalizeFirstLetterOfEveryWord(
-    item.filename
-      .substring(item.filename.indexOf("-") + 1)
-      .split("-")
-      .join(" ")
-  ),
-  seed: i,
-}));
+export const HEAD_TRAITS: NounTrait[] = ImageData.images.heads.map(
+  (item, i) => ({
+    name: capitalizeFirstLetterOfEveryWord(
+      item.filename
+        .substring(item.filename.indexOf("-") + 1)
+        .split("-")
+        .join(" "),
+    ),
+    seed: i,
+  }),
+);
 
-export const BODY_TRAITS: NounTrait[] = ImageData.images.bodies.map((item, i) => ({
-  name: capitalizeFirstLetterOfEveryWord(
-    item.filename
-      .substring(item.filename.indexOf("-") + 1)
-      .split("-")
-      .join(" ")
-  ),
-  seed: i,
-}));
+export const BODY_TRAITS: NounTrait[] = ImageData.images.bodies.map(
+  (item, i) => ({
+    name: capitalizeFirstLetterOfEveryWord(
+      item.filename
+        .substring(item.filename.indexOf("-") + 1)
+        .split("-")
+        .join(" "),
+    ),
+    seed: i,
+  }),
+);
 
-export const ACCESSORY_TRAITS: NounTrait[] = ImageData.images.accessories.map((item, i) => ({
-  name: capitalizeFirstLetterOfEveryWord(
-    item.filename
-      .substring(item.filename.indexOf("-") + 1)
-      .split("-")
-      .join(" ")
-  ),
-  seed: i,
-}));
+export const ACCESSORY_TRAITS: NounTrait[] = ImageData.images.accessories.map(
+  (item, i) => ({
+    name: capitalizeFirstLetterOfEveryWord(
+      item.filename
+        .substring(item.filename.indexOf("-") + 1)
+        .split("-")
+        .join(" "),
+    ),
+    seed: i,
+  }),
+);
 
 export default function NounFilter({ numNouns }: { numNouns: number }) {
   const [isOpen, setIsOpen] = useState(false);
   const { totalCount } = useNounFilters();
   return (
     <>
-      <div className="sticky top-0 z-[10] flex max-h-[100dvh] min-h-[60px] shrink-0 md:h-auto md:pb-[0px]">
+      <div className="sticky top-0 z-[10] flex max-h-[100dvh] min-h-[60px] shrink-0 md:top-[64px] md:h-auto md:pb-[0px]">
         <div
           className={cn(
-            "label-sm top-0 z-[10] flex w-screen items-end justify-between bg-white py-2 md:hidden md:w-full"
+            "top-0 z-[10] flex w-screen items-end justify-between bg-white py-2 label-sm md:hidden md:w-full",
           )}
         >
-          <Button variant="secondary" className="w-fit" onClick={() => setIsOpen(true)}>
+          <Button
+            variant="secondary"
+            className="w-fit"
+            onClick={() => setIsOpen(true)}
+          >
             Filters • {totalCount}
           </Button>
           <div>
@@ -85,33 +97,33 @@ export default function NounFilter({ numNouns }: { numNouns: number }) {
             "animate-in slide-in-from-bottom",
             "md:static md:flex md:max-w-[280px] md:animate-none md:p-0 md:pr-2", // md
             isOpen ? "flex" : "hidden",
-            "md:flex"
+            "md:flex",
           )}
         >
           <div className="top-0 z-[50] flex w-full items-center justify-between bg-white pt-3">
             <h3>Filter</h3>
-            <ClearAllFiltersButton className="text-semantic-accent clickable-active hidden md:flex">
+            <ClearAllFiltersButton className="hidden text-semantic-accent clickable-active md:flex">
               Clear all
             </ClearAllFiltersButton>
           </div>
           <Separator className="h-[2px]" />
           <div>
             <BuyNowFilter />
-            <span className="paragraph-sm text-content-secondary">
+            <span className="text-content-secondary paragraph-sm">
               Show Nouns that are listed on secondary that you can buy now.
             </span>
           </div>
           <Separator className="h-[2px]" />
           <div>
             <InstantSwapFilter />
-            <span className="paragraph-sm text-content-secondary">
+            <span className="text-content-secondary paragraph-sm">
               Show Nouns available for instant Swap via $nouns.
             </span>
           </div>
           <Separator className="h-[2px]" />
           <div>
             <TreasuryNounFilter />
-            <span className="paragraph-sm text-content-secondary">
+            <span className="text-content-secondary paragraph-sm">
               Show Nouns held by the Treasury you can create a swap offer for.
             </span>
           </div>
@@ -126,11 +138,13 @@ export default function NounFilter({ numNouns }: { numNouns: number }) {
       </div>
       <div
         className={clsx(
-          "border-border-secondary fixed bottom-0 left-0 z-[100] flex w-full justify-between border-t-2 bg-white px-6 py-2 md:hidden",
-          isOpen ? "flex md:hidden" : "hidden"
+          "fixed bottom-0 left-0 z-[100] flex w-full justify-between border-t-2 border-border-secondary bg-white px-6 py-2 md:hidden",
+          isOpen ? "flex md:hidden" : "hidden",
         )}
       >
-        <ClearAllFiltersButton className="text-semantic-accent clickable-active">Clear all</ClearAllFiltersButton>
+        <ClearAllFiltersButton className="text-semantic-accent clickable-active">
+          Clear all
+        </ClearAllFiltersButton>
         <Button className="w-fit md:hidden" onClick={() => setIsOpen(false)}>
           Done
         </Button>

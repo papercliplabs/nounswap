@@ -11,8 +11,9 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@electric-sql/pglite": "0.2.13",
     "hono": "^4.6.9",
-    "ponder": "^0.8.10",
+    "ponder": "^0.8.18",
     "viem": "^2.21.42"
   },
   "devDependencies": {
@@ -21,8 +22,5 @@
     "eslint-config-ponder": "^0.4.40",
     "prettier": "^3.3.2",
     "typescript": "^5.2.2"
-  },
-  "engines": {
-    "node": ">=18.14"
   }
 }

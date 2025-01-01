@@ -9,6 +9,7 @@ import Analytics from "@/components/Analytics";
 import "@paperclip-labs/whisk-sdk/styles.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import "@/theme/globals.css";
+import MobileNav from "@/components/Nav/MobileNav";
 
 const ptRootUiFont = localFont({
   src: [
@@ -75,15 +76,23 @@ export async function generateMetadata() {
   };
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en" className={`${ptRootUiFont.variable} ${londrinaSolidFont.variable} `}>
+    <html
+      lang="en"
+      className={`${ptRootUiFont.variable} ${londrinaSolidFont.variable} `}
+    >
       <body className="overflow-x-hidden">
         <Providers>
-          <div className="border-border-primary flex min-h-screen flex-col justify-between">
+          <div className="flex min-h-screen flex-col justify-between border-border-primary">
             <TestnetBanner />
             {children}
           </div>
+          <MobileNav />
           <ToastContainer />
         </Providers>
         <Analytics />

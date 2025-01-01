@@ -78,7 +78,9 @@ const config: Config = {
     extend: {
       boxShadow: {
         overlay: "0px 16px 48px 0px rgba(0, 0, 0, 0.24)",
-        "fixed-bottom": "0 -2px 6px rgba(0, 0, 0, .05), 0 4px 36px rgba(0, 0, 0, .04);",
+        "fixed-bottom":
+          "0 -2px 6px rgba(0, 0, 0, .05), 0 4px 36px rgba(0, 0, 0, .04);",
+        marketing: "0px 5.42px 127.38px 0px rgba(0, 0, 0, 0.5)",
       },
       colors: {
         ...palette,
@@ -127,7 +129,8 @@ const config: Config = {
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        "gradient-conic":
+          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       fontFamily: {
         pt: ["var(--font-pt-root-ui)"],
@@ -152,11 +155,17 @@ const config: Config = {
   plugins: [
     plugin(function ({ addUtilities }: { addUtilities: any }) {
       addUtilities({
+        ".hero": {
+          "@apply font-londrina text-[48px] md:text-[86px] font-normal leading-[64px] md:leading-[96px]":
+            {},
+        },
         ".heading-1": {
-          "@apply font-londrina text-[36px] md:text-[56px] font-normal leading-[44px] md:leading-[64px]": {},
+          "@apply font-londrina text-[36px] md:text-[56px] font-normal leading-[44px] md:leading-[64px]":
+            {},
         },
         ".heading-2": {
-          "@apply font-londrina text-[32px] md:text-[42px] font-normal leading-[40px] md:leading-[56px]": {},
+          "@apply font-londrina text-[32px] md:text-[42px] font-normal leading-[40px] md:leading-[56px]":
+            {},
         },
         ".heading-3": {
           "@apply font-londrina text-[36px] font-normal leading-[44px]": {},
@@ -165,10 +174,10 @@ const config: Config = {
           "@apply font-londrina text-[28px] font-normal leading-[36px]": {},
         },
         ".heading-5": {
-          "@apply font-londrina text-[24px] font-normal leading-[32px]": {},
+          "@apply font-pt text-[24px] font-bold leading-[32px]": {},
         },
         ".heading-6": {
-          "@apply font-londrina text-[18px] font-normal leading-[24px]": {},
+          "@apply font-pt text-[18px] font-bold leading-[24px]": {},
         },
         ".label-lg": {
           "@apply font-pt text-[18px] font-bold leading-[24px]": {},
@@ -189,7 +198,8 @@ const config: Config = {
           "@apply font-pt text-[14px] font-medium leading-[20px]": {},
         },
         ".clickable-active": {
-          "@apply active:scale-[98%] active:brightness-[85%] active:ease-in-out": {},
+          "@apply active:scale-[98%] active:brightness-[85%] active:ease-in-out":
+            {},
         },
         ".no-scrollbar::-webkit-scrollbar": {
           display: "none",

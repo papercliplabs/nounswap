@@ -19,6 +19,7 @@ import { Auction } from "@/data/auction/types";
 import { LiveAuction } from "./LiveAuction";
 import { EndedAuction } from "./EndedAuction";
 import { Client } from "@/data/ponder/client/getClients";
+import { NounImageBase } from "../NounImage";
 
 const PREFETCH_DISTANCE = 3;
 
@@ -30,9 +31,11 @@ export default function AuctionClient({ clients }: { clients: Client[] }) {
     return searchParams.get("auctionId");
   }, [searchParams]);
 
-  const { data: currentAuctionId, refetch: refetchCurrentAuctionId } = useQuery({
-    ...currentAuctionIdQuery(),
-  });
+  const { data: currentAuctionId, refetch: refetchCurrentAuctionId } = useQuery(
+    {
+      ...currentAuctionIdQuery(),
+    },
+  );
 
   const { data: secondaryFloorListing } = useQuery({
     ...secondaryFloorListingQuery(),
@@ -56,7 +59,6 @@ export default function AuctionClient({ clients }: { clients: Client[] }) {
     ...nounQuery(auctionId),
     enabled: !!auctionId,
   });
-  const nounImgSrc = useNounImage("full", noun);
 
   const date = useMemo(() => {
     if (auction?.endTime) {
@@ -77,7 +79,10 @@ export default function AuctionClient({ clients }: { clients: Client[] }) {
     let interval: NodeJS.Timeout | undefined = undefined;
     if (auctionId == currentAuctionId) {
       interval = setInterval(() => {
-        if (auction?.state == "ended-settled" && auctionId == currentAuctionId) {
+        if (
+          auction?.state == "ended-settled" &&
+          auctionId == currentAuctionId
+        ) {
           refetchCurrentAuctionId();
         }
       }, 500);
@@ -92,7 +97,11 @@ export default function AuctionClient({ clients }: { clients: Client[] }) {
 
   // Set to current if at or above current
   useEffect(() => {
-    if (requestedAuctionId && currentAuctionId && Number(requestedAuctionId) >= Number(currentAuctionId)) {
+    if (
+      requestedAuctionId &&
+      currentAuctionId &&
+      Number(requestedAuctionId) >= Number(currentAuctionId)
+    ) {
       const params = new URLSearchParams(searchParams);
       params.delete("auctionId");
       window.history.pushState(null, "", `?${params.toString()}`);
@@ -114,11 +123,17 @@ export default function AuctionClient({ clients }: { clients: Client[] }) {
             queryClient.prefetchQuery(nounQuery(i.toString())),
           ]);
 
-          const auction = (await queryClient.getQueryData(auctionQuery(i.toString()).queryKey)) as Auction | undefined;
+          const auction = (await queryClient.getQueryData(
+            auctionQuery(i.toString()).queryKey,
+          )) as Auction | undefined;
           if (auction && auction.bids.length > 0) {
             await Promise.all([
-              queryClient.prefetchQuery(userNameQuery(auction.bids[0].bidderAddress)),
-              queryClient.prefetchQuery(userAvatarQuery(auction.bids[0].bidderAddress)),
+              queryClient.prefetchQuery(
+                userNameQuery(auction.bids[0].bidderAddress),
+              ),
+              queryClient.prefetchQuery(
+                userAvatarQuery(auction.bids[0].bidderAddress),
+              ),
             ]);
           }
         }
@@ -131,26 +146,34 @@ export default function AuctionClient({ clients }: { clients: Client[] }) {
   return (
     <>
       <div
-        className={clsx("absolute inset-0 z-0", noun?.traits.background.seed == 1 ? "bg-nouns-warm" : "bg-nouns-cool")}
+        className={clsx(
+          "absolute inset-0 z-0",
+          noun?.traits.background.seed == 1 ? "bg-nouns-warm" : "bg-nouns-cool",
+        )}
       />
       <div
-        className={clsx("flex flex-1 flex-col items-center justify-end md:items-end md:bg-transparent md:pr-[60px]")}
+        className={clsx(
+          "flex flex-1 flex-col items-center justify-end md:items-end md:bg-transparent md:pr-[60px]",
+        )}
       >
-        <Image
-          src={nounImgSrc ?? "/noun-loading-skull.gif"}
+        <NounImageBase
+          noun={noun}
           width={370}
           height={370}
-          className="z-10 flex h-[194px] w-[194px] flex-1 grow-0 select-none items-end justify-end rounded-3xl object-contain object-bottom md:h-[370px] md:w-[370px]"
-          draggable={false}
-          unoptimized={nounImgSrc == undefined}
-          alt=""
+          priority
+          className="z-10 flex h-[194px] w-[194px] flex-1 grow-0 select-none items-end justify-end rounded-3xl object-contain object-bottom md:h-[470px] md:w-[470px]"
         />
       </div>
-      <div className="z-10 flex min-h-[389px] w-full min-w-0 flex-1 flex-col items-start justify-start gap-4 bg-white p-6 md:w-fit md:gap-6 md:bg-transparent">
-        <div className="flex w-full flex-col gap-2">
+      <div className="z-10 flex min-h-[389px] w-full min-w-0 flex-1 flex-col items-start justify-start gap-4 bg-white p-6 md:min-h-[477px] md:w-fit md:gap-6 md:bg-transparent">
+        <div className="flex w-full flex-col gap-2 md:pt-[44px]">
           <div className="flex w-full flex-row-reverse items-center justify-between gap-3 md:flex-row md:justify-start">
-            {auctionId && currentAuctionId && <NavButtons auctionId={auctionId} currentAuctionId={currentAuctionId} />}
-            <span className="label-md text-content-secondary">{date}</span>
+            {auctionId && currentAuctionId && (
+              <NavButtons
+                auctionId={auctionId}
+                currentAuctionId={currentAuctionId}
+              />
+            )}
+            <span className="text-content-secondary label-md">{date}</span>
           </div>
           <div>
             <h1 className="flex whitespace-pre-wrap">Noun {auctionId}</h1>

@@ -8,12 +8,10 @@
     "dev:web": "bun run --filter=web dev",
     "build:web": "bun run --filter=web dev",
     "codegen:web": "bun run --filter=web codegen",
-    "dev:indexer": "bun run --filter=indexer dev:mainnet",
-    "codegen:indexer": "bun run --filter=indexer codegen:mainnet",
-    "preinstall": "npx only-allow bun"
+    "dev:indexer": "bun run --filter=indexer dev",
+    "codegen:indexer": "bun run --filter=indexer codegen"
   },
   "devDependencies": {
-    "only-allow": "^1.2.1",
     "prettier": "^3.3.3"
   },
   "workspaces": [

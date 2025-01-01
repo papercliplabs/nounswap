@@ -1,4 +1,4 @@
-import { createConfig, rateLimit } from "ponder";
+import { createConfig, loadBalance, rateLimit } from "ponder";
 import { http } from "viem";
 import { base } from "viem/chains";
 
@@ -14,17 +14,11 @@ export default createConfig({
   networks: {
     mainnet: {
       chainId: 1,
-      transport: process.env.LOCAL_MAINNET_RPC_URL
-        ? http(process.env.LOCAL_MAINNET_RPC_URL)
-        : rateLimit(http(`https://eth-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY!}`), {
-            requestsPerSecond: 12,
-          }),
+      transport: http(process.env.MAINNET_RPC_URL!),
     },
     base: {
       chainId: base.id,
-      transport: rateLimit(http(`https://base-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY!}`), {
-        requestsPerSecond: 12,
-      }),
+      transport: http(process.env.BASE_RPC_URL!),
     },
   },
   contracts: {
@@ -32,7 +26,7 @@ export default createConfig({
       abi: NounsTokenAbi,
       address: "0x9c8ff314c9bc7f6e59a9d9225fb22946427edc03",
       network: "mainnet",
-      startBlock: 12985438, // Misses events from past ~1 week
+      startBlock: 12985438,
     },
     NounsERC20: {
       abi: nounsErc20Abi,

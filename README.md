@@ -1,23 +1,18 @@
 # NounSwap
 
-An application that allows anyone to swap their Noun for one from the Nouns treasury
+Bid, explore, buy, and swap to find your forever Noun.
 
 ## Structure
-
--   [Web](./web/): The web app
--   [Indexer](./web/): Onchain data indexer that powers the web app  
--   [Contracts](./contracts/): NounSwap specific contracts 
+-   [Web](./apps/web/): The web app
+-   [Indexer](./apps/indexer/): Onchain data indexer that powers the web app  
 
 > See the individual folders for more details
 
 ## Development
 
-Install Dependencies
-```bash
-bun i
-```
+1. For each app, copy the `.env.example` to `.env.local` and populate the environment variables. 
 
-Run web app
+2. Start all apps
 ```bash
-bun dev:web
+docker compose up --build
 ```

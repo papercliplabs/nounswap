@@ -1,5 +1,5 @@
 "use client";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Dialog, DialogContent } from "../ui/dialogBase";
 import clsx from "clsx";
 import Image from "next/image";
@@ -28,7 +28,10 @@ interface NounsDialogProps {
   secondaryFloorListing: SecondaryNounListing | null;
 }
 
-export default function NounDialog({ nouns, secondaryFloorListing }: NounsDialogProps) {
+export default function NounDialog({
+  nouns,
+  secondaryFloorListing,
+}: NounsDialogProps) {
   const searchParams = useSearchParams();
   const nounId = searchParams.get("nounId");
 
@@ -64,11 +67,15 @@ export default function NounDialog({ nouns, secondaryFloorListing }: NounsDialog
   }
 
   return (
-    <Dialog open={nounId != undefined} onOpenChange={handleOpenChange} modal={true}>
+    <Dialog
+      open={nounId != undefined}
+      onOpenChange={handleOpenChange}
+      modal={true}
+    >
       <DialogContent
         className={clsx(
           "h-full max-h-[90dvh] w-full min-w-0 max-w-[95vw] overflow-hidden rounded-2xl border-none p-0 md:h-auto md:max-w-[min(85vw,1400px)]",
-          noun.traits.background.seed == 1 ? "bg-nouns-warm" : "bg-nouns-cool"
+          noun.traits.background.seed == 1 ? "bg-nouns-warm" : "bg-nouns-cool",
         )}
       >
         <div className="absolute bottom-0 left-0 right-0 top-0 flex aspect-auto h-full w-full flex-col overflow-y-auto md:static md:aspect-[100/45] md:flex-row md:overflow-hidden">
@@ -93,8 +100,10 @@ export default function NounDialog({ nouns, secondaryFloorListing }: NounsDialog
             >
               <div className="flex w-fit max-w-full items-center gap-6">
                 <Avatar address={noun.owner} size={36} />
-                <div className="label-md flex h-full min-w-0 flex-col justify-start overflow-hidden">
-                  <span className="paragraph-sm text-content-secondary">Held by</span>
+                <div className="flex h-full min-w-0 flex-col justify-start overflow-hidden label-md">
+                  <span className="text-content-secondary paragraph-sm">
+                    Held by
+                  </span>
                   <Name address={noun.owner} />
                 </div>
               </div>
@@ -125,8 +134,9 @@ export default function NounDialog({ nouns, secondaryFloorListing }: NounsDialog
                   </Button>
                 </Link>
                 <div className="text-content-secondary">
-                  This Noun can be instantly swapped with any Noun you own. No need for a proposal because its held in
-                  the $nouns contract. Just swap it.
+                  This Noun can be instantly swapped with any Noun you own. No
+                  need for a proposal because its held in the $nouns contract.
+                  Just swap it.
                 </div>
               </>
             )}
@@ -136,13 +146,22 @@ export default function NounDialog({ nouns, secondaryFloorListing }: NounsDialog
                 <div className="flex flex-col gap-6 rounded-[20px] bg-white p-4">
                   <div className="flex items-start justify-between">
                     <div className="flex flex-col gap-1">
-                      <span className="label-md text-content-secondary">List Price</span>
-                      <span className="font-pt text-content-primary text-[28px] font-bold leading-[36px]">
-                        {formatTokenAmount(BigInt(noun.secondaryListing.priceRaw), 18)} ETH
+                      <span className="text-content-secondary label-md">
+                        List Price
+                      </span>
+                      <span className="font-pt text-[28px] font-bold leading-[36px] text-content-primary">
+                        {formatTokenAmount(
+                          BigInt(noun.secondaryListing.priceRaw),
+                          18,
+                        )}{" "}
+                        ETH
                       </span>
                       {noun.secondaryListing.priceUsd && (
-                        <span className="label-sm text-content-secondary">
-                          {formatNumber({ input: noun.secondaryListing.priceUsd, unit: "USD" })}
+                        <span className="text-content-secondary label-sm">
+                          {formatNumber({
+                            input: noun.secondaryListing.priceUsd,
+                            unit: "USD",
+                          })}
                         </span>
                       )}
                     </div>
@@ -157,7 +176,8 @@ export default function NounDialog({ nouns, secondaryFloorListing }: NounsDialog
                   <BuyNounOnSecondaryDialog noun={noun} />
                 </div>
                 <div className="text-content-secondary">
-                  Buy this Noun instantly from the secondary market via NounSwap with no additional fees!
+                  Buy this Noun instantly from the secondary market via NounSwap
+                  with no additional fees!
                 </div>
               </>
             )}
@@ -181,18 +201,23 @@ export default function NounDialog({ nouns, secondaryFloorListing }: NounsDialog
               <h5>Info</h5>
               <LinkExternal
                 href={`https://app.noggles.com/reward/eth/0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03/${nounId}`}
-                className="label-sm flex w-fit items-center gap-2.5 rounded-lg bg-black/5 p-2 hover:bg-black/10 hover:brightness-100"
+                className="flex w-fit items-center gap-2.5 rounded-lg bg-black/5 p-2 label-sm hover:bg-black/10 hover:brightness-100"
               >
                 <Image src="/nogs.png" width={24} height={24} alt="" />
                 <span>
-                  $NOGS: {nogsValue != null && nogsValue != undefined ? formatNumber({ input: nogsValue }) : "-"}
+                  $NOGS:{" "}
+                  {nogsValue != null && nogsValue != undefined
+                    ? formatNumber({ input: nogsValue })
+                    : "-"}
                 </span>
               </LinkExternal>
             </div>
 
             <Separator className="h-[2px]" />
 
-            <span className="paragraph-sm text-content-secondary">One Noun, Every Day, Forever.</span>
+            <span className="text-content-secondary paragraph-sm">
+              One Noun, Every Day, Forever.
+            </span>
           </div>
         </div>
       </DialogContent>
@@ -202,6 +227,8 @@ export default function NounDialog({ nouns, secondaryFloorListing }: NounsDialog
 
 function NounTraitCard({ type, noun }: { type: NounTraitType; noun?: Noun }) {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
   const traitImage = useNounImage(type, noun);
   const trait = noun?.traits[type];
 
@@ -220,25 +247,38 @@ function NounTraitCard({ type, noun }: { type: NounTraitType; noun?: Noun }) {
         params.set("auctionId", auctionId);
       }
 
-      window.history.pushState(null, "", `?${params.toString()}`);
+      if (pathname == "/explore") {
+        window.history.pushState(null, "", `?${params.toString()}`);
+      } else {
+        // Navigate to explore page if not there already
+        router.push(`/explore?${params.toString()}`);
+      }
 
       // Scroll explore section into view
       scrollToNounExplorer();
     }
-  }, [type, trait, searchParams]);
+  }, [type, trait, searchParams, pathname, router]);
 
   return (
     <button
-      className="clickable-active flex justify-start gap-4 rounded-xl bg-black/5 p-2 text-start hover:bg-black/10"
+      className="flex justify-start gap-4 rounded-xl bg-black/5 p-2 text-start clickable-active hover:bg-black/10"
       onClick={() => handleClick()}
     >
       {traitImage ? (
-        <Image src={traitImage} width={48} height={48} alt="" className="h-12 w-12 rounded-lg" />
+        <Image
+          src={traitImage}
+          width={48}
+          height={48}
+          alt=""
+          className="h-12 w-12 rounded-lg"
+        />
       ) : (
         <Skeleton className="h-12 w-12 rounded-lg" />
       )}
       <div className="flex flex-col">
-        <span className="paragraph-sm text-content-secondary">{type.charAt(0).toUpperCase() + type.slice(1)}</span>
+        <span className="text-content-secondary paragraph-sm">
+          {type.charAt(0).toUpperCase() + type.slice(1)}
+        </span>
         <span className="label-md">
           {trait?.name
             ?.split("-")

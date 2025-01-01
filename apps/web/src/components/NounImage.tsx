@@ -1,36 +1,44 @@
 import { getNounById } from "@/data/noun/getNounById";
+import { Noun } from "@/data/noun/types";
 import { buildNounImage } from "@/utils/nounImage";
 import { cn } from "@/utils/shadcn";
 import Image from "next/image";
 import { ComponentProps, Suspense } from "react";
 
-interface NounImageProps extends Omit<ComponentProps<typeof Image>, "src" | "alt"> {
+interface NounImageProps
+  extends Omit<ComponentProps<typeof Image>, "src" | "alt"> {
   nounId: string;
 }
 
 export function NounImage({ nounId, ...props }: NounImageProps) {
   return (
-    <Suspense fallback={<NounImageImg src="/noun-loading-skull.gif" unoptimized={true} alt="" {...props} />}>
-      <NounImageInternal nounId={nounId} {...props} />
+    <Suspense fallback={<NounImageBase noun={undefined} {...props} />}>
+      <NounImageWrapper nounId={nounId} {...props} />
     </Suspense>
   );
 }
 
-async function NounImageInternal({ nounId, ...props }: NounImageProps) {
+async function NounImageWrapper({ nounId, ...props }: NounImageProps) {
   const noun = await getNounById(nounId);
   if (!noun) {
     throw Error(`NounImageInternal - no Noun found - ${nounId}`);
   }
 
-  const imageSrc = buildNounImage(noun.traits, "full");
-  return <NounImageImg src={imageSrc} alt="" {...props} />;
+  return <NounImageBase noun={noun} {...props} />;
 }
 
-function NounImageImg({ className, ...props }: ComponentProps<typeof Image>) {
+export function NounImageBase({
+  noun,
+  className,
+  ...props
+}: { noun?: Noun } & Omit<ComponentProps<typeof Image>, "src" | "alt">) {
+  const imageSrc = noun ? buildNounImage(noun.traits, "full") : undefined;
   return (
     <Image
-      className={cn("select-none rounded-3xl object-contain object-bottom", className)}
-      draggable={false}
+      src={imageSrc ?? "/noun-loading-skull.gif"}
+      unoptimized={imageSrc == undefined}
+      alt=""
+      className={cn("pointer-events-none select-none object-cover", className)}
       {...props}
     />
   );
