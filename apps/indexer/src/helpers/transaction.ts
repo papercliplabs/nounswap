@@ -1,17 +1,24 @@
-import { Event, Context, Schema } from "@/generated";
+import { Context } from "ponder:registry";
+import { transaction } from "ponder:schema";
+import { LogEvent } from "../utils/types";
 
 export async function upsertTransaction({
   event,
   context,
 }: {
-  event: Event;
+  event: LogEvent;
   context: Context;
-}): Promise<Schema["Transaction"]> {
-  const { Transaction } = context.db;
+}): Promise<(typeof transaction)["$inferSelect"]> {
+  const { db } = context;
 
-  return await Transaction.upsert({
-    id: event.log.transactionHash,
-    create: {
+  const txn = await db.find(transaction, { hash: event.transaction.hash });
+
+  if (txn) {
+    // Since onConflictDoNothing returns undefined...
+    return txn;
+  } else {
+    return await db.insert(transaction).values({
+      hash: event.transaction.hash,
       blockNumber: event.block.number,
       timestamp: event.block.timestamp,
       from: event.transaction.from,
@@ -19,7 +26,6 @@ export async function upsertTransaction({
       value: event.transaction.value,
       gas: event.transaction.gas,
       gasPrice: event.transaction.gasPrice,
-    },
-    update: {},
-  });
+    });
+  }
 }

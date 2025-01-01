@@ -1,14 +1,13 @@
-import { Event, Context, Schema } from "@/generated";
-import { bigIntMax } from "../utils/bigInt";
-import { Address, formatUnits, parseUnits } from "viem";
+import { Event, Context } from "ponder:registry";
+import { account } from "ponder:schema";
+import { Address, parseUnits } from "viem";
 import { NOUNS_ERC20_DECIMALS, NOUNS_ERC20_PER_NOUNS_NFT } from "../utils/constants";
 
-export const createAccountParams: Omit<Schema["Account"], "id"> = {
+export const createAccountParams: Omit<(typeof account)["$inferInsert"], "address"> = {
   nounsNftBalance: 0n,
   nounsErc20BaseBalance: 0n,
   nounsErc20MainnetBalance: 0n,
   effectiveNounsBalance: 0n,
-  delegateId: undefined,
 };
 
 export async function upsertAccountWithBalanceDeltas({
@@ -25,9 +24,7 @@ export async function upsertAccountWithBalanceDeltas({
   };
   event: Event;
   context: Context;
-}): Promise<Schema["Account"]> {
-  const { Account } = context.db;
-
+}): Promise<(typeof account)["$inferInsert"]> {
   const nounsNftBalanceDelta = deltas?.nounsNftBalance ?? 0n;
   const nounsErc20MainnetBalanceDelta = deltas?.nounsErc20MainnetBalance ?? 0n;
   const nounsErc20BaseBalanceDelta = deltas?.nounsErc20BaseBalance ?? 0n;
@@ -44,19 +41,21 @@ export async function upsertAccountWithBalanceDeltas({
   // * Zero address: will show negative balances for circulating supply for mainnet
   // * Superchain bridge mainnet: locks $nouns on mainnet (will equal base supply)
   // * $nouns contract: locks Nouns and mints $nouns
-  return await Account.upsert({
-    id: address,
-    create: {
+  return await context.db
+    .insert(account)
+    .values({
+      address,
       nounsNftBalance: nounsNftBalanceDelta,
-      nounsErc20MainnetBalance: nounsErc20MainnetBalanceDelta,
       nounsErc20BaseBalance: nounsErc20BaseBalanceDelta,
+      nounsErc20MainnetBalance: nounsErc20MainnetBalanceDelta,
       effectiveNounsBalance: effectiveNounsBalanceDelta,
-    },
-    update: ({ current }) => ({
-      nounsNftBalance: current.nounsNftBalance + nounsNftBalanceDelta,
-      nounsErc20MainnetBalance: current.nounsErc20MainnetBalance + nounsErc20MainnetBalanceDelta,
-      nounsErc20BaseBalance: current.nounsErc20BaseBalance + nounsErc20BaseBalanceDelta,
-      effectiveNounsBalance: current.effectiveNounsBalance + effectiveNounsBalanceDelta,
-    }),
-  });
+    })
+    .onConflictDoUpdate((row) => {
+      return {
+        nounsNftBalance: row.nounsNftBalance + nounsNftBalanceDelta,
+        nounsErc20BaseBalance: row.nounsErc20BaseBalance + nounsErc20BaseBalanceDelta,
+        nounsErc20MainnetBalance: row.nounsErc20MainnetBalance + nounsErc20MainnetBalanceDelta,
+        effectiveNounsBalance: row.effectiveNounsBalance + effectiveNounsBalanceDelta,
+      };
+    });
 }

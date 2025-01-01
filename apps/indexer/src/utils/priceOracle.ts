@@ -1,7 +1,7 @@
-import { Context } from "@/generated";
 import { Address, formatUnits } from "viem";
 import { yearnLensOracleAbi } from "../../abis/yearnLensOracle";
 import { WETH_ADDRESS } from "./tokens";
+import { Context } from "ponder:registry";
 
 const YEARN_LENS_USDC_ORACLE_ADDRESS = "0x83d95e0d5f402511db06817aff3f9ea88224b030"; // Deployed 12242339
 const YEARN_LENS_ORACLE_DECIMALS = 6;

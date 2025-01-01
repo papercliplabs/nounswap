@@ -1,6 +1,6 @@
 import { onchainTable, relations } from "ponder";
 
-export const transactions = onchainTable("transactions", (t) => ({
+export const transaction = onchainTable("transaction", (t) => ({
   hash: t.hex().notNull().primaryKey(),
   blockNumber: t.bigint().notNull(),
   timestamp: t.bigint().notNull(),
@@ -11,50 +11,50 @@ export const transactions = onchainTable("transactions", (t) => ({
   gasPrice: t.bigint(),
 }));
 
-export const transactionsRelations = relations(transactions, ({ many }) => ({
-  nounsNftTransfers: many(nounsNftTransfers),
-  nounsErc20Deposits: many(nounsErc20Deposits),
-  nounsErc20Redeems: many(nounsErc20Redeems),
-  nounsErc20Swaps: many(nounsErc20Swaps),
+export const transactionRelations = relations(transaction, ({ many }) => ({
+  nounsNftTransfers: many(nounsNftTransfer),
+  nounsErc20Deposits: many(nounsErc20Deposit),
+  nounsErc20Redeems: many(nounsErc20Redeem),
+  nounsErc20Swaps: many(nounsErc20Swap),
 }));
 
-export const accounts = onchainTable("accounts", (t) => ({
+export const account = onchainTable("account", (t) => ({
   address: t.hex().notNull().primaryKey(),
 
-  delegateAccountId: t.hex(), // Id of account their votes are delegated to, undefined if self
+  delegateAccountAddress: t.hex(), // Id of account their votes are delegated to, undefined if self
 
   // Nouns balances
-  nounsNftBalance: t.bigint(),
-  nounsErc20MainnetBalance: t.bigint(),
-  nounsErc20BaseBalance: t.bigint(),
+  nounsNftBalance: t.bigint().notNull(),
+  nounsErc20MainnetBalance: t.bigint().notNull(),
+  nounsErc20BaseBalance: t.bigint().notNull(),
 
   // Derived
-  effectiveNounsBalance: t.bigint(), // (nounsErc20MainnetBalance + nounsErc20BaseBalance) + (nounsNftBalance * 1M * 10^18) -> scaled to ERC20 units to maintain precision
+  effectiveNounsBalance: t.bigint().notNull(), // (nounsErc20MainnetBalance + nounsErc20BaseBalance) + (nounsNftBalance * 1M * 10^18) -> scaled to ERC20 units to maintain precision
 }));
 
-export const accountsRelations = relations(accounts, ({ many, one }) => ({
-  delegateAccount: one(accounts, { fields: [accounts.delegateAccountId], references: [accounts.address] }),
-  nounsNftFromTransfers: many(nounsNftTransfers),
-  nounsNftToTransfers: many(nounsNftTransfers),
-  nounsNftsOwned: many(nounsNfts),
-  nounsErc20MainnetFromTransfers: many(nounsErc20MainnetTransfers),
-  nounsErc20MainnetToTransfers: many(nounsErc20MainnetTransfers),
-  nounsErc20BaseFromTransfers: many(nounsErc20BaseTransfers),
-  nounsErc20BaseToTransfers: many(nounsErc20BaseTransfers),
-  delegatedAccounts: many(accounts),
+export const accountRelations = relations(account, ({ many, one }) => ({
+  delegateAccount: one(account, { fields: [account.delegateAccountAddress], references: [account.address] }),
+  nounsNftFromTransfers: many(nounsNftTransfer),
+  nounsNftToTransfers: many(nounsNftTransfer),
+  nounsNftsOwned: many(nounsNft),
+  nounsErc20MainnetFromTransfers: many(nounsErc20MainnetTransfer),
+  nounsErc20MainnetToTransfers: many(nounsErc20MainnetTransfer),
+  nounsErc20BaseFromTransfers: many(nounsErc20BaseTransfer),
+  nounsErc20BaseToTransfers: many(nounsErc20BaseTransfer),
+  delegatedAccounts: many(account),
 }));
 
-export const nounsNfts = onchainTable("nouns_nfts", (t) => ({
+export const nounsNft = onchainTable("nouns_nft", (t) => ({
   id: t.bigint().notNull().primaryKey(), // tokenId
   ownerAccountAddress: t.hex().notNull(),
 }));
 
-export const nounsNftsRelations = relations(nounsNfts, ({ one, many }) => ({
-  owner: one(accounts, { fields: [nounsNfts.ownerAccountAddress], references: [accounts.address] }),
-  transfers: many(nounsNftTransfers),
+export const nounsNftRelations = relations(nounsNft, ({ one, many }) => ({
+  owner: one(account, { fields: [nounsNft.ownerAccountAddress], references: [account.address] }),
+  transfers: many(nounsNftTransfer),
 }));
 
-export const nounsNftTransfers = onchainTable("nouns_nft_transfers", (t) => ({
+export const nounsNftTransfer = onchainTable("nouns_nft_transfer", (t) => ({
   id: t.text().primaryKey(), // tx hash + log index
   transactionHash: t.hex().notNull(),
   nounId: t.bigint().notNull(),
@@ -62,14 +62,14 @@ export const nounsNftTransfers = onchainTable("nouns_nft_transfers", (t) => ({
   toAccountAddress: t.hex().notNull(),
 }));
 
-export const nounsNftTransfersRelations = relations(nounsNftTransfers, ({ one }) => ({
-  transaction: one(transactions, { fields: [nounsNftTransfers.transactionHash], references: [transactions.hash] }),
-  fromAccount: one(accounts, { fields: [nounsNftTransfers.fromAccountAddress], references: [accounts.address] }),
-  toAccount: one(accounts, { fields: [nounsNftTransfers.toAccountAddress], references: [accounts.address] }),
-  noun: one(nounsNfts, { fields: [nounsNftTransfers.nounId], references: [nounsNfts.id] }),
+export const nounsNftTransferRelations = relations(nounsNftTransfer, ({ one }) => ({
+  transaction: one(transaction, { fields: [nounsNftTransfer.transactionHash], references: [transaction.hash] }),
+  fromAccount: one(account, { fields: [nounsNftTransfer.fromAccountAddress], references: [account.address] }),
+  toAccount: one(account, { fields: [nounsNftTransfer.toAccountAddress], references: [account.address] }),
+  noun: one(nounsNft, { fields: [nounsNftTransfer.nounId], references: [nounsNft.id] }),
 }));
 
-export const nounsErc20MainnetTransfers = onchainTable("nouns_erc20_mainnet_transfers", (t) => ({
+export const nounsErc20MainnetTransfer = onchainTable("nouns_erc20_mainnet_transfer", (t) => ({
   id: t.text().notNull().primaryKey(), // tx hash + log index
   transactionHash: t.hex().notNull(),
   fromAccountAddress: t.hex().notNull(),
@@ -77,19 +77,19 @@ export const nounsErc20MainnetTransfers = onchainTable("nouns_erc20_mainnet_tran
   amount: t.bigint(),
 }));
 
-export const nounsErc20MainnetTransfersRelations = relations(nounsErc20MainnetTransfers, ({ one }) => ({
-  transaction: one(transactions, {
-    fields: [nounsErc20MainnetTransfers.transactionHash],
-    references: [transactions.hash],
+export const nounsErc20MainnetTransferRelations = relations(nounsErc20MainnetTransfer, ({ one }) => ({
+  transaction: one(transaction, {
+    fields: [nounsErc20MainnetTransfer.transactionHash],
+    references: [transaction.hash],
   }),
-  fromAccount: one(accounts, {
-    fields: [nounsErc20MainnetTransfers.fromAccountAddress],
-    references: [accounts.address],
+  fromAccount: one(account, {
+    fields: [nounsErc20MainnetTransfer.fromAccountAddress],
+    references: [account.address],
   }),
-  toAccount: one(accounts, { fields: [nounsErc20MainnetTransfers.toAccountAddress], references: [accounts.address] }),
+  toAccount: one(account, { fields: [nounsErc20MainnetTransfer.toAccountAddress], references: [account.address] }),
 }));
 
-export const nounsErc20BaseTransfers = onchainTable("nouns_erc20_base_transfers", (t) => ({
+export const nounsErc20BaseTransfer = onchainTable("nouns_erc20_base_transfer", (t) => ({
   id: t.text().notNull().primaryKey(), // tx hash + log index + array index
   transactionHash: t.hex().notNull(),
   fromAccountAddress: t.hex().notNull(),
@@ -97,57 +97,57 @@ export const nounsErc20BaseTransfers = onchainTable("nouns_erc20_base_transfers"
   amount: t.bigint().notNull(),
 }));
 
-export const nounsErc20BaseTransfersRelations = relations(nounsErc20BaseTransfers, ({ one }) => ({
-  transaction: one(transactions, {
-    fields: [nounsErc20BaseTransfers.transactionHash],
-    references: [transactions.hash],
+export const nounsErc20BaseTransferRelations = relations(nounsErc20BaseTransfer, ({ one }) => ({
+  transaction: one(transaction, {
+    fields: [nounsErc20BaseTransfer.transactionHash],
+    references: [transaction.hash],
   }),
-  fromAccount: one(accounts, {
-    fields: [nounsErc20BaseTransfers.fromAccountAddress],
-    references: [accounts.address],
+  fromAccount: one(account, {
+    fields: [nounsErc20BaseTransfer.fromAccountAddress],
+    references: [account.address],
   }),
-  toAccount: one(accounts, { fields: [nounsErc20BaseTransfers.toAccountAddress], references: [accounts.address] }),
+  toAccount: one(account, { fields: [nounsErc20BaseTransfer.toAccountAddress], references: [account.address] }),
 }));
 
-export const nounsErc20Deposits = onchainTable("nouns_erc20_deposits", (t) => ({
+export const nounsErc20Deposit = onchainTable("nouns_erc20_deposit", (t) => ({
   id: t.text().notNull().primaryKey(), // tx hash + log index
   transactionHash: t.hex().notNull(),
   depositorAccountAddress: t.hex().notNull(),
   nounsNftId: t.bigint().notNull(),
 }));
 
-export const nounsErc20DepositsRelations = relations(nounsErc20Deposits, ({ one }) => ({
-  transaction: one(transactions, {
-    fields: [nounsErc20Deposits.transactionHash],
-    references: [transactions.hash],
+export const nounsErc20DepositRelations = relations(nounsErc20Deposit, ({ one }) => ({
+  transaction: one(transaction, {
+    fields: [nounsErc20Deposit.transactionHash],
+    references: [transaction.hash],
   }),
-  depositor: one(accounts, {
-    fields: [nounsErc20Deposits.depositorAccountAddress],
-    references: [accounts.address],
+  depositor: one(account, {
+    fields: [nounsErc20Deposit.depositorAccountAddress],
+    references: [account.address],
   }),
-  nounsNft: one(nounsNfts, { fields: [nounsErc20Deposits.nounsNftId], references: [nounsNfts.id] }),
+  nounsNft: one(nounsNft, { fields: [nounsErc20Deposit.nounsNftId], references: [nounsNft.id] }),
 }));
 
-export const nounsErc20Redeems = onchainTable("nouns_erc20_redeems", (t) => ({
+export const nounsErc20Redeem = onchainTable("nouns_erc20_redeem", (t) => ({
   id: t.text().primaryKey(), // tx hash + log index + array index
   transactionHash: t.hex().notNull(),
   redeemerAccountAddress: t.hex().notNull(),
   nounsNftId: t.bigint().notNull(),
 }));
 
-export const nounsErc20RedeemsRelations = relations(nounsErc20Redeems, ({ one }) => ({
-  transaction: one(transactions, {
-    fields: [nounsErc20Redeems.transactionHash],
-    references: [transactions.hash],
+export const nounsErc20RedeemRelations = relations(nounsErc20Redeem, ({ one }) => ({
+  transaction: one(transaction, {
+    fields: [nounsErc20Redeem.transactionHash],
+    references: [transaction.hash],
   }),
-  redeemer: one(accounts, {
-    fields: [nounsErc20Redeems.redeemerAccountAddress],
-    references: [accounts.address],
+  redeemer: one(account, {
+    fields: [nounsErc20Redeem.redeemerAccountAddress],
+    references: [account.address],
   }),
-  nounsNft: one(nounsNfts, { fields: [nounsErc20Redeems.nounsNftId], references: [nounsNfts.id] }),
+  nounsNft: one(nounsNft, { fields: [nounsErc20Redeem.nounsNftId], references: [nounsNft.id] }),
 }));
 
-export const nounsErc20Swaps = onchainTable("nouns_erc20_swaps", (t) => ({
+export const nounsErc20Swap = onchainTable("nouns_erc20_swap", (t) => ({
   id: t.text().primaryKey(), // tx hash + log index + array index
   transactionHash: t.hex().notNull(),
   swapperAccountAddress: t.hex().notNull(),
@@ -155,28 +155,27 @@ export const nounsErc20Swaps = onchainTable("nouns_erc20_swaps", (t) => ({
   toNounsNftId: t.bigint().notNull(),
 }));
 
-export const nounsErc20SwapsRelations = relations(nounsErc20Swaps, ({ one }) => ({
-  transaction: one(transactions, {
-    fields: [nounsErc20Swaps.transactionHash],
-    references: [transactions.hash],
+export const nounsErc20SwapRelations = relations(nounsErc20Swap, ({ one }) => ({
+  transaction: one(transaction, {
+    fields: [nounsErc20Swap.transactionHash],
+    references: [transaction.hash],
   }),
-  swapper: one(accounts, {
-    fields: [nounsErc20Swaps.swapperAccountAddress],
-    references: [accounts.address],
+  swapper: one(account, {
+    fields: [nounsErc20Swap.swapperAccountAddress],
+    references: [account.address],
   }),
-  fromNounsNft: one(nounsNfts, { fields: [nounsErc20Swaps.fromNounsNftId], references: [nounsNfts.id] }),
-  toNounsNft: one(nounsNfts, { fields: [nounsErc20Swaps.toNounsNftId], references: [nounsNfts.id] }),
+  fromNounsNft: one(nounsNft, { fields: [nounsErc20Swap.fromNounsNftId], references: [nounsNft.id] }),
+  toNounsNft: one(nounsNft, { fields: [nounsErc20Swap.toNounsNftId], references: [nounsNft.id] }),
 }));
 
-export const treasuryBalances = onchainTable("treasury_balances", (t) => ({
+export const treasuryBalance = onchainTable("treasury_balance", (t) => ({
   timestamp: t.integer().primaryKey(),
   balanceInUsd: t.real(),
   balanceInEth: t.real(),
 }));
 
-export const auctions = onchainTable("auctions", (t) => ({
-  id: t.bigint().primaryKey(), // nounId
-  nounsNftId: t.bigint().notNull(),
+export const auction = onchainTable("auction", (t) => ({
+  nounsNftId: t.bigint().primaryKey(),
 
   timestamp: t.integer().notNull(),
 
@@ -185,12 +184,12 @@ export const auctions = onchainTable("auctions", (t) => ({
   winningBidInUsd: t.real().notNull(),
 }));
 
-export const auctionsRelations = relations(auctions, ({ one }) => ({
-  nounsNft: one(nounsNfts, { fields: [auctions.nounsNftId], references: [nounsNfts.id] }),
-  winner: one(accounts, { fields: [auctions.winnerAccountAddress], references: [accounts.address] }),
+export const auctionRelations = relations(auction, ({ one }) => ({
+  nounsNft: one(nounsNft, { fields: [auction.nounsNftId], references: [nounsNft.id] }),
+  winner: one(account, { fields: [auction.winnerAccountAddress], references: [account.address] }),
 }));
 
-export const executedProposals = onchainTable("executed_proposals", (t) => ({
+export const executedProposal = onchainTable("executed_proposal", (t) => ({
   id: t.bigint().primaryKey(), // proposalId
   timestamp: t.integer().notNull(),
   transactionHash: t.hex().notNull(),
@@ -198,7 +197,7 @@ export const executedProposals = onchainTable("executed_proposals", (t) => ({
   amountInUsd: t.real().notNull(),
 }));
 
-export const dailyFinancialSnapshots = onchainTable("daily_financial_snapshots", (t) => ({
+export const dailyFinancialSnapshot = onchainTable("daily_financial_snapshot", (t) => ({
   id: t.integer().primaryKey(), // day number
 
   timestamp: t.integer().notNull(),
@@ -213,7 +212,7 @@ export const dailyFinancialSnapshots = onchainTable("daily_financial_snapshots",
   propSpendInUsd: t.real().notNull(),
 }));
 
-export const clients = onchainTable("clients", (t) => ({
+export const client = onchainTable("client", (t) => ({
   id: t.integer().primaryKey(),
 
   name: t.text().notNull(),

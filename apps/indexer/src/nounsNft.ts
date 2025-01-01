@@ -1,9 +1,11 @@
-import { ponder } from "@/generated";
 import { upsertTransaction } from "./helpers/transaction";
 import { createAccountParams, upsertAccountWithBalanceDeltas } from "./helpers/account";
 
+import { ponder } from "ponder:registry";
+import { account, nounsNft, nounsNftTransfer } from "ponder:schema";
+
 ponder.on("NounsNFT:Transfer", async ({ event, context }) => {
-  const { NounsNftTransfer, NounsNft } = context.db;
+  const { db } = context;
 
   const fromAddress = event.args.from;
   const toAddress = event.args.to;
@@ -28,49 +30,47 @@ ponder.on("NounsNFT:Transfer", async ({ event, context }) => {
     context,
   });
 
-  const nounsNft = await NounsNft.upsert({
-    id: event.args.tokenId,
-    create: {
-      ownerId: toAccount.id,
-    },
-    update: {
-      ownerId: toAccount.id,
-    },
-  });
+  const nft = await db
+    .insert(nounsNft)
+    .values({
+      id: event.args.tokenId,
+      ownerAccountAddress: toAccount.address,
+    })
+    .onConflictDoUpdate((row) => ({ ownerAccountAddress: toAccount.address }));
 
-  await NounsNftTransfer.create({
-    id: event.log.transactionHash + "-" + event.log.logIndex,
-    data: {
-      transactionId: transaction.id,
-      nounId: nounsNft.id,
-      fromId: fromAccount.id,
-      toId: toAccount.id,
-    },
+  await db.insert(nounsNftTransfer).values({
+    id: event.transaction.hash + "-" + event.log.logIndex,
+    transactionHash: transaction.hash,
+    nounId: nft.id,
+    fromAccountAddress: fromAccount.address,
+    toAccountAddress: toAccount.address,
   });
 });
 
 ponder.on("NounsNFT:DelegateChanged", async ({ event, context }) => {
-  const { Account } = context.db;
+  const { db } = context;
 
   // Delegate account
   const delegateAddress = event.args.toDelegate;
-  const delegateAccount = await Account.upsert({
-    id: delegateAddress,
-    create: createAccountParams,
-    update: {},
-  });
+  const delegateAccount = await db
+    .insert(account)
+    .values({
+      address: delegateAddress,
+      ...createAccountParams,
+    })
+    .onConflictDoUpdate((row) => ({}));
 
   // Delegator account
   const delegatorAddress = event.args.delegator;
   const selfDelegate = delegatorAddress == delegateAddress;
-  await Account.upsert({
-    id: delegatorAddress,
-    create: {
+  await db
+    .insert(account)
+    .values({
+      address: delegatorAddress,
       ...createAccountParams,
-      delegateId: selfDelegate ? undefined : delegateAccount.id, // undefined if self
-    },
-    update: {
-      delegateId: selfDelegate ? undefined : delegateAccount.id, // undefined if self
-    },
-  });
+      delegateAccountAddress: selfDelegate ? null : delegateAccount.address, // undefined if self
+    })
+    .onConflictDoUpdate((row) => ({
+      delegateAccountAddress: selfDelegate ? null : delegateAccount.address, // undefined if self
+    }));
 });

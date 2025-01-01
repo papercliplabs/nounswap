@@ -1,64 +1,47 @@
-import { ponder } from "@/generated";
+import { ponder } from "ponder:registry";
+import { client } from "ponder:schema";
 
 ponder.on("NounsClientIncentives:ClientRegistered", async ({ event, context }) => {
-  const { Client } = context.db;
+  const { db } = context;
 
-  await Client.create({
+  await db.insert(client).values({
     id: event.args.clientId,
-    data: {
-      name: event.args.name,
-      rewardAmount: BigInt(0),
-      auctionsWon: 0,
-      proposalsCreated: 0,
-      votesCast: 0,
-      approved: false,
-    },
+    name: event.args.name,
+    rewardAmount: BigInt(0),
+    auctionsWon: 0,
+    proposalsCreated: 0,
+    votesCast: 0,
+    approved: false,
   });
 });
 
 ponder.on("NounsClientIncentives:ClientUpdated", async ({ event, context }) => {
-  const { Client } = context.db;
+  const { db } = context;
 
-  await Client.update({
-    id: event.args.clientId,
-    data: {
-      name: event.args.name,
-    },
+  await db.update(client, { id: event.args.clientId }).set({
+    name: event.args.name,
   });
 });
 
 ponder.on("NounsClientIncentives:ClientApprovalSet", async ({ event, context }) => {
-  const { Client } = context.db;
+  const { db } = context;
 
-  await Client.update({
-    id: event.args.clientId,
-    data: {
-      approved: event.args.approved,
-    },
-  });
+  await db.update(client, { id: event.args.clientId }).set({ approved: event.args.approved });
 });
 
 ponder.on("NounsClientIncentives:ClientRewarded", async ({ event, context }) => {
-  const { Client } = context.db;
+  const { db } = context;
 
-  await Client.update({
-    id: event.args.clientId,
-    data: ({ current }) => ({
-      rewardAmount: current.rewardAmount + event.args.amount,
-    }),
-  });
+  await db
+    .update(client, { id: event.args.clientId })
+    .set((current) => ({ rewardAmount: current.rewardAmount + event.args.amount }));
 });
 
 ponder.on("NounsAuctionHouse:AuctionSettledWithClientId", async ({ event, context }) => {
-  const { Client } = context.db;
+  const { db } = context;
 
   try {
-    await Client.update({
-      id: event.args.clientId,
-      data: ({ current }) => ({
-        auctionsWon: current.auctionsWon + 1,
-      }),
-    });
+    await db.update(client, { id: event.args.clientId }).set((current) => ({ auctionsWon: current.auctionsWon + 1 }));
   } catch (e) {
     console.error("Error updating client auctions won", e);
   }
@@ -68,15 +51,12 @@ ponder.on("NounsAuctionHouse:AuctionSettledWithClientId", async ({ event, contex
 ponder.on(
   "NounsDaoProxy:ProposalCreatedWithRequirements(uint256 id, address[] signers, uint256 updatePeriodEndBlock, uint256 proposalThreshold, uint256 quorumVotes, uint32 indexed clientId)",
   async ({ event, context }) => {
-    const { Client } = context.db;
+    const { db } = context;
 
     try {
-      await Client.update({
-        id: event.args.clientId,
-        data: ({ current }) => ({
-          proposalsCreated: current.proposalsCreated + 1,
-        }),
-      });
+      await db
+        .update(client, { id: event.args.clientId })
+        .set((current) => ({ proposalsCreated: current.proposalsCreated + 1 }));
     } catch (e) {
       console.error("Error updating client props created", e);
     }
@@ -84,15 +64,10 @@ ponder.on(
 );
 
 ponder.on("NounsDaoProxy:VoteCastWithClientId", async ({ event, context }) => {
-  const { Client } = context.db;
+  const { db } = context;
 
   try {
-    await Client.update({
-      id: event.args.clientId,
-      data: ({ current }) => ({
-        votesCast: current.votesCast + 1,
-      }),
-    });
+    await db.update(client, { id: event.args.clientId }).set((current) => ({ votesCast: current.votesCast + 1 }));
   } catch (e) {
     console.error("Error updating client votes cast", e);
   }

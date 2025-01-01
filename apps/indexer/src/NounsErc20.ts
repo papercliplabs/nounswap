@@ -1,9 +1,10 @@
-import { ponder } from "@/generated";
+import { ponder } from "ponder:registry";
 import { createAccountParams, upsertAccountWithBalanceDeltas } from "./helpers/account";
 import { upsertTransaction } from "./helpers/transaction";
+import { account, nounsErc20Deposit, nounsErc20MainnetTransfer, nounsErc20Redeem, nounsErc20Swap } from "ponder:schema";
 
 ponder.on("NounsERC20:Transfer", async ({ event, context }) => {
-  const { NounsErc20MainnetTransfer } = context.db;
+  const { db } = context;
 
   const fromAddress = event.args.from;
   const toAddress = event.args.to;
@@ -29,109 +30,106 @@ ponder.on("NounsERC20:Transfer", async ({ event, context }) => {
     context,
   });
 
-  await NounsErc20MainnetTransfer.create({
-    id: event.log.transactionHash + "-" + event.log.logIndex,
-    data: {
-      transactionId: transaction.id,
-      fromId: fromAccount.id,
-      toId: toAccount.id,
-      amount,
-    },
+  await db.insert(nounsErc20MainnetTransfer).values({
+    id: event.transaction.hash + "-" + event.log.logIndex,
+    transactionHash: transaction.hash,
+    fromAccountAddress: fromAccount.address,
+    toAccountAddress: toAccount.address,
+    amount,
   });
 });
 
-ponder.on("NounsErc20Base:Transfer", async ({ event, context }) => {
-  const { NounsErc20BaseTransfer } = context.db;
+// TODO: Slow indexing since no local base node, undo for prod
+// ponder.on("NounsErc20Base:Transfer", async ({ event, context }) => {
+//   const { db } = context;
 
-  const fromAddress = event.args.from;
-  const toAddress = event.args.to;
-  const amount = event.args.value;
+//   const fromAddress = event.args.from;
+//   const toAddress = event.args.to;
+//   const amount = event.args.value;
 
-  const transaction = await upsertTransaction({ event, context });
+//   const transaction = await upsertTransaction({ event, context });
 
-  const fromAccount = await upsertAccountWithBalanceDeltas({
-    address: fromAddress,
-    deltas: {
-      nounsErc20BaseBalance: -amount,
-    },
-    event,
-    context,
-  });
+//   const fromAccount = await upsertAccountWithBalanceDeltas({
+//     address: fromAddress,
+//     deltas: {
+//       nounsErc20BaseBalance: -amount,
+//     },
+//     event,
+//     context,
+//   });
 
-  const toAccount = await upsertAccountWithBalanceDeltas({
-    address: toAddress,
-    deltas: {
-      nounsErc20BaseBalance: amount,
-    },
-    event,
-    context,
-  });
+//   const toAccount = await upsertAccountWithBalanceDeltas({
+//     address: toAddress,
+//     deltas: {
+//       nounsErc20BaseBalance: amount,
+//     },
+//     event,
+//     context,
+//   });
 
-  await NounsErc20BaseTransfer.create({
-    id: event.log.transactionHash + "-" + event.log.logIndex,
-    data: {
-      transactionId: transaction.id,
-      fromId: fromAccount.id,
-      toId: toAccount.id,
-      amount,
-    },
-  });
-});
+//   await db.insert(nounsErc20BaseTransfers).values({
+//     id: event.transaction.hash + "-" + event.log.logIndex,
+//     transactionHash: transaction.hash,
+//     fromAccountAddress: fromAccount.address,
+//     toAccountAddress: toAccount.address,
+//     amount,
+//   });
+// });
 
 ponder.on("NounsERC20:Deposit", async ({ event, context }) => {
-  const { NounsErc20Deposit, Account, NounsNft } = context.db;
+  const { db } = context;
 
   const depositorAddress = event.args.to;
   const nounsNftIds = event.args.tokenIds;
 
   const transaction = await upsertTransaction({ event, context });
 
-  const depositor = await Account.upsert({
-    id: depositorAddress,
-    create: createAccountParams,
-    update: {},
-  });
+  const depositor = await db
+    .insert(account)
+    .values({
+      address: depositorAddress,
+      ...createAccountParams,
+    })
+    .onConflictDoUpdate((row) => ({}));
 
   for (let i = 0; i < nounsNftIds.length; i++) {
-    await NounsErc20Deposit.create({
-      id: event.log.transactionHash + "-" + event.log.logIndex + "-" + i,
-      data: {
-        transactionId: transaction.id,
-        depositorId: depositor.id,
-        nounsNftId: nounsNftIds[i]!,
-      },
+    await db.insert(nounsErc20Deposit).values({
+      id: event.transaction.hash + "-" + event.log.logIndex + "-" + i,
+      transactionHash: transaction.hash,
+      depositorAccountAddress: depositor.address,
+      nounsNftId: nounsNftIds[i]!,
     });
   }
 });
 
 ponder.on("NounsERC20:Redeem", async ({ event, context }) => {
-  const { NounsErc20Redeem, Account, NounsNft } = context.db;
+  const { db } = context;
 
   const redeemerAddress = event.args.to;
   const nounsNftIds = event.args.tokenIds;
 
   const transaction = await upsertTransaction({ event, context });
 
-  const redeemer = await Account.upsert({
-    id: redeemerAddress,
-    create: createAccountParams,
-    update: {},
-  });
+  const redeemer = await db
+    .insert(account)
+    .values({
+      address: redeemerAddress,
+      ...createAccountParams,
+    })
+    .onConflictDoUpdate((row) => ({}));
 
   for (let i = 0; i < nounsNftIds.length; i++) {
-    await NounsErc20Redeem.create({
-      id: event.log.transactionHash + "-" + event.log.logIndex + "-" + i,
-      data: {
-        transactionId: transaction.id,
-        redeemerId: redeemer.id,
-        nounsNftId: nounsNftIds[i]!,
-      },
+    await await db.insert(nounsErc20Redeem).values({
+      id: event.transaction.hash + "-" + event.log.logIndex + "-" + i,
+      transactionHash: transaction.hash,
+      redeemerAccountAddress: redeemer.address,
+      nounsNftId: nounsNftIds[i]!,
     });
   }
 });
 
 ponder.on("NounsERC20:Swap", async ({ event, context }) => {
-  const { NounsErc20Swap, Account } = context.db;
+  const { db } = context;
 
   const swapperAddress = event.args.to;
   const inputNounsNftIds = event.args.tokensIn;
@@ -139,21 +137,21 @@ ponder.on("NounsERC20:Swap", async ({ event, context }) => {
 
   const transaction = await upsertTransaction({ event, context });
 
-  const swapper = await Account.upsert({
-    id: swapperAddress,
-    create: createAccountParams,
-    update: {},
-  });
+  const swapper = await db
+    .insert(account)
+    .values({
+      address: swapperAddress,
+      ...createAccountParams,
+    })
+    .onConflictDoUpdate((row) => ({}));
 
   for (let i = 0; i < inputNounsNftIds.length; i++) {
-    await NounsErc20Swap.create({
-      id: event.log.transactionHash + "-" + event.log.logIndex + "-" + i,
-      data: {
-        transactionId: transaction.id,
-        swapperId: swapper.id,
-        fromNounsNftId: inputNounsNftIds[i]!,
-        toNounsNftId: outputNounsNftIds[i]!,
-      },
+    await await db.insert(nounsErc20Swap).values({
+      id: event.transaction.hash + "-" + event.log.logIndex + "-" + i,
+      transactionHash: transaction.hash,
+      swapperAccountAddress: swapper.address,
+      fromNounsNftId: inputNounsNftIds[i]!,
+      toNounsNftId: outputNounsNftIds[i]!,
     });
   }
 });
