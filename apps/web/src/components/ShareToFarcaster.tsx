@@ -10,7 +10,10 @@ interface ShareToFarcasterProps {
 
 const BASE_COMPOSE_URL = "https://warpcast.com/~/compose";
 
-export default function ShareToFarcaster({ text, embeds }: ShareToFarcasterProps) {
+export default function ShareToFarcaster({
+  text,
+  embeds,
+}: ShareToFarcasterProps) {
   const searchParams = new URLSearchParams([
     ["text", text],
     ...(embeds ? embeds.map((embed) => ["embeds[]", embed]) : []),
@@ -21,9 +24,15 @@ export default function ShareToFarcaster({ text, embeds }: ShareToFarcasterProps
       <Slottable>
         <LinkExternal
           href={`${BASE_COMPOSE_URL}?${searchParams.toString()}`}
-          className="label-md flex items-center gap-3"
+          className="flex items-center gap-3 label-md"
         >
-          <Image src="/farcaster-arch.svg" width={20} height={20} className="h-[20px] w-[20px]" alt="" />
+          <Image
+            src="/socials/farcaster.svg"
+            width={20}
+            height={20}
+            className="h-[20px] w-[20px]"
+            alt=""
+          />
           Share to Farcaster
         </LinkExternal>
       </Slottable>

@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import clsx from "clsx";
 
 const NAV_INFO = [
@@ -15,7 +15,7 @@ export default function StatsNav() {
   const pathname = usePathname();
 
   return (
-    <div className="sticky top-0 z-50 flex w-full max-w-full gap-6 border-b-2 border-border-secondary bg-white no-scrollbar md:static md:gap-10">
+    <div className="sticky top-[64px] z-[40] flex w-full max-w-full gap-6 border-b-2 border-border-secondary bg-white no-scrollbar md:static md:gap-10">
       {NAV_INFO.map((info, i) => {
         const selected = info.href == pathname;
         return (

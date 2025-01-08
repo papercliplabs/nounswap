@@ -14,6 +14,7 @@ import InstantSwapFilter from "./InstantSwapFilter";
 import { useNounFilters } from "@/hooks/useNounFilters";
 import clsx from "clsx";
 import BuyNowFilter from "./BuyNowFilter";
+import Icon from "@/components/ui/Icon";
 
 export const BACKGROUND_TRAITS: NounTrait[] = [
   { name: "Cool", seed: 0 },
@@ -70,30 +71,20 @@ export const ACCESSORY_TRAITS: NounTrait[] = ImageData.images.accessories.map(
 
 export default function NounFilter({ numNouns }: { numNouns: number }) {
   const [isOpen, setIsOpen] = useState(false);
-  const { totalCount } = useNounFilters();
   return (
     <>
-      <div className="sticky top-0 z-[10] flex max-h-[100dvh] min-h-[60px] shrink-0 md:top-[64px] md:h-auto md:pb-[0px]">
-        <div
-          className={cn(
-            "top-0 z-[10] flex w-screen items-end justify-between bg-white py-2 label-sm md:hidden md:w-full",
-          )}
-        >
-          <Button
-            variant="secondary"
-            className="w-fit"
-            onClick={() => setIsOpen(true)}
-          >
-            Filters • {totalCount}
-          </Button>
-          <div>
-            <h6>{numNouns} nouns</h6>
-          </div>
-        </div>
+      <button
+        className="fixed bottom-[68px] left-1/2 z-10 flex h-12 -translate-x-1/2 items-center justify-center gap-2.5 rounded-full bg-content-primary px-6 text-white hover:bg-content-primary/90 md:hidden"
+        onClick={() => setIsOpen(true)}
+      >
+        <Icon icon="filter" size={24} className="fill-white" />
+        <span>Filter</span>
+      </button>
+      <div className="sticky top-[60px] z-[10] flex max-h-[100dvh] shrink-0 md:h-auto md:min-h-[60px] md:pb-[0px]">
         <div
           className={cn(
             "shrink-0 flex-col gap-2 overflow-y-auto",
-            "fixed left-0 top-0 z-[50] hidden h-full w-full bg-white px-6 pb-[104px] pt-4 transition-all", // sm
+            "fixed left-0 top-[64px] z-[110] hidden h-full w-full bg-white px-6 pb-[154px] pt-4 transition-all", // sm
             "animate-in slide-in-from-bottom",
             "md:static md:flex md:max-w-[280px] md:animate-none md:p-0 md:pr-2", // md
             isOpen ? "flex" : "hidden",

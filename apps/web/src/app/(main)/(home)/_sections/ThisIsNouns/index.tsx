@@ -13,7 +13,7 @@ export default function ThisIsNouns() {
       </Suspense>
 
       <div className="z-[1] flex flex-col items-center justify-center gap-4 px-6 text-center md:gap-8">
-        <div className="flex w-full max-w-[560px] flex-col gap-2">
+        <div className="flex w-full max-w-[480px] flex-col gap-2">
           <AnimateIn delayS={0}>
             <h1 className="hero">This is Nouns</h1>
           </AnimateIn>

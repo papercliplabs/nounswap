@@ -66,7 +66,7 @@ export default function NounExplorer({ nouns }: NounExplorerProps) {
       <NounFilter numNouns={filteredNouns.length} />
       {/* </div> */}
       <div className="flex min-w-0 flex-[2] flex-col">
-        <div className="sticky top-[60px] z-[8] bg-green-300 md:top-[64px]">
+        <div className="sticky top-[63px] z-[8]">
           <ActiveFilters numNouns={filteredNouns.length} />
         </div>
         <div className="min-h-[calc(100dvh-108px)] overflow-hidden pb-[0px] md:min-h-[calc(100vh-64px)]">

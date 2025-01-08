@@ -92,7 +92,6 @@ export default function RootLayout({
             <TestnetBanner />
             {children}
           </div>
-          <MobileNav />
           <ToastContainer />
         </Providers>
         <Analytics />

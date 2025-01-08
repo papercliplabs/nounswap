@@ -44,7 +44,7 @@ export default async function Page(props: {
 }) {
   const searchParams = await props.searchParams;
   return (
-    <div className="flex w-full flex-col items-center gap-[160px] pb-[160px] md:gap-[196px] md:pb-[196px]">
+    <div className="flex w-full flex-col items-center gap-[160px] md:gap-[196px] md:pb-[196px]">
       <div className="flex w-full flex-col items-center justify-center gap-[80px]">
         <section className="flex w-full max-w-[1680px] flex-col gap-4 px-6 pt-6 md:px-10 md:pt-10">
           <Auction initialAuctionId={searchParams.auctionId} />

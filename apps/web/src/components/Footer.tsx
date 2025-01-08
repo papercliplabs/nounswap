@@ -5,6 +5,7 @@ import { LinkExternal } from "./ui/link";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import MailingListForm from "./MailingListForm";
+import { NounSwapLogoLink } from "./NounSwapLogoLink";
 
 const NAV_ITEMS: { name: string; href: string; external?: boolean }[][] = [
   [
@@ -41,15 +42,12 @@ const SOCIALS: { name: string; icon: string; href: string }[] = [
 
 export default function Footer() {
   return (
-    <footer className="flex w-full flex-col items-center justify-center gap-14 bg-background-dark pb-[60px] text-content-secondary md:pb-0 pwa:pb-[72px]">
+    <footer className="mt-[80px] flex w-full flex-col items-center justify-center gap-14 bg-background-dark pb-[60px] text-content-secondary md:pb-0 pwa:pb-[72px]">
       <div className="flex w-full flex-col justify-between gap-20 px-4 pt-14 md:flex-row md:px-10">
         <div className="flex flex-col gap-5">
           <div className="flex items-center gap-3 paragraph-lg">
-            <div className="flex items-center gap-1 text-white">
-              <Icon icon="swap" className="fill-white stroke-white" />
-              <h4>NounSwap</h4>
-            </div>
-            for Nouns DAO
+            <NounSwapLogoLink darkMode />
+            <span className="pt-[4px]">for Nouns DAO</span>
           </div>
           <div className="flex max-w-[448px] flex-col gap-5">
             <span>

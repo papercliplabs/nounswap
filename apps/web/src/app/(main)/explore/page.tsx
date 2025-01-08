@@ -9,7 +9,7 @@ import { getSecondaryFloorListing } from "@/data/noun/getSecondaryNounListings";
 
 export default async function Page() {
   return (
-    <div className="flex w-full flex-col gap-12 p-6 md:p-10">
+    <div className="flex w-full flex-col gap-8 p-6 md:gap-12 md:p-10">
       <div>
         <h2 className="pb-1">Explore Nouns</h2>
         <div className="paragraph-lg">
