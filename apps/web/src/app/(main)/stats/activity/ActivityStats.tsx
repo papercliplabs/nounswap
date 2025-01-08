@@ -21,9 +21,16 @@ interface ActivityStatsProps {
   swappableNounCount: number;
 }
 
-export default function ActivityStats({ data, nouns, swappableNounCount }: ActivityStatsProps) {
+export default function ActivityStats({
+  data,
+  nouns,
+  swappableNounCount,
+}: ActivityStatsProps) {
   const activitySelector = useActivitySelector();
-  const swapCount = data.reduce((acc, entry) => (entry.type == "swap" ? acc + 1 : acc), 0);
+  const swapCount = data.reduce(
+    (acc, entry) => (entry.type == "swap" ? acc + 1 : acc),
+    0,
+  );
 
   const filteredData = useMemo(() => {
     switch (activitySelector) {
@@ -41,11 +48,17 @@ export default function ActivityStats({ data, nouns, swappableNounCount }: Activ
     <>
       <div className="flex flex-col gap-4 md:flex-row">
         <Card className="flex flex-col">
-          <TitlePopover title="Total Swaps">Total number of swaps via $nouns.</TitlePopover>
-          <span className="label-lg">{formatNumber({ input: swapCount, maxFractionDigits: 0 })}</span>
+          <TitlePopover title="Total Swaps">
+            Total number of swaps via $nouns.
+          </TitlePopover>
+          <span className="label-lg">
+            {formatNumber({ input: swapCount, maxFractionDigits: 0 })}
+          </span>
         </Card>
         <Card className="flex flex-col">
-          <TitlePopover title="Swappable Nouns">Current number of swappable Nouns in the $nouns contract.</TitlePopover>
+          <TitlePopover title="Swappable Nouns">
+            Current number of swappable Nouns in the $nouns contract.
+          </TitlePopover>
           <span className="label-lg">{swappableNounCount}</span>
         </Card>
       </div>
@@ -54,14 +67,21 @@ export default function ActivityStats({ data, nouns, swappableNounCount }: Activ
           return (
             <LinkExternal
               key={i}
-              className="hover:bg-background-secondary rounded-lg px-4 py-2 hover:brightness-100"
-              href={CHAIN_CONFIG.chain.blockExplorers?.default.url + `/tx/${entry.transaction.id}`}
+              className="rounded-lg px-4 py-2 hover:bg-background-secondary hover:brightness-100"
+              href={
+                CHAIN_CONFIG.chain.blockExplorers?.default.url +
+                `/tx/${entry.transaction.id}`
+              }
             >
               {entry.type === "swap" ? (
                 <SwapActivity
                   swapper={getAddress(entry.swapperId)}
-                  inputNoun={nouns.find((nouns) => nouns.id == entry.fromNounsNftId)!}
-                  outputNoun={nouns.find((nouns) => nouns.id == entry.toNounsNftId)!}
+                  inputNoun={
+                    nouns.find((nouns) => nouns.id == entry.fromNounsNftId)!
+                  }
+                  outputNoun={
+                    nouns.find((nouns) => nouns.id == entry.toNounsNftId)!
+                  }
                   timestamp={Number(entry.transaction.timestamp)}
                 />
               ) : entry.type === "deposit" ? (
@@ -85,7 +105,15 @@ export default function ActivityStats({ data, nouns, swappableNounCount }: Activ
   );
 }
 
-function RedeemActivity({ redeemer, noun, timestamp }: { redeemer: Address; noun: Noun; timestamp: Number }) {
+function RedeemActivity({
+  redeemer,
+  noun,
+  timestamp,
+}: {
+  redeemer: Address;
+  noun: Noun;
+  timestamp: Number;
+}) {
   const nounImage = useNounImage("full", noun);
   return (
     <div className="flex justify-between">
@@ -95,32 +123,42 @@ function RedeemActivity({ redeemer, noun, timestamp }: { redeemer: Address; noun
             src="/redeem-icon.png"
             width={22}
             height={22}
-            alt=""
+            alt="Redeem"
             className="absolute left-0 top-0 -translate-x-1/3 -translate-y-1/3 rounded-full border-2 border-white"
           />
           <Image
             src={nounImage ?? "/noun-loading-skull.gif"}
             width={44}
             height={44}
-            alt=""
+            alt="Noun Image"
             className="mr-4 rounded-md object-contain"
             draggable={false}
           />
         </div>
         <div className="flex min-w-0 flex-col">
-          <span className="paragraph-sm text-content-secondary flex gap-1 whitespace-nowrap">
+          <span className="flex gap-1 whitespace-nowrap text-content-secondary paragraph-sm">
             Redeem by
             <Identity address={redeemer} avatarSize={16} />
           </span>
           <span className="label-md">Noun {noun.id}</span>
         </div>
       </div>
-      <span className="text-content-secondary paragraph-sm shrink-0 pl-4">{formatTimeSinceNow(Number(timestamp))}</span>
+      <span className="shrink-0 pl-4 text-content-secondary paragraph-sm">
+        {formatTimeSinceNow(Number(timestamp))}
+      </span>
     </div>
   );
 }
 
-function DepositActivity({ depositor, noun, timestamp }: { depositor: Address; noun: Noun; timestamp: Number }) {
+function DepositActivity({
+  depositor,
+  noun,
+  timestamp,
+}: {
+  depositor: Address;
+  noun: Noun;
+  timestamp: Number;
+}) {
   const nounImage = useNounImage("full", noun);
   return (
     <div className="flex justify-between">
@@ -130,27 +168,29 @@ function DepositActivity({ depositor, noun, timestamp }: { depositor: Address; n
             src="/deposit-icon.png"
             width={22}
             height={22}
-            alt=""
+            alt="Deposit $nouns"
             className="absolute left-0 top-0 -translate-x-1/3 -translate-y-1/3 rounded-full border-2 border-white"
           />
           <Image
             src={nounImage ?? "/noun-loading-skull.gif"}
             width={44}
             height={44}
-            alt=""
+            alt="Noun"
             className="mr-4 rounded-md object-contain"
             draggable={false}
           />
         </div>
         <div className="flex min-w-0 flex-col">
-          <span className="paragraph-sm text-content-secondary flex gap-1 whitespace-nowrap">
+          <span className="flex gap-1 whitespace-nowrap text-content-secondary paragraph-sm">
             Deposit by
             <Identity address={depositor} avatarSize={16} />
           </span>
           <span className="label-md">Noun {noun.id}</span>
         </div>
       </div>
-      <span className="text-content-secondary paragraph-sm shrink-0 pl-4">{formatTimeSinceNow(Number(timestamp))}</span>
+      <span className="shrink-0 pl-4 text-content-secondary paragraph-sm">
+        {formatTimeSinceNow(Number(timestamp))}
+      </span>
     </div>
   );
 }
@@ -176,14 +216,14 @@ function SwapActivity({
             src="/swap-icon.png"
             width={22}
             height={22}
-            alt=""
+            alt="Swap Nouns"
             className="absolute left-0 top-0 z-10 -translate-x-1/3 -translate-y-1/3 rounded-full border-2 border-white"
           />
           <Image
             src={inputNounImage ?? "/noun-loading-skull.gif"}
             width={28}
             height={28}
-            alt=""
+            alt="Swap Input Noun"
             className="absolute left-[30px] top-1/2 z-0 h-[28px] w-[28px] -translate-y-1/2 rotate-[5deg] rounded-[4.6px] object-contain"
             draggable={false}
           />
@@ -191,26 +231,28 @@ function SwapActivity({
             src={outputNounImage ?? "/noun-loading-skull.gif"}
             width={40}
             height={40}
-            alt=""
+            alt="Swap Output Noun"
             className="z-10 h-[44px] w-[44px] -translate-x-[2px] rounded-md border-2 border-white object-contain"
             draggable={false}
           />
         </div>
         <div className="flex min-w-0 flex-col">
-          <span className="paragraph-sm text-content-secondary flex gap-1 whitespace-nowrap">
+          <span className="flex gap-1 whitespace-nowrap text-content-secondary paragraph-sm">
             Swap by
             <Identity address={swapper} avatarSize={16} />
           </span>
-          <div className="label-md flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 label-md">
             <span>Noun {inputNoun.id}</span>
-            <div className="bg-background-secondary rounded-full p-[3px]">
+            <div className="rounded-full bg-background-secondary p-[3px]">
               <Icon icon="chevronRight" size={10} />
             </div>
             <span>Noun {outputNoun.id}</span>
           </div>
         </div>
       </div>
-      <span className="text-content-secondary paragraph-sm shrink-0 pl-4">{formatTimeSinceNow(Number(timestamp))}</span>
+      <span className="shrink-0 pl-4 text-content-secondary paragraph-sm">
+        {formatTimeSinceNow(Number(timestamp))}
+      </span>
     </div>
   );
 }

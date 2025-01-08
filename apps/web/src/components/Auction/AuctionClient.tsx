@@ -175,8 +175,8 @@ export default function AuctionClient({ clients }: { clients: Client[] }) {
             )}
             <span className="text-content-secondary label-md">{date}</span>
           </div>
-          <div>
-            <h1 className="flex whitespace-pre-wrap">Noun {auctionId}</h1>
+          <div className="flex whitespace-pre-wrap heading-1">
+            Noun {auctionId}
           </div>
         </div>
 

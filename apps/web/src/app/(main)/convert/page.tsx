@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   title: "Convert Nouns to $nouns | Unlock Fractional Ownership with Nouns DAO",
   description:
     "Convert your Nouns into $nouns tokens or redeem $nouns for a full Noun NFT. Unlock liquidity and stay connected to the Nouns DAO. Fast, simple, and secure.",
+  alternates: {
+    canonical: "./convert",
+  },
 };
 
 export default function ConvertPage() {

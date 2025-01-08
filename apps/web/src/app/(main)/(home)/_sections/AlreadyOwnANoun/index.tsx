@@ -41,7 +41,7 @@ export default function AlreadyOwnANoun() {
             src="/feature/instant-swap/main.png"
             width={270}
             height={280}
-            alt=""
+            alt="Swap Nouns"
             className="hidden self-end object-cover lg:block"
           />
         </AlreadyOwnANounCard>
@@ -68,7 +68,7 @@ export default function AlreadyOwnANoun() {
             src="/feature/treasury-swap/main.png"
             width={160}
             height={280}
-            alt=""
+            alt="Swap Noun with Treasury"
             className="hidden self-end object-cover object-left lg:block"
           />
         </AlreadyOwnANounCard>

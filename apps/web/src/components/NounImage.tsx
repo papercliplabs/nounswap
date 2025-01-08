@@ -37,7 +37,7 @@ export function NounImageBase({
     <Image
       src={imageSrc ?? "/noun-loading-skull.gif"}
       unoptimized={imageSrc == undefined}
-      alt=""
+      alt="Noun"
       className={cn("pointer-events-none select-none object-cover", className)}
       {...props}
     />

@@ -21,9 +21,27 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.6,
     },
     {
-      url: "https://www.nounswap.wtf/stats",
+      url: "https://www.nounswap.wtf/stats/treasury",
       lastModified: new Date(),
-      changeFrequency: "weekly",
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: "https://www.nounswap.wtf/stats/leaderboard",
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: "https://www.nounswap.wtf/stats/clients",
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: "https://www.nounswap.wtf/stats/activity",
+      lastModified: new Date(),
+      changeFrequency: "monthly",
       priority: 0.8,
     },
   ];

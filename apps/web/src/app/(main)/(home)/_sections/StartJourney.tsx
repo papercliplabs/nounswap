@@ -47,7 +47,7 @@ export default function StartJourney() {
               src="/farcaster-followers.png"
               width={58}
               height={24}
-              alt=""
+              alt="Nouns DAO Farcaster"
             />
             <span>100k+ Followers</span>
           </div>

@@ -105,14 +105,14 @@ export default function Footer() {
           src="/footer-left.png"
           width={208}
           height={135}
-          alt=""
+          alt="Nouns"
           className="h-[67.5px] w-[104px] md:h-[135px] md:w-[208px]"
         />
         <Image
           src="/footer-right.png"
           width={208}
           height={135}
-          alt=""
+          alt="Nouns"
           className="h-[67.5px] w-[104px] md:h-[135px] md:w-[208px]"
         />
       </div>

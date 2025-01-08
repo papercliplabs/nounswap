@@ -52,6 +52,7 @@ export const metadata: Metadata = {
     "Discover NounSwap, your gateway to Nouns DAO and iconic Noggles. Bid on Noun NFTs, explore $nouns tokens, and join the creative Nouns ecosystem today.",
   metadataBase: new URL("https://www.nounswap.wtf"),
   openGraph: {
+    url: "https://www.nounswap.wtf",
     siteName: "NounSwap - Discover, Buy, and Swap Nouns from Nouns DAO",
     type: "website",
     locale: "en_US",

@@ -11,7 +11,13 @@ interface ConvertNounGraphicProps {
   scale?: number;
 }
 
-export default function ConvertNounGraphic({ noun, action, asset, amount, scale }: ConvertNounGraphicProps) {
+export default function ConvertNounGraphic({
+  noun,
+  action,
+  asset,
+  amount,
+  scale,
+}: ConvertNounGraphicProps) {
   return (
     <div className="flex flex-row gap-5" style={{ scale: scale }}>
       <div className="relative">
@@ -21,7 +27,11 @@ export default function ConvertNounGraphic({ noun, action, asset, amount, scale 
           <Erc20Card asset={asset} amount={amount} />
         )}
         <div className="absolute right-0 top-1/2 z-40 -translate-y-1/2 translate-x-[calc(50%+10px)]">
-          <Icon icon={"swap"} size={36} className="bg-background-secondary rounded-full border-2 border-white p-2" />
+          <Icon
+            icon={"swap"}
+            size={36}
+            className="rounded-full border-2 border-white bg-background-secondary p-2"
+          />
         </div>
       </div>
       {action === "redeem" ? (
@@ -33,18 +43,32 @@ export default function ConvertNounGraphic({ noun, action, asset, amount, scale 
   );
 }
 
-function Erc20Card({ asset, amount }: { asset?: "$nouns" | "eth"; amount?: string }) {
+function Erc20Card({
+  asset,
+  amount,
+}: {
+  asset?: "$nouns" | "eth";
+  amount?: string;
+}) {
   const assetInternal = asset ?? "$nouns";
   return (
-    <div className="bg-background-secondary flex h-[80px] w-[80px] flex-col items-center justify-center gap-2 rounded-[12px]">
+    <div className="flex h-[80px] w-[80px] flex-col items-center justify-center gap-2 rounded-[12px] bg-background-secondary">
       <Image
-        src={assetInternal == "$nouns" ? "/erc-20-nouns-ethereum.png" : "/ethereum-logo.png"}
+        src={
+          assetInternal == "$nouns"
+            ? "/erc-20-nouns-ethereum.png"
+            : "/ethereum-logo.png"
+        }
         width={100}
         height={100}
-        alt=""
+        alt="$nouns ERC-20 Fractionalized Noun"
         className="h-[43px] w-[43px]"
       />
-      {amount != undefined && <span className="label-sm flex w-full items-center justify-center">{amount}</span>}
+      {amount != undefined && (
+        <span className="flex w-full items-center justify-center label-sm">
+          {amount}
+        </span>
+      )}
     </div>
   );
 }

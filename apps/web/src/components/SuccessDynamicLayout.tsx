@@ -25,7 +25,7 @@ export default function SuccessDynamicLayout({
         <div className="aspect-square max-h-[400px] w-full max-w-[400px] shrink-0 rounded-[32px] p-[7px] shadow-2xl md:w-[400px] md:p-[12px]">
           <Image
             src={`${frameUrl}/image`}
-            alt=""
+            alt="Nouns Frame"
             width={400}
             height={400}
             className="h-full w-full rounded-[24px]"

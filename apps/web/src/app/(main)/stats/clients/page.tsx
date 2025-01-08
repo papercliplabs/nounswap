@@ -3,6 +3,13 @@ import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getClients } from "@/data/ponder/client/getClients";
 import ClientStats from "./ClientStats";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "./stats/clients",
+  },
+};
 
 export default function ClientsPage() {
   return (

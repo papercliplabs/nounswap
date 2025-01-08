@@ -35,7 +35,7 @@ export default function GovernedByYou() {
           width={1600}
           height={430}
           className="absolute bottom-0 min-w-[1600px] max-w-[1600px] origin-bottom scale-50 md:scale-100"
-          alt=""
+          alt="Nouns DAO Governance"
         />
       </div>
     </section>

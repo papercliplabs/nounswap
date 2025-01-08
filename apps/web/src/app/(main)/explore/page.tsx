@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   title: "Explore Nouns - Browse Unique NFTs and Traits | Nouns DAO",
   description:
     "Dive into the world of Nouns. Browse thousands of unique Noggle wearing digital pixel-art NFTs, filter by traits, and discover the magic behind Nouns DAO. Start exploring today!",
+  alternates: {
+    canonical: "./explore",
+  },
 };
 
 export default async function Page() {

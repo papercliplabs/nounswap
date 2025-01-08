@@ -1,4 +1,8 @@
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialogBase";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from "@/components/ui/dialogBase";
 import { Bid } from "@/data/auction/types";
 import { formatEther } from "viem";
 import { ReactNode } from "react";
@@ -16,10 +20,15 @@ interface BidHistoryDialogProps {
   clients: Client[];
 }
 
-export function BidHistoryDialog({ children, nounId, bids, clients }: BidHistoryDialogProps) {
+export function BidHistoryDialog({
+  children,
+  nounId,
+  bids,
+  clients,
+}: BidHistoryDialogProps) {
   return (
     <Dialog>
-      <DialogTrigger className="clickable-active label-sm text-content-secondary flex self-center underline hover:brightness-75 md:self-start">
+      <DialogTrigger className="flex self-center text-content-secondary underline label-sm clickable-active hover:brightness-75 md:self-start">
         {children}
       </DialogTrigger>
       <DialogContent className="flex max-h-[80vh] max-w-[min(425px,95vw)] flex-col overflow-y-auto p-0">
@@ -39,7 +48,7 @@ export function BidHistoryDialog({ children, nounId, bids, clients }: BidHistory
             return (
               <LinkExternal
                 key={i}
-                className="label-lg hover:bg-background-secondary flex w-full min-w-0 items-center justify-between gap-2 px-6 py-3 hover:brightness-100"
+                className="flex w-full min-w-0 items-center justify-between gap-2 px-6 py-3 label-lg hover:bg-background-secondary hover:brightness-100"
                 href={`${CHAIN_CONFIG.chain.blockExplorers?.default.url}/tx/${bid.transactionHash}`}
               >
                 <div className="flex min-w-0 items-center gap-2">
@@ -50,19 +59,21 @@ export function BidHistoryDialog({ children, nounId, bids, clients }: BidHistory
                         src={client.icon}
                         width={16}
                         height={16}
-                        alt=""
-                        className="bg-background-primary absolute bottom-0 right-0 rounded-full"
+                        alt="Nouns DAO Client"
+                        className="absolute bottom-0 right-0 rounded-full bg-background-primary"
                       />
                     )}
                   </div>
                   <div className="flex min-w-0 flex-col">
                     <Name address={bid.bidderAddress} />
-                    <span className="paragraph-sm text-content-secondary">{date}</span>
+                    <span className="text-content-secondary paragraph-sm">
+                      {date}
+                    </span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="text-content-secondary shrink-0 pl-6">
+                  <span className="shrink-0 pl-6 text-content-secondary">
                     {formatNumber({
                       input: Number(formatEther(BigInt(bid.amount))),
                       unit: "Ξ",

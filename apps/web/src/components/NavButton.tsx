@@ -55,7 +55,7 @@ export default function NavButton({
                 src={iconSrc}
                 width={24}
                 height={24}
-                alt=""
+                alt="Nav Icon"
                 className="h-[24px] w-[24px]"
               />
             </motion.div>

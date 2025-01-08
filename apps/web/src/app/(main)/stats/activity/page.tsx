@@ -9,6 +9,13 @@ import { readContract } from "viem/actions";
 import { CHAIN_CONFIG } from "@/config";
 import { erc721Abi } from "viem";
 import { unstable_cache } from "next/cache";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "./stats/activity",
+  },
+};
 
 export default function ActivityPage() {
   return (
@@ -37,7 +44,10 @@ export default function ActivityPage() {
               {Array(2)
                 .fill(0)
                 .map((_, i) => (
-                  <Skeleton className="w-full flex-1 rounded-2xl md:h-full md:w-auto" key={i} />
+                  <Skeleton
+                    className="w-full flex-1 rounded-2xl md:h-full md:w-auto"
+                    key={i}
+                  />
                 ))}
             </div>
             {Array(10)
@@ -66,13 +76,19 @@ async function ActivityDataWrapper() {
             address: CHAIN_CONFIG.addresses.nounsToken,
             functionName: "balanceOf",
             args: [CHAIN_CONFIG.addresses.nounsErc20],
-          })
+          }),
         );
       },
       ["swappable-noun-count"],
-      { revalidate: 60 * 15 }
+      { revalidate: 60 * 15 },
     )(),
   ]);
 
-  return <ActivityStats data={activity} nouns={allNouns} swappableNounCount={swappableNounCount} />;
+  return (
+    <ActivityStats
+      data={activity}
+      nouns={allNouns}
+      swappableNounCount={swappableNounCount}
+    />
+  );
 }

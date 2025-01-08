@@ -15,13 +15,19 @@ import { Client } from "@/data/ponder/client/getClients";
 import Image from "next/image";
 import { Avatar, Name } from "@paperclip-labs/whisk-sdk/identity";
 
-export function EndedAuction({ auction, clients }: { auction: Auction; clients: Client[] }) {
+export function EndedAuction({
+  auction,
+  clients,
+}: {
+  auction: Auction;
+  clients: Client[];
+}) {
   const winningBid = auction.bids[0];
   const client = clients.find((client) => client.id == winningBid?.clientId);
 
   const address = auction.nounderAuction
     ? CHAIN_CONFIG.addresses.noundersMultisig
-    : auction.bids[0]?.bidderAddress ?? zeroAddress;
+    : (auction.bids[0]?.bidderAddress ?? zeroAddress);
 
   return (
     <>
@@ -31,7 +37,11 @@ export function EndedAuction({ auction, clients }: { auction: Auction; clients: 
           value: auction.nounderAuction
             ? "n/a"
             : formatNumber({
-                input: Number(formatEther(winningBid ? BigInt(winningBid.amount) : BigInt(0))),
+                input: Number(
+                  formatEther(
+                    winningBid ? BigInt(winningBid.amount) : BigInt(0),
+                  ),
+                ),
                 unit: "ETH",
               }),
         }}
@@ -40,18 +50,25 @@ export function EndedAuction({ auction, clients }: { auction: Auction; clients: 
           value: (
             <div className="flex flex-row items-center gap-2">
               <LinkExternal
-                href={CHAIN_CONFIG.chain.blockExplorers?.default.url + `/address/${address}`}
+                href={
+                  CHAIN_CONFIG.chain.blockExplorers?.default.url +
+                  `/address/${address}`
+                }
                 className="flex min-w-0 items-center gap-2"
               >
                 <div className="relative">
-                  <Avatar address={address} size={36} className="!h-[20px] !w-[20px] md:!h-[36px] md:!w-[36px]" />
+                  <Avatar
+                    address={address}
+                    size={36}
+                    className="!h-[20px] !w-[20px] md:!h-[36px] md:!w-[36px]"
+                  />
                   {client?.icon && (
                     <Image
                       src={client.icon}
                       width={16}
                       height={16}
-                      alt=""
-                      className="bg-background-primary absolute bottom-0 right-0 h-[10px] w-[10px] rounded-full md:h-[16px] md:w-[16px]"
+                      alt="Auction client"
+                      className="absolute bottom-0 right-0 h-[10px] w-[10px] rounded-full bg-background-primary md:h-[16px] md:w-[16px]"
                     />
                   )}
                 </div>
@@ -60,11 +77,17 @@ export function EndedAuction({ auction, clients }: { auction: Auction; clients: 
               {auction.nounderAuction && (
                 <Tooltip>
                   <TooltipTrigger>
-                    <Icon icon="circleInfo" className="fill-content-secondary" size={20} />
+                    <Icon
+                      icon="circleInfo"
+                      className="fill-content-secondary"
+                      size={20}
+                    />
                   </TooltipTrigger>
-                  <TooltipContent className="bg-background-dark text-wrap text-center">
-                    All Noun auction proceeds go to the Nouns Treasury. The founders ('Nounders'), are compensated with
-                    Nouns. Every 10th Noun for the first 5 years goes to their multisig wallet.
+                  <TooltipContent className="text-wrap bg-background-dark text-center">
+                    All Noun auction proceeds go to the Nouns Treasury. The
+                    founders ('Nounders'), are compensated with Nouns. Every
+                    10th Noun for the first 5 years goes to their multisig
+                    wallet.
                   </TooltipContent>
                 </Tooltip>
               )}
@@ -75,7 +98,10 @@ export function EndedAuction({ auction, clients }: { auction: Auction; clients: 
 
       {auction.state == "ended-unsettled" &&
         (CHAIN_CONFIG.chain == mainnet ? (
-          <LinkExternal href="https://fomonouns.wtf/" className="w-full hover:brightness-100">
+          <LinkExternal
+            href="https://fomonouns.wtf/"
+            className="w-full hover:brightness-100"
+          >
             <Button className="w-full">Help mint the next Noun</Button>
           </LinkExternal>
         ) : (
@@ -103,7 +129,11 @@ export function EndedAuction({ auction, clients }: { auction: Auction; clients: 
         </div>
       )}
       {auction.bids.length > 0 && (
-        <BidHistoryDialog nounId={auction.nounId} bids={auction.bids} clients={clients}>
+        <BidHistoryDialog
+          nounId={auction.nounId}
+          bids={auction.bids}
+          clients={clients}
+        >
           Bid history
         </BidHistoryDialog>
       )}

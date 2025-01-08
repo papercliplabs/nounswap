@@ -33,9 +33,10 @@ export async function generateMetadata(props: {
   }
 
   return {
-    title: "NounSwap",
-    description: "See all the Nouns or Swap for one from the Nouns treasury.",
     other: searchParams.frame != undefined ? filteredFrameMetadata : {},
+    alternates: {
+      canonical: "./",
+    },
   };
 }
 

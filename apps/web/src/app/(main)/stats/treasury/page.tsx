@@ -6,6 +6,13 @@ import { getDailyFinancialSnapshots } from "@/data/ponder/financial/getDailyFina
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import TreasuryStats from "./TreasuryStats";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "./stats/treasury",
+  },
+};
 
 export default function TreasuryPage() {
   return (

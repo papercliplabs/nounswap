@@ -31,7 +31,7 @@ export default function ShareToFarcaster({
             width={20}
             height={20}
             className="h-[20px] w-[20px]"
-            alt=""
+            alt="Share to Nouns DAO Farcaster"
           />
           Share to Farcaster
         </LinkExternal>

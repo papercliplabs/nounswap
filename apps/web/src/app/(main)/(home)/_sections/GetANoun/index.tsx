@@ -29,7 +29,7 @@ export default function GetANoun() {
             src="/feature/shop/main.png"
             width={400}
             height={332}
-            alt=""
+            alt="Buy Secondary Nouns"
             className="h-[332px] w-[400px] object-cover"
           />
         </NavCard>
@@ -44,7 +44,7 @@ export default function GetANoun() {
             src="/feature/redeem/main.png"
             width={400}
             height={332}
-            alt=""
+            alt="Redeem $nouns"
             className="h-[332px] w-[400px] object-cover"
           />
         </NavCard>

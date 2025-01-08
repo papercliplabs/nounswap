@@ -84,7 +84,7 @@ export default function NounDialog({
               src={fullImageData ?? "/noun-loading-skull.gif"}
               width={600}
               height={600}
-              alt=""
+              alt="Noun"
               unoptimized={fullImageData == undefined}
               className="aspect-square h-full max-h-[400px] w-full max-w-[min(70%,400px)] object-contain object-bottom md:max-h-none md:max-w-none"
             />
@@ -269,7 +269,7 @@ function NounTraitCard({ type, noun }: { type: NounTraitType; noun?: Noun }) {
           src={traitImage}
           width={48}
           height={48}
-          alt=""
+          alt="Noun Trait"
           className="h-12 w-12 rounded-lg"
         />
       ) : (

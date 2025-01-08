@@ -3,13 +3,23 @@ import LeaderboardStats from "./LeaderboardStats";
 import { getAccountLeaderboard } from "@/data/ponder/leaderboard/getAccountLeaderboard";
 import { getCurrentAuctionNounId } from "@/data/auction/getCurrentAuctionNounId";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "./stats/leaderboard",
+  },
+};
 
 export default function LeaderboardPage() {
   return (
     <>
       <div>
         <h4>Ownership Leaderboard</h4>
-        <div>This leaderboard ranks Noun owners based on their combined holdings of Nouns NFTs and $nouns tokens. </div>
+        <div>
+          This leaderboard ranks Noun owners based on their combined holdings of
+          Nouns NFTs and $nouns tokens.{" "}
+        </div>
       </div>
       <Suspense
         fallback={
@@ -38,7 +48,10 @@ async function LeaderboardDataWrapper() {
   ]);
 
   return (
-    <LeaderboardStats accountLeaderboardData={accountLeaderboardData} totalNounsCount={Number(currentAuctionId)} />
+    <LeaderboardStats
+      accountLeaderboardData={accountLeaderboardData}
+      totalNounsCount={Number(currentAuctionId)}
+    />
   );
 }
 

@@ -32,7 +32,7 @@ export default function ThisIsNouns() {
                 src="/this-is-nouns-video-thumbnail.png"
                 width={113}
                 height={64}
-                alt=""
+                alt="This is Nouns"
                 className="rounded-lg"
               />
               <div className="flex flex-col items-center justify-center text-center">
