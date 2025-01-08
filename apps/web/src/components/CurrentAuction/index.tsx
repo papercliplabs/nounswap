@@ -4,7 +4,6 @@ import { formatNumber, formatTimeLeft } from "@/utils/format";
 import { formatEther } from "viem";
 import clsx from "clsx";
 import { useAuctionData } from "@/hooks/useAuctionData";
-import { Skeleton } from "../ui/skeleton";
 
 export function CurrentAuctionLarge() {
   const { auction, noun, timeRemainingS } = useAuctionData();

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import NavCard from "./NavCard";
 import JoinAuction from "./JoinAuction";
+import { CurrentAuctionPrefetchWrapper } from "@/components/CurrentAuction/CurrentAuctionPrefetchWrapper";
 
 export default function GetANoun() {
   return (
@@ -14,7 +15,9 @@ export default function GetANoun() {
       </div>
 
       <div className="flex w-full min-w-0 max-w-[1600px] flex-col gap-6 md:flex-row md:gap-10">
-        <JoinAuction />
+        <CurrentAuctionPrefetchWrapper>
+          <JoinAuction />
+        </CurrentAuctionPrefetchWrapper>
         <NavCard
           href="/explore?buyNow=1"
           iconSrc="/feature/shop/icon.svg"

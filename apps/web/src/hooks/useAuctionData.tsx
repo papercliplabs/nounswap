@@ -24,9 +24,7 @@ export function useAuctionData() {
   });
 
   const [timeRemainingS, setTimeRemainingS] = useState<number | undefined>(
-    auction
-      ? Math.max(Number(auction.endTime) - Date.now() / 1000, 0)
-      : undefined,
+    undefined,
   );
 
   useEffect(() => {

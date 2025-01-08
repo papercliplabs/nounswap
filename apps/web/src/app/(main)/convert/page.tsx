@@ -1,8 +1,14 @@
-// import { Proposals } from "./Proposals";
-
 import Icon from "@/components/ui/Icon";
 import Convert from "./Convert";
 import ConvertInfo from "./ConvertInfo";
+
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Convert Nouns to $nouns | Unlock Fractional Ownership with Nouns DAO",
+  description:
+    "Convert your Nouns into $nouns tokens or redeem $nouns for a full Noun NFT. Unlock liquidity and stay connected to the Nouns DAO. Fast, simple, and secure.",
+};
 
 export default function ConvertPage() {
   return (

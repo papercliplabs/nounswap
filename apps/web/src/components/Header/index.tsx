@@ -1,12 +1,10 @@
-import { Suspense } from "react";
-import LoadingSpinner from "../LoadingSpinner";
 import Link from "next/link";
-import Icon from "../ui/Icon";
 import WalletButton from "../WalletButton";
 import { CurrentAuctionSmall } from "../CurrentAuction";
 import HidingHeader from "./HidingHeader";
 import DesktopNav from "../Nav/DesktopNav";
 import { NounSwapLogoLink } from "../NounSwapLogoLink";
+import { CurrentAuctionPrefetchWrapper } from "../CurrentAuction/CurrentAuctionPrefetchWrapper";
 
 export function Header() {
   return (
@@ -21,7 +19,9 @@ export function Header() {
             href="/"
             className="rounded-lg border-transparent p-2 transition-all hover:bg-background-secondary/50"
           >
-            <CurrentAuctionSmall />
+            <CurrentAuctionPrefetchWrapper>
+              <CurrentAuctionSmall />
+            </CurrentAuctionPrefetchWrapper>
           </Link>
           <WalletButton />
         </div>

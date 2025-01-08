@@ -6,6 +6,13 @@ import NounDialog from "@/components/dialog/NounDialog";
 import NounExplorer from "@/components/NounExplorer";
 import AnimationGird from "@/components/NounExplorer/NounGrid/AnimationGrid";
 import { getSecondaryFloorListing } from "@/data/noun/getSecondaryNounListings";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Explore Nouns - Browse Unique NFTs and Traits | Nouns DAO",
+  description:
+    "Dive into the world of Nouns. Browse thousands of unique Noggle wearing digital pixel-art NFTs, filter by traits, and discover the magic behind Nouns DAO. Start exploring today!",
+};
 
 export default async function Page() {
   return (
