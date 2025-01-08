@@ -1,0 +1,20 @@
+{
+  "name": "nounswap",
+  "repository": "TODO",
+  "private": true,
+  "author": "Paperclip Labs",
+  "license": "GPL-3.0-only",
+  "scripts": {
+    "dev:web": "bun run --filter=web dev",
+    "build:web": "bun run --filter=web dev",
+    "codegen:web": "bun run --filter=web codegen",
+    "dev:indexer": "bun run --filter=indexer dev",
+    "codegen:indexer": "bun run --filter=indexer codegen"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3"
+  },
+  "workspaces": [
+    "apps/*"
+  ]
+}

@@ -1,11 +1,10 @@
 # NounSwap
 
-An application that allows anyone to swap their Noun for one from the Nouns treasury
+Bid, explore, buy, and swap to find your forever Noun.
 
 ## Structure
-
--   [Web](./web/): The web app
--   [Indexer](./web/): Onchain data indexer that powers the web app  
--   [Contracts](./contracts/): NounSwap specific contracts 
+-   [Web](./apps/web/): The web app
+-   [Indexer](./apps/indexer/): Onchain data indexer that powers the web app  
 
 > See the individual folders for more details
+
