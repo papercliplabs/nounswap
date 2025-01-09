@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15           
+    environment:
+      POSTGRES_USER: postgres      
+      POSTGRES_PASSWORD: postgres 
+      POSTGRES_DB: default    
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 1s
+      timeout: 3s
+      retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Persist data on the host
+
+  indexer:
+    build: 
+      context: .
+      dockerfile: apps/indexer/Dockerfile
+      target: dev
+    volumes:
+      - ./apps/indexer/src:/app/apps/indexer/src
+      - ./apps/indexer/ponder.config.ts:/app/apps/indexer/ponder.config.ts
+      - ./apps/indexer/ponder.schema.ts:/app/apps/indexer/ponder.schema.ts
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file: 
+      - apps/indexer/.env.local
+    ports:
+      - "42069:42069"
+    
+  # web:
+  #   build: 
+  #     context: .
+  #     dockerfile: apps/web/Dockerfile
+  #     target: dev
+  #   volumes:
+  #     - ./apps/web/src:/app/apps/web/src
+  #     - ./apps/web/next.config.js:/app/apps/web/next.config.js
+  #     - ./apps/web/tsconfig.json:/app/apps/web/tsconfig.json
+  #     - ./apps/web/codegen.ts:/app/apps/web/codegen.ts
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #   environment:
+  #     - WATCHPACK_POLLING=true
+  #   env_file: 
+  #     - apps/web/.env
+  #   ports:
+  #     - "3000:3000"
+
+volumes:
+  postgres_data:

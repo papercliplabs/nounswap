@@ -1,6 +1,7 @@
 import { GraphQLError } from "graphql";
 import { TypedDocumentString as SubgraphTypedDocumentString } from "../generated/gql/graphql";
 import { TypedDocumentString as PonderTypedDocumentString } from "../generated/ponder/graphql";
+import { CHAIN_CONFIG } from "@/config";
 
 type GraphQLResponse<Data> = { data: Data } | { errors: GraphQLError[] };
 
@@ -11,9 +12,11 @@ export interface CacheConfig {
 
 export async function graphQLFetch<Result, Variables>(
   url: string,
-  query: SubgraphTypedDocumentString<Result, Variables> | PonderTypedDocumentString<Result, Variables>,
+  query:
+    | SubgraphTypedDocumentString<Result, Variables>
+    | PonderTypedDocumentString<Result, Variables>,
   variables?: Variables,
-  cacheConfig?: CacheConfig
+  cacheConfig?: CacheConfig,
 ): Promise<Result> {
   const response = await fetch(url, {
     method: "POST",
@@ -31,7 +34,10 @@ export async function graphQLFetch<Result, Variables>(
   const result = (await response.json()) as GraphQLResponse<Result>;
 
   if ("errors" in result) {
-    throw new Error(`CUSTOM ERROR - ${url} - ${result.errors[0].message} - ${query} - ${JSON.stringify(variables)}`);
+    console.log("DEBUG", CHAIN_CONFIG.ponderIndexerUrl);
+    throw new Error(
+      `CUSTOM ERROR - ${url} - ${result.errors[0].message} - ${query} - ${JSON.stringify(variables)}`,
+    );
   }
 
   return result.data;
@@ -39,9 +45,11 @@ export async function graphQLFetch<Result, Variables>(
 
 export async function graphQLFetchWithFallback<Result, Variables>(
   url: { primary: string; fallback: string },
-  query: SubgraphTypedDocumentString<Result, Variables> | PonderTypedDocumentString<Result, Variables>,
+  query:
+    | SubgraphTypedDocumentString<Result, Variables>
+    | PonderTypedDocumentString<Result, Variables>,
   variables?: Variables,
-  cacheConfig?: CacheConfig
+  cacheConfig?: CacheConfig,
 ): Promise<Result> {
   try {
     return await graphQLFetch(url.primary, query, variables, cacheConfig);

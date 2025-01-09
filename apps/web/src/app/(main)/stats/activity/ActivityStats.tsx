@@ -70,31 +70,31 @@ export default function ActivityStats({
               className="rounded-lg px-4 py-2 hover:bg-background-secondary hover:brightness-100"
               href={
                 CHAIN_CONFIG.chain.blockExplorers?.default.url +
-                `/tx/${entry.transaction.id}`
+                `/tx/${entry.transaction?.hash}`
               }
             >
               {entry.type === "swap" ? (
                 <SwapActivity
-                  swapper={getAddress(entry.swapperId)}
+                  swapper={getAddress(entry.swapperAccountAddress)}
                   inputNoun={
                     nouns.find((nouns) => nouns.id == entry.fromNounsNftId)!
                   }
                   outputNoun={
                     nouns.find((nouns) => nouns.id == entry.toNounsNftId)!
                   }
-                  timestamp={Number(entry.transaction.timestamp)}
+                  timestamp={Number(entry.transaction?.timestamp)}
                 />
               ) : entry.type === "deposit" ? (
                 <DepositActivity
-                  depositor={getAddress(entry.depositorId)}
+                  depositor={getAddress(entry.depositorAccountAddress)}
                   noun={nouns.find((noun) => noun.id == entry.nounsNftId)!}
-                  timestamp={Number(entry.transaction.timestamp)}
+                  timestamp={Number(entry.transaction?.timestamp)}
                 />
               ) : (
                 <RedeemActivity
                   noun={nouns.find((noun) => noun.id == entry.nounsNftId)!}
-                  redeemer={getAddress(entry.redeemerId)}
-                  timestamp={Number(entry.transaction.timestamp)}
+                  redeemer={getAddress(entry.redeemerAccountAddress)}
+                  timestamp={Number(entry.transaction?.timestamp)}
                 />
               )}
             </LinkExternal>

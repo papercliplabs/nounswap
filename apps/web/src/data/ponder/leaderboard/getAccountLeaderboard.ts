@@ -5,7 +5,8 @@ import { AccountLeaderboardQuery } from "@/data/generated/ponder/graphql";
 import { CHAIN_CONFIG } from "@/config";
 import { getAddress, isAddressEqual } from "viem";
 
-const MAINNET_BASE_BRIDGE_CONTRACT_ADDRESS = "0x3154Cf16ccdb4C6d922629664174b904d80F2C35";
+const MAINNET_BASE_BRIDGE_CONTRACT_ADDRESS =
+  "0x3154Cf16ccdb4C6d922629664174b904d80F2C35";
 
 // Only consider holders with >0.1 of a Noun
 const query = graphql(/* GraphQL */ `
@@ -22,7 +23,7 @@ const query = graphql(/* GraphQL */ `
         endCursor
       }
       items {
-        id
+        address
         effectiveNounsBalance
       }
     }
@@ -41,18 +42,30 @@ async function runPaginatedQuery() {
         next: {
           revalidate: 0,
         },
-      }
+      },
     );
     items = items.concat(
       data.accounts.items.filter(
         (item) =>
-          !isAddressEqual(getAddress(item.id), MAINNET_BASE_BRIDGE_CONTRACT_ADDRESS) && // Exclude bridge contract, otherwise will double count these
-          !isAddressEqual(getAddress(item.id), CHAIN_CONFIG.addresses.nounsErc20) && // Exclude Nouns ERC20 contract, otherwise will double count these
-          !isAddressEqual(getAddress(item.id), CHAIN_CONFIG.addresses.nounsAuctionHouseProxy) // Exclude auction house Noun
-      )
+          !isAddressEqual(
+            getAddress(item.address),
+            MAINNET_BASE_BRIDGE_CONTRACT_ADDRESS,
+          ) && // Exclude bridge contract, otherwise will double count these
+          !isAddressEqual(
+            getAddress(item.address),
+            CHAIN_CONFIG.addresses.nounsErc20,
+          ) && // Exclude Nouns ERC20 contract, otherwise will double count these
+          !isAddressEqual(
+            getAddress(item.address),
+            CHAIN_CONFIG.addresses.nounsAuctionHouseProxy,
+          ), // Exclude auction house Noun
+      ),
     );
 
-    if (data.accounts.pageInfo.hasNextPage && data.accounts.pageInfo.endCursor) {
+    if (
+      data.accounts.pageInfo.hasNextPage &&
+      data.accounts.pageInfo.endCursor
+    ) {
       cursor = data.accounts.pageInfo.endCursor;
     } else {
       break;

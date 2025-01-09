@@ -22,81 +22,83 @@ const EXCLUDE_PROP_IDS = [
   359n, // migrate DAO
 ];
 
-// ponder.on("NounsDaoProxy:ProposalExecuted", async ({ event, context }) => {
-//   const { db, client } = context;
+ponder.on("NounsDaoProxy:ProposalExecuted", async ({ event, context }) => {
+  const { db, client } = context;
 
-//   if (EXCLUDE_PROP_IDS.includes(event.args.id)) {
-//     // Ignore manually excluded props
-//     return;
-//   }
+  if (EXCLUDE_PROP_IDS.includes(event.args.id)) {
+    // Ignore manually excluded props
+    return;
+  }
 
-//   let amountInUsd = 0;
+  let amountInUsd = 0;
 
-//   const receipt = await client.getTransactionReceipt({ hash: event.transaction.hash });
-//   for (let log of receipt.logs) {
-//     let decodedLog = undefined;
-//     try {
-//       decodedLog = decodeEventLog({
-//         abi: mergeAbis([nounDaoExecutorAbi, erc20Abi, nounsPayerAbi]),
-//         data: log.data,
-//         topics: log.topics,
-//       });
-//     } catch (e) {
-//       // Ignore, not one of the desired events
-//       continue;
-//     }
+  // TODO: this new implementation is not working as expected (wrong spend numbers)
+  const receipt = await client.getTransactionReceipt({ hash: event.transaction.hash });
+  for (let log of receipt.logs) {
+    let decodedLog = undefined;
 
-//     if (
-//       [PREVIOUS_NOUNS_TREASURY_ADDRESS, NOUNS_TREASURY_ADDRESS].includes(log.address) &&
-//       decodedLog.eventName == "ExecuteTransaction" &&
-//       !isAddressEqual(decodedLog.args.target, NOUNS_DAO_TOKEN_BUYER)
-//     ) {
-//       // ETH not to the token buyer
-//       const ethAmount = decodedLog.args.value;
-//       amountInUsd += await getEthAmountInUsd({ amount: ethAmount, context });
-//     } else if (
-//       log.address == USDC_TOKEN.address &&
-//       decodedLog.eventName == "Transfer" &&
-//       isAddressEqual(decodedLog.args.from, NOUNS_DAO_PAYER_ADDRESS)
-//     ) {
-//       // USDC transfer from USDC payer
-//       amountInUsd += await getTokenAmountInUsd({
-//         amount: decodedLog.args.value,
-//         address: USDC_TOKEN.address,
-//         decimals: USDC_TOKEN.decimals,
-//         context,
-//       });
-//     } else if (isAddressEqual(log.address, NOUNS_DAO_PAYER_ADDRESS) && decodedLog.eventName == "RegisteredDebt") {
-//       // Registered debt to USDC payer
-//       amountInUsd += await getTokenAmountInUsd({
-//         amount: decodedLog.args.amount,
-//         address: USDC_TOKEN.address,
-//         decimals: USDC_TOKEN.decimals,
-//         context,
-//       });
-//     }
-//   }
+    try {
+      decodedLog = decodeEventLog({
+        abi: mergeAbis([nounDaoExecutorAbi, erc20Abi, nounsPayerAbi]),
+        data: log.data,
+        topics: log.topics,
+      });
+    } catch (e) {
+      // Ignore, not one of the desired events
+      continue;
+    }
 
-//   const amountInEth = await getUsdAmountInEth({ amount: amountInUsd, context });
+    if (
+      [PREVIOUS_NOUNS_TREASURY_ADDRESS, NOUNS_TREASURY_ADDRESS].includes(getAddress(log.address)) &&
+      decodedLog.eventName == "ExecuteTransaction" &&
+      !isAddressEqual(decodedLog.args.target, NOUNS_DAO_TOKEN_BUYER)
+    ) {
+      // ETH not to the token buyer
+      const ethAmount = decodedLog.args.value;
+      amountInUsd += await getEthAmountInUsd({ amount: ethAmount, context });
+    } else if (
+      isAddressEqual(log.address, USDC_TOKEN.address) &&
+      decodedLog.eventName == "Transfer" &&
+      isAddressEqual(decodedLog.args.from, NOUNS_DAO_PAYER_ADDRESS)
+    ) {
+      // USDC transfer from USDC payer
+      amountInUsd += await getTokenAmountInUsd({
+        amount: decodedLog.args.value,
+        address: USDC_TOKEN.address,
+        decimals: USDC_TOKEN.decimals,
+        context,
+      });
+    } else if (isAddressEqual(log.address, NOUNS_DAO_PAYER_ADDRESS) && decodedLog.eventName == "RegisteredDebt") {
+      // Registered debt to USDC payer
+      amountInUsd += await getTokenAmountInUsd({
+        amount: decodedLog.args.amount,
+        address: USDC_TOKEN.address,
+        decimals: USDC_TOKEN.decimals,
+        context,
+      });
+    }
+  }
 
-//   await db.insert(executedProposal).values({
-//     id: event.args.id,
-//     timestamp: parseInt(event.block.timestamp.toString()),
-//     transactionHash: event.transaction.hash,
-//     amountInEth,
-//     amountInUsd,
-//   });
+  const amountInEth = await getUsdAmountInEth({ amount: amountInUsd, context });
 
-//   const { id } = (
-//     await db.sql
-//       .select({ id: dailyFinancialSnapshot.id })
-//       .from(dailyFinancialSnapshot)
-//       .limit(1)
-//       .orderBy(desc(dailyFinancialSnapshot.id))
-//   )[0]!;
+  await db.insert(executedProposal).values({
+    id: event.args.id,
+    timestamp: parseInt(event.block.timestamp.toString()),
+    transactionHash: event.transaction.hash,
+    amountInEth,
+    amountInUsd,
+  });
 
-//   await db.update(dailyFinancialSnapshot, { id }).set((row) => ({
-//     propSpendInEth: row.propSpendInEth + amountInEth,
-//     propSpendInUsd: row.propSpendInUsd + amountInUsd,
-//   }));
-// });
+  const { id } = (
+    await db.sql
+      .select({ id: dailyFinancialSnapshot.id })
+      .from(dailyFinancialSnapshot)
+      .limit(1)
+      .orderBy(desc(dailyFinancialSnapshot.id))
+  )[0]!;
+
+  await db.update(dailyFinancialSnapshot, { id }).set((row) => ({
+    propSpendInEth: row.propSpendInEth + amountInEth,
+    propSpendInUsd: row.propSpendInUsd + amountInUsd,
+  }));
+});

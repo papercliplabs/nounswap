@@ -13,11 +13,11 @@ const query = graphql(/* GraphQL */ `
         endCursor
       }
       items {
-        swapperId
+        swapperAccountAddress
         fromNounsNftId
         toNounsNftId
         transaction {
-          id
+          hash
           timestamp
         }
       }
@@ -37,11 +37,14 @@ async function runPaginatedQuery() {
         next: {
           revalidate: 0,
         },
-      }
+      },
     );
     items = items.concat(data.nounsErc20Swaps.items);
 
-    if (data.nounsErc20Swaps.pageInfo.hasNextPage && data.nounsErc20Swaps.pageInfo.endCursor) {
+    if (
+      data.nounsErc20Swaps.pageInfo.hasNextPage &&
+      data.nounsErc20Swaps.pageInfo.endCursor
+    ) {
       cursor = data.nounsErc20Swaps.pageInfo.endCursor;
     } else {
       break;
