@@ -8,8 +8,10 @@
     "dev:web": "bun run --filter=web dev",
     "build:web": "bun run --filter=web dev",
     "codegen:web": "bun run --filter=web codegen",
+    "start:web": "bun run --filter=web start",
     "dev:indexer": "bun run --filter=indexer dev",
-    "codegen:indexer": "bun run --filter=indexer codegen"
+    "codegen:indexer": "bun run --filter=indexer codegen",
+    "start:indexer": "bun run --filter=indexer start"
   },
   "devDependencies": {
     "prettier": "^3.3.3"

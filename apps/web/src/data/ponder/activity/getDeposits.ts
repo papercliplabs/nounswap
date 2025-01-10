@@ -2,7 +2,6 @@
 import { graphql } from "@/data/generated/ponder";
 import { graphQLFetch } from "@/data/utils/graphQLFetch";
 import { DepositsQuery } from "@/data/generated/ponder/graphql";
-import { SECONDS_PER_DAY } from "@/utils/constants";
 import { CHAIN_CONFIG } from "@/config";
 
 const query = graphql(/* GraphQL */ `
@@ -13,10 +12,10 @@ const query = graphql(/* GraphQL */ `
         endCursor
       }
       items {
-        depositorId
+        depositorAccountAddress
         nounsNftId
         transaction {
-          id
+          hash
           timestamp
         }
       }
@@ -36,11 +35,14 @@ async function runPaginatedQuery() {
         next: {
           revalidate: 0,
         },
-      }
+      },
     );
     items = items.concat(data.nounsErc20Deposits.items);
 
-    if (data.nounsErc20Deposits.pageInfo.hasNextPage && data.nounsErc20Deposits.pageInfo.endCursor) {
+    if (
+      data.nounsErc20Deposits.pageInfo.hasNextPage &&
+      data.nounsErc20Deposits.pageInfo.endCursor
+    ) {
       cursor = data.nounsErc20Deposits.pageInfo.endCursor;
     } else {
       break;

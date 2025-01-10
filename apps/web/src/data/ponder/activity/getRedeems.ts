@@ -13,10 +13,10 @@ const query = graphql(/* GraphQL */ `
         endCursor
       }
       items {
-        redeemerId
+        redeemerAccountAddress
         nounsNftId
         transaction {
-          id
+          hash
           timestamp
         }
       }
@@ -36,11 +36,14 @@ async function runPaginatedQuery() {
         next: {
           revalidate: 0,
         },
-      }
+      },
     );
     items = items.concat(data.nounsErc20Redeems.items);
 
-    if (data.nounsErc20Redeems.pageInfo.hasNextPage && data.nounsErc20Redeems.pageInfo.endCursor) {
+    if (
+      data.nounsErc20Redeems.pageInfo.hasNextPage &&
+      data.nounsErc20Redeems.pageInfo.endCursor
+    ) {
       cursor = data.nounsErc20Redeems.pageInfo.endCursor;
     } else {
       break;
