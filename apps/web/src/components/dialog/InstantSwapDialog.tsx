@@ -11,18 +11,36 @@ import { useQuery } from "@tanstack/react-query";
 import { getDoesNounRequireApprovalAndIsOwner } from "@/data/noun/getDoesNounRequireApproval";
 import { ApproveNoun } from "./transactionDialogPages/ApproveNoun";
 import { CreateInstantSwap } from "./transactionDialogPages/CreateInstantSwap";
+import {
+  DrawerDialog,
+  DrawerDialogContent,
+  DrawerDialogTrigger,
+} from "@/components/ui/DrawerDialog";
 
 interface InstantSwapDialogProps {
   fromNoun?: Noun;
   toNoun: Noun;
 }
 
-export default function InstantSwapDialog({ fromNoun, toNoun }: InstantSwapDialogProps) {
+export default function InstantSwapDialog({
+  fromNoun,
+  toNoun,
+}: InstantSwapDialogProps) {
   const { address } = useAccount();
 
   const { data: nounRequiresApproval } = useQuery({
-    queryKey: ["get-does-noun-require-approval-and-is-owner", fromNoun?.id, address, CHAIN_CONFIG.addresses.nounsErc20],
-    queryFn: () => getDoesNounRequireApprovalAndIsOwner(fromNoun!.id, address!, CHAIN_CONFIG.addresses.nounsErc20),
+    queryKey: [
+      "get-does-noun-require-approval-and-is-owner",
+      fromNoun?.id,
+      address,
+      CHAIN_CONFIG.addresses.nounsErc20,
+    ],
+    queryFn: () =>
+      getDoesNounRequireApprovalAndIsOwner(
+        fromNoun!.id,
+        address!,
+        CHAIN_CONFIG.addresses.nounsErc20,
+      ),
     refetchInterval: 1000 * 2,
     enabled: fromNoun != undefined && address != undefined,
   });
@@ -37,23 +55,32 @@ export default function InstantSwapDialog({ fromNoun, toNoun }: InstantSwapDialo
 
   const progressStepper = useMemo(
     () => (
-      <div className="text-content-secondary flex w-full flex-col items-center justify-center gap-3 pt-3">
+      <div className="flex w-full flex-col items-center justify-center gap-3 pt-3 text-content-secondary">
         {step != undefined && (
           <>
-            <div className="paragraph-sm flex w-full flex-row items-center justify-center gap-3 px-10 pb-8">
+            <div className="flex w-full flex-row items-center justify-center gap-3 px-10 pb-8 paragraph-sm">
               <div className="relative">
                 <ProgressCircle state={step == 0 ? "active" : "completed"} />
-                <div className="text-semantic-accent absolute top-6 w-fit -translate-x-[calc(50%-6px)] whitespace-nowrap">
+                <div className="absolute top-6 w-fit -translate-x-[calc(50%-6px)] whitespace-nowrap text-semantic-accent">
                   Approve Noun
                 </div>
               </div>
-              <div className={twMerge("bg-background-disabled h-1 w-1/3", step > 0 && "bg-semantic-accent")} />
+              <div
+                className={twMerge(
+                  "h-1 w-1/3 bg-background-disabled",
+                  step > 0 && "bg-semantic-accent",
+                )}
+              />
               <div className="relative">
-                <ProgressCircle state={step == 0 ? "todo" : step == 1 ? "active" : "completed"} />
+                <ProgressCircle
+                  state={
+                    step == 0 ? "todo" : step == 1 ? "active" : "completed"
+                  }
+                />
                 <div
                   className={twMerge(
                     "absolute top-6 w-fit -translate-x-[calc(50%-6px)] whitespace-nowrap",
-                    step > 0 && "text-semantic-accent"
+                    step > 0 && "text-semantic-accent",
                   )}
                 >
                   Swap
@@ -64,32 +91,41 @@ export default function InstantSwapDialog({ fromNoun, toNoun }: InstantSwapDialo
         )}
       </div>
     ),
-    [step]
+    [step],
   );
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button className="w-full md:w-fit" disabled={fromNoun == undefined || address == undefined}>
+    <DrawerDialog>
+      <DrawerDialogTrigger asChild>
+        <Button
+          className="w-full md:w-fit"
+          disabled={fromNoun == undefined || address == undefined}
+        >
           Swap
         </Button>
-      </DialogTrigger>
-      <DialogContent
-        className="flex max-h-[80vh] max-w-[425px] flex-col overflow-y-auto pt-12"
-        onInteractOutside={(event) => event.preventDefault()}
+      </DrawerDialogTrigger>
+      <DrawerDialogContent
+        className="max-h-[80vh] max-w-[425px]"
+        ignoreOutsideInteractions
       >
-        {fromNoun && step == 0 && (
-          <ApproveNoun
-            noun={fromNoun}
-            spender={CHAIN_CONFIG.addresses.nounsErc20}
-            progressStepper={progressStepper}
-            reason="This will give the $nouns ERC-20 contract permission to swap your Noun."
-          />
-        )}
-        {fromNoun && step == 1 && (
-          <CreateInstantSwap fromNoun={fromNoun} toNoun={toNoun} progressStepper={progressStepper} />
-        )}
-      </DialogContent>
-    </Dialog>
+        <div className="flex flex-col overflow-y-auto p-6">
+          {fromNoun && step == 0 && (
+            <ApproveNoun
+              noun={fromNoun}
+              spender={CHAIN_CONFIG.addresses.nounsErc20}
+              progressStepper={progressStepper}
+              reason="This will give the $nouns ERC-20 contract permission to swap your Noun."
+            />
+          )}
+          {fromNoun && step == 1 && (
+            <CreateInstantSwap
+              fromNoun={fromNoun}
+              toNoun={toNoun}
+              progressStepper={progressStepper}
+            />
+          )}
+        </div>
+      </DrawerDialogContent>
+    </DrawerDialog>
   );
 }
