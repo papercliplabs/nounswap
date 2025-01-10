@@ -11,12 +11,19 @@ import { useQuery } from "@tanstack/react-query";
 import { getDoesNounRequireApprovalAndIsOwner } from "@/data/noun/getDoesNounRequireApproval";
 import { ApproveNoun } from "./transactionDialogPages/ApproveNoun";
 import { NounsErc20DepositNoun } from "./transactionDialogPages/NounsErc20DepositNoun";
+import {
+  DrawerDialog,
+  DrawerDialogContent,
+  DrawerDialogTrigger,
+} from "../ui/DrawerDialog";
 
 interface NounToErc20DialogProps {
   depositNoun?: Noun;
 }
 
-export default function NounToErc20Dialog({ depositNoun }: NounToErc20DialogProps) {
+export default function NounToErc20Dialog({
+  depositNoun,
+}: NounToErc20DialogProps) {
   const { address } = useAccount();
 
   const { data: nounRequiresApproval } = useQuery({
@@ -26,7 +33,12 @@ export default function NounToErc20Dialog({ depositNoun }: NounToErc20DialogProp
       address,
       CHAIN_CONFIG.addresses.nounsErc20,
     ],
-    queryFn: () => getDoesNounRequireApprovalAndIsOwner(depositNoun!.id, address!, CHAIN_CONFIG.addresses.nounsErc20),
+    queryFn: () =>
+      getDoesNounRequireApprovalAndIsOwner(
+        depositNoun!.id,
+        address!,
+        CHAIN_CONFIG.addresses.nounsErc20,
+      ),
     refetchInterval: 1000 * 2,
     enabled: depositNoun != undefined && address != undefined,
   });
@@ -41,23 +53,32 @@ export default function NounToErc20Dialog({ depositNoun }: NounToErc20DialogProp
 
   const progressStepper = useMemo(
     () => (
-      <div className="text-content-secondary flex w-full flex-col items-center justify-center gap-3 pt-3">
+      <div className="flex w-full flex-col items-center justify-center gap-3 pt-3 text-content-secondary">
         {step != undefined && (
           <>
-            <div className="paragraph-sm flex w-full flex-row items-center justify-center gap-3 px-10 pb-8">
+            <div className="flex w-full flex-row items-center justify-center gap-3 px-10 pb-8 paragraph-sm">
               <div className="relative">
                 <ProgressCircle state={step == 0 ? "active" : "completed"} />
-                <div className="text-semantic-accent absolute top-6 w-fit -translate-x-[calc(50%-6px)] whitespace-nowrap">
+                <div className="absolute top-6 w-fit -translate-x-[calc(50%-6px)] whitespace-nowrap text-semantic-accent">
                   Approve Noun
                 </div>
               </div>
-              <div className={twMerge("bg-background-disabled h-1 w-1/3", step > 0 && "bg-semantic-accent")} />
+              <div
+                className={twMerge(
+                  "h-1 w-1/3 bg-background-disabled",
+                  step > 0 && "bg-semantic-accent",
+                )}
+              />
               <div className="relative">
-                <ProgressCircle state={step == 0 ? "todo" : step == 1 ? "active" : "completed"} />
+                <ProgressCircle
+                  state={
+                    step == 0 ? "todo" : step == 1 ? "active" : "completed"
+                  }
+                />
                 <div
                   className={twMerge(
                     "absolute top-6 w-fit -translate-x-[calc(50%-6px)] whitespace-nowrap",
-                    step > 0 && "text-semantic-accent"
+                    step > 0 && "text-semantic-accent",
                   )}
                 >
                   Convert
@@ -68,30 +89,41 @@ export default function NounToErc20Dialog({ depositNoun }: NounToErc20DialogProp
         )}
       </div>
     ),
-    [step]
+    [step],
   );
 
+  // TODO: prevent closing on this
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button className="w-full md:w-fit" disabled={depositNoun == undefined || address == undefined}>
+    <DrawerDialog>
+      <DrawerDialogTrigger asChild>
+        <Button
+          className="w-full md:w-fit"
+          disabled={depositNoun == undefined || address == undefined}
+        >
           Convert to $nouns
         </Button>
-      </DialogTrigger>
-      <DialogContent
-        className="flex max-h-[80vh] max-w-[425px] flex-col overflow-y-auto pt-12"
-        onInteractOutside={(event) => event.preventDefault()}
+      </DrawerDialogTrigger>
+      <DrawerDialogContent
+        className="max-h-[80vh] max-w-[425px]"
+        // onInteractOutside={(event) => event.preventDefault()}
       >
-        {depositNoun && step == 0 && (
-          <ApproveNoun
-            noun={depositNoun}
-            spender={CHAIN_CONFIG.addresses.nounsErc20}
-            progressStepper={progressStepper}
-            reason="This will give the $nouns ERC-20 contract permission to deposit your Noun."
-          />
-        )}
-        {depositNoun && step == 1 && <NounsErc20DepositNoun noun={depositNoun} progressStepper={progressStepper} />}
-      </DialogContent>
-    </Dialog>
+        <div className="flex flex-col overflow-y-auto p-6">
+          {depositNoun && step == 0 && (
+            <ApproveNoun
+              noun={depositNoun}
+              spender={CHAIN_CONFIG.addresses.nounsErc20}
+              progressStepper={progressStepper}
+              reason="This will give the $nouns ERC-20 contract permission to deposit your Noun."
+            />
+          )}
+          {depositNoun && step == 1 && (
+            <NounsErc20DepositNoun
+              noun={depositNoun}
+              progressStepper={progressStepper}
+            />
+          )}
+        </div>
+      </DrawerDialogContent>
+    </DrawerDialog>
   );
 }

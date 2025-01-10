@@ -1,10 +1,8 @@
-import HowItWorksDialog from "@/components/dialog/HowItWorksDialog";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { Button } from "@/components/ui/button";
 import { Suspense } from "react";
 import ProgressCircle from "./ProgressCircle";
 import Link from "next/link";
-import Icon from "./ui/Icon";
 
 interface DynamicSwapLayoutProps {
   currentStep: number;
@@ -13,7 +11,6 @@ interface DynamicSwapLayoutProps {
   subtitle: string;
   backButtonHref: string;
   children: React.ReactNode;
-  // progressSection: React.ReactNode;
 }
 
 export default function DynamicSwapLayout({
@@ -41,17 +38,17 @@ export default function DynamicSwapLayout({
                 .fill(0)
                 .map((_, i) => (
                   <ProgressCircle
-                    state={currentStep > i + 1 ? "completed" : currentStep == i + 1 ? "active" : "todo"}
+                    state={
+                      currentStep > i + 1
+                        ? "completed"
+                        : currentStep == i + 1
+                          ? "active"
+                          : "todo"
+                    }
                     key={i}
                   />
                 ))}
           </div>
-          <HowItWorksDialog>
-            <Button variant="ghost" size="icon" className="gap-2">
-              <span className="text-content-secondary label-sm hidden md:block">How it works</span>
-              <Icon icon="circleQuestion" size={20} className="fill-gray-600" />
-            </Button>
-          </HowItWorksDialog>
         </div>
         <div className="flex flex-col items-center justify-center px-6 pb-10 text-center md:px-10">
           <h1>{title}</h1>

@@ -1,16 +1,14 @@
 "use client";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Dialog, DialogContent } from "../ui/dialogBase";
 import clsx from "clsx";
 import Image from "next/image";
 import { Noun, NounTraitType, SecondaryNounListing } from "@/data/noun/types";
 import { Separator } from "../ui/separator";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { CHAIN_CONFIG } from "@/config";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { Skeleton } from "../ui/skeleton";
-import HowItWorksDialog from "./HowItWorksDialog";
 import { useNounImage } from "@/hooks/useNounImage";
 import Icon from "../ui/Icon";
 import { scrollToNounExplorer } from "@/utils/scroll";
@@ -22,6 +20,11 @@ import { Avatar, Name } from "@paperclip-labs/whisk-sdk/identity";
 import { LinkExternal } from "../ui/link";
 import { useQuery } from "@tanstack/react-query";
 import { nogsQuery } from "@/data/tanstackQueries";
+import {
+  DrawerDialog,
+  DrawerDialogContent,
+  DrawerDialogTitle,
+} from "../ui/DrawerDialog";
 
 interface NounsDialogProps {
   nouns: Noun[];
@@ -35,8 +38,14 @@ export default function NounDialog({
   const searchParams = useSearchParams();
   const nounId = searchParams.get("nounId");
 
-  const noun = useMemo(() => {
-    return nounId ? nouns.find((noun) => noun.id === nounId) : undefined;
+  const [noun, setNoun] = useState<Noun | undefined>();
+
+  useEffect(() => {
+    if (nounId) {
+      setNoun(nouns.find((noun) => noun.id === nounId));
+    } else {
+      // Latch the selected Noun so we can have a nice exit animation
+    }
   }, [nouns, nounId]);
 
   const { data: nogsValue } = useQuery({
@@ -67,31 +76,30 @@ export default function NounDialog({
   }
 
   return (
-    <Dialog
-      open={nounId != undefined}
-      onOpenChange={handleOpenChange}
-      modal={true}
-    >
-      <DialogContent
-        className={clsx(
-          "h-full max-h-[90dvh] w-full min-w-0 max-w-[95vw] overflow-hidden rounded-2xl border-none p-0 md:h-auto md:max-w-[min(85vw,1400px)]",
-          noun.traits.background.seed == 1 ? "bg-nouns-warm" : "bg-nouns-cool",
-        )}
-      >
-        <div className="absolute bottom-0 left-0 right-0 top-0 flex aspect-auto h-full w-full flex-col overflow-y-auto md:static md:aspect-[100/45] md:flex-row md:overflow-hidden">
-          <div className="flex h-fit w-full shrink-0 justify-center md:h-full md:w-[45%]">
-            <Image
-              src={fullImageData ?? "/noun-loading-skull.gif"}
-              width={600}
-              height={600}
-              alt="Noun"
-              unoptimized={fullImageData == undefined}
-              className="aspect-square h-full max-h-[400px] w-full max-w-[min(70%,400px)] object-contain object-bottom md:max-h-none md:max-w-none"
-            />
-          </div>
-          <div className="flex flex-auto flex-col gap-6 overflow-visible px-6 pb-6 pt-12 md:h-full md:overflow-y-auto md:px-8">
-            <h1>Noun {noun.id}</h1>
+    <DrawerDialog open={nounId != undefined} onOpenChange={handleOpenChange}>
+      <DrawerDialogContent className="md:aspect-[100/45] md:max-w-[min(95vw,1400px)]">
+        <div
+          className={clsx(
+            "flex h-full w-full flex-col items-center overflow-y-auto md:flex-row",
+            noun.traits.background.seed == 1
+              ? "bg-nouns-warm"
+              : "bg-nouns-cool",
+          )}
+        >
+          <DrawerDialogTitle className="w-full pl-6 pt-6 heading-1 md:hidden">
+            Noun {noun.id}
+          </DrawerDialogTitle>
+          <Image
+            src={fullImageData ?? "/noun-loading-skull.gif"}
+            width={600}
+            height={600}
+            alt="Noun"
+            unoptimized={fullImageData == undefined}
+            className="flex aspect-square h-fit max-h-[400px] w-full max-w-[min(70%,400px)] shrink-0 justify-center object-contain object-bottom md:h-full md:max-h-none md:w-[45%] md:max-w-none"
+          />
 
+          <div className="scrollbar-track-transparent flex w-full flex-auto flex-col gap-6 overflow-visible px-6 pb-6 md:h-full md:overflow-y-auto md:px-8 md:pt-12">
+            <h2 className="hidden md:block">Noun {noun.id}</h2>
             <Separator className="h-[2px]" />
 
             <LinkExternal
@@ -115,12 +123,7 @@ export default function NounDialog({
                   <Button className="w-full">Create a swap offer</Button>
                 </Link>
                 <div className="text-content-secondary">
-                  You can create a swap offer for this Noun.{" "}
-                  <HowItWorksDialog>
-                    <span className="text-semantic-accent">
-                      <button>Learn More</button>
-                    </span>
-                  </HowItWorksDialog>
+                  You can create a swap offer proposal for this Noun.
                 </div>
               </>
             )}
@@ -220,8 +223,8 @@ export default function NounDialog({
             </span>
           </div>
         </div>
-      </DialogContent>
-    </Dialog>
+      </DrawerDialogContent>
+    </DrawerDialog>
   );
 }
 

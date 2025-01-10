@@ -47,7 +47,7 @@ export default function Icon({ icon, size, className, ...props }: IconProps) {
       height={sizeInternal}
       width={sizeInternal}
       viewBox={`0 0 24 24`}
-      className={cn("fill-content-primary", className)}
+      className={cn("shrink-0 fill-content-primary", className)}
       {...props}
       xmlns="http://www.w3.org/2000/svg"
     >
