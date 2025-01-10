@@ -15,7 +15,7 @@
   }
 
   body {
-    @apply border-border-primary text-content-primary bg-background-primary paragraph-md antialiased;
+    @apply border-border-primary bg-background-primary text-content-primary antialiased paragraph-md;
     text-rendering: optimizeLegibility;
   }
 
