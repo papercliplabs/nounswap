@@ -14,6 +14,7 @@ import { NounsErc20DepositNoun } from "./transactionDialogPages/NounsErc20Deposi
 import {
   DrawerDialog,
   DrawerDialogContent,
+  DrawerDialogContentInner,
   DrawerDialogTrigger,
 } from "../ui/DrawerDialog";
 
@@ -106,7 +107,7 @@ export default function NounToErc20Dialog({
         className="max-h-[80vh] max-w-[425px]"
         ignoreOutsideInteractions
       >
-        <div className="flex flex-col overflow-y-auto p-6">
+        <DrawerDialogContentInner>
           {depositNoun && step == 0 && (
             <ApproveNoun
               noun={depositNoun}
@@ -121,7 +122,7 @@ export default function NounToErc20Dialog({
               progressStepper={progressStepper}
             />
           )}
-        </div>
+        </DrawerDialogContentInner>
       </DrawerDialogContent>
     </DrawerDialog>
   );

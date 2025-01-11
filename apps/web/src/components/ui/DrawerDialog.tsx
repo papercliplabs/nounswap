@@ -8,6 +8,7 @@ import {
 } from "./dialogBase";
 import { Drawer, DrawerContent, DrawerTitle, DrawerTrigger } from "./drawer";
 import { HTMLAttributes, ReactNode, useMemo, useState } from "react";
+import { cn } from "@paperclip-labs/whisk-sdk";
 
 export function DrawerDialog({
   children,
@@ -30,7 +31,11 @@ export function DrawerDialog({
   }, [open, onOpenChange, openUncontrolled, setOpenUncontrolled]);
 
   return screenSize == "sm" ? (
-    <Drawer open={openInternal} onOpenChange={setOpenInternal}>
+    <Drawer
+      open={openInternal}
+      onOpenChange={setOpenInternal}
+      repositionInputs={false}
+    >
       {children}
     </Drawer>
   ) : (
@@ -72,6 +77,27 @@ export function DrawerDialogContent({
       }
       {...props}
     />
+  );
+}
+
+export function DrawerDialogContentInner({
+  children,
+  className,
+  ...props
+}: { children: ReactNode } & HTMLAttributes<HTMLDivElement>) {
+  return (
+    <>
+      <div
+        className={cn(
+          "relative flex h-full min-h-0 w-full flex-col items-center overflow-y-auto p-6",
+          className,
+        )}
+        {...props}
+      >
+        {children}
+      </div>
+      <div className="hidden h-[env(safe-area-inset-bottom)] w-full pwa:block" />
+    </>
   );
 }
 

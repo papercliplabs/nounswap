@@ -23,6 +23,7 @@ import { nogsQuery } from "@/data/tanstackQueries";
 import {
   DrawerDialog,
   DrawerDialogContent,
+  DrawerDialogContentInner,
   DrawerDialogTitle,
 } from "../ui/DrawerDialog";
 
@@ -77,15 +78,13 @@ export default function NounDialog({
 
   return (
     <DrawerDialog open={nounId != undefined} onOpenChange={handleOpenChange}>
-      <DrawerDialogContent className="md:aspect-[100/45] md:max-w-[min(95vw,1400px)]">
-        <div
-          className={clsx(
-            "flex h-full w-full flex-col items-center overflow-y-auto md:flex-row",
-            noun.traits.background.seed == 1
-              ? "bg-nouns-warm"
-              : "bg-nouns-cool",
-          )}
-        >
+      <DrawerDialogContent
+        className={clsx(
+          "md:aspect-[100/45] md:max-w-[min(95vw,1400px)]",
+          noun.traits.background.seed == 1 ? "bg-nouns-warm" : "bg-nouns-cool",
+        )}
+      >
+        <DrawerDialogContentInner className={clsx("p-0 md:flex-row")}>
           <DrawerDialogTitle className="w-full pl-6 pt-6 heading-1 md:hidden">
             Noun {noun.id}
           </DrawerDialogTitle>
@@ -222,7 +221,7 @@ export default function NounDialog({
               One Noun, Every Day, Forever.
             </span>
           </div>
-        </div>
+        </DrawerDialogContentInner>
       </DrawerDialogContent>
     </DrawerDialog>
   );

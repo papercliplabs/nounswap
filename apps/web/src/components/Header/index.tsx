@@ -9,7 +9,7 @@ import { CurrentAuctionPrefetchWrapper } from "../CurrentAuction/CurrentAuctionP
 export function Header() {
   return (
     <HidingHeader>
-      <div className="flex w-full flex-row justify-between bg-white px-4 py-2 shadow-fixed-bottom md:px-8">
+      <div className="shadow-bottom-only flex w-full flex-row justify-between bg-white px-4 py-2 md:px-8">
         <div className="flex items-center gap-6 md:flex-1">
           <NounSwapLogoLink />
           <DesktopNav />

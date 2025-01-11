@@ -13,7 +13,12 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { useAccount, useBalance } from "wagmi";
 import { CHAIN_CONFIG } from "@/config";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { DrawerDialog, DrawerDialogContent } from "../ui/DrawerDialog";
+import {
+  DrawerDialog,
+  DrawerDialogContent,
+  DrawerDialogContentInner,
+  DrawerDialogTitle,
+} from "../ui/DrawerDialog";
 
 interface UserTipDialogProps {
   tip?: bigint;
@@ -95,8 +100,10 @@ export default function UserTipDialog({
       </>
 
       <DrawerDialogContent className="md:max-h-[80vh] md:max-w-[425px]">
-        <div className="flex flex-col overflow-y-auto p-6">
-          <h4>Add a tip</h4>
+        <DrawerDialogContentInner>
+          <DrawerDialogTitle className="w-full heading-4">
+            Add a tip
+          </DrawerDialogTitle>
           <div className="flex flex-col gap-4">
             <div>
               Incentivize the DAO to accept the Swap Prop. <br />
@@ -213,7 +220,7 @@ export default function UserTipDialog({
               Add tip
             </Button>
           </div>
-        </div>
+        </DrawerDialogContentInner>
       </DrawerDialogContent>
     </DrawerDialog>
   );

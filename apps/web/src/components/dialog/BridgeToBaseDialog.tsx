@@ -6,6 +6,7 @@ import { ArrowRightLeft, Clock, ExternalLink, ShieldAlert } from "lucide-react";
 import {
   DrawerDialog,
   DrawerDialogContent,
+  DrawerDialogContentInner,
   DrawerDialogTitle,
   DrawerDialogTrigger,
 } from "../ui/DrawerDialog";
@@ -26,7 +27,7 @@ export default function BridgeToBaseDialog() {
         </Button>
       </DrawerDialogTrigger>
       <DrawerDialogContent className="md:max-h-[80vh] md:max-w-[425px]">
-        <div className="flex flex-col gap-6 overflow-y-auto p-6">
+        <DrawerDialogContentInner className="gap-6">
           <DrawerDialogTitle className="heading-4">
             Bridge to Base
           </DrawerDialogTitle>
@@ -98,7 +99,7 @@ export default function BridgeToBaseDialog() {
               <ExternalLink size={16} />
             </Button>
           </LinkExternal>
-        </div>
+        </DrawerDialogContentInner>
       </DrawerDialogContent>
     </DrawerDialog>
   );

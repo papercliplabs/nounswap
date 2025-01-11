@@ -5,6 +5,7 @@ import { NounsErc20Redeem } from "./transactionDialogPages/NounsErc20Redeem";
 import {
   DrawerDialog,
   DrawerDialogContent,
+  DrawerDialogContentInner,
   DrawerDialogTrigger,
 } from "@/components/ui/DrawerDialog";
 
@@ -26,9 +27,9 @@ export default function Erc20ToNounDialog({
         className="max-h-[80vh] max-w-[425px]"
         ignoreOutsideInteractions
       >
-        <div className="flex flex-col overflow-y-auto p-6">
+        <DrawerDialogContentInner>
           {redeemNoun && <NounsErc20Redeem noun={redeemNoun} />}
-        </div>
+        </DrawerDialogContentInner>
       </DrawerDialogContent>
     </DrawerDialog>
   );

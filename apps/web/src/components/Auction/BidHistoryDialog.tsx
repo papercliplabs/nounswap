@@ -15,6 +15,7 @@ import { Avatar, Name } from "@paperclip-labs/whisk-sdk/identity";
 import {
   DrawerDialog,
   DrawerDialogContent,
+  DrawerDialogContentInner,
   DrawerDialogTitle,
   DrawerDialogTrigger,
 } from "@/components/ui/DrawerDialog";
@@ -38,11 +39,11 @@ export function BidHistoryDialog({
         {children}
       </DrawerDialogTrigger>
       <DrawerDialogContent className="md:max-h-[80vh] md:max-w-[min(425px,95vw)]">
-        <div className="flex flex-col overflow-y-auto">
-          <DrawerDialogTitle className="p-6 pb-2 shadow-fixed-bottom heading-4">
+        <DrawerDialogContentInner className="p-0">
+          <DrawerDialogTitle className="shadow-bottom-only w-full p-6 pb-2 heading-4">
             Bids for Noun {nounId}
           </DrawerDialogTitle>
-          <div className="flex flex-col overflow-y-auto">
+          <div className="flex w-full flex-col overflow-y-auto">
             {bids.map((bid, i) => {
               const date = new Intl.DateTimeFormat("en-US", {
                 month: "long",
@@ -95,7 +96,7 @@ export function BidHistoryDialog({
               );
             })}
           </div>
-        </div>
+        </DrawerDialogContentInner>
       </DrawerDialogContent>
     </DrawerDialog>
   );

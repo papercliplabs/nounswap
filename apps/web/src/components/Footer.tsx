@@ -42,7 +42,7 @@ const SOCIALS: { name: string; icon: string; href: string }[] = [
 
 export default function Footer() {
   return (
-    <footer className="mt-[80px] flex w-full flex-col items-center justify-center gap-14 bg-background-dark pb-[60px] text-content-secondary md:pb-0 pwa:pb-[72px]">
+    <footer className="mt-[80px] flex w-full flex-col items-center justify-center gap-14 bg-background-dark pb-[calc(env(safe-area-inset-bottom)+60px)] text-content-secondary md:pb-0">
       <div className="flex w-full flex-col justify-between gap-20 px-4 pt-14 md:flex-row md:px-10">
         <div className="flex flex-col gap-5">
           <div className="flex items-center gap-3 paragraph-lg">

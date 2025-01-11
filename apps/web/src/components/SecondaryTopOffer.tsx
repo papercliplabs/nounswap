@@ -19,6 +19,7 @@ import Image from "next/image";
 import {
   DrawerDialog,
   DrawerDialogContent,
+  DrawerDialogContentInner,
   DrawerDialogTrigger,
 } from "@/components/ui/DrawerDialog";
 
@@ -35,8 +36,8 @@ export default function SecondaryTopOffer({ offer }: NounsFloorProps) {
         Top offer: {formatNumber({ input: offer.priceEth, unit: "ETH" })}
       </DrawerDialogTrigger>
       <DrawerDialogContent className="md:max-w-[min(420px,95%)]">
-        <div className="flex flex-col gap-6 p-6">
-          <DialogTitle className="heading-4">Top Offer</DialogTitle>
+        <DrawerDialogContentInner className="gap-6">
+          <DialogTitle className="w-full heading-4">Top Offer</DialogTitle>
           <div className="flex h-[92px] w-full items-start justify-between gap-3 rounded-xl border-2 border-border-secondary p-4 font-pt font-bold">
             <div className="flex flex-col gap-1">
               <span className="text-[28px] leading-[36px]">
@@ -57,10 +58,10 @@ export default function SecondaryTopOffer({ offer }: NounsFloorProps) {
               />
             )}
           </div>
-          <div>
+          <div className="w-full">
             The highest offer to buy a Noun across all secondary marketplaces.
           </div>
-        </div>
+        </DrawerDialogContentInner>
       </DrawerDialogContent>
     </DrawerDialog>
   );

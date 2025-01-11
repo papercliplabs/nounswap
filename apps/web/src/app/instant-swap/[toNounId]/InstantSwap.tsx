@@ -72,7 +72,7 @@ export function InstantSwap({ toNoun }: InstantSwapProps) {
             />
           </div>
         </div>
-        <div className="item-center flex w-full flex-col-reverse items-center justify-end gap-6 border-border-secondary px-4 py-4 text-content-secondary md:fixed md:bottom-0 md:flex-row md:border-t-4 md:bg-white md:px-10 md:py-2">
+        <div className="item-center flex w-full flex-col-reverse items-center justify-end gap-6 px-4 py-4 text-content-secondary md:fixed md:bottom-0 md:flex-row md:border-t-4 md:bg-white md:px-10 md:py-2">
           <span className="text-center">
             This will instantly swap your Noun for Noun {toNoun.id}.
           </span>
