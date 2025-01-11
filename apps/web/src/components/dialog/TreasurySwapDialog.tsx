@@ -17,6 +17,7 @@ import { CreatePropCandidate } from "./transactionDialogPages/CreatePropCandidat
 import {
   DrawerDialog,
   DrawerDialogContent,
+  DrawerDialogContentInner,
   DrawerDialogTrigger,
 } from "../ui/DrawerDialog";
 
@@ -140,7 +141,7 @@ export default function TreasurySwapDialog({
         className="md:max-h-[80vh] md:max-w-[425px]"
         ignoreOutsideInteractions
       >
-        <div className="flex flex-col overflow-y-auto p-6">
+        <DrawerDialogContentInner>
           {step == 0 && (
             <ApproveNoun
               noun={userNoun}
@@ -161,7 +162,7 @@ export default function TreasurySwapDialog({
               progressStepper={progressStepper}
             />
           )}
-        </div>
+        </DrawerDialogContentInner>
       </DrawerDialogContent>
     </DrawerDialog>
   );

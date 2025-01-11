@@ -24,6 +24,7 @@ import { revalidateSecondaryNounListings } from "@/data/noun/getSecondaryNounLis
 import {
   DrawerDialog,
   DrawerDialogContent,
+  DrawerDialogContentInner,
   DrawerDialogTrigger,
 } from "@/components/ui/DrawerDialog";
 
@@ -213,10 +214,10 @@ export default function BuyNounOnSecondaryDialog({
         </Button>
       </DrawerDialogTrigger>
       <DrawerDialogContent
-        className="max-h-[80vh] max-w-[425px]"
+        className="md:max-h-[80vh] md:max-w-[425px]"
         ignoreOutsideInteractions
       >
-        <div className="flex flex-col items-center justify-center gap-6 overflow-y-auto p-6">
+        <DrawerDialogContentInner className="gap-6">
           <ConvertNounGraphic
             noun={noun}
             action="redeem"
@@ -256,7 +257,7 @@ export default function BuyNounOnSecondaryDialog({
               {insufficientFunds ? "Insufficient Funds" : error}
             </span>
           </div>
-        </div>
+        </DrawerDialogContentInner>
       </DrawerDialogContent>
     </DrawerDialog>
   );

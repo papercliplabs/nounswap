@@ -14,6 +14,7 @@ import { useConnectModal } from "@rainbow-me/rainbowkit";
 import {
   DrawerDialog,
   DrawerDialogContent,
+  DrawerDialogContentInner,
   DrawerDialogTitle,
 } from "../ui/DrawerDialog";
 import LoadingSpinner from "../LoadingSpinner";
@@ -87,11 +88,11 @@ export default function NounSelectDialog({
       </>
 
       <DrawerDialogContent className="md:max-h-[80vh] md:max-w-[425px]">
-        <div className="flex h-full min-h-0 w-full flex-col">
+        <DrawerDialogContentInner className="p-0">
           <DrawerDialogTitle className="w-full bg-white p-6 pb-2 shadow-fixed-bottom heading-4">
             Select Noun
           </DrawerDialogTitle>
-          <div className="justify-top z-0 flex h-full min-h-[400px] flex-col items-center overflow-y-scroll [&>ol>li>div]:text-content-secondary">
+          <div className="justify-top z-0 flex h-full min-h-[400px] w-full flex-col items-center overflow-y-auto [&>ol>li>div]:text-content-secondary">
             {userNouns == undefined ? (
               <LoadingSpinner />
             ) : userNouns.length == 0 ? (
@@ -138,7 +139,7 @@ export default function NounSelectDialog({
               ))
             )}
           </div>
-        </div>
+        </DrawerDialogContentInner>
       </DrawerDialogContent>
     </DrawerDialog>
   );

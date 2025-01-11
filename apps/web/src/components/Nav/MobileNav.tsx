@@ -10,8 +10,7 @@ export default function MobileNav() {
   const pathName = usePathname();
 
   return (
-    // <div className="fixed bottom-0 left-0 right-0 z-[12] flex flex-row gap-2 border-t-2 border-border-secondary px-4 py-2 shadow-fixed-bottom md:static md:w-auto md:gap-12 md:border-none md:p-0 md:shadow-none pwa:pb-6">
-    <div className="fixed bottom-0 left-0 right-0 z-50 flex gap-2 bg-white px-4 shadow-fixed-bottom md:hidden pwa:pb-6">
+    <div className="fixed bottom-0 left-0 right-0 z-50 flex gap-2 bg-white px-4 pb-[env(safe-area-inset-bottom)] shadow-fixed-bottom md:hidden">
       {NAV_ITEMS.map((item, i) => {
         const active =
           item.href == "/"

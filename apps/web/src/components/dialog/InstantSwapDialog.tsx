@@ -14,6 +14,7 @@ import { CreateInstantSwap } from "./transactionDialogPages/CreateInstantSwap";
 import {
   DrawerDialog,
   DrawerDialogContent,
+  DrawerDialogContentInner,
   DrawerDialogTrigger,
 } from "@/components/ui/DrawerDialog";
 
@@ -108,7 +109,7 @@ export default function InstantSwapDialog({
         className="max-h-[80vh] max-w-[425px]"
         ignoreOutsideInteractions
       >
-        <div className="flex flex-col overflow-y-auto p-6">
+        <DrawerDialogContentInner>
           {fromNoun && step == 0 && (
             <ApproveNoun
               noun={fromNoun}
@@ -124,7 +125,7 @@ export default function InstantSwapDialog({
               progressStepper={progressStepper}
             />
           )}
-        </div>
+        </DrawerDialogContentInner>
       </DrawerDialogContent>
     </DrawerDialog>
   );

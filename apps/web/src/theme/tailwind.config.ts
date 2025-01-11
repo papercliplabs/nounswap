@@ -204,6 +204,19 @@ const config: Config = {
         ".no-scrollbar::-webkit-scrollbar": {
           display: "none",
         },
+        ".pb-safe": {
+          "padding-bottom": "env(safe-area-inset-bottom, 0)",
+        },
+        ".shadow-top-only": {
+          "@apply shadow-[0px_-2px_6px_rgba(0,0,0,0.05),0px_4px_36px_rgba(0,0,0,0.04)]":
+            {},
+          "clip-path": "inset(-36px 0 0 0)",
+        },
+        ".shadow-bottom-only": {
+          "@apply shadow-[0px_2px_6px_rgba(0,0,0,0.05),0px_-4px_36px_rgba(0,0,0,0.04)]":
+            {},
+          "clip-path": "inset(0 0 -36px 0)",
+        },
       });
     }),
     require("tailwindcss-animate"),

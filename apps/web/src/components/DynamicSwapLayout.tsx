@@ -22,7 +22,7 @@ export default function DynamicSwapLayout({
   children,
 }: DynamicSwapLayoutProps) {
   return (
-    <div className="flex w-full grow flex-col">
+    <div className="flex w-full grow flex-col pb-[env(safe-area-inset-bottom)]">
       <div className="bg-background-secondary">
         <div className="relative flex flex-row justify-between px-6 py-5 md:px-10">
           <Suspense fallback={<LoadingSpinner />}>

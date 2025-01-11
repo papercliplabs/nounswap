@@ -14,6 +14,7 @@ import Icon from "@/components/ui/Icon";
 import { DrawerTrigger, Drawer, DrawerContent } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { DrawerDialogContentInner } from "@/components/ui/DrawerDialog";
 
 export const BACKGROUND_TRAITS: NounTrait[] = [
   { name: "Cool", seed: 0 },
@@ -79,28 +80,30 @@ export default function NounFilter({ numNouns }: { numNouns: number }) {
 
       {/* Mobile  */}
       <div className="md:hidden">
-        <Drawer open={open} onOpenChange={setOpen}>
+        <Drawer open={open} onOpenChange={setOpen} repositionInputs={false}>
           <DrawerTrigger asChild>
-            <button className="fixed bottom-[68px] left-1/2 z-10 flex h-12 -translate-x-1/2 items-center justify-center gap-2.5 rounded-full bg-content-primary px-6 text-white hover:bg-content-primary/90 md:hidden pwa:bottom-[80px]">
+            <button className="fixed bottom-[84px] left-1/2 z-10 flex h-12 -translate-x-1/2 items-center justify-center gap-2.5 rounded-full bg-content-primary px-6 text-white hover:bg-content-primary/90 md:hidden pwa:bottom-[104px]">
               <Icon icon="filter" size={24} className="fill-white" />
               <span>Filter</span>
             </button>
           </DrawerTrigger>
           <DrawerContent>
-            <div className="flex min-h-0 flex-col overflow-y-auto p-6">
-              <FilterMenu />
-            </div>
-            <div className="flex w-full justify-between border-t-2 border-border-secondary bg-white px-6 py-2">
-              <ClearAllFiltersButton className="text-semantic-accent clickable-active">
-                Clear all
-              </ClearAllFiltersButton>
-              <Button
-                className="w-fit md:hidden"
-                onClick={() => setOpen(false)}
-              >
-                Done
-              </Button>
-            </div>
+            <DrawerDialogContentInner className="p-0">
+              <div className="flex min-h-0 flex-col overflow-y-auto px-6 pt-6">
+                <FilterMenu />
+              </div>
+              <div className="shadow-top-only flex w-full shrink-0 justify-between overflow-hidden bg-white px-6 py-2">
+                <ClearAllFiltersButton className="text-semantic-accent clickable-active">
+                  Clear all
+                </ClearAllFiltersButton>
+                <Button
+                  className="w-fit md:hidden"
+                  onClick={() => setOpen(false)}
+                >
+                  Apply
+                </Button>
+              </div>
+            </DrawerDialogContentInner>
           </DrawerContent>
         </Drawer>
       </div>
@@ -110,7 +113,7 @@ export default function NounFilter({ numNouns }: { numNouns: number }) {
 
 function FilterMenu() {
   return (
-    <div className={cn("relative flex h-full min-h-0 w-full flex-col gap-2")}>
+    <div className={cn("relative flex h-full w-full flex-col gap-2")}>
       <div className="flex w-full items-center justify-between bg-white md:pt-3">
         <h3>Filter</h3>
         <ClearAllFiltersButton className="hidden text-semantic-accent clickable-active md:flex">
