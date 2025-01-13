@@ -1,8 +1,9 @@
 import { Noun, NounTraitType } from "@/data/noun/types";
-import { getNounData, ImageData } from "@nouns/assets";
 import { buildSVG } from "@nouns/sdk";
+import { imageData } from "./imageData";
 
-const { palette } = ImageData;
+const { palette, bgcolors } = imageData;
+const { bodies, accessories, heads, glasses } = imageData.images;
 
 export type NounImageType = "full" | NounTraitType;
 
@@ -11,7 +12,7 @@ export function buildBase64Image(
     data: string;
   }[],
   bgColor?: string,
-  cropViewBox?: string
+  cropViewBox?: string,
 ) {
   let svg = buildSVG(parts, palette, bgColor);
 
@@ -24,7 +25,28 @@ export function buildBase64Image(
   return "data:image/svg+xml;base64," + svgBase64;
 }
 
-export function buildNounImage(traits: Noun["traits"], imageType: NounImageType): string {
+export function getNounData(seed: {
+  background: number;
+  body: number;
+  accessory: number;
+  head: number;
+  glasses: number;
+}) {
+  return {
+    parts: [
+      bodies[seed.body],
+      accessories[seed.accessory],
+      heads[seed.head],
+      glasses[seed.glasses],
+    ],
+    background: bgcolors[seed.background],
+  };
+}
+
+export function buildNounImage(
+  traits: Noun["traits"],
+  imageType: NounImageType,
+): string {
   const seed = {
     background: traits.background.seed,
     body: traits.body.seed,
@@ -62,23 +84,30 @@ const TRAIT_TYPE_VIEW_BOX: Record<NounTraitType, string> = {
   background: "0 0 320 320",
 };
 
-export function buildNounTraitImage(traitType: NounTraitType, seed: number): string {
+export function buildNounTraitImage(
+  traitType: NounTraitType,
+  seed: number,
+): string {
   const data = getPartData(traitType, seed);
   let viewBox = TRAIT_TYPE_VIEW_BOX[traitType];
 
-  return buildBase64Image([{ data }], traitType == "background" ? ImageData.bgcolors[seed] : undefined, viewBox);
+  return buildBase64Image(
+    [{ data }],
+    traitType == "background" ? bgcolors[seed] : undefined,
+    viewBox,
+  );
 }
 
 function getPartData(traitType: NounTraitType, seed: number) {
   switch (traitType) {
     case "head":
-      return ImageData.images.heads[seed].data;
+      return heads[seed].data;
     case "glasses":
-      return ImageData.images.glasses[seed].data;
+      return glasses[seed].data;
     case "body":
-      return ImageData.images.bodies[seed].data;
+      return bodies[seed].data;
     case "accessory":
-      return ImageData.images.accessories[seed].data;
+      return accessories[seed].data;
     case "background":
       return ""; // TODO
   }

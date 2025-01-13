@@ -2,7 +2,6 @@
 import { Accordion } from "@/components/ui/accordion";
 import { NounTrait } from "@/data/noun/types";
 import { capitalizeFirstLetterOfEveryWord } from "@/utils/format";
-import { ImageData } from "@nouns/assets";
 import { FilterSection } from "./FilterSection";
 import { Separator } from "../../ui/separator";
 import TreasuryNounFilter from "./TreasuryNounFilter";
@@ -15,13 +14,14 @@ import { DrawerTrigger, Drawer, DrawerContent } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { DrawerDialogContentInner } from "@/components/ui/DrawerDialog";
+import { imageData } from "@/utils/nounImages/imageData";
 
 export const BACKGROUND_TRAITS: NounTrait[] = [
   { name: "Cool", seed: 0 },
   { name: "Warm", seed: 1 },
 ];
 
-export const GLASSES_TRAITS: NounTrait[] = ImageData.images.glasses.map(
+export const GLASSES_TRAITS: NounTrait[] = imageData.images.glasses.map(
   (item, i) => ({
     name: capitalizeFirstLetterOfEveryWord(
       item.filename
@@ -33,7 +33,7 @@ export const GLASSES_TRAITS: NounTrait[] = ImageData.images.glasses.map(
   }),
 );
 
-export const HEAD_TRAITS: NounTrait[] = ImageData.images.heads.map(
+export const HEAD_TRAITS: NounTrait[] = imageData.images.heads.map(
   (item, i) => ({
     name: capitalizeFirstLetterOfEveryWord(
       item.filename
@@ -45,7 +45,7 @@ export const HEAD_TRAITS: NounTrait[] = ImageData.images.heads.map(
   }),
 );
 
-export const BODY_TRAITS: NounTrait[] = ImageData.images.bodies.map(
+export const BODY_TRAITS: NounTrait[] = imageData.images.bodies.map(
   (item, i) => ({
     name: capitalizeFirstLetterOfEveryWord(
       item.filename
@@ -57,7 +57,7 @@ export const BODY_TRAITS: NounTrait[] = ImageData.images.bodies.map(
   }),
 );
 
-export const ACCESSORY_TRAITS: NounTrait[] = ImageData.images.accessories.map(
+export const ACCESSORY_TRAITS: NounTrait[] = imageData.images.accessories.map(
   (item, i) => ({
     name: capitalizeFirstLetterOfEveryWord(
       item.filename
@@ -92,7 +92,7 @@ export default function NounFilter({ numNouns }: { numNouns: number }) {
               <div className="flex min-h-0 flex-col overflow-y-auto px-6 pt-6">
                 <FilterMenu />
               </div>
-              <div className="shadow-top-only flex w-full shrink-0 justify-between overflow-hidden bg-white px-6 py-2">
+              <div className="flex w-full shrink-0 justify-between overflow-hidden bg-white px-6 py-2 shadow-top-only">
                 <ClearAllFiltersButton className="text-semantic-accent clickable-active">
                   Clear all
                 </ClearAllFiltersButton>
