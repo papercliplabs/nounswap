@@ -1,6 +1,6 @@
 import { getNounById } from "@/data/noun/getNounById";
 import { Noun } from "@/data/noun/types";
-import { buildNounImage } from "@/utils/nounImage";
+import { buildNounImage } from "@/utils/nounImages/nounImage";
 import { cn } from "@/utils/shadcn";
 import Image from "next/image";
 import { ComponentProps, Suspense } from "react";

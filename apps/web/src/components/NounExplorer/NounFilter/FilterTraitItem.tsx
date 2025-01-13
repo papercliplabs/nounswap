@@ -5,7 +5,7 @@ import { useCallback, useMemo, useRef } from "react";
 import { FilterItemButton } from "./FilterItemButton";
 import { scrollToNounExplorer } from "@/utils/scroll";
 import Image from "next/image";
-import { buildNounTraitImage } from "@/utils/nounImage";
+import { buildNounTraitImage } from "@/utils/nounImages/nounImage";
 import { useInView } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -53,16 +53,25 @@ export function FilterTraitItem({ traitType, trait }: FilterTraitItemProps) {
       window.history.pushState(null, "", `?${params.toString()}`);
       scrollToNounExplorer();
     },
-    [searchParams, filterKey, trait.seed]
+    [searchParams, filterKey, trait.seed],
   );
 
   const traitImg = buildNounTraitImage(traitType, trait.seed);
 
   return (
-    <FilterItemButton isChecked={isChecked} onClick={() => handleCheckChange(!isChecked)}>
+    <FilterItemButton
+      isChecked={isChecked}
+      onClick={() => handleCheckChange(!isChecked)}
+    >
       <div className="flex items-center gap-2" ref={ref}>
-        {isInView ? <Image src={traitImg} width={32} height={32} alt={trait.name} /> : <Skeleton className="h-8 w-8" />}
-        <span className="overflow-hidden overflow-ellipsis whitespace-nowrap pr-2">{trait.name}</span>
+        {isInView ? (
+          <Image src={traitImg} width={32} height={32} alt={trait.name} />
+        ) : (
+          <Skeleton className="h-8 w-8" />
+        )}
+        <span className="overflow-hidden overflow-ellipsis whitespace-nowrap pr-2">
+          {trait.name}
+        </span>
       </div>
     </FilterItemButton>
   );

@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@graphql-typed-document-node/core": "^3.2.0",
-    "@nouns/assets": "^0.9.0",
     "@nouns/sdk": "^0.4.0",
     "@number-flow/react": "^0.5.1",
     "@paperclip-labs/whisk-sdk": "^0.0.18",
