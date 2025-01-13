@@ -3,10 +3,7 @@ import { getFrameMetadata } from "frog/next";
 import React from "react";
 import NounsFundsIdeas from "./_sections/NounsFundsIdeas";
 import ThisIsNouns from "./_sections/ThisIsNouns";
-import { getAllNouns } from "@/data/noun/getAllNouns";
 import GovernedByYou from "./_sections/GovernedByYou";
-import { getSecondaryFloorListing } from "@/data/noun/getSecondaryNounListings";
-import NounDialog from "@/components/dialog/NounDialog";
 import TheseAreNouns from "./_sections/TheseAreNouns";
 import AlreadyOwnANoun from "./_sections/AlreadyOwnANoun";
 import ByTheNumbers from "./_sections/ByTheNumbers";
@@ -62,21 +59,6 @@ export default async function Page(props: {
       <ByTheNumbers />
       <StartJourney />
       <Faq />
-
-      <NounsDialogWrapper />
     </div>
-  );
-}
-
-async function NounsDialogWrapper() {
-  const [allNouns, secondaryFloorListing] = await Promise.all([
-    getAllNouns(),
-    getSecondaryFloorListing(),
-  ]);
-  return (
-    <NounDialog
-      nouns={allNouns}
-      secondaryFloorListing={secondaryFloorListing}
-    />
   );
 }

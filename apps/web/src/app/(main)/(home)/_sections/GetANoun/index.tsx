@@ -1,7 +1,7 @@
 import Image from "next/image";
-import NavCard from "./NavCard";
 import JoinAuction from "./JoinAuction";
 import { CurrentAuctionPrefetchWrapper } from "@/components/CurrentAuction/CurrentAuctionPrefetchWrapper";
+import FeatureHighlightCard from "@/components/FeatureHighlightCard";
 
 export default function GetANoun() {
   return (
@@ -18,7 +18,7 @@ export default function GetANoun() {
         <CurrentAuctionPrefetchWrapper>
           <JoinAuction />
         </CurrentAuctionPrefetchWrapper>
-        <NavCard
+        <FeatureHighlightCard
           href="/explore?buyNow=1"
           iconSrc="/feature/shop/icon.svg"
           buttonLabel="Shop"
@@ -32,22 +32,23 @@ export default function GetANoun() {
             alt="Buy Secondary Nouns"
             className="h-[332px] w-[400px] object-cover"
           />
-        </NavCard>
-        <NavCard
-          href="/convert"
-          iconSrc="/feature/redeem/icon.svg"
+        </FeatureHighlightCard>
+        <FeatureHighlightCard
+          href="/convert?tab=redeem"
+          iconSrc="/feature/$nouns-redeem/icon.svg"
           buttonLabel="Redeem"
-          description="Collect $nouns tokens! 1,000,000 $nouns = 1 Noun!"
-          className="bg-blue-400 text-white"
+          description="Collect $NOUNS tokens and redeem them for a Noun."
+          className="gap-4 bg-blue-400 pb-8 text-white md:pb-10"
         >
           <Image
-            src="/feature/redeem/main.png"
-            width={400}
-            height={332}
-            alt="Redeem $nouns"
-            className="h-[332px] w-[400px] object-cover"
+            src="/feature/$nouns-redeem/main.png"
+            width={169}
+            height={212}
+            alt="Buy Secondary Nouns"
+            className="h-[212px] w-[169px] object-cover"
           />
-        </NavCard>
+          <p className="label-sm">1,000,000 $NOUNS = 1 Noun</p>
+        </FeatureHighlightCard>
       </div>
     </section>
   );

@@ -1,14 +1,14 @@
 "use client";
 import { useAuctionData } from "@/hooks/useAuctionData";
-import NavCard from "./NavCard";
 import { CurrentAuctionLarge } from "@/components/CurrentAuction";
 import clsx from "clsx";
+import FeatureHighlightCard from "@/components/FeatureHighlightCard";
 
 export default function JoinAuction() {
   const { noun } = useAuctionData();
 
   return (
-    <NavCard
+    <FeatureHighlightCard
       href=""
       iconSrc="/feature/bid/icon.svg"
       buttonLabel="Bid"
@@ -24,6 +24,6 @@ export default function JoinAuction() {
           <span className="text-green-600 label-md">Live auction</span>
         </div>
       </div>
-    </NavCard>
+    </FeatureHighlightCard>
   );
 }

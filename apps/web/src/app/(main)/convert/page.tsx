@@ -3,6 +3,7 @@ import Convert from "./Convert";
 import ConvertInfo from "./ConvertInfo";
 
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Convert Nouns to $nouns | Unlock Fractional Ownership with Nouns DAO",
@@ -25,7 +26,9 @@ export default function ConvertPage() {
           />
           <span>The $nouns contracts are unaudited use at your own risk. </span>
         </div>
-        <Convert />
+        <Suspense fallback={null}>
+          <Convert />
+        </Suspense>
       </div>
       <div className="flex w-full flex-[3] pb-[80px] md:pb-0">
         <ConvertInfo />

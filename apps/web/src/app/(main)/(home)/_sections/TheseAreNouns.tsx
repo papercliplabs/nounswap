@@ -1,8 +1,8 @@
 import { getAllNouns } from "@/data/noun/getAllNouns";
-import { TheseAreNounsScroller } from "./TheseAreNounsScroller";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Suspense } from "react";
+import { NounsInfiniteScroller } from "@/components/NounsInfiniteScroller";
 
 export default function TheseAreNouns() {
   return (
@@ -26,5 +26,5 @@ export default function TheseAreNouns() {
 
 async function ScrollerWrapper() {
   const allNouns = await getAllNouns();
-  return <TheseAreNounsScroller nouns={allNouns} />;
+  return <NounsInfiniteScroller nouns={allNouns} />;
 }

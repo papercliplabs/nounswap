@@ -1,9 +1,6 @@
 import Link from "next/link";
-import Icon from "./ui/Icon";
 import Image from "next/image";
 import { LinkExternal } from "./ui/link";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
 import MailingListForm from "./MailingListForm";
 import { NounSwapLogoLink } from "./NounSwapLogoLink";
 
@@ -12,6 +9,7 @@ const NAV_ITEMS: { name: string; href: string; external?: boolean }[][] = [
     { name: "Explore", href: "/explore" },
     { name: "Stats", href: "/stats" },
     { name: "Convert", href: "/convert" },
+    { name: "$NOUNS", href: "/$nouns" },
   ],
   [
     { name: "Bid", href: "/" },

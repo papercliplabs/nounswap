@@ -50,18 +50,6 @@ export default async function Page() {
 }
 
 async function NounExplorerWrapper() {
-  const [allNouns, secondaryFloorListing] = await Promise.all([
-    getAllNounsUncached(),
-    getSecondaryFloorListing(),
-  ]);
-
-  return (
-    <>
-      <NounExplorer nouns={allNouns} />
-      <NounDialog
-        nouns={allNouns}
-        secondaryFloorListing={secondaryFloorListing}
-      />
-    </>
-  );
+  const allNouns = await getAllNounsUncached();
+  return <NounExplorer nouns={allNouns} />;
 }
