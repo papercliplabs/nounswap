@@ -2,11 +2,10 @@ import { Suspense } from "react";
 import ByTheNumbersData from "./ByTheNumbersData";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { currentAuctionIdQuery } from "@/data/tanstackQueries";
 import { getCurrentAuctionNounId } from "@/data/auction/getCurrentAuctionNounId";
 import { getAccountLeaderboard } from "@/data/ponder/leaderboard/getAccountLeaderboard";
-import { getDailyFinancialSnapshots } from "@/data/ponder/financial/getDailyFinancialSnapshots";
 import { getTreasurySummary } from "@/data/ponder/financial/getTreasurySummart";
+import { getExecutedProposalsCount } from "@/data/ponder/governance/getExecutedProposalsCount";
 
 export default function ByTheNumbers() {
   return (
@@ -29,14 +28,13 @@ export default function ByTheNumbers() {
 }
 
 async function ByTheNumbersDataWrapper() {
-  // TODO: fetch actual number for this
-  const ideasFunded = 408;
-
-  const [currentAuctionId, leaderboard, treasurySummary] = await Promise.all([
-    getCurrentAuctionNounId(),
-    getAccountLeaderboard(),
-    getTreasurySummary(),
-  ]);
+  const [currentAuctionId, leaderboard, treasurySummary, ideasFunded] =
+    await Promise.all([
+      getCurrentAuctionNounId(),
+      getAccountLeaderboard(),
+      getTreasurySummary(),
+      getExecutedProposalsCount(),
+    ]);
 
   return (
     <ByTheNumbersData

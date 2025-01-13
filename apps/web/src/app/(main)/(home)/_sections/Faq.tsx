@@ -1,9 +1,4 @@
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import FaqAccordion from "@/components/FaqAccordion";
 import { LinkExternal } from "@/components/ui/link";
 import { ReactNode } from "react";
 
@@ -210,18 +205,7 @@ export default function Faq() {
       id="faq"
     >
       <div className="heading-1">Questions? Answers.</div>
-      <Accordion type="single" collapsible className="w-full max-w-[720px]">
-        {QUESTIONS_AND_ANSWERS.map(({ question, answer }, i) => (
-          <AccordionItem value={question} key={i} className="first:border-t-0">
-            <AccordionTrigger className="px-0 text-start heading-4 hover:bg-transparent hover:underline">
-              {question}
-            </AccordionTrigger>
-            <AccordionContent className="flex flex-col gap-[1em] [&>ul]:list-inside [&>ul]:list-disc [&>ul]:pl-2 [&_*_ul]:list-inside [&_*_ul]:list-disc [&_*_ul]:pl-2">
-              {answer}
-            </AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
+      <FaqAccordion items={QUESTIONS_AND_ANSWERS} />
     </section>
   );
 }

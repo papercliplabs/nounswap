@@ -2,11 +2,10 @@
 import NounDialogTrigger from "@/components/NounDialogTrigger";
 import { NounImageBase } from "@/components/NounImage";
 import { Noun } from "@/data/noun/types";
-import { useScreenSize } from "@/hooks/useScreenSize";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
-export function TheseAreNounsScroller({ nouns }: { nouns: Noun[] }) {
+export function NounsInfiniteScroller({ nouns }: { nouns: Noun[] }) {
   // To fix SSR issues
   const [firstRowNounsDoubled, setFirstRowNounsDoubled] = useState<Noun[]>([]);
   const [secondRowNounsDoubles, setSecondRowNounsDoubles] = useState<Noun[]>(
@@ -20,8 +19,19 @@ export function TheseAreNounsScroller({ nouns }: { nouns: Noun[] }) {
       .filter((noun) => !first.includes(noun))
       .sort(() => Math.random() - 0.5)
       .slice(0, 50);
-    setFirstRowNounsDoubled([...first, ...first]);
-    setSecondRowNounsDoubles([...second, ...second]);
+    const doubleFirst = [...first, ...first];
+    const doubleSecond = [...second, ...second];
+
+    // Make sure there are at least 50 items in the double array
+    while (doubleFirst.length > 0 && doubleFirst.length < 50) {
+      doubleFirst.push(...first);
+    }
+    while (doubleSecond.length > 0 && doubleSecond.length < 50) {
+      doubleSecond.push(...second);
+    }
+
+    setFirstRowNounsDoubled(doubleFirst.slice(0, 50));
+    setSecondRowNounsDoubles(doubleSecond.slice(0, 50));
   }, [nouns]);
 
   return (
