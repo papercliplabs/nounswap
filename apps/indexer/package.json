@@ -13,7 +13,7 @@
   "dependencies": {
     "@electric-sql/pglite": "0.2.13",
     "hono": "^4.6.9",
-    "ponder": "^0.8.18",
+    "ponder": "^0.8.24",
     "viem": "^2.21.42"
   },
   "devDependencies": {

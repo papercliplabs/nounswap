@@ -52,13 +52,13 @@ ponder.on("NounsNFT:DelegateChanged", async ({ event, context }) => {
 
   // Delegate account
   const delegateAddress = event.args.toDelegate;
-  const delegateAccount = await db
+  await db
     .insert(account)
     .values({
       address: delegateAddress,
       ...createAccountParams,
     })
-    .onConflictDoUpdate((row) => ({}));
+    .onConflictDoNothing();
 
   // Delegator account
   const delegatorAddress = event.args.delegator;
@@ -68,9 +68,9 @@ ponder.on("NounsNFT:DelegateChanged", async ({ event, context }) => {
     .values({
       address: delegatorAddress,
       ...createAccountParams,
-      delegateAccountAddress: selfDelegate ? null : delegateAccount.address, // undefined if self
+      delegateAccountAddress: selfDelegate ? null : delegateAddress, // undefined if self
     })
     .onConflictDoUpdate((row) => ({
-      delegateAccountAddress: selfDelegate ? null : delegateAccount.address, // undefined if self
+      delegateAccountAddress: selfDelegate ? null : delegateAddress, // undefined if self
     }));
 });

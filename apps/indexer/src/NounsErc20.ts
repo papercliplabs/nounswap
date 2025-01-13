@@ -88,19 +88,19 @@ ponder.on("NounsERC20:Deposit", async ({ event, context }) => {
 
   const transaction = await upsertTransaction({ event, context });
 
-  const depositor = await db
+  await db
     .insert(account)
     .values({
       address: depositorAddress,
       ...createAccountParams,
     })
-    .onConflictDoUpdate((row) => ({}));
+    .onConflictDoNothing();
 
   for (let i = 0; i < nounsNftIds.length; i++) {
     await db.insert(nounsErc20Deposit).values({
       id: event.transaction.hash + "-" + event.log.logIndex + "-" + i,
       transactionHash: transaction.hash,
-      depositorAccountAddress: depositor.address,
+      depositorAccountAddress: depositorAddress,
       nounsNftId: nounsNftIds[i]!,
     });
   }
@@ -114,19 +114,19 @@ ponder.on("NounsERC20:Redeem", async ({ event, context }) => {
 
   const transaction = await upsertTransaction({ event, context });
 
-  const redeemer = await db
+  await db
     .insert(account)
     .values({
       address: redeemerAddress,
       ...createAccountParams,
     })
-    .onConflictDoUpdate((row) => ({}));
+    .onConflictDoNothing();
 
   for (let i = 0; i < nounsNftIds.length; i++) {
     await await db.insert(nounsErc20Redeem).values({
       id: event.transaction.hash + "-" + event.log.logIndex + "-" + i,
       transactionHash: transaction.hash,
-      redeemerAccountAddress: redeemer.address,
+      redeemerAccountAddress: redeemerAddress,
       nounsNftId: nounsNftIds[i]!,
     });
   }
@@ -141,19 +141,19 @@ ponder.on("NounsERC20:Swap", async ({ event, context }) => {
 
   const transaction = await upsertTransaction({ event, context });
 
-  const swapper = await db
+  await db
     .insert(account)
     .values({
       address: swapperAddress,
       ...createAccountParams,
     })
-    .onConflictDoUpdate((row) => ({}));
+    .onConflictDoNothing();
 
   for (let i = 0; i < inputNounsNftIds.length; i++) {
     await await db.insert(nounsErc20Swap).values({
       id: event.transaction.hash + "-" + event.log.logIndex + "-" + i,
       transactionHash: transaction.hash,
-      swapperAccountAddress: swapper.address,
+      swapperAccountAddress: swapperAddress,
       fromNounsNftId: inputNounsNftIds[i]!,
       toNounsNftId: outputNounsNftIds[i]!,
     });
