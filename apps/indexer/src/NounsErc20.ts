@@ -8,7 +8,10 @@ import {
   nounsErc20BaseTransfer,
   nounsErc20Redeem,
   nounsErc20Swap,
+  nounsErc20DailyVolume,
 } from "ponder:schema";
+import { isAddressEqual, zeroAddress } from "viem";
+import { SECONDS_PER_DAY } from "./utils/constants";
 
 ponder.on("NounsERC20:Transfer", async ({ event, context }) => {
   const { db } = context;
@@ -44,6 +47,21 @@ ponder.on("NounsERC20:Transfer", async ({ event, context }) => {
     toAccountAddress: toAccount.address,
     amount,
   });
+
+  if (!isAddressEqual(fromAddress, zeroAddress) && !isAddressEqual(toAddress, zeroAddress)) {
+    const dayTimestamp = Math.floor(Number(event.block.timestamp) / SECONDS_PER_DAY) * SECONDS_PER_DAY;
+
+    await db
+      .insert(nounsErc20DailyVolume)
+      .values({
+        dayTimestamp,
+        baseVolume: BigInt(0),
+        mainnetVolume: amount,
+      })
+      .onConflictDoUpdate((row) => ({
+        mainnetVolume: row.mainnetVolume + amount,
+      }));
+  }
 });
 
 ponder.on("NounsErc20Base:Transfer", async ({ event, context }) => {
@@ -53,8 +71,8 @@ ponder.on("NounsErc20Base:Transfer", async ({ event, context }) => {
   const toAddress = event.args.to;
   const amount = event.args.value;
 
-  const transaction = await upsertTransaction({ event, context });
-  const fromAccount = await upsertAccountWithBalanceDeltas({
+  await upsertTransaction({ event, context });
+  await upsertAccountWithBalanceDeltas({
     address: fromAddress,
     deltas: {
       nounsErc20BaseBalance: -amount,
@@ -62,7 +80,7 @@ ponder.on("NounsErc20Base:Transfer", async ({ event, context }) => {
     event,
     context,
   });
-  const toAccount = await upsertAccountWithBalanceDeltas({
+  await upsertAccountWithBalanceDeltas({
     address: toAddress,
     deltas: {
       nounsErc20BaseBalance: amount,
@@ -78,6 +96,21 @@ ponder.on("NounsErc20Base:Transfer", async ({ event, context }) => {
     toAccountAddress: toAddress,
     amount,
   });
+
+  if (!isAddressEqual(fromAddress, zeroAddress) && !isAddressEqual(toAddress, zeroAddress)) {
+    const dayTimestamp = Math.floor(Number(event.block.timestamp) / SECONDS_PER_DAY) * SECONDS_PER_DAY;
+
+    await db
+      .insert(nounsErc20DailyVolume)
+      .values({
+        dayTimestamp,
+        baseVolume: amount,
+        mainnetVolume: BigInt(0),
+      })
+      .onConflictDoUpdate((row) => ({
+        baseVolume: row.baseVolume + amount,
+      }));
+  }
 });
 
 ponder.on("NounsERC20:Deposit", async ({ event, context }) => {

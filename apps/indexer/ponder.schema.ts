@@ -1,4 +1,5 @@
 import { onchainTable, relations } from "ponder";
+import { mainnet } from "viem/chains";
 
 export const transaction = onchainTable("transaction", (t) => ({
   hash: t.hex().notNull().primaryKey(),
@@ -224,4 +225,11 @@ export const client = onchainTable("client", (t) => ({
   votesCast: t.integer().notNull(),
 
   approved: t.boolean().notNull(),
+}));
+
+export const nounsErc20DailyVolume = onchainTable("noun_erc20_daily_volume", (t) => ({
+  dayTimestamp: t.integer().primaryKey(),
+
+  baseVolume: t.bigint().notNull(),
+  mainnetVolume: t.bigint().notNull(),
 }));

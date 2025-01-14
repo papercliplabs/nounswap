@@ -32,7 +32,6 @@ ponder.on("NounsDaoProxy:ProposalExecuted", async ({ event, context }) => {
 
   let amountInUsd = 0;
 
-  // TODO: this new implementation is not working as expected (wrong spend numbers)
   const receipt = await client.getTransactionReceipt({ hash: event.transaction.hash });
   for (let log of receipt.logs) {
     let decodedLog = undefined;
