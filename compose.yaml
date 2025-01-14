@@ -1,7 +1,35 @@
-version: '3.8'
-
 services:
-  postgres:
+  # postgres-indexer:
+  #   image: postgres:15           
+  #   environment:
+  #     POSTGRES_USER: postgres      
+  #     POSTGRES_PASSWORD: postgres 
+  #     POSTGRES_DB: default    
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U postgres"]
+  #     interval: 1s
+  #     timeout: 3s
+  #     retries: 5
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data # Persist data on the host
+
+  # indexer:
+  #   build: 
+  #     context: ./indexer
+  #     target: dev
+  #   volumes:
+  #     - ./indexer/src:/app/src
+  #     - ./indexer/ponder.config.ts:/app/ponder.config.ts
+  #     - ./indexer/ponder.schema.ts:/app/ponder.schema.ts
+  #   depends_on:
+  #     postgres-indexer:
+  #       condition: service_healthy
+  #   env_file: 
+  #     - ./indexer/.env.local
+  #   ports:
+  #     - "42069:42069"
+    
+  postgres-cms:
     image: postgres:15           
     environment:
       POSTGRES_USER: postgres      
@@ -13,24 +41,24 @@ services:
       timeout: 3s
       retries: 5
     volumes:
-      - postgres_data:/var/lib/postgresql/data # Persist data on the host
+      - postgres_cms_data:/var/lib/postgresql/data # Persist data on the host
+    ports:
+      - "5432:5432"
 
-  indexer:
+  cms:
     build: 
-      context: .
-      dockerfile: apps/indexer/Dockerfile
+      context: ./cms
       target: dev
     volumes:
-      - ./apps/indexer/src:/app/apps/indexer/src
-      - ./apps/indexer/ponder.config.ts:/app/apps/indexer/ponder.config.ts
-      - ./apps/indexer/ponder.schema.ts:/app/apps/indexer/ponder.schema.ts
+      - ./cms/src:/app/src
+      - cms_media:/app/media 
     depends_on:
-      postgres:
+      postgres-cms:
         condition: service_healthy
     env_file: 
-      - apps/indexer/.env.local
+      - cms/.env
     ports:
-      - "42069:42069"
+      - "3001:3001"
     
   # web:
   #   build: 
@@ -54,3 +82,5 @@ services:
 
 volumes:
   postgres_data:
+  postgres_cms_data:
+  cms_media:
