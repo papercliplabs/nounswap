@@ -12,12 +12,16 @@ import Disclaimer from "./_sections/Disclaimer";
 import Spend from "./_sections/Spend";
 
 export const metadata: Metadata = {
-  title:
-    "$NOUNS - An ERC-20 Currency Backed by Nouns NFTs | Your Gateway to Ownership",
+  title: "$NOUNS | Nouns DAO's ERC-20 Token Backed by Nouns NFTs",
   description:
-    "Learn about $NOUNS, an ERC-20 currency backed by Noun NFTs. Stack $NOUNS to join Nouns DAO and earn a noun!",
+    "$NOUNS is an ERC-20 token for Nouns DAO backed by Nouns NFTs. 1,000,000 $NOUNS = 1 Noun NFT. Trade, collect, or redeem and join the community today!",
   alternates: {
     canonical: "./$nouns",
+  },
+  openGraph: {
+    title: "$NOUNS | Nouns DAO",
+    description:
+      "An ERC-20 token you can trade, collect, or redeem for a Noun NFT anytime! 1 Noun = 1,000,000 $NOUNS.",
   },
 };
 
