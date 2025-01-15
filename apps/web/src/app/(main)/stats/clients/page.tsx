@@ -7,7 +7,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   alternates: {
-    canonical: "./stats/clients",
+    canonical: "./",
   },
 };
 

@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description:
     "Convert your Nouns into $nouns tokens or redeem $nouns for a full Noun NFT. Unlock liquidity and stay connected to the Nouns DAO. Fast, simple, and secure.",
   alternates: {
-    canonical: "./convert",
+    canonical: "./",
   },
 };
 

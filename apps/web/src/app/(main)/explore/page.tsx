@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description:
     "Dive into the world of Nouns. Browse thousands of unique Noggle wearing digital pixel-art NFTs, filter by traits, and discover the magic behind Nouns DAO. Start exploring today!",
   alternates: {
-    canonical: "./explore",
+    canonical: "./",
   },
 };
 

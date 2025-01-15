@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   description:
     "$NOUNS is an ERC-20 token for Nouns DAO backed by Nouns NFTs. 1,000,000 $NOUNS = 1 Noun NFT. Trade, collect, or redeem and join the community today!",
   alternates: {
-    canonical: "./$nouns",
+    canonical: "./",
   },
   openGraph: {
     title: "$NOUNS | Nouns DAO",
