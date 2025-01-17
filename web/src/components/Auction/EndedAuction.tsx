@@ -134,7 +134,7 @@ export function EndedAuction({
           bids={auction.bids}
           clients={clients}
         >
-          Bid history
+          Bid history ({auction.bids.length})
         </BidHistoryDialog>
       )}
     </>

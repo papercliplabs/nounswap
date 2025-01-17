@@ -63,7 +63,7 @@ export default function NounExplorer({ nouns }: NounExplorerProps) {
     >
       {/* Moved this inside NounFilter avoid stacking context issue with new mobile nav */}
       {/* <div className="sticky top-0 z-[10] flex max-h-[100dvh] min-h-[60px] shrink-0 md:h-auto md:pb-[0px]"> */}
-      <NounFilter numNouns={filteredNouns.length} />
+      <NounFilter />
       {/* </div> */}
       <div className="flex min-w-0 flex-[2] flex-col">
         <div className="sticky top-[63px] z-[8]">

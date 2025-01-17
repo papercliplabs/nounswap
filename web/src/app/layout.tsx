@@ -121,11 +121,11 @@ export default function RootLayout({
       lang="en"
       className={`${ptRootUiFont.variable} ${londrinaSolidFont.variable} `}
     >
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
       <body className="overflow-x-hidden">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <Providers>
           <div className="flex min-h-screen flex-col justify-between border-border-primary">
             <TestnetBanner />

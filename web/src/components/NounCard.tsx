@@ -10,6 +10,9 @@ import { useNounImage } from "@/hooks/useNounImage";
 import Icon from "./ui/Icon";
 import clsx from "clsx";
 import { formatTokenAmount } from "@/utils/utils";
+import { currentAuctionIdQuery } from "@/data/tanstackQueries";
+import { useQuery } from "@tanstack/react-query";
+import { isAddressEqual } from "viem";
 
 interface NounCardProps {
   noun: Noun;
@@ -36,6 +39,13 @@ export default function NounCard({
     () => noun.owner == CHAIN_CONFIG.addresses.nounsErc20,
     [noun.owner],
   );
+
+  const isAuctionNoun = useMemo(() => {
+    return isAddressEqual(
+      CHAIN_CONFIG.addresses.nounsAuctionHouseProxy,
+      noun.owner,
+    );
+  }, [noun.owner]);
 
   const nounImage = useNounImage("full", noun);
 
@@ -119,6 +129,24 @@ export default function NounCard({
               </TooltipTrigger>
               <TooltipContent>
                 This Noun is listed on the secondary market.
+              </TooltipContent>
+            </Tooltip>
+          )}
+          {isAuctionNoun && enableHover && (
+            <Tooltip>
+              <TooltipTrigger
+                className="absolute left-2 top-2 z-[6] font-bold text-white label-sm"
+                asChild
+              >
+                <div className="flex items-center justify-center gap-[7px] rounded-full bg-background-dark py-2 pl-3 pr-4 shadow-md">
+                  <div className="h-2 w-2 rounded-full bg-green-200 shadow-[0px_-1px_4px_0px_#26CB7E8C]" />
+                  Bid
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                This Noun is currently on auction.
+                <br />
+                You can create a bid to win it!
               </TooltipContent>
             </Tooltip>
           )}

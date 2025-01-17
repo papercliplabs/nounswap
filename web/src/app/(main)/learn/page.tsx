@@ -1,19 +1,17 @@
+import { FloatingNounsBackground } from "@/components/FloatingNounsBackground";
+import PostOverview from "@/components/PostOverview";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getPostOverviews } from "@/data/cms/getPostOverviews";
-import Image from "next/image";
-import Link from "next/link";
+import { getAllNouns } from "@/data/noun/getAllNouns";
 import { Suspense } from "react";
 
 export default async function LearnPage() {
   return (
-    <div className="flex w-full max-w-[800px] flex-col justify-center gap-[120px] px-6 pt-[72px] md:px-10">
-      <section className="flex flex-col items-center justify-center gap-10">
-        <Image
-          src="/learn.png"
-          width={332}
-          height={104}
-          alt="Learn Nouns DAO"
-        />
+    <div className="flex w-full max-w-[800px] flex-col justify-center gap-[72px] p-6 md:p-10">
+      <section className="relative flex flex-col items-center justify-center gap-4">
+        <Suspense fallback={<div className="h-[120px] w-[400px]" />}>
+          <FloatingNounsBackgroundWrapper />
+        </Suspense>
         <div className="flex flex-col gap-3 text-center">
           <h1>Learn about Nouns DAO</h1>
           <p className="text-content-secondary paragraph-lg">
@@ -23,7 +21,7 @@ export default async function LearnPage() {
         </div>
       </section>
 
-      <div className="grid w-full grid-cols-1 gap-[44px_16px] md:grid-cols-2">
+      <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2">
         <Suspense
           fallback={Array(10)
             .fill(0)
@@ -38,28 +36,18 @@ export default async function LearnPage() {
   );
 }
 
+async function FloatingNounsBackgroundWrapper() {
+  const nouns = await getAllNouns();
+  return <FloatingNounsBackground nouns={nouns} forceSmall />;
+}
+
 async function LearnPostGridWrapper() {
   const postOverviews = await getPostOverviews();
 
   return (
     <>
-      {postOverviews?.map((overview) => (
-        <Link
-          href={`/learn/${overview.slug}`}
-          className="flex h-[340px] w-full flex-col overflow-hidden rounded-[32px] transition-all hover:brightness-90"
-          key={overview.id}
-        >
-          <Image
-            src={overview.heroImage.url ?? ""}
-            width={400}
-            height={225}
-            className="aspect-video h-[212px] w-full object-cover"
-            alt={overview.heroImage.alt}
-          />
-          <div className="grow bg-background-secondary p-6">
-            <h2 className="heading-4">{overview.title}</h2>
-          </div>
-        </Link>
+      {postOverviews?.map((overview, i) => (
+        <PostOverview data={overview} key={i} />
       ))}
     </>
   );
