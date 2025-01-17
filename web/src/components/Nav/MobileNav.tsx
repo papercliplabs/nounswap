@@ -20,7 +20,7 @@ export default function MobileNav() {
           <Link
             href={item.href}
             className={twMerge(
-              "flex grow flex-col items-center justify-center gap-1 px-2.5 py-2",
+              "flex flex-1 grow flex-col items-center justify-center gap-1 px-2.5 py-2",
               active ? "text-content-primary" : "text-content-secondary",
             )}
             key={i}
