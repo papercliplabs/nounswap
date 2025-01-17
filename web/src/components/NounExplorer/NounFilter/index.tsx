@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { DrawerDialogContentInner } from "@/components/ui/DrawerDialog";
 import { imageData } from "@/utils/nounImages/imageData";
+import { useNounFilters } from "@/hooks/useNounFilters";
 
 export const BACKGROUND_TRAITS: NounTrait[] = [
   { name: "Cool", seed: 0 },
@@ -69,8 +70,9 @@ export const ACCESSORY_TRAITS: NounTrait[] = imageData.images.accessories.map(
   }),
 );
 
-export default function NounFilter({ numNouns }: { numNouns: number }) {
+export default function NounFilter() {
   const [open, setOpen] = useState<boolean>(false);
+  const { totalCount } = useNounFilters();
   return (
     <>
       {/* Desktop */}
@@ -82,9 +84,9 @@ export default function NounFilter({ numNouns }: { numNouns: number }) {
       <div className="md:hidden">
         <Drawer open={open} onOpenChange={setOpen} repositionInputs={false}>
           <DrawerTrigger asChild>
-            <button className="fixed bottom-[84px] left-1/2 z-10 flex h-12 -translate-x-1/2 items-center justify-center gap-2.5 rounded-full bg-content-primary px-6 text-white hover:bg-content-primary/90 md:hidden pwa:bottom-[104px]">
+            <button className="fixed bottom-[84px] left-1/2 z-10 flex h-12 -translate-x-1/2 items-center justify-center gap-2.5 rounded-full bg-content-primary px-6 font-bold text-white hover:bg-content-primary/90 md:hidden pwa:bottom-[104px]">
               <Icon icon="filter" size={24} className="fill-white" />
-              <span>Filter</span>
+              <span>Filters ({totalCount})</span>
             </button>
           </DrawerTrigger>
           <DrawerContent>

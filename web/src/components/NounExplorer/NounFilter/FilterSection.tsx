@@ -8,7 +8,7 @@ import { Input } from "../../ui/input";
 import { FilterTraitItem } from "./FilterTraitItem";
 import { NounTrait, NounTraitType } from "@/data/noun/types";
 import { capitalizeFirstLetterOfEveryWord } from "@/utils/format";
-import { Suspense, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 const MIN_TRAITS_FOR_SEARCH = 5;
 

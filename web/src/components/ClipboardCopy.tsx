@@ -1,4 +1,6 @@
+"use client";
 import { ToastContext, ToastType } from "@/providers/toast";
+import { cn } from "@/utils/shadcn";
 import { HTMLAttributes, ReactNode, useCallback, useContext } from "react";
 
 interface ClipboardCopyProps extends HTMLAttributes<HTMLDivElement> {
@@ -9,6 +11,7 @@ interface ClipboardCopyProps extends HTMLAttributes<HTMLDivElement> {
 export function ClipboardCopy({
   copyContent,
   children,
+  className,
   ...props
 }: ClipboardCopyProps) {
   const { addToast } = useContext(ToastContext);
@@ -28,7 +31,11 @@ export function ClipboardCopy({
   }, [copyContent, addToast]);
 
   return (
-    <div onClick={copy} {...props}>
+    <div
+      onClick={copy}
+      className={cn("hover:cursor-pointer", className)}
+      {...props}
+    >
       {children}
     </div>
   );

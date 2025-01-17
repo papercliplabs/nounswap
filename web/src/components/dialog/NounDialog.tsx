@@ -19,13 +19,14 @@ import BuyNounOnSecondaryDialog from "./BuyNounOnSecondaryDialog";
 import { Avatar, Name } from "@paperclip-labs/whisk-sdk/identity";
 import { LinkExternal } from "../ui/link";
 import { useQuery } from "@tanstack/react-query";
-import { nogsQuery } from "@/data/tanstackQueries";
+import { currentAuctionIdQuery, nogsQuery } from "@/data/tanstackQueries";
 import {
   DrawerDialog,
   DrawerDialogContent,
   DrawerDialogContentInner,
   DrawerDialogTitle,
 } from "../ui/DrawerDialog";
+import { isAddressEqual } from "viem";
 
 interface NounsDialogProps {
   nouns: Noun[];
@@ -72,6 +73,13 @@ export default function NounDialog({
     return noun?.owner == CHAIN_CONFIG.addresses.nounsErc20;
   }, [noun]);
 
+  const isAuctionNoun = useMemo(() => {
+    return (
+      noun &&
+      isAddressEqual(noun.owner, CHAIN_CONFIG.addresses.nounsAuctionHouseProxy)
+    );
+  }, [noun]);
+
   if (!noun) {
     return null;
   }
@@ -97,7 +105,7 @@ export default function NounDialog({
             className="flex aspect-square h-fit max-h-[400px] w-full max-w-[min(70%,400px)] shrink-0 justify-center object-contain object-bottom md:h-full md:max-h-none md:w-[45%] md:max-w-none"
           />
 
-          <div className="scrollbar-track-transparent flex w-full flex-auto flex-col gap-6 overflow-visible px-6 pb-6 md:h-full md:overflow-y-auto md:px-8 md:pt-12">
+          <div className="flex w-full flex-auto flex-col gap-6 overflow-visible px-6 pb-6 scrollbar-track-transparent md:h-full md:overflow-y-auto md:px-8 md:pt-12">
             <h2 className="hidden md:block">Noun {noun.id}</h2>
             <Separator className="h-[2px]" />
 
@@ -180,6 +188,20 @@ export default function NounDialog({
                 <div className="text-content-secondary">
                   Buy this Noun instantly from the secondary market via NounSwap
                   with no additional fees!
+                </div>
+              </>
+            )}
+
+            {isAuctionNoun && (
+              <>
+                <Link href="/">
+                  <Button className="w-full gap-[10px]">
+                    <Icon icon="bid" size={20} className="fill-white" />
+                    Bid
+                  </Button>
+                </Link>
+                <div className="text-content-secondary">
+                  This Noun is currently on auction. Bid now to win it!
                 </div>
               </>
             )}

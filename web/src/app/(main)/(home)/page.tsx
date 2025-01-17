@@ -10,6 +10,7 @@ import ByTheNumbers from "./_sections/ByTheNumbers";
 import Faq from "./_sections/Faq";
 import StartJourney from "./_sections/StartJourney";
 import GetANoun from "./_sections/GetANoun";
+import LearnAboutNounsDao from "./_sections/LearnAboutNounsDao";
 
 export async function generateMetadata(props: {
   searchParams: Promise<{ frame?: string }>;
@@ -58,6 +59,7 @@ export default async function Page(props: {
       <AlreadyOwnANoun />
       <ByTheNumbers />
       <StartJourney />
+      <LearnAboutNounsDao />
       <Faq />
     </div>
   );

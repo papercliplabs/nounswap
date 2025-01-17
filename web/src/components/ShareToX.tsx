@@ -4,20 +4,20 @@ import { ComponentProps } from "react";
 interface ShareToFarcasterProps
   extends Omit<ComponentProps<typeof LinkExternal>, "href"> {
   text: string;
-  embeds?: [string] | [string, string];
+  url?: string;
 }
 
-const BASE_COMPOSE_URL = "https://warpcast.com/~/compose";
+const BASE_COMPOSE_URL = "https://twitter.com/intent/tweet";
 
-export default function ShareToFarcaster({
+export default function ShareToX({
   text,
-  embeds,
+  url,
   ...props
 }: ShareToFarcasterProps) {
-  const searchParams = new URLSearchParams([
-    ["text", text],
-    ...(embeds ? embeds.map((embed) => ["embeds[]", embed]) : []),
-  ]).toString();
+  const searchParams = new URLSearchParams({
+    text,
+    ...(url ? { url } : {}),
+  }).toString();
 
   return (
     <LinkExternal

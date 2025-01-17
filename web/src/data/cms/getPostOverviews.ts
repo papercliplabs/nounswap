@@ -4,7 +4,7 @@ import { graphQLFetch } from "../utils/graphQLFetch";
 
 const query = graphql(/* GraphQL */ `
   query GetPosts {
-    Posts {
+    Posts(sort: "-createdAt") {
       docs {
         id
         slug
@@ -29,12 +29,14 @@ export async function getPostOverviews() {
     {
       next: {
         revalidate: SECONDS_PER_DAY,
-        tags: ["get-post-overviews"]
+        tags: ["get-post-overviews"],
       },
     },
   );
 
-  const posts = data.Posts?.docs?.filter((post) => post != null).filter((post) => post.discoverable) ;
+  const posts = data.Posts?.docs
+    ?.filter((post) => post != null)
+    .filter((post) => post.discoverable);
 
   return posts ?? null;
 }

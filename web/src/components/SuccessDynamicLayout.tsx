@@ -2,6 +2,8 @@ import Image from "next/image";
 import { ReactNode } from "react";
 import ShareToFarcaster from "./ShareToFarcaster";
 import Confetti from "./Confetti";
+import { Button } from "./ui/button";
+import Icon from "./ui/Icon";
 
 export interface SuccessDynamicLayoutProps {
   frameUrl: string;
@@ -40,7 +42,12 @@ export default function SuccessDynamicLayout({
             </div>
           </div>
           <div className="fixed bottom-0 left-0 flex w-screen flex-col gap-2 border-t-2 border-border-secondary bg-white px-4 py-2 md:static md:w-auto md:border-none md:p-0">
-            <ShareToFarcaster text={socialShareCopy} embeds={[frameUrl]} />
+            <ShareToFarcaster text={socialShareCopy} embeds={[frameUrl]}>
+              <Button className="w-full gap-3">
+                <Icon icon="farcaster" size={20} className="fill-white" />
+                Share to Farcaster
+              </Button>
+            </ShareToFarcaster>
             {secondaryButton}
           </div>
         </div>

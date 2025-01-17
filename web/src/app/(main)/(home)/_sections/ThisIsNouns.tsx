@@ -1,9 +1,9 @@
 import { getAllNouns } from "@/data/noun/getAllNouns";
-import { ThisIsNounsBackground } from "./ThisIsNounsBackground";
 import { Suspense } from "react";
 import AnimateIn from "@/components/AnimateIn";
 import VideoDialog from "@/components/dialog/VideoDialog";
 import Image from "next/image";
+import { FloatingNounsBackground } from "@/components/FloatingNounsBackground";
 
 export default function ThisIsNouns() {
   return (
@@ -51,5 +51,5 @@ export default function ThisIsNouns() {
 
 async function BackgroundWrapper() {
   const allNouns = await getAllNouns();
-  return <ThisIsNounsBackground nouns={allNouns} />;
+  return <FloatingNounsBackground nouns={allNouns} />;
 }
