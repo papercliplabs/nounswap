@@ -2,20 +2,42 @@ import React from "react";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getAllNounsUncached } from "@/data/noun/getAllNouns";
-import NounDialog from "@/components/dialog/NounDialog";
 import NounExplorer from "@/components/NounExplorer";
 import AnimationGird from "@/components/NounExplorer/NounGrid/AnimationGrid";
-import { getSecondaryFloorListing } from "@/data/noun/getSecondaryNounListings";
-import { Metadata } from "next";
+import { getFrameMetadata } from "frog/next";
 
-export const metadata: Metadata = {
-  title: "Explore Nouns - Browse Unique NFTs and Traits | Nouns DAO",
-  description:
-    "Dive into the world of Nouns. Browse thousands of unique Noggle wearing digital pixel-art NFTs, filter by traits, and discover the magic behind Nouns DAO. Start exploring today!",
-  alternates: {
-    canonical: "./",
-  },
-};
+export async function generateMetadata(props: {
+  searchParams: Promise<{ nounId?: string }>;
+}) {
+  const searchParams = await props.searchParams;
+  const nounId = searchParams.nounId;
+
+  let filteredFrameMetadata: Record<string, string> = {};
+  if (nounId) {
+    try {
+      const frameMetadata = await getFrameMetadata(
+        `https://frames.paperclip.xyz/nounswap/noun/1/${nounId}`,
+      );
+
+      // Only take fc:frame tags (not og image overrides)
+      filteredFrameMetadata = Object.fromEntries(
+        Object.entries(frameMetadata).filter(([k]) => k.includes("fc:frame")),
+      );
+    } catch (e) {
+      console.error("Failed to fetch frame metadata", e);
+    }
+  }
+
+  return {
+    title: "Explore Nouns - Browse Unique NFTs and Traits | Nouns DAO",
+    description:
+      "Dive into the world of Nouns. Browse thousands of unique Noggle wearing digital pixel-art NFTs, filter by traits, and discover the magic behind Nouns DAO. Start exploring today!",
+    alternates: {
+      canonical: "./",
+    },
+    other: filteredFrameMetadata,
+  };
+}
 
 export default async function Page() {
   return (
