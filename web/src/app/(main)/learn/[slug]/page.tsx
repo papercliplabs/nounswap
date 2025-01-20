@@ -190,8 +190,8 @@ const jsxConverters: JSXConvertersFunction<DefaultNodeTypes> = ({
     );
   },
   link: ({ node }) => {
-    const url = node.fields.url;
-    const internal = url.startsWith("/");
+    const url = decodeURIComponent(node.fields.url); // To ensure decoded correctly since payload encodes direct relative url (/slug => %2Fslug)
+    const internal = node.fields.newTab === false;
     const content = (node.children[0] as any)["text"] as string | undefined;
 
     return internal ? (
