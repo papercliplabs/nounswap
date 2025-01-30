@@ -1,10 +1,28 @@
 .vscode
 .DS_Store
 
-node_modules
-dist
-coverage
-.turbo
+# Build outputs
+build
 
+# Dependencies
+node_modules
+.next
+
+# Autogen
+generated
+
+# Env
+.env*
+!.env.example 
+
+# misc
+.DS_Store
+*.pem
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# Environment variables
 .env*
 !.env.example
