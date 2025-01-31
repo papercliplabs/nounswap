@@ -1,5 +1,5 @@
 import { createConfig, loadBalance, rateLimit } from "ponder";
-import { http } from "viem";
+import { fallback, http } from "viem";
 import { base } from "viem/chains";
 
 import { NounsTokenAbi } from "./abis/NounsTokenAbi";
@@ -14,11 +14,11 @@ export default createConfig({
   networks: {
     mainnet: {
       chainId: 1,
-      transport: http(process.env.MAINNET_RPC_URL!),
+      transport: fallback([http(process.env.MAINNET_RPC_URL!), http(process.env.MAINNET_RPC_URL_FALLBACK!)]),
     },
     base: {
       chainId: base.id,
-      transport: http(process.env.BASE_RPC_URL!),
+      transport: fallback([http(process.env.BASE_RPC_URL!), http(process.env.BASE_RPC_URL_FALLBACK!)]),
     },
   },
   contracts: {

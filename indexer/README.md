@@ -15,17 +15,12 @@ Populate the `.env` file
 Install dependencies
 
 ```bash
-pnpm i
+bun i
 ```
 
 Start dev server for mainnet
 
 ```bash
-pnpm dev:mainnet
+bun dev
 ```
 
-Start production server for mainnet
-
-```bash
-pnpm start:mainnet
-```
