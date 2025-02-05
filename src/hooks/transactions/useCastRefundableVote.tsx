@@ -22,6 +22,12 @@ interface UseCastRefundableVoteReturnType
   ) => void;
 }
 
+const VOTE_MAP: Record<"for" | "against" | "abstain", number> = {
+  against: 0,
+  for: 1,
+  abstain: 2,
+};
+
 export function useCastRefundableVote(): UseCastRefundableVoteReturnType {
   const { sendTransaction, ...other } = useSendTransaction();
   const { address } = useAccount();
@@ -97,22 +103,13 @@ export function useCastRefundableVote(): UseCastRefundableVoteReturnType {
         data = encodeFunctionData({
           abi: nounsDaoLogicConfig.abi,
           functionName: "castRefundableVoteWithReason",
-          args: [
-            BigInt(proposalId),
-            vote == "abstain" ? 0 : vote == "for" ? 1 : 2,
-            reason,
-            CLIENT_ID,
-          ],
+          args: [BigInt(proposalId), VOTE_MAP[vote], reason, CLIENT_ID],
         });
       } else {
         data = encodeFunctionData({
           abi: nounsDaoLogicConfig.abi,
           functionName: "castRefundableVote",
-          args: [
-            BigInt(proposalId),
-            vote == "abstain" ? 0 : vote == "for" ? 1 : 2,
-            CLIENT_ID,
-          ],
+          args: [BigInt(proposalId), VOTE_MAP[vote], CLIENT_ID],
         });
       }
 
