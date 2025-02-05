@@ -53,35 +53,40 @@ export default async function IndividualVotePage(props: {
             <SidebarProvider>
               <SidebarMainContent>
                 <div className="flex w-full max-w-[780px] flex-col gap-8 p-6 pb-24 md:p-10 md:pb-24">
-                  <div className="flex items-center gap-2 paragraph-sm">
-                    <Link href="/vote">Proposals</Link>
-                    <ChevronRight
-                      size={16}
-                      className="stroke-content-secondary"
-                    />
-                    <span className="text-content-secondary">
-                      Proposal {id}
-                    </span>
-                  </div>
-
-                  <Suspense
-                    fallback={
-                      <LoadingSkeletons count={3} className="h-[80px] w-full" />
-                    }
-                  >
-                    <ProposalTopWrapper proposalId={id} />
-                  </Suspense>
-
-                  <Suspense
-                    fallback={
-                      <LoadingSkeletons
-                        count={20}
-                        className="h-[200px] w-full"
+                  <div className="flex w-full flex-col gap-8 md:px-4">
+                    <div className="flex items-center gap-2 paragraph-sm">
+                      <Link href="/vote">Proposals</Link>
+                      <ChevronRight
+                        size={16}
+                        className="stroke-content-secondary"
                       />
-                    }
-                  >
-                    <ProposalMarkdownWrapper proposalId={id} />
-                  </Suspense>
+                      <span className="text-content-secondary">
+                        Proposal {id}
+                      </span>
+                    </div>
+
+                    <Suspense
+                      fallback={
+                        <LoadingSkeletons
+                          count={3}
+                          className="h-[80px] w-full"
+                        />
+                      }
+                    >
+                      <ProposalTopWrapper proposalId={id} />
+                    </Suspense>
+
+                    <Suspense
+                      fallback={
+                        <LoadingSkeletons
+                          count={20}
+                          className="h-[200px] w-full"
+                        />
+                      }
+                    >
+                      <ProposalMarkdownWrapper proposalId={id} />
+                    </Suspense>
+                  </div>
 
                   <Suspense fallback={null}>
                     {/* Prevent render on mobile as it causes issue with drawer state */}

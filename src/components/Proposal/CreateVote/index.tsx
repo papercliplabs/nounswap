@@ -121,7 +121,7 @@ export function CreateVote({ proposal }: { proposal: Proposal }) {
             </Button>
           </DrawerTrigger>
           <DrawerContent className="flex-col gap-6 p-6 shadow-fixed-bottom md:hidden">
-            <DrawerTitle>Vote</DrawerTitle>
+            <DrawerTitle className="heading-4">Vote</DrawerTitle>
             <div className="flex flex-col gap-2">
               <CreateVoteForm
                 proposal={proposal}

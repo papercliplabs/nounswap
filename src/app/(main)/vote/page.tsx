@@ -2,16 +2,26 @@ import LoadingSkeletons from "@/components/LoadingSkeletons";
 import FilteredProposalOverviews from "@/components/Proposal/FilteredProposalOverviews";
 import SearchProvider, { SearchInput } from "@/components/Search";
 import { getProposalOverviews } from "@/data/ponder/governance/getProposalOverviews";
+import Link from "next/link";
 import { Suspense } from "react";
 
 export default function VotePage() {
   return (
     <SearchProvider>
       <div className="flex w-full max-w-[780px] flex-col gap-8 p-6 pb-20 md:p-10 md:pb-20">
-        <div className="flex flex-col justify-between gap-2 md:flex-row md:items-end">
+        <div className="flex flex-col justify-between gap-2 md:flex-row md:items-end md:gap-8">
           <div>
-            <h1 className="heading-2">Nouns DAO Governance</h1>
-            <p>Nouns can vote on proposals or delegate their vote.</p>
+            <h1 className="heading-2">Vote</h1>
+            <p>
+              Vote on Nouns DAO proposals.{" "}
+              <Link
+                href="/learn/nouns-dao-governance-explained"
+                className="inline underline transition-colors hover:text-content-secondary"
+              >
+                Learn about governance
+              </Link>
+              .
+            </p>
           </div>
           <SearchInput
             placeholder="Search proposals"

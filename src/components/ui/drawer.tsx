@@ -5,7 +5,7 @@ import { Drawer as DrawerPrimitive } from "vaul";
 
 import { cn } from "@/utils/shadcn";
 import { Button } from "./button";
-import Icon from "./Icon";
+import { ChevronsDown } from "lucide-react";
 
 const Drawer = ({
   shouldScaleBackground = true,
@@ -54,9 +54,9 @@ const DrawerContent = React.forwardRef<
         <Button
           variant="ghost"
           size="icon"
-          className="absolute right-4 top-4 z-[2] h-10 w-10 rounded-full bg-gray-200/80 transition-all hover:bg-white"
+          className="absolute right-4 top-4 z-[2] h-10 w-10 rounded-full bg-white/40 transition-all hover:bg-white"
         >
-          <Icon icon="x" size={20} />
+          <ChevronsDown size={24} className="shrink-0 stroke-content-primary" />
           <span className="sr-only">Close</span>
         </Button>
       </DrawerPrimitive.Close>

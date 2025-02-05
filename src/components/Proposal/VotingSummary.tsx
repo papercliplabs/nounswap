@@ -1,6 +1,6 @@
 import { Info } from "lucide-react";
-import Icon from "../ui/Icon";
 import { TooltipPopover } from "../ui/tooltipPopover";
+import clsx from "clsx";
 
 export default function VotingSummary({
   forVotes,
@@ -28,7 +28,14 @@ export default function VotingSummary({
             className="flex h-[30px] flex-1 flex-col items-center justify-center border-l first:border-none"
           >
             <div className="label-sm">{item.name}</div>
-            <div className="heading-5">{item.votes}</div>
+            <div
+              className={clsx("text-content-secondary heading-5", {
+                "text-semantic-positive": item.name == "For",
+                "text-semantic-negative": item.name == "Against",
+              })}
+            >
+              {item.votes}
+            </div>
           </div>
         ))}
       </div>
