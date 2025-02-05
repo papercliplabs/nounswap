@@ -2,8 +2,24 @@ import LoadingSkeletons from "@/components/LoadingSkeletons";
 import FilteredProposalOverviews from "@/components/Proposal/FilteredProposalOverviews";
 import SearchProvider, { SearchInput } from "@/components/Search";
 import { getProposalOverviews } from "@/data/ponder/governance/getProposalOverviews";
+import { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
+
+const title = "Vote on Proposals | Nouns DAO";
+const description =
+  "Explore and vote on Nouns DAO proposals to shape the future of Nouns through decentralized governance.";
+export const metadata: Metadata = {
+  title,
+  description,
+  openGraph: {
+    title,
+    description,
+  },
+  alternates: {
+    canonical: "./",
+  },
+};
 
 export default function VotePage() {
   return (

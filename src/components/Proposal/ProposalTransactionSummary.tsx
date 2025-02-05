@@ -66,7 +66,6 @@ interface DecodedTransaction {
   to: Address;
   functionName: string;
   args: {
-    name?: string;
     type: "address" | "uint256" | string;
     value: string | Address | bigint | number;
   }[];
@@ -82,7 +81,7 @@ function decodeTransaction(
   if (transaction.signature == "") {
     // ETH transfer
     functionName = "transfer";
-    args = [{ name: "value", type: "uint256", value: transaction.value }];
+    args = [{ type: "uint256", value: transaction.value }];
   } else {
     functionName = transaction.signature.split("(")[0];
     const functionSignature = `function ${transaction.signature}`;
@@ -95,7 +94,6 @@ function decodeTransaction(
     )[];
 
     args = decoded.map((value, i) => ({
-      name: abi.inputs[i].name,
       type: abi.inputs[i].type,
       value,
     }));
@@ -133,7 +131,6 @@ function DecodedTransactionRenderer({
 }
 
 function FunctionArgumentRenderer({
-  name,
   type,
   value,
 }: DecodedTransaction["args"][0]) {
@@ -175,7 +172,7 @@ function parseDecodedTransactionsSummary(
           CHAIN_CONFIG.addresses.nounsTreasury,
         )
       ) {
-        nounIds.push(Number(tx.args[2]));
+        nounIds.push(Number(tx.args[2].value));
       } else if (
         isAddressEqual(tx.to, CHAIN_CONFIG.addresses.nounsToken) &&
         tx.functionName == "transferFrom" &&

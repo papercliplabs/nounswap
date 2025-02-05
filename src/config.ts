@@ -10,7 +10,6 @@ import { mainnet, Chain, sepolia } from "viem/chains";
 import dotenv from "dotenv";
 import {
   reservoirChains,
-  ReservoirClient,
   createClient as createReservoirClient,
   ReservoirChain,
 } from "@reservoir0x/reservoir-sdk";

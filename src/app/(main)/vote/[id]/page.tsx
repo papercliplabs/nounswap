@@ -34,6 +34,39 @@ import SortProvider, { SortSelect } from "@/components/Sort";
 import { TooltipPopover } from "@/components/ui/tooltipPopover";
 import { ResponsiveContent } from "@/components/ResponsiveContet";
 
+export async function generateMetadata(props: {
+  params: Promise<{ id: string }>;
+}) {
+  const params = await props.params;
+  const proposal = await getProposal(Number(params.id));
+
+  const title = `Proposal ${proposal?.id} | Nouns DAO`;
+  const description = proposal?.title ?? "Vote now";
+  const ogImageUrl = `${process.env.NEXT_PUBLIC_URL}/api/og/vote/${proposal?.id}`;
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: [
+        {
+          url: ogImageUrl,
+          alt: "Nouns DAO Vote",
+        },
+      ],
+    },
+    twitter: {
+      title,
+      description,
+      images: [ogImageUrl],
+    },
+    alternates: {
+      canonical: "./",
+    },
+  };
+}
+
 export default async function IndividualVotePage(props: {
   params: Promise<{ id: string }>;
 }) {
