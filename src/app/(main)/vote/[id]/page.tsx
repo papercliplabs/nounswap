@@ -181,7 +181,10 @@ export default async function IndividualVotePage(props: {
             </SubnavTabs>
 
             <Suspense fallback={null}>
-              <CreateVoteWrapper proposalId={id} />
+              {/* Prevent render on desktop as it causes issue with form */}
+              <ResponsiveContent screenSize="sm">
+                <CreateVoteWrapper proposalId={id} />
+              </ResponsiveContent>
             </Suspense>
           </div>
         </SortProvider>

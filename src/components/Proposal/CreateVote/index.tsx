@@ -232,130 +232,135 @@ function CreateVoteForm({
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className={clsx(
-          "flex w-full flex-col gap-2 overflow-hidden rounded-[20px] bg-background-secondary ring-border-primary focus-within:ring-2",
+          "flex w-full flex-col overflow-hidden rounded-[20px] bg-background-secondary ring-border-primary focus-within:ring-2",
           disabled && "pointer-events-none opacity-50",
         )}
       >
-        <fieldset disabled={disabled}>
-          <div className="flex max-h-[30dvh] w-full flex-col gap-2 overflow-y-auto overflow-x-hidden px-4 pt-4">
-            {revotes.map((revote, i) => (
-              <RevoteCard
-                revote={revote}
-                key={i}
-                onClick={() => removeRevote(revote)}
-              />
-            ))}
-
-            {replies.map((reply, i) => (
-              <div className="flex min-w-0 flex-col" key={i}>
+        <fieldset disabled={disabled} style={{ all: "unset" }}>
+          <div className="flex w-full flex-col gap-2">
+            <div className="flex max-h-[30dvh] w-full flex-col gap-2 overflow-y-auto overflow-x-hidden px-4 pt-4">
+              {revotes.map((revote, i) => (
                 <RevoteCard
-                  revote={reply}
+                  revote={revote}
                   key={i}
-                  onClick={() => handleRemoveReply(reply, i)}
+                  onClick={() => removeRevote(revote)}
                 />
-                <div className="flex gap-2">
-                  <div className="relative w-[20px] shrink-0">
-                    <div className="absolute right-0 top-0 h-[19px] w-[7px] rounded-bl-[12px] border-b border-l" />
-                  </div>
-                  <FormField
-                    key={i}
-                    control={form.control}
-                    name={`replies.${i}`}
-                    render={({ field }) => (
-                      <FormItem className="w-full">
-                        <FormControl>
-                          <div className="relative">
-                            <AutoresizingTextArea
-                              placeholder={`Reply...`}
-                              className="pt-2"
-                              {...field}
-                            />
-                          </div>
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
-            ))}
-            <FormField
-              control={form.control}
-              name="reason"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <AutoresizingTextArea
-                      placeholder="I believe that .... (optional)"
-                      {...field}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </div>
+              ))}
 
-          <div className="flex flex-col items-end gap-1 px-4 pb-4">
-            <div className="flex items-center justify-end gap-4">
+              {replies.map((reply, i) => (
+                <div className="flex min-w-0 flex-col" key={i}>
+                  <RevoteCard
+                    revote={reply}
+                    key={i}
+                    onClick={() => handleRemoveReply(reply, i)}
+                  />
+                  <div className="flex gap-2">
+                    <div className="relative w-[20px] shrink-0">
+                      <div className="absolute right-0 top-0 h-[19px] w-[7px] rounded-bl-[12px] border-b border-l" />
+                    </div>
+                    <FormField
+                      key={i}
+                      control={form.control}
+                      name={`replies.${i}`}
+                      render={({ field }) => (
+                        <FormItem className="w-full">
+                          <FormControl>
+                            <div className="relative">
+                              <AutoresizingTextArea
+                                placeholder={`Reply...`}
+                                className="pt-2"
+                                {...field}
+                              />
+                            </div>
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+              ))}
               <FormField
                 control={form.control}
-                name="vote"
+                name="reason"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value ?? undefined}
-                      >
-                        <SelectTrigger
-                          className={clsx("h-8 w-[150px] rounded-full border", {
-                            "border-semantic-positive bg-semantic-positive fill-white text-white":
-                              field.value == "for",
-                            "border-semantic-negative bg-semantic-negative fill-white text-white":
-                              field.value == "against",
-                          })}
-                        >
-                          <SelectValue placeholder="Select vote" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value={"abstain"}>
-                            Abstain
-                            {address &&
-                              voteWeight != undefined &&
-                              ` (${voteWeight})`}
-                          </SelectItem>
-                          <SelectItem value={"for"}>
-                            For
-                            {address &&
-                              voteWeight != undefined &&
-                              ` (${voteWeight})`}
-                          </SelectItem>
-                          <SelectItem value={"against"}>
-                            Against
-                            {address &&
-                              voteWeight != undefined &&
-                              ` (${voteWeight})`}
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <AutoresizingTextArea
+                        placeholder="I believe that .... (optional)"
+                        {...field}
+                      />
                     </FormControl>
                   </FormItem>
                 )}
               />
-              <TransactionButton
-                type="submit"
-                className="h-8 w-fit rounded-full px-5 py-1.5"
-                disabled={!form.formState.isValid}
-                txnState={txnState}
-              >
-                Vote
-              </TransactionButton>
             </div>
 
-            {txnErrorMsg && (
-              <div className="max-h-[50px] w-full overflow-y-auto text-center text-semantic-negative paragraph-sm">
-                {txnErrorMsg}
+            <div className="flex flex-col items-end gap-1 px-4 pb-4">
+              <div className="flex items-center justify-end gap-4">
+                <FormField
+                  control={form.control}
+                  name="vote"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value ?? undefined}
+                        >
+                          <SelectTrigger
+                            className={clsx(
+                              "h-8 w-[150px] rounded-full border",
+                              {
+                                "border-semantic-positive bg-semantic-positive fill-white text-white":
+                                  field.value == "for",
+                                "border-semantic-negative bg-semantic-negative fill-white text-white":
+                                  field.value == "against",
+                              },
+                            )}
+                          >
+                            <SelectValue placeholder="Select vote" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value={"abstain"}>
+                              Abstain
+                              {address &&
+                                voteWeight != undefined &&
+                                ` (${voteWeight})`}
+                            </SelectItem>
+                            <SelectItem value={"for"}>
+                              For
+                              {address &&
+                                voteWeight != undefined &&
+                                ` (${voteWeight})`}
+                            </SelectItem>
+                            <SelectItem value={"against"}>
+                              Against
+                              {address &&
+                                voteWeight != undefined &&
+                                ` (${voteWeight})`}
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <TransactionButton
+                  type="submit"
+                  className="h-8 w-fit rounded-full px-5 py-1.5"
+                  disabled={!form.formState.isValid}
+                  txnState={txnState}
+                >
+                  Vote
+                </TransactionButton>
               </div>
-            )}
+
+              {txnErrorMsg && (
+                <div className="max-h-[50px] w-full overflow-y-auto text-center text-semantic-negative paragraph-sm">
+                  {txnErrorMsg}
+                </div>
+              )}
+            </div>
           </div>
         </fieldset>
       </form>

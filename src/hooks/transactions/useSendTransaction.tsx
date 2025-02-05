@@ -1,8 +1,21 @@
 "use client";
 import { useCallback, useContext, useMemo, useState } from "react";
-import { BaseError, Hash, InsufficientFundsError, TransactionReceipt, UserRejectedRequestError } from "viem";
-import { useAccount, useSendTransaction as useSendTransactionWagmi, useWaitForTransactionReceipt } from "wagmi";
-import { SendTransactionErrorType, WaitForTransactionReceiptErrorType } from "wagmi/actions";
+import {
+  BaseError,
+  Hash,
+  InsufficientFundsError,
+  TransactionReceipt,
+  UserRejectedRequestError,
+} from "viem";
+import {
+  useAccount,
+  useSendTransaction as useSendTransactionWagmi,
+  useWaitForTransactionReceipt,
+} from "wagmi";
+import {
+  SendTransactionErrorType,
+  WaitForTransactionReceiptErrorType,
+} from "wagmi/actions";
 import {
   CustomTransactionValidationError,
   MinimalTransactionRequest,
@@ -15,7 +28,7 @@ import { estimateGas } from "viem/actions";
 import { useSwitchChainCustom } from "../useSwitchChainCustom";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 
-const GAS_BUFFER = 0.2; // Gives buffer on gas estimate to help prevent out of gas error
+const GAS_BUFFER = 0.25; // Gives buffer on gas estimate to help prevent out of gas error
 
 export type CustomSendTransactionErrorType =
   | CustomTransactionValidationError
@@ -32,7 +45,7 @@ export interface UseSendTransactionReturnType {
   sendTransaction: (
     request: MinimalTransactionRequest,
     logging: { type: TransactionType; description: string },
-    validationFn?: () => Promise<CustomTransactionValidationError | null>
+    validationFn?: () => Promise<CustomTransactionValidationError | null>,
   ) => void;
   reset: () => void;
 }
@@ -43,7 +56,8 @@ export function useSendTransaction(): UseSendTransactionReturnType {
   const { switchChain } = useSwitchChainCustom();
   const { openConnectModal } = useConnectModal();
 
-  const [validationError, setValidationError] = useState<CustomTransactionValidationError | null>(null);
+  const [validationError, setValidationError] =
+    useState<CustomTransactionValidationError | null>(null);
 
   const {
     data: hash,
@@ -68,13 +82,15 @@ export function useSendTransaction(): UseSendTransactionReturnType {
     async (
       request: MinimalTransactionRequest,
       logging: { type: TransactionType; description: string },
-      validationFn?: () => Promise<CustomTransactionValidationError | null>
+      validationFn?: () => Promise<CustomTransactionValidationError | null>,
     ) => {
       if (!accountAddress) {
         openConnectModal?.();
       } else {
         // Call all the time
-        const correctChain = await switchChain({ chainId: CHAIN_CONFIG.chain.id });
+        const correctChain = await switchChain({
+          chainId: CHAIN_CONFIG.chain.id,
+        });
         if (!correctChain) return;
 
         const validationError = await validationFn?.();
@@ -83,12 +99,18 @@ export function useSendTransaction(): UseSendTransactionReturnType {
         if (!validationError) {
           let gasEstimateWithBuffer;
           try {
-            const gasEstimate = await estimateGas(CHAIN_CONFIG.publicClient, request);
-            gasEstimateWithBuffer = (gasEstimate * BigInt((1 + GAS_BUFFER) * 1000)) / BigInt(1000);
+            const gasEstimate = await estimateGas(
+              CHAIN_CONFIG.publicClient,
+              request,
+            );
+            gasEstimateWithBuffer =
+              (gasEstimate * BigInt((1 + GAS_BUFFER) * 1000)) / BigInt(1000);
           } catch (e) {
             console.error("Error estimating gas, using default", e);
             gasEstimateWithBuffer = request.gasFallback; // Use fallback when gas estimation fails
           }
+
+          console.log("ESTIMATION", gasEstimateWithBuffer);
 
           try {
             const hash = await sendTransactionWagmi({
@@ -103,7 +125,14 @@ export function useSendTransaction(): UseSendTransactionReturnType {
         }
       }
     },
-    [accountAddress, sendTransactionWagmi, setValidationError, openConnectModal, switchChain, addTransaction]
+    [
+      accountAddress,
+      sendTransactionWagmi,
+      setValidationError,
+      openConnectModal,
+      switchChain,
+      addTransaction,
+    ],
   );
 
   function reset() {
@@ -112,8 +141,9 @@ export function useSendTransaction(): UseSendTransactionReturnType {
   }
 
   const error = useMemo(
-    () => parseError(validationError, sendTransactionError, waitForReceiptError),
-    [validationError, sendTransactionError, waitForReceiptError]
+    () =>
+      parseError(validationError, sendTransactionError, waitForReceiptError),
+    [validationError, sendTransactionError, waitForReceiptError],
   );
 
   const state = useMemo(() => {
@@ -136,7 +166,7 @@ export function useSendTransaction(): UseSendTransactionReturnType {
 function parseError(
   validationError: CustomTransactionValidationError | null,
   sendTransactionError: SendTransactionErrorType | null,
-  waitForReceiptError: WaitForTransactionReceiptErrorType | null
+  waitForReceiptError: WaitForTransactionReceiptErrorType | null,
 ) {
   if (validationError) {
     return {
@@ -145,27 +175,46 @@ function parseError(
     };
   } else if (sendTransactionError) {
     if (sendTransactionError instanceof BaseError) {
-      if (sendTransactionError.walk((e) => e instanceof InsufficientFundsError)) {
-        return { raw: sendTransactionError, message: "Wallet has insufficient balance." };
+      if (
+        sendTransactionError.walk((e) => e instanceof InsufficientFundsError)
+      ) {
+        return {
+          raw: sendTransactionError,
+          message: "Wallet has insufficient balance.",
+        };
       } else if (
-        sendTransactionError.walk((e) => e instanceof UserRejectedRequestError) ||
+        sendTransactionError.walk(
+          (e) => e instanceof UserRejectedRequestError,
+        ) ||
         sendTransactionError.details?.includes("User rejected")
       ) {
-        return { raw: sendTransactionError, message: "User rejected transaction request." };
+        return {
+          raw: sendTransactionError,
+          message: "User rejected transaction request.",
+        };
       } else {
         console.log(
-          `Unknown send txn error: ${sendTransactionError.name} -  ${sendTransactionError.shortMessage} - ${sendTransactionError.message} - ${sendTransactionError.cause}`
+          `Unknown send txn error: ${sendTransactionError.name} -  ${sendTransactionError.shortMessage} - ${sendTransactionError.message} - ${sendTransactionError.cause}`,
         );
-        return { raw: sendTransactionError, message: "Unknown error occurred, try again." };
+        return {
+          raw: sendTransactionError,
+          message: "Unknown error occurred, try again.",
+        };
       }
     } else {
       console.log(
-        `Unknown send txn error: ${sendTransactionError.name} - ${sendTransactionError.message} - ${sendTransactionError.cause}`
+        `Unknown send txn error: ${sendTransactionError.name} - ${sendTransactionError.message} - ${sendTransactionError.cause}`,
       );
-      return { raw: sendTransactionError, message: "Unknown error occurred, try again.." };
+      return {
+        raw: sendTransactionError,
+        message: "Unknown error occurred, try again..",
+      };
     }
   } else if (waitForReceiptError) {
-    return { raw: waitForReceiptError, message: "Error waiting for transaction receipt." };
+    return {
+      raw: waitForReceiptError,
+      message: "Error waiting for transaction receipt.",
+    };
   } else {
     return null;
   }

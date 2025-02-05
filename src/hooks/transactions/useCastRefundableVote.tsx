@@ -8,7 +8,7 @@ import { useCallback } from "react";
 
 import { CustomTransactionValidationError } from "./types";
 import { useAccount } from "wagmi";
-import { multicall } from "viem/actions";
+import { getBlock, multicall } from "viem/actions";
 import { CHAIN_CONFIG } from "@/config";
 import { nounsDaoLogicConfig } from "@/data/generated/wagmi";
 import { CLIENT_ID } from "@/utils/constants";
@@ -40,21 +40,44 @@ export function useCastRefundableVote(): UseCastRefundableVoteReturnType {
         );
       }
 
-      const [{ hasVoted }] = await multicall(CHAIN_CONFIG.publicClient, {
-        contracts: [
-          {
-            ...nounsDaoLogicConfig,
-            functionName: "getReceipt",
-            args: [BigInt(proposalId), address],
-          },
-        ],
-        allowFailure: false,
-      });
+      const [{ hasVoted }, { startBlock, endBlock }] = await multicall(
+        CHAIN_CONFIG.publicClient,
+        {
+          contracts: [
+            {
+              ...nounsDaoLogicConfig,
+              functionName: "getReceipt",
+              args: [BigInt(proposalId), address],
+            },
+            {
+              ...nounsDaoLogicConfig,
+              functionName: "proposals",
+              args: [BigInt(proposalId)],
+            },
+          ],
+          allowFailure: false,
+        },
+      );
 
       if (hasVoted) {
         return new CustomTransactionValidationError(
           "ALREADY_VOTED",
           "Address has already voted.",
+        );
+      }
+
+      const currentBlock = await getBlock(CHAIN_CONFIG.publicClient);
+      if (currentBlock.number < startBlock) {
+        return new CustomTransactionValidationError(
+          "VOTING_NOT_STARTED",
+          "The voting period has not started yet.",
+        );
+      }
+
+      if (currentBlock.number > endBlock) {
+        return new CustomTransactionValidationError(
+          "VOTING_ENDED",
+          "The voting period has ended.",
         );
       }
 
@@ -97,7 +120,7 @@ export function useCastRefundableVote(): UseCastRefundableVoteReturnType {
         to: nounsDaoLogicConfig.address,
         data,
         value: BigInt(0),
-        gasFallback: BigInt(500000), // Vote generally ~400k
+        gasFallback: BigInt(500000), // Vote generally ~200k, can be more if reason is long
       };
 
       return sendTransaction(
