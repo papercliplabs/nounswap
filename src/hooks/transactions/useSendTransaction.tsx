@@ -28,7 +28,7 @@ import { estimateGas } from "viem/actions";
 import { useSwitchChainCustom } from "../useSwitchChainCustom";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 
-const GAS_BUFFER = 0.5; // Gives buffer on gas estimate to help prevent out of gas error
+const GAS_BUFFER = 0.35; // Gives buffer on gas estimate to help prevent out of gas error
 
 export type CustomSendTransactionErrorType =
   | CustomTransactionValidationError
@@ -99,10 +99,10 @@ export function useSendTransaction(): UseSendTransactionReturnType {
         if (!validationError) {
           let gasEstimateWithBuffer;
           try {
-            const gasEstimate = await estimateGas(
-              CHAIN_CONFIG.publicClient,
-              request,
-            );
+            const gasEstimate = await estimateGas(CHAIN_CONFIG.publicClient, {
+              ...request,
+              account: accountAddress,
+            });
             gasEstimateWithBuffer =
               (gasEstimate * BigInt((1 + GAS_BUFFER) * 1000)) / BigInt(1000);
           } catch (e) {
