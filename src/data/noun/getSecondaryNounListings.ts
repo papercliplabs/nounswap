@@ -3,13 +3,19 @@ import { CHAIN_CONFIG } from "@/config";
 import { paths } from "@reservoir0x/reservoir-sdk";
 import { SecondaryNounListing, SecondaryNounOffer } from "./types";
 import { revalidateTag, unstable_cache } from "next/cache";
+import { safeFetch } from "@/utils/safeFetch";
 
-export async function getSecondaryNounListingsUncached(): Promise<SecondaryNounListing[]> {
+export async function getSecondaryNounListingsUncached(): Promise<
+  SecondaryNounListing[]
+> {
   let continuationCursor: string | undefined = undefined;
-  let items: paths["/tokens/v7"]["get"]["responses"]["200"]["schema"]["tokens"] = [];
+  let items: paths["/tokens/v7"]["get"]["responses"]["200"]["schema"]["tokens"] =
+    [];
 
   while (true) {
-    const response = await fetch(
+    const data = await safeFetch<
+      paths["/tokens/v7"]["get"]["responses"]["200"]["schema"]
+    >(
       `${CHAIN_CONFIG.reservoirApiUrl}/tokens/v7?&collection=${CHAIN_CONFIG.addresses.nounsToken}&minFloorAskPrice=0&flagStatus=0&currencies=0x0000000000000000000000000000000000000000&limit=100&includeTopBid=false&includeMintStages=false`,
       {
         method: "GET",
@@ -20,10 +26,12 @@ export async function getSecondaryNounListingsUncached(): Promise<SecondaryNounL
         next: {
           revalidate: 0,
         },
-      }
+      },
     );
-    const respJson = await response.json();
-    const data = respJson as paths["/tokens/v7"]["get"]["responses"]["200"]["schema"];
+
+    if (!data) {
+      break;
+    }
 
     items = items.concat(data.tokens ?? []);
 
@@ -65,10 +73,12 @@ export const getSecondaryNounListings = unstable_cache(
   {
     tags: ["get-secondary-noun-listings"],
     revalidate: 60 * 1, // 1 min
-  }
+  },
 );
 
-export async function getSecondaryListingForNoun(id: string): Promise<SecondaryNounListing | null> {
+export async function getSecondaryListingForNoun(
+  id: string,
+): Promise<SecondaryNounListing | null> {
   const listings = await getSecondaryNounListings();
   return listings.find((listing) => listing.nounId === id) ?? null;
 }
@@ -77,11 +87,15 @@ export async function getSecondaryFloorListing(): Promise<SecondaryNounListing |
   const listings = await getSecondaryNounListings();
   return listings.length == 0
     ? null
-    : listings.reduce((prev, curr) => (BigInt(curr.priceRaw) < BigInt(prev.priceRaw) ? curr : prev));
+    : listings.reduce((prev, curr) =>
+        BigInt(curr.priceRaw) < BigInt(prev.priceRaw) ? curr : prev,
+      );
 }
 
 export async function getSecondaryTopOffer(): Promise<SecondaryNounOffer | null> {
-  const resp = await fetch(
+  const data = await safeFetch<
+    paths["/collections/{collectionId}/bids/v1"]["get"]["responses"]["200"]["schema"]
+  >(
     `https://api.reservoir.tools/collections/${CHAIN_CONFIG.addresses.nounsToken}/bids/v1?type=collection&limit=1`,
     {
       headers: {
@@ -91,22 +105,23 @@ export async function getSecondaryTopOffer(): Promise<SecondaryNounOffer | null>
       next: {
         revalidate: 60 * 15, // 15min
       },
-    }
+    },
   );
 
-  if (!resp.ok) {
-    console.error("Failed to fetch top offer", resp);
+  if (!data) {
+    console.error("Failed to fetch top offer");
     return null;
   }
-
-  const data = (await resp.json()) as paths["/collections/{collectionId}/bids/v1"]["get"]["responses"]["200"]["schema"];
 
   if (data.orders?.length != 1) {
     return null;
   }
 
   const order = data.orders[0];
-  if (order.price?.amount?.native != undefined && order.price?.amount?.usd != undefined) {
+  if (
+    order.price?.amount?.native != undefined &&
+    order.price?.amount?.usd != undefined
+  ) {
     return {
       marketName: order.source?.["name"] as string | undefined,
       marketIcon: order.source?.["icon"] as string | undefined,

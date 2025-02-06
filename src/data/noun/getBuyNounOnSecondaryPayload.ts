@@ -1,5 +1,6 @@
 "use server";
 import { CHAIN_CONFIG } from "@/config";
+import { safeFetch } from "@/utils/safeFetch";
 import { paths } from "@reservoir0x/reservoir-sdk";
 import { Address, getAddress, Hex, TransactionRequest } from "viem";
 
@@ -18,9 +19,11 @@ type BuyOnSecondaryPayload =
 
 export async function getBuyNounOnSecondaryPayload(
   orderId: string,
-  taker: Address
+  taker: Address,
 ): Promise<BuyOnSecondaryPayload | null> {
-  const resp = await fetch(`${CHAIN_CONFIG.reservoirApiUrl}/execute/buy/v7`, {
+  const data = await safeFetch<
+    paths["/execute/buy/v7"]["post"]["responses"]["200"]["schema"]
+  >(`${CHAIN_CONFIG.reservoirApiUrl}/execute/buy/v7`, {
     method: "POST",
     headers: {
       "content-type": "application/json",
@@ -40,11 +43,17 @@ export async function getBuyNounOnSecondaryPayload(
       revalidate: 0,
     },
   });
-  const data = (await resp.json()) as paths["/execute/buy/v7"]["post"]["responses"]["200"]["schema"];
-  const steps = data.steps;
+  const steps = data?.steps;
 
-  if ((data.errors && data.errors.length != 0) || !steps || steps.length === 0) {
-    console.error(`getBuyNounOnSecondaryPayload: error ${data.errors}, steps: ${steps}`);
+  if (
+    !data ||
+    (data.errors && data.errors.length != 0) ||
+    !steps ||
+    steps.length === 0
+  ) {
+    console.error(
+      `getBuyNounOnSecondaryPayload: error ${data?.errors}, steps: ${steps}`,
+    );
     return null;
   }
 
@@ -53,7 +62,9 @@ export async function getBuyNounOnSecondaryPayload(
   if (firstStep.id == "sale") {
     const { to, value, data: calldata } = firstStep.items[0].data as any;
     if (!to || !value || !calldata) {
-      console.error(`getBuyNounOnSecondaryPayload: missing payload data, ${to}, ${value}, ${calldata}`);
+      console.error(
+        `getBuyNounOnSecondaryPayload: missing payload data, ${to}, ${value}, ${calldata}`,
+      );
       return null;
     }
     return {
@@ -70,7 +81,10 @@ export async function getBuyNounOnSecondaryPayload(
       step: "sign-in",
     };
   } else {
-    console.error("getBuyNounOnSecondaryPayload: unexpected step", firstStep.id);
+    console.error(
+      "getBuyNounOnSecondaryPayload: unexpected step",
+      firstStep.id,
+    );
     return null;
   }
 }

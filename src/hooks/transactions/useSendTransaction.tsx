@@ -24,9 +24,10 @@ import {
 } from "./types";
 import { CHAIN_CONFIG } from "@/config";
 import { TransactionListenerContext } from "@/providers/TransactionListener";
-import { estimateGas } from "viem/actions";
+import { estimateGas, simulate, simulateContract } from "viem/actions";
 import { useSwitchChainCustom } from "../useSwitchChainCustom";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
+import { nounsDaoLogicAbi } from "@/data/generated/wagmi";
 
 const GAS_BUFFER = 0.35; // Gives buffer on gas estimate to help prevent out of gas error
 
@@ -109,14 +110,42 @@ export function useSendTransaction(): UseSendTransactionReturnType {
             console.error("Error estimating gas, using default", e);
             gasEstimateWithBuffer = request.gasFallback; // Use fallback when gas estimation fails
           }
+          console.log("GAS LIMIT", gasEstimateWithBuffer);
 
-          console.log("ESTIMATION", gasEstimateWithBuffer);
+          // Run transaction simulation
+          const simResults = await simulate(CHAIN_CONFIG.publicClient, {
+            blocks: [
+              {
+                calls: [
+                  {
+                    ...request,
+                    account: accountAddress,
+                    gas: gasEstimateWithBuffer,
+                  },
+                ],
+              },
+            ],
+          });
+          const simResult = simResults?.[0];
+
+          if (simResult && simResult.calls[0].status === "failure") {
+            const error = simResult.calls[0].error;
+            console.warn("Simulation error", error);
+            setValidationError(
+              new CustomTransactionValidationError(
+                "SIMULATION_FAILURE",
+                "Transaction simulation failed for unknown reason.",
+              ),
+            );
+            return;
+          }
 
           try {
             const hash = await sendTransactionWagmi({
+              ...request,
               chainId: CHAIN_CONFIG.chain.id,
               gas: gasEstimateWithBuffer,
-              ...request,
+              account: accountAddress,
             });
             addTransaction?.(hash, logging);
           } catch (e) {

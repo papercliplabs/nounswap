@@ -104,7 +104,7 @@ export default function NounToErc20Dialog({
         </Button>
       </DrawerDialogTrigger>
       <DrawerDialogContent
-        className="max-h-[80vh] max-w-[425px]"
+        className="md:max-h-[80vh] md:max-w-[425px]"
         ignoreOutsideInteractions
       >
         <DrawerDialogContentInner>

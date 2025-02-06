@@ -114,8 +114,8 @@ export function NoProposals({
 }) {
   return (
     <div className="flex h-[85px] w-full items-center justify-center rounded-[16px] border bg-gray-100 p-4 text-center">
-      There are no {type} proposals{" "}
-      {searchFilterActive && "matching the search filter"}.
+      There are no {type} proposals
+      {searchFilterActive && " matching the search filter"}.
     </div>
   );
 }
