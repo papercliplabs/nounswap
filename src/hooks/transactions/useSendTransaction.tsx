@@ -28,7 +28,7 @@ import { estimateGas } from "viem/actions";
 import { useSwitchChainCustom } from "../useSwitchChainCustom";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 
-const GAS_BUFFER = 0.25; // Gives buffer on gas estimate to help prevent out of gas error
+const GAS_BUFFER = 0.5; // Gives buffer on gas estimate to help prevent out of gas error
 
 export type CustomSendTransactionErrorType =
   | CustomTransactionValidationError
