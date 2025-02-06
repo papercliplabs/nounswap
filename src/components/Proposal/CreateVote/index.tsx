@@ -93,7 +93,7 @@ export function CreateVote({ proposal }: { proposal: Proposal }) {
   return (
     <>
       {/* Desktop */}
-      <div className="sticky bottom-0 hidden flex-col items-center gap-2 rounded-t-[20px] bg-background-primary pb-8 md:flex">
+      <div className="sticky bottom-0 hidden flex-col items-center gap-2 rounded-t-[20px] bg-background-primary pb-8 lg:flex">
         <CreateVoteForm
           proposal={proposal}
           form={form}
@@ -105,7 +105,7 @@ export function CreateVote({ proposal }: { proposal: Proposal }) {
         <VotingAs />
       </div>
 
-      <div className="sticky bottom-[84px] z-[2] flex items-center justify-center md:hidden pwa:bottom-[104px]">
+      <div className="sticky bottom-[84px] z-[2] flex items-center justify-center lg:hidden pwa:bottom-[104px]">
         <Drawer
           repositionInputs={false}
           modal={false}

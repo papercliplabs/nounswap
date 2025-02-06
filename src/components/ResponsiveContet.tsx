@@ -4,15 +4,15 @@ import { ReactNode } from "react";
 
 interface ResponseContentProps {
   children: ReactNode;
-  screenSize: ScreenSize;
+  screenSizes: ScreenSize[];
 }
 
 export function ResponsiveContent({
   children,
-  screenSize,
+  screenSizes,
 }: ResponseContentProps) {
   const actualScreenSize = useScreenSize();
-  if (screenSize == actualScreenSize) {
+  if (screenSizes.includes(actualScreenSize)) {
     return <>{children}</>;
   }
 }

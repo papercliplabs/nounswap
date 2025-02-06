@@ -123,7 +123,7 @@ export default async function IndividualVotePage(props: {
 
                   <Suspense fallback={null}>
                     {/* Prevent render on mobile as it causes issue with drawer state */}
-                    <ResponsiveContent screenSize="lg">
+                    <ResponsiveContent screenSizes={["lg"]}>
                       <CreateVoteWrapper proposalId={id} />
                     </ResponsiveContent>
                   </Suspense>
@@ -220,7 +220,7 @@ export default async function IndividualVotePage(props: {
 
             <Suspense fallback={null}>
               {/* Prevent render on desktop as it causes issue with form */}
-              <ResponsiveContent screenSize="sm">
+              <ResponsiveContent screenSizes={["sm", "md"]}>
                 <CreateVoteWrapper proposalId={id} />
               </ResponsiveContent>
             </Suspense>
