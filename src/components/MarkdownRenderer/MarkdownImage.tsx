@@ -1,38 +1,54 @@
-"use client";
-import { useEffect, useState } from "react";
-import { Skeleton } from "../ui/skeleton";
 import Image from "next/image";
+import { Suspense } from "react";
+import { getImageSize } from "@/data/image/getImageSize";
+import { Skeleton } from "../ui/skeleton";
 
-export default function MarkdownImage({
+export default async function MarkdownImage({
   src,
-  alt,
+  title,
 }: {
   src?: string;
-  alt?: string;
+  title?: string;
 }) {
-  const [size, setSize] = useState<{ width: number; height: number } | null>(
-    null,
+  return (
+    <Suspense fallback={<Skeleton className="h-[300px] w-full" />}>
+      <MarkdownImageWrapper src={src} title={title} />
+    </Suspense>
   );
+}
 
-  useEffect(() => {
-    const img = new window.Image();
-    img.src = src ?? "";
-    img.onload = () => {
-      setSize({ width: img.width, height: img.height });
-    };
-  }, [src]);
+async function MarkdownImageWrapper({
+  src,
+  title,
+}: {
+  src?: string;
+  title?: string;
+}) {
+  if (!src) {
+    return null;
+  }
 
-  if (!size) {
-    return <Skeleton className="h-48 w-full rounded-md" />;
-  } else {
-    return (
+  const { width, height } = await getImageSize(src);
+
+  let clampedWidth = 800;
+  let clampedHeight = 0;
+  if (width && height) {
+    const aspect = width / height;
+
+    clampedWidth = Math.min(800, width);
+    clampedHeight = Math.min(height, width / aspect);
+  }
+
+  return (
+    <div className="flex flex-col gap-1">
       <Image
-        src={src ?? ""}
-        width={size?.width}
-        height={size?.height}
-        alt={alt ?? ""}
+        src={src}
+        width={clampedWidth}
+        height={clampedHeight}
+        alt={title ?? ""}
         className="max-w-full rounded-md"
       />
-    );
-  }
+      <span className="text-content-secondary label-sm">{title}</span>
+    </div>
+  );
 }

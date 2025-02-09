@@ -10,7 +10,7 @@ export default function PostOverview({ data }: PostOverviewProps) {
   return (
     <Link
       href={`/learn/${data.slug}`}
-      className="flex h-[340px] w-full max-w-[750px] flex-col overflow-hidden rounded-[32px] transition-all clickable-active hover:brightness-90"
+      className="flex h-[368px] w-full max-w-[750px] flex-col overflow-hidden rounded-[32px] transition-all clickable-active hover:brightness-90"
       key={data.id}
     >
       <Image

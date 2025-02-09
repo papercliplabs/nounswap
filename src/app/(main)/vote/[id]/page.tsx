@@ -311,7 +311,12 @@ function LearnHowActivityWorksTooltipPopover() {
           including votes, comments, and discussions. Anyone can leave a
           comment, but only Nouns delegates can vote on proposals.
         </p>
-        {/* <div>Learn more about Governance</div> */}
+        <Link
+          href="/learn/nouns-dao-governance-explained"
+          className="underline"
+        >
+          Learn more about Governance
+        </Link>
       </div>
     </TooltipPopover>
   );
@@ -324,9 +329,9 @@ async function ProposalMarkdownWrapper({ proposalId }: { proposalId: number }) {
   }
 
   return (
-    <div className="flex min-w-0 flex-col gap-4 overflow-x-hidden break-words [&>ol]:list-outside [&>ol]:list-decimal [&>ol]:pl-6 [&>ul]:list-outside [&>ul]:list-disc [&>ul]:pl-6">
-      <MarkdownRenderer>{proposal.description}</MarkdownRenderer>
-    </div>
+    <MarkdownRenderer className="gap-4">
+      {proposal.description}
+    </MarkdownRenderer>
   );
 }
 

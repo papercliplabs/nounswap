@@ -155,6 +155,28 @@ function FunctionArgumentRenderer({
   }
 }
 
+function parseErc20Amount(
+  tx: DecodedTransaction,
+  erc20Address: Address,
+): bigint {
+  if (!isAddressEqual(tx.to, erc20Address)) {
+    return BigInt(0);
+  } else if (tx.functionName == "transfer") {
+    return tx.args[1].value as bigint;
+  } else if (
+    tx.functionName == "transferFrom" &&
+    tx.args[0]?.type == "address" &&
+    isAddressEqual(
+      getAddress(tx.args[0]!.value as string),
+      CHAIN_CONFIG.addresses.nounsTreasury,
+    )
+  ) {
+    return tx.args[1].value as bigint;
+  } else {
+    return BigInt(0);
+  }
+}
+
 function parseDecodedTransactionsSummary(
   transactions: DecodedTransaction[],
 ): string | undefined {
@@ -162,12 +184,28 @@ function parseDecodedTransactionsSummary(
 
   let totalEth: bigint = BigInt(0);
   let totalUsdc: bigint = BigInt(0);
+  let totalWeth: bigint = BigInt(0);
+  let totalStEth: bigint = BigInt(0);
   const nounIds: number[] = [];
 
   try {
     for (const tx of transactions) {
       if (tx.functionName == "transfer") {
         totalEth += tx.value;
+      }
+
+      totalUsdc += parseErc20Amount(tx, CHAIN_CONFIG.addresses.usdc);
+      totalWeth += parseErc20Amount(
+        tx,
+        CHAIN_CONFIG.addresses.wrappedNativeToken,
+      );
+      totalStEth += parseErc20Amount(tx, CHAIN_CONFIG.addresses.stEth);
+
+      if (
+        isAddressEqual(tx.to, CHAIN_CONFIG.addresses.nounsPayer) &&
+        tx.functionName == "sendOrRegisterDebt"
+      ) {
+        totalUsdc += tx.args[1].value as bigint;
       } else if (
         isAddressEqual(tx.to, CHAIN_CONFIG.addresses.nounsToken) &&
         (tx.functionName == "safeTransferFrom" ||
@@ -179,21 +217,6 @@ function parseDecodedTransactionsSummary(
         )
       ) {
         nounIds.push(Number(tx.args[2].value));
-      } else if (
-        isAddressEqual(tx.to, CHAIN_CONFIG.addresses.nounsToken) &&
-        tx.functionName == "transferFrom" &&
-        tx.args[0]?.type == "address" &&
-        isAddressEqual(
-          getAddress(tx.args[0]!.value as string),
-          CHAIN_CONFIG.addresses.nounsTreasury,
-        )
-      ) {
-        totalUsdc += tx.args[1].value as bigint;
-      } else if (
-        isAddressEqual(tx.to, CHAIN_CONFIG.addresses.nounsPayer) &&
-        tx.functionName == "sendOrRegisterDebt"
-      ) {
-        totalUsdc += tx.args[1].value as bigint;
       }
     }
   } catch (e) {
@@ -202,6 +225,14 @@ function parseDecodedTransactionsSummary(
 
   if (totalEth > BigInt(0)) {
     items.push(`${formatTokenAmount(totalEth, 18)} ETH`);
+  }
+
+  if (totalWeth > BigInt(0)) {
+    items.push(`${formatTokenAmount(totalWeth, 18)} WETH`);
+  }
+
+  if (totalStEth > BigInt(0)) {
+    items.push(`${formatTokenAmount(totalStEth, 18)} stETH`);
   }
 
   if (totalUsdc > BigInt(0)) {

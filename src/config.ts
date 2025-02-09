@@ -35,6 +35,7 @@ export interface ChainSpecificData {
     noundersMultisig: Address;
     usdc: Address;
     nounsPayer: Address;
+    stEth: Address;
   };
   nounsGovernanceUrl: string;
   subgraphUrl: {
@@ -86,6 +87,7 @@ const CHAIN_SPECIFIC_CONFIGS: Record<number, ChainSpecificData> = {
       ),
       usdc: getAddress("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"),
       nounsPayer: getAddress("0xd97Bcd9f47cEe35c0a9ec1dc40C1269afc9E8E1D"),
+      stEth: getAddress("0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84"),
     },
     nounsGovernanceUrl: "https://nouns.camp/",
     subgraphUrl: {
@@ -138,6 +140,7 @@ const CHAIN_SPECIFIC_CONFIGS: Record<number, ChainSpecificData> = {
       ), // TODO: update
       usdc: getAddress("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"), // TODO: update
       nounsPayer: getAddress("0xd97Bcd9f47cEe35c0a9ec1dc40C1269afc9E8E1D"), // TODO: update
+      stEth: getAddress("0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84"), // TODO: update
     },
     nounsGovernanceUrl: "https://sepolia.nouns.camp/",
     subgraphUrl: {
