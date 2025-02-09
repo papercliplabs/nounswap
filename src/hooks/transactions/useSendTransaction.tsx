@@ -24,10 +24,9 @@ import {
 } from "./types";
 import { CHAIN_CONFIG } from "@/config";
 import { TransactionListenerContext } from "@/providers/TransactionListener";
-import { estimateGas, simulate, simulateContract } from "viem/actions";
+import { estimateGas, simulate } from "viem/actions";
 import { useSwitchChainCustom } from "../useSwitchChainCustom";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { nounsDaoLogicAbi } from "@/data/generated/wagmi";
 
 const GAS_BUFFER = 0.35; // Gives buffer on gas estimate to help prevent out of gas error
 

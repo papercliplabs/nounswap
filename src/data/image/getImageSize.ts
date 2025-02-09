@@ -1,18 +1,6 @@
 "use server";
 import sharp from "sharp";
-import https from "https";
 import { unstable_cache } from "next/cache";
-
-async function fetchImageBuffer(url: string): Promise<Buffer> {
-  return new Promise((resolve, reject) => {
-    https.get(url, (res) => {
-      const chunks: Buffer[] = [];
-      res.on("data", (chunk) => chunks.push(chunk));
-      res.on("end", () => resolve(Buffer.concat(chunks)));
-      res.on("error", reject);
-    });
-  });
-}
 
 async function getImageSizeUncached(src: string) {
   try {
@@ -24,7 +12,8 @@ async function getImageSizeUncached(src: string) {
       buffer = Buffer.from(base64Data, "base64");
     } else {
       // Handle remote image
-      buffer = await fetchImageBuffer(src);
+      const resp = await fetch(src, { cache: "no-store" }); // Disable cache here, since some images may be > 2MB (we cache the generated output)
+      buffer = Buffer.from(await resp.arrayBuffer());
     }
 
     // Extract dimensions

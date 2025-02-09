@@ -34,7 +34,13 @@ export default function ProposalTransactionSummary({
     <DrawerDialog>
       <DrawerDialogTrigger className="flex items-center justify-between gap-3 rounded-[12px] bg-gray-100 px-6 py-4 transition-colors hover:brightness-95">
         <span className="whitespace-normal text-start">
-          Requesting <b>{summary}</b>
+          {summary != undefined ? (
+            <>
+              Requesting <b>{summary}</b>
+            </>
+          ) : (
+            `${decodedTransactions.length} transaction${decodedTransactions.length > 1 ? "s" : ""}`
+          )}
         </span>
         <span className="underline label-md">Details</span>
       </DrawerDialogTrigger>
@@ -151,7 +157,7 @@ function FunctionArgumentRenderer({
 
 function parseDecodedTransactionsSummary(
   transactions: DecodedTransaction[],
-): string {
+): string | undefined {
   const items: string[] = [];
 
   let totalEth: bigint = BigInt(0);
@@ -208,5 +214,5 @@ function parseDecodedTransactionsSummary(
     );
   }
 
-  return `${items.length == 0 ? "unknown" : items.join(" + ")}`;
+  return items.length == 0 ? undefined : items.join(" + ");
 }
