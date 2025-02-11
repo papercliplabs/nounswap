@@ -13,11 +13,9 @@ import {
   nounQuery,
   secondaryFloorListingQuery,
   secondaryTopOfferQuery,
-  userNameQuery,
 } from "@/data/tanstackQueries";
 import { getAuctionById } from "@/data/auction/getAuctionById";
 import { getNounByIdUncached } from "@/data/noun/getNounById";
-import { Auction as AuctionType } from "@/data/auction/types";
 import {
   getSecondaryFloorListing,
   getSecondaryTopOffer,
@@ -76,14 +74,6 @@ async function AuctionWrapper({
       queryFn: async () => await getSecondaryTopOffer(),
     }),
   ]);
-
-  const auction = (await queryClient.getQueryData(
-    auctionQuery(auctionId).queryKey,
-  )) as AuctionType | undefined;
-  const bidderAddress = auction?.bids[0]?.bidderAddress;
-  if (bidderAddress) {
-    queryClient.prefetchQuery(userNameQuery(auction.bids[0].bidderAddress));
-  }
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

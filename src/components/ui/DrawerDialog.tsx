@@ -8,7 +8,7 @@ import {
 } from "./dialogBase";
 import { Drawer, DrawerContent, DrawerTitle, DrawerTrigger } from "./drawer";
 import { HTMLAttributes, ReactNode, useMemo, useState } from "react";
-import { cn } from "@paperclip-labs/whisk-sdk";
+import { cn } from "@/utils/shadcn";
 
 export function DrawerDialog({
   children,

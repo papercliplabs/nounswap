@@ -1,6 +1,6 @@
 import { chainlinkPriceFeedAbi } from "@/abis/chainlinkPriceFeed";
 import { mainnetPublicClient } from "@/config";
-import { SECONDS_PER_DAY } from "@paperclip-labs/whisk-sdk";
+import { SECONDS_PER_DAY } from "@/utils/constants";
 import { unstable_cache } from "next/cache";
 import { formatUnits, getAddress } from "viem";
 import { readContract } from "viem/actions";

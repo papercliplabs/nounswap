@@ -10,8 +10,8 @@ import React, {
 } from "react";
 import { Input } from "./ui/input";
 import { Search } from "lucide-react";
-import { cn } from "@paperclip-labs/whisk-sdk";
 import { debounce } from "lodash";
+import { cn } from "@/utils/shadcn";
 
 interface SearchProviderInterface {
   searchValue: string;
