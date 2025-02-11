@@ -1,6 +1,6 @@
 import Icon from "@/components/ui/Icon";
 import { TooltipPopover } from "@/components/ui/tooltipPopover";
-import { cn } from "@paperclip-labs/whisk-sdk";
+import { cn } from "@/utils/shadcn";
 import clsx from "clsx";
 import { HTMLAttributes } from "react";
 

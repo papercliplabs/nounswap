@@ -15,7 +15,7 @@
     "@hookform/resolvers": "^3.10.0",
     "@nouns/sdk": "^0.4.0",
     "@number-flow/react": "^0.5.1",
-    "@paperclip-labs/whisk-sdk": "^0.0.18",
+    "@paperclip-labs/whisk-sdk": "^0.1.0",
     "@payloadcms/richtext-lexical": "^3.17.1",
     "@radix-ui/react-accordion": "^1.2.1",
     "@radix-ui/react-aspect-ratio": "^1.1.0",

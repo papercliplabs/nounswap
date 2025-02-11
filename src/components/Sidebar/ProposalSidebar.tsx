@@ -8,9 +8,9 @@ import React, {
   ComponentProps,
 } from "react";
 import { Button } from "../ui/button";
-import { cn } from "@paperclip-labs/whisk-sdk";
 import { motion } from "framer-motion";
 import { PanelRight } from "lucide-react";
+import { cn } from "@/utils/shadcn";
 
 const SIDEBAR_WIDTH = 480;
 

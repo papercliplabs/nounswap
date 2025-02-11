@@ -1,7 +1,7 @@
 "use client";
 import { ComponentProps, useState } from "react";
 import { Textarea } from "./ui/textarea";
-import { cn } from "@paperclip-labs/whisk-sdk";
+import { cn } from "@/utils/shadcn";
 
 export default function AutoresizingTextArea({
   className,

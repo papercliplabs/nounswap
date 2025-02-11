@@ -3,7 +3,7 @@ import { LinkExternal } from "./ui/link";
 import { getExplorerLink } from "@/utils/blockExplorer";
 import { Avatar, Name } from "@paperclip-labs/whisk-sdk/identity";
 import { HTMLAttributes } from "react";
-import { cn } from "@paperclip-labs/whisk-sdk";
+import { cn } from "@/utils/shadcn";
 
 interface IdentityExplorerLinkProps extends HTMLAttributes<HTMLDivElement> {
   address: Address;

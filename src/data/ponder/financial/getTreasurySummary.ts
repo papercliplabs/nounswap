@@ -1,6 +1,6 @@
 import { unstable_cache } from "next/cache";
 import { getDailyFinancialSnapshots } from "./getDailyFinancialSnapshots";
-import { SECONDS_PER_DAY } from "@paperclip-labs/whisk-sdk";
+import { SECONDS_PER_DAY } from "@/utils/constants";
 
 interface TreasurySummary {
   treasuryBalanceInUsd: number;

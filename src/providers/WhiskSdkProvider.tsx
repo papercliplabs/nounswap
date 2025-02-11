@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 import { WhiskSdkProvider as _WhiskSdkProvider } from "@paperclip-labs/whisk-sdk";
 import { getAddress } from "viem";
 import { CHAIN_CONFIG } from "@/config";
+import { IdentityResolver } from "@paperclip-labs/whisk-sdk/identity";
 
 export default function WhiskSdkProvider({
   children,
@@ -14,14 +15,14 @@ export default function WhiskSdkProvider({
       apiKey={process.env.NEXT_PUBLIC_WHISK_API_KEY!}
       config={{
         identity: {
-          resolvers: [
-            "nns",
-            "ens",
-            "farcaster",
-            "lens",
-            "base",
-            "uni",
-            "world",
+          resolverOrder: [
+            IdentityResolver.Nns,
+            IdentityResolver.Ens,
+            IdentityResolver.Farcaster,
+            IdentityResolver.Lens,
+            IdentityResolver.Base,
+            IdentityResolver.Uni,
+            IdentityResolver.World,
           ],
           overrides: {
             [getAddress(CHAIN_CONFIG.addresses.nounsTreasury)]: {

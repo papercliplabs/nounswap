@@ -1,4 +1,5 @@
 "use client";
+import { cn } from "@/utils/shadcn";
 import {
   ComponentProps,
   createContext,
@@ -9,8 +10,6 @@ import {
   useRef,
   useState,
 } from "react";
-import { Button } from "./ui/button";
-import { cn } from "@paperclip-labs/whisk-sdk";
 
 interface SubnavTabsContextInterface {
   activeTab: string;

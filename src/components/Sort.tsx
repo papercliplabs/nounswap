@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { cn } from "@paperclip-labs/whisk-sdk";
+import { cn } from "@/utils/shadcn";
 
 interface SortProviderInterface {
   sortValue: string;

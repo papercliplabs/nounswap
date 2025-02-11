@@ -12,8 +12,6 @@ import {
   nounQuery,
   secondaryFloorListingQuery,
   secondaryTopOfferQuery,
-  userAvatarQuery,
-  userNameQuery,
 } from "@/data/tanstackQueries";
 import { Auction } from "@/data/auction/types";
 import { LiveAuction } from "./LiveAuction";
@@ -122,20 +120,6 @@ export default function AuctionClient({ clients }: { clients: Client[] }) {
             queryClient.prefetchQuery(auctionQuery(i.toString())),
             queryClient.prefetchQuery(nounQuery(i.toString())),
           ]);
-
-          const auction = (await queryClient.getQueryData(
-            auctionQuery(i.toString()).queryKey,
-          )) as Auction | undefined;
-          if (auction && auction.bids.length > 0) {
-            await Promise.all([
-              queryClient.prefetchQuery(
-                userNameQuery(auction.bids[0].bidderAddress),
-              ),
-              queryClient.prefetchQuery(
-                userAvatarQuery(auction.bids[0].bidderAddress),
-              ),
-            ]);
-          }
         }
       }
     }

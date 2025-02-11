@@ -1,7 +1,6 @@
 import { BigIntString } from "@/utils/types";
 import { Auction } from "./auction/types";
 import { Noun, SecondaryNounListing, SecondaryNounOffer } from "./noun/types";
-import { getAvatar, getName } from "@paperclip-labs/whisk-sdk/identity/core";
 import { Address } from "viem";
 import { ProposalVote } from "./ponder/governance/getProposal";
 import { safeFetch } from "@/utils/safeFetch";
@@ -40,24 +39,6 @@ export function secondaryTopOfferQuery() {
     queryKey: ["secondary-top-offer"],
     queryFn: async () =>
       await safeFetch<SecondaryNounOffer>(`/api/secondary-top-offer`),
-  };
-}
-
-const IDENTITY_RESOLVERS = ["nns", "ens", "farcaster"];
-
-export function userNameQuery(address: Address) {
-  return {
-    queryKey: ["name", { address, resolvers: IDENTITY_RESOLVERS }],
-    queryFn: async () =>
-      await getName("", { address, resolvers: IDENTITY_RESOLVERS as any }),
-  };
-}
-
-export function userAvatarQuery(address: Address) {
-  return {
-    queryKey: ["avatar", { address, resolvers: IDENTITY_RESOLVERS }],
-    queryFn: async () =>
-      await getAvatar("", { address, resolvers: IDENTITY_RESOLVERS as any }),
   };
 }
 

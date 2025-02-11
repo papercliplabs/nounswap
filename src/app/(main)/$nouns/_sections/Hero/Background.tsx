@@ -1,5 +1,5 @@
 "use client";
-import { cn } from "@paperclip-labs/whisk-sdk";
+import { cn } from "@/utils/shadcn";
 import { motion, HTMLMotionProps } from "framer-motion";
 import Image from "next/image";
 
