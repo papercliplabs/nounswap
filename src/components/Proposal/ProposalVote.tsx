@@ -11,6 +11,8 @@ import { formatTimeLeft } from "@/utils/format";
 import { useCreateVoteContext } from "./CreateVote/CreateVoteProvider";
 import { ProposalState } from "@/data/ponder/governance/common";
 import ExpandableContent from "../ExpandableContent";
+import { Ellipsis } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 interface ProposalVoteProps {
   vote: ProposalVoteType;
@@ -35,27 +37,49 @@ export default function ProposalVote({
       />
 
       <div className="flex w-full min-w-0 flex-col justify-center gap-1 paragraph-sm">
-        <div
-          className={clsx("inline-flex gap-1 whitespace-pre-wrap label-md", {
-            "text-semantic-positive": vote.value === VoteValue.For,
-            "text-semantic-negative": vote.value === VoteValue.Against,
-            "text-content-secondary": vote.value === VoteValue.Abstain,
-          })}
-        >
-          <LinkExternal
-            href={
-              CHAIN_CONFIG.publicClient.chain?.blockExplorers?.default.url +
-              "/address/" +
-              vote.voterAddress
-            }
-            className="inline hover:underline"
+        <div className="flex w-full items-center justify-between gap-2">
+          <div
+            className={clsx("inline whitespace-pre-wrap label-md", {
+              "text-semantic-positive": vote.value === VoteValue.For,
+              "text-semantic-negative": vote.value === VoteValue.Against,
+              "text-content-secondary": vote.value === VoteValue.Abstain,
+            })}
           >
-            <Name
-              address={getAddress(vote.voterAddress)}
-              className="text-content-primary"
-            />
-          </LinkExternal>{" "}
-          voted {vote.value.toLowerCase()} ({vote.weight})
+            <LinkExternal
+              href={
+                CHAIN_CONFIG.publicClient.chain?.blockExplorers?.default.url +
+                "/address/" +
+                vote.voterAddress
+              }
+              className="inline *:inline hover:underline"
+            >
+              <Name
+                address={getAddress(vote.voterAddress)}
+                className="inline text-content-primary *:inline"
+              />
+            </LinkExternal>{" "}
+            voted {vote.value.toLowerCase()} ({vote.weight})
+          </div>
+          <Popover>
+            <PopoverTrigger className="flex h-full justify-start pt-0.5">
+              <Ellipsis size={20} className="stroke-content-secondary" />
+            </PopoverTrigger>
+            <PopoverContent
+              align="end"
+              className="flex flex-col overflow-hidden bg-background-secondary p-0 text-content-primary"
+            >
+              <LinkExternal
+                href={
+                  CHAIN_CONFIG.publicClient.chain?.blockExplorers?.default.url +
+                  "/tx/" +
+                  vote.transactionHash
+                }
+                className="bg-background-secondary p-2 transition-all"
+              >
+                Etherscan
+              </LinkExternal>
+            </PopoverContent>
+          </Popover>
         </div>
 
         {vote.voteRevotes?.items.map(({ revote }, i) =>
@@ -121,7 +145,7 @@ function Revote({
   revoteValue: VoteValue;
 }) {
   return (
-    <div className="flex w-full min-w-0 flex-col overflow-hidden rounded-[12px] border px-3 py-2">
+    <div className="flex w-full min-w-0 flex-col gap-1 overflow-hidden rounded-[12px] border px-3 py-2">
       <div className="flex gap-1">
         <Avatar address={getAddress(revoteVoterAddress)} size={20} />
         <Name address={getAddress(revoteVoterAddress)} />

@@ -1,6 +1,7 @@
 "use client";
+import { cn } from "@paperclip-labs/whisk-sdk";
 import clsx from "clsx";
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { HTMLAttributes, ReactNode, useEffect, useRef, useState } from "react";
 
 interface ExpandableContentProps {
   maxCollapsedHeight: number;
@@ -23,29 +24,30 @@ export default function ExpandableContent({
   }, [children, maxCollapsedHeight]);
 
   return (
-    <div className="flex flex-col">
+    <button
+      onClick={() => setExpanded(true)}
+      className={cn("flex flex-col justify-start text-start")}
+      disabled={!needsExpansion || expanded}
+    >
       <div
         ref={contentRef}
-        className="relative overflow-hidden"
+        className={clsx("relative overflow-hidden")}
         style={{ maxHeight: expanded ? "none" : maxCollapsedHeight }}
       >
         {children}
         <div
           className={clsx(
-            "flex",
-            "absolute bottom-0 right-0",
+            "flex justify-end",
+            "absolute bottom-0 left-0 right-0 w-full pt-4",
+            "bg-gradient-to-t from-white to-transparent",
             needsExpansion && !expanded ? "block" : "hidden",
           )}
         >
-          <div className="h-[full] w-[60px] bg-gradient-to-l from-white to-transparent" />
-          <button
-            onClick={() => setExpanded(true)}
-            className="bg-white pl-2 underline"
-          >
+          <div className="bg-gradient-to-t from-white to-transparent pl-2 underline paragraph-sm">
             More
-          </button>
+          </div>
         </div>
       </div>
-    </div>
+    </button>
   );
 }
