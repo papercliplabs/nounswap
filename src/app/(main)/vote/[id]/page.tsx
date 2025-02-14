@@ -33,16 +33,17 @@ import SearchProvider, { SearchInput } from "@/components/Search";
 import SortProvider, { SortSelect } from "@/components/Sort";
 import { TooltipPopover } from "@/components/ui/tooltipPopover";
 import { ResponsiveContent } from "@/components/ResponsiveContet";
+import { getProposalTitle } from "@/data/ponder/governance/getProposalTitle";
 
 export async function generateMetadata(props: {
   params: Promise<{ id: string }>;
 }) {
-  const params = await props.params;
-  const proposal = await getProposal(Number(params.id));
+  const { id } = await props.params;
+  const proposalTitle = await getProposalTitle(Number(id));
 
-  const title = `Proposal ${proposal?.id} | Nouns DAO`;
-  const description = proposal?.title ?? "Vote now";
-  const ogImageUrl = `${process.env.NEXT_PUBLIC_URL}/api/og/vote/${proposal?.id}`;
+  const title = `Proposal ${id} | Nouns DAO`;
+  const description = proposalTitle ?? "Vote now";
+  const ogImageUrl = `${process.env.NEXT_PUBLIC_URL}/api/og/vote/${id}`;
   return {
     title,
     description,
