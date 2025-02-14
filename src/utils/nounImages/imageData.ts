@@ -363,6 +363,10 @@ export const imageData = {
         filename: "body-yellow",
         data: "0x0015171f093a1f01000d1f01000d1f01000d1f01000d1f01000d1f01000d1f01000b1f",
       },
+      {
+        filename: "body-lilac",
+        data: "0x0015171f093a9001000d9001000d9001000d9001000d9001000d9001000d9001000b90",
+      },
     ],
     accessories: [
       {
