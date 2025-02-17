@@ -10,8 +10,6 @@ import { useNounImage } from "@/hooks/useNounImage";
 import Icon from "./ui/Icon";
 import clsx from "clsx";
 import { formatTokenAmount } from "@/utils/utils";
-import { currentAuctionIdQuery } from "@/data/tanstackQueries";
-import { useQuery } from "@tanstack/react-query";
 import { isAddressEqual } from "viem";
 
 interface NounCardProps {
@@ -29,8 +27,8 @@ export default function NounCard({
   alwaysShowNumber,
   lazyLoad,
 }: NounCardProps) {
-  const ref = useRef<HTMLInputElement | null>(null);
-  const isInView = useInView(ref as any, { margin: "500px 0px" });
+  const ref = useRef<HTMLDivElement | null>(null);
+  const isInView = useInView(ref, { margin: "500px 0px" });
   const isTreasuryNoun = useMemo(
     () => noun.owner == CHAIN_CONFIG.addresses.nounsTreasury,
     [noun.owner],

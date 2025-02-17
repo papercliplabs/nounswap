@@ -17,7 +17,7 @@ const CLIENT_INFO: Record<number, { url: string; icon: string } | undefined> = {
   5: { url: "/", icon: "/app-icon.jpeg" },
   6: { url: "https://www.nouns.game", icon: "/client/game.png" },
   7: { url: "https://nouns.sh", icon: "/client/sh.png" },
-  8: { url: "https://nouns.gg", icon: "https://nouns.gg/favicon.ico" },
+  8: { url: "https://nouns.gg", icon: "https://nouns.gg/logo/logo.svg" },
   9: { url: "https://www.probe.wtf", icon: "/client/probe.svg" },
   10: {
     url: "https://nounsagora.com",
@@ -36,6 +36,8 @@ const CLIENT_INFO: Record<number, { url: string; icon: string } | undefined> = {
     icon: "https://lighthouse.cx/favicon.ico",
   },
   17: { url: "https://protocol.nouns.camp", icon: "/client/camp.png" },
+  18: { url: "https://anouns.eth.limo/", icon: "/client/unknown.svg" },
+  19: { url: "https://www.etherscan.io", icon: "/client/etherscan.png" },
 };
 
 export interface Client {

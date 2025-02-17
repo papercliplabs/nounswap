@@ -1,7 +1,5 @@
 "use client";
-import { useNounImage } from "@/hooks/useNounImage";
 import clsx from "clsx";
-import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo } from "react";
 import NavButtons from "./NavButtons";
@@ -13,7 +11,6 @@ import {
   secondaryFloorListingQuery,
   secondaryTopOfferQuery,
 } from "@/data/tanstackQueries";
-import { Auction } from "@/data/auction/types";
 import { LiveAuction } from "./LiveAuction";
 import { EndedAuction } from "./EndedAuction";
 import { Client } from "@/data/ponder/client/getClients";
@@ -137,7 +134,7 @@ export default function AuctionClient({ clients }: { clients: Client[] }) {
       />
       <div
         className={clsx(
-          "flex flex-1 flex-col items-center justify-end md:items-end md:bg-transparent md:pr-[60px]",
+          "flex flex-col items-center justify-end gap-0 md:flex-1 md:items-end md:bg-transparent md:pr-[60px]",
         )}
       >
         <NounImageBase

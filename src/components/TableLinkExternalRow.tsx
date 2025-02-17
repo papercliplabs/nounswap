@@ -1,5 +1,5 @@
 "use client";
-import { ComponentProps, ReactNode } from "react";
+import { ComponentProps, forwardRef, ReactNode } from "react";
 import { TableRow } from "./ui/table";
 import { cn } from "@/utils/shadcn";
 
@@ -8,10 +8,18 @@ interface TableLinkRowProps extends ComponentProps<typeof TableRow> {
   children: ReactNode;
 }
 
-export function TableLinkExternalRow({ href, children, className }: TableLinkRowProps) {
+export const TableLinkExternalRow = forwardRef<
+  HTMLTableRowElement,
+  TableLinkRowProps
+>(({ href, children, className }, ref) => {
   return (
-    <TableRow className={cn("cursor-pointer", className)} onClick={() => window.open(href)}>
+    <TableRow
+      ref={ref}
+      className={cn("cursor-pointer", className)}
+      onClick={() => window.open(href)}
+    >
       {children}
     </TableRow>
   );
-}
+});
+TableLinkExternalRow.displayName = "TableLinkExternalRow";
