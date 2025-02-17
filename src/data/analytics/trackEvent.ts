@@ -15,7 +15,7 @@ export async function trackEvent(
   // Umami
   if (process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID) {
     try {
-      const resp = await umami.track(name, payload);
+      const resp = await umami.track({ name, data: payload });
       if (!resp.ok) {
         console.error("Event tracking failed", resp.status, await resp.text());
       }
