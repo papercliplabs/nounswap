@@ -9,6 +9,7 @@ import {
 } from "viem";
 import {
   useAccount,
+  useBalance,
   useSendTransaction as useSendTransactionWagmi,
   useWaitForTransactionReceipt,
 } from "wagmi";
@@ -24,7 +25,7 @@ import {
 } from "./types";
 import { CHAIN_CONFIG } from "@/config";
 import { TransactionListenerContext } from "@/providers/TransactionListener";
-import { estimateGas, simulate } from "viem/actions";
+import { estimateGas, getGasPrice, simulateCalls } from "viem/actions";
 import { useSwitchChainCustom } from "../useSwitchChainCustom";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 
@@ -55,6 +56,7 @@ export function useSendTransaction(): UseSendTransactionReturnType {
   const { addTransaction } = useContext(TransactionListenerContext);
   const { switchChain } = useSwitchChainCustom();
   const { openConnectModal } = useConnectModal();
+  const { data: balanceData } = useBalance({ address: accountAddress });
 
   const [validationError, setValidationError] =
     useState<CustomTransactionValidationError | null>(null);
@@ -84,7 +86,7 @@ export function useSendTransaction(): UseSendTransactionReturnType {
       logging: { type: TransactionType; description: string },
       validationFn?: () => Promise<CustomTransactionValidationError | null>,
     ) => {
-      if (!accountAddress) {
+      if (!accountAddress || !balanceData) {
         openConnectModal?.();
       } else {
         // Call all the time
@@ -111,29 +113,41 @@ export function useSendTransaction(): UseSendTransactionReturnType {
           }
           console.log("GAS LIMIT", gasEstimateWithBuffer);
 
-          // Run transaction simulation
-          const simResults = await simulate(CHAIN_CONFIG.publicClient, {
-            blocks: [
-              {
-                calls: [
-                  {
-                    ...request,
-                    account: accountAddress,
-                    gas: gasEstimateWithBuffer,
-                  },
-                ],
-              },
-            ],
-          });
-          const simResult = simResults?.[0];
+          // Run transaction simulation - some RPC's won't support
+          try {
+            const { results } = await simulateCalls(CHAIN_CONFIG.publicClient, {
+              account: accountAddress,
+              calls: [
+                {
+                  ...request,
+                },
+              ],
+            });
+            const simResult = results[0];
+            if (simResult && simResult.status === "failure") {
+              console.warn("Simulation error", simResult.error);
+              setValidationError(
+                new CustomTransactionValidationError(
+                  "SIMULATION_FAILURE",
+                  "Transaction simulation failed for unknown reason.",
+                ),
+              );
+              return;
+            }
+          } catch (e) {
+            console.warn(
+              "Simulation transaction error occured, results inconclusive",
+              e,
+            );
+          }
 
-          if (simResult && simResult.calls[0].status === "failure") {
-            const error = simResult.calls[0].error;
-            console.warn("Simulation error", error);
+          const gasPrice = await getGasPrice(CHAIN_CONFIG.publicClient);
+          const txCost = gasEstimateWithBuffer * gasPrice + request.value;
+          if (balanceData.value < txCost) {
             setValidationError(
               new CustomTransactionValidationError(
-                "SIMULATION_FAILURE",
-                "Transaction simulation failed for unknown reason.",
+                "INSUFFICIENT_FUNDS",
+                "Insufficient balance.",
               ),
             );
             return;
@@ -160,6 +174,7 @@ export function useSendTransaction(): UseSendTransactionReturnType {
       openConnectModal,
       switchChain,
       addTransaction,
+      balanceData,
     ],
   );
 
