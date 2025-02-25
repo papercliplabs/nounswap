@@ -18,7 +18,7 @@ const PROJECTS: ProjectCard[] = [
   {
     title: "Hyalinobatrachium Nouns",
     imgSrc: "/project/frog.png",
-    link: "https://nouns.world/hyalinobatrachium-nouns/",
+    link: "https://explore.nouns.world/hyalinobatrachium-nouns/",
   },
   {
     title: "Quack and Lola",
@@ -28,17 +28,17 @@ const PROJECTS: ProjectCard[] = [
   {
     title: "Bud Light x Nouns Super Bowl Commercial",
     imgSrc: "/project/bud-light.png",
-    link: "https://nouns.world/bud-light-x-nouns-super-bowl-commercial/",
+    link: "https://explore.nouns.world/bud-light-and-nouns-super-bowl/",
   },
   {
     title: "Dustin Yellin's PERSON, PLACE, or THING ",
     imgSrc: "/project/dustin-yellin.png",
-    link: "https://nouns.world/dustin-yellins-person-place-or-thing-sculpture/",
+    link: "https://explore.nouns.world/dustin-yellins-person-place-or-thing/",
   },
   {
     title: "John Hamon x Nouns",
     imgSrc: "/project/john-hamon.png",
-    link: "https://nouns.world/john-hamon-x-nouns-a-bold-collaboration-in-public-art/",
+    link: "https://explore.nouns.world/john-hamon-and-nouns/",
   },
   {
     title: "The Rise of Blus: A Nouns Movie",
