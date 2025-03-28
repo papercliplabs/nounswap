@@ -92,12 +92,18 @@ function decodeTransaction(
     functionName = transaction.signature.split("(")[0];
     const functionSignature = `function ${transaction.signature}`;
     const abi = parseAbi([functionSignature])[0] as AbiFunction;
-    const decoded = decodeAbiParameters(abi.inputs, transaction.calldata) as (
-      | string
-      | Address
-      | bigint
-      | number
-    )[];
+
+    let decoded: (string | Address | bigint | number)[];
+    try {
+      decoded = decodeAbiParameters(abi.inputs, transaction.calldata) as (
+        | string
+        | Address
+        | bigint
+        | number
+      )[];
+    } catch (e) {
+      decoded = Array(abi.inputs.length).fill("decodeError");
+    }
 
     args = decoded.map((value, i) => ({
       type: abi.inputs[i].type,

@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useCallback, useState } from "react";
+import { createContext, useCallback, useState, useEffect } from "react";
 
 const TOAST_TIMEOUT_MS = 3000;
 let id = 0;
@@ -18,6 +18,7 @@ export interface ToastConfig {
 export interface Toast {
   id: number;
   config: ToastConfig;
+  timeoutId?: NodeJS.Timeout;
 }
 
 interface ToastContextType {
@@ -35,26 +36,44 @@ export const ToastContext = createContext<ToastContextType>({
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
-  const removeToast = useCallback(
-    (id: number) => {
-      setToasts((toasts) => toasts.filter((t) => t.id != id));
-    },
-    [setToasts]
-  );
+  const removeToast = useCallback((id: number) => {
+    setToasts((toasts) => {
+      const toast = toasts.find((t) => t.id === id);
+      if (toast?.timeoutId) {
+        clearTimeout(toast.timeoutId);
+      }
+      return toasts.filter((t) => t.id !== id);
+    });
+  }, []);
 
   const addToast = useCallback(
     (config: ToastConfig) => {
       const _id = id++;
-      setToasts((toasts) => [...toasts, { id: _id, config }]);
 
+      let timeoutId: NodeJS.Timeout | undefined = undefined;
       if (config.type != ToastType.Pending) {
-        setTimeout(() => removeToast(_id), TOAST_TIMEOUT_MS);
+        timeoutId = setTimeout(() => removeToast(_id), TOAST_TIMEOUT_MS);
       }
+      setToasts((toasts) => [...toasts, { id: _id, config, timeoutId }]);
 
       return _id;
     },
-    [setToasts, removeToast]
+    [setToasts, removeToast],
   );
 
-  return <ToastContext.Provider value={{ toasts, addToast, removeToast }}>{children}</ToastContext.Provider>;
+  useEffect(() => {
+    return () => {
+      toasts.forEach((toast) => {
+        if (toast.timeoutId) {
+          clearTimeout(toast.timeoutId);
+        }
+      });
+    };
+  }, [toasts]);
+
+  return (
+    <ToastContext.Provider value={{ toasts, addToast, removeToast }}>
+      {children}
+    </ToastContext.Provider>
+  );
 }

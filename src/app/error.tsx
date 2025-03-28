@@ -1,7 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { trackEvent } from "@/data/analytics/trackEvent";
-import * as Sentry from "@sentry/nextjs";
 import { useEffect } from "react";
 
 export default function Error({
@@ -13,7 +12,6 @@ export default function Error({
 }) {
   useEffect(() => {
     trackEvent("app_error", { message: `${error}` });
-    Sentry.captureException(error);
   }, [error]);
 
   return (
