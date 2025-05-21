@@ -1,20 +1,19 @@
 import Link from "next/link";
-import Icon from "./ui/Icon";
 import clsx from "clsx";
+import Image from "next/image";
 
 export function NounsDotComLogoLink({ darkMode }: { darkMode?: boolean }) {
   return (
     <Link
       href="/"
-      className="flex shrink grow-0 flex-row items-center gap-1.5 [&>svg]:hover:rotate-12"
+      className="flex shrink grow-0 flex-row items-center gap-1.5 [&>img]:hover:rotate-12"
     >
-      <Icon
-        icon="swap"
-        size={28}
-        className={clsx(
-          "transition-all ease-linear",
-          darkMode ? "fill-white" : "fill-content-primary",
-        )}
+      <Image
+        src="/icon.png"
+        width={44}
+        height={44}
+        className="transition-all ease-linear"
+        alt=""
       />
       <div
         className={clsx(
