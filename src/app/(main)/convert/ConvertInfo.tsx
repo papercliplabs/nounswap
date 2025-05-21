@@ -38,10 +38,10 @@ export default function ConvertInfo() {
         contract.
       </InfoSection>
       <Separator className="h-[2px]" />
-      <InfoSection title="Is NounSwap affiliated with $nouns?">
-        No, NounSwap is not affiliated with $nouns. This interface is only a
+      <InfoSection title="Is Nouns.com affiliated with $nouns?">
+        No, Nouns.com is not affiliated with $nouns. This interface is only a
         layer to interact with the $nouns contracts. No funds are held in
-        custody by NounSwap at any point.
+        custody by Nouns.com at any point.
       </InfoSection>
       <Separator className="h-[2px]" />
       <div className="flex flex-col gap-4">

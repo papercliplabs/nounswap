@@ -1,11 +1,11 @@
 export default function TermsAndConditionsPage() {
   return (
     <div className="flex w-full max-w-[800px] flex-col gap-8 self-center p-6 pb-24 md:p-10 md:pb-24">
-      <h1>NounSwap Terms of Use Agreement</h1>
+      <h1>Nouns.com Terms of Use Agreement</h1>
       <span>Last updated: Jan 7, 2025</span>
       <p>
-        Welcome to NounSwap! These Terms and Conditions ("Terms") govern your
-        access to and use of the NounSwap website (https://nounswap.wtf) and
+        Welcome to Nouns.com! These Terms and Conditions ("Terms") govern your
+        access to and use of the Nouns.com website (https://nouns.com) and
         related services (collectively, the "Interface"). The Interface is
         provided by Office Supply Ventures LLC ("Company," "we," "our," or
         "us"). By accessing or using the Interface, you agree to these Terms. If
@@ -14,7 +14,7 @@ export default function TermsAndConditionsPage() {
       <div className="flex flex-col gap-4">
         <h2>1. Acceptance of Terms</h2>
         <p>
-          By using NounSwap, you confirm that you are of the legal age of
+          By using Nouns.com, you confirm that you are of the legal age of
           majority in your jurisdiction and have the capacity to enter into a
           legally binding agreement. These Terms apply to all visitors, users,
           and others who access or use the Interface.
@@ -34,7 +34,7 @@ export default function TermsAndConditionsPage() {
             <li>Use the Interface for any unlawful or fraudulent purpose.</li>
             <li>
               Interfere with the proper functioning of the Interface or engage
-              in activities that could harm NounSwap, its users, or third
+              in activities that could harm Nouns.com, its users, or third
               parties.
             </li>
             <li>
@@ -46,7 +46,7 @@ export default function TermsAndConditionsPage() {
             </li>
           </ul>
           <li>
-            <b>Third-Party Wallets and Services:</b> NounSwap interacts with
+            <b>Third-Party Wallets and Services:</b> Nouns.com interacts with
             third-party cryptocurrency wallets like MetaMask, Rainbow, and
             Coinbase. Your use of these wallets or third-party services is
             governed by their respective terms and policies. The Interface
@@ -64,7 +64,7 @@ export default function TermsAndConditionsPage() {
       <div>
         <h2>3. Service as an Interface Only</h2>
         <p>
-          NounSwap provides an Interface that enables users to access and
+          Nouns.com provides an Interface that enables users to access and
           interact with the Ethereum blockchain protocol (the “Protocol”) in a
           decentralized manner.
         </p>
@@ -72,7 +72,7 @@ export default function TermsAndConditionsPage() {
           <li>
             <b>No Transaction Processing:</b> As an Interface, we do not process
             or facilitate transactions between users or any third parties. All
-            transactions are conducted directly on the Protocol, and NounSwap
+            transactions are conducted directly on the Protocol, and Nouns.com
             has no control over or involvement in these transactions.
           </li>
           <li>
@@ -80,7 +80,7 @@ export default function TermsAndConditionsPage() {
             access the Protocol, and its use is entirely optional.
           </li>
           <li>
-            <b>No Guarantees or Liability:</b> NounSwap does not guarantee the
+            <b>No Guarantees or Liability:</b> Nouns.com does not guarantee the
             existence, authenticity, quality, safety, legality, or purpose of
             any content, materials, or transactions conducted through the
             Protocol.
@@ -88,7 +88,7 @@ export default function TermsAndConditionsPage() {
           <li>
             <b>Dispute Resolution Disclaimer:</b> While we may, at our sole
             discretion, assist in facilitating the resolution of disputes
-            between users, NounSwap has no obligation to do so and cannot
+            between users, Nouns.com has no obligation to do so and cannot
             guarantee the outcome of any such efforts.
           </li>
         </ul>
@@ -112,7 +112,7 @@ export default function TermsAndConditionsPage() {
       <div>
         <h2>5. Assumption of Risk</h2>
         <p>
-          NounSwap facilitates interactions with decentralized technologies,
+          Nouns.com facilitates interactions with decentralized technologies,
           which involve inherent risks, including:
         </p>
         <ul className="inline-block list-inside list-disc pl-4 [&>li]:mb-[5px]">
@@ -124,7 +124,7 @@ export default function TermsAndConditionsPage() {
           </li>
         </ul>
         <p>
-          You acknowledge that NounSwap is not responsible for any losses
+          You acknowledge that Nouns.com is not responsible for any losses
           arising from your use of the Interface. You assume all risks
           associated with cryptocurrency transactions and decentralized finance
           (DeFi).
@@ -150,7 +150,7 @@ export default function TermsAndConditionsPage() {
       <div>
         <h2>7. Limitation of Liability</h2>
         <p>
-          To the fullest extent permitted by law, NounSwap and its affiliates
+          To the fullest extent permitted by law, Nouns.com and its affiliates
           are not liable for:
         </p>
         <ul className="inline-block list-inside list-disc pl-4 [&>li]:mb-[5px]">
@@ -176,7 +176,7 @@ export default function TermsAndConditionsPage() {
       <div>
         <h2>8. Indemnification</h2>
         <p>
-          You agree to indemnify and hold NounSwap, its affiliates, officers,
+          You agree to indemnify and hold Nouns.com, its affiliates, officers,
           and employees harmless from any claims, damages, or expenses arising
           from:
         </p>

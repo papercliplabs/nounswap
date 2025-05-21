@@ -108,8 +108,8 @@ export default async function LearnPostPage(props: {
             </div>
           </div>
           <div className="text-content-secondary paragraph-sm">
-            The content on this site is produced by the NounSwap Team and is for
-            informational purposes only. The content is not intended to be
+            The content on this site is produced by the Nouns.com Team and is
+            for informational purposes only. The content is not intended to be
             investment advice or any other kind of professional advice. Before
             taking any action based on this content you should do you own
             research. We do not endorse any third parties referenced on this
@@ -142,14 +142,14 @@ async function LearnPostWrapper({ slug }: { slug: string }) {
     description: post.description,
     author: {
       "@type": "Organization",
-      name: "NounSwap",
-      url: "https://www.nounswap.wtf",
-      logo: "https://www.nounswap.wtf/app-icon.jpeg",
+      name: "Nouns.com",
+      url: "https://www.nouns.com",
+      logo: "https://www.nouns.com/app-icon.jpeg",
     },
     datePublished: post.createdAt ?? undefined,
     dateModified: post.updatedAt ?? undefined,
     image: post.heroImage.url ?? "",
-    url: `https://nounswap.wtf/learn/${slug}`,
+    url: `https://nouns.com/learn/${slug}`,
     keywords: [...keywords, "Nouns DAO", "Nouns NFT", "web3", "Crypto"],
   };
 

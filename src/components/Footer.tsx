@@ -50,7 +50,7 @@ export default function Footer() {
           <div className="flex max-w-[448px] flex-col gap-5">
             <span>
               Join our mailing list to stay in the loop with our newest feature
-              releases and tips and tricks for navigating NounSwap.
+              releases and tips and tricks for navigating Nouns.com.
             </span>
             <MailingListForm />
           </div>

@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "NounSwap",
-    short_name: "NounSwap",
+    name: "Nouns.com",
+    short_name: "Nouns.com",
     description: "Bid, explore, and swap Nouns.",
     start_url: "/",
     display: "standalone",

@@ -5,11 +5,10 @@ export default function PrivacyPolicyPage() {
       <span>Last updated: Jan 7, 2025</span>
       <p>
         This Privacy Policy describes the practices of{" "}
-        <b>Office Supply Ventures LLC</b> ("NounSwap," "we," "us," or "our")
+        <b>Office Supply Ventures LLC</b> ("Nouns.com," "we," "us," or "our")
         regarding the collection, use, and sharing of personal information
-        through our website{" "}
-        <a href="https://nounswap.wtf">https://nounswap.wtf</a> (the
-        "Interface") and related services, features, and tools.
+        through our website <a href="https://nouns.com">https://nouns.com</a>{" "}
+        (the "Interface") and related services, features, and tools.
       </p>
       <div>
         <h2>Personal Information We Collect</h2>

@@ -22,7 +22,7 @@ export function NounSwapLogoLink({ darkMode }: { darkMode?: boolean }) {
           darkMode ? "text-white" : "text-content-primary",
         )}
       >
-        NounSwap
+        Nouns.com
       </div>
     </Link>
   );

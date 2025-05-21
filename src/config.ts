@@ -158,7 +158,7 @@ export const CHAIN_CONFIG =
 
 export const reservoirClient = createReservoirClient({
   chains: [CHAIN_CONFIG.reservoirChain],
-  source: "nounswap.wtf",
+  source: "nouns.com",
   synchronousStepItemExecution: true,
   apiKey: process.env.NEXT_PUBLIC_RESERVOIR_API_KEY!,
 });

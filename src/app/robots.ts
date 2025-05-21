@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: ["/"],
       disallow: ["/api"],
     },
-    sitemap: ["https://www.nounswap.wtf/sitemap.xml"],
+    sitemap: ["https://www.nouns.com/sitemap.xml"],
   };
 }
