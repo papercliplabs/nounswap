@@ -2,7 +2,7 @@ import Link from "next/link";
 import Icon from "./ui/Icon";
 import clsx from "clsx";
 
-export function NounSwapLogoLink({ darkMode }: { darkMode?: boolean }) {
+export function NounsDotComLogoLink({ darkMode }: { darkMode?: boolean }) {
   return (
     <Link
       href="/"

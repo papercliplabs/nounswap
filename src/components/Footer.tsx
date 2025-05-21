@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { LinkExternal } from "./ui/link";
 import MailingListForm from "./MailingListForm";
-import { NounSwapLogoLink } from "./NounSwapLogoLink";
+import { NounsDotComLogoLink } from "./NounsDotComLogoLink";
 
 const NAV_ITEMS: { name: string; href: string; external?: boolean }[][] = [
   [
@@ -44,7 +44,7 @@ export default function Footer() {
       <div className="flex w-full flex-col justify-between gap-20 px-4 pt-14 md:flex-row md:px-10">
         <div className="flex flex-col gap-5">
           <div className="flex items-center gap-3 paragraph-lg">
-            <NounSwapLogoLink darkMode />
+            <NounsDotComLogoLink darkMode />
             <span className="pt-[4px]">for Nouns DAO</span>
           </div>
           <div className="flex max-w-[448px] flex-col gap-5">
