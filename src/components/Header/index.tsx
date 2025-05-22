@@ -3,7 +3,7 @@ import WalletButton from "../WalletButton";
 import { CurrentAuctionSmall } from "../CurrentAuction";
 import HidingHeader from "./HidingHeader";
 import DesktopNav from "../Nav/DesktopNav";
-import { NounSwapLogoLink } from "../NounSwapLogoLink";
+import { NounsDotComLogoLink } from "../NounsDotComLogoLink";
 import { CurrentAuctionPrefetchWrapper } from "../CurrentAuction/CurrentAuctionPrefetchWrapper";
 
 const HEADER_HEIGHT = 64;
@@ -16,7 +16,7 @@ export function Header() {
         style={{ height: HEADER_HEIGHT }}
       >
         <div className="flex items-center gap-6 md:flex-1">
-          <NounSwapLogoLink />
+          <NounsDotComLogoLink />
           <DesktopNav />
         </div>
         <div className="flex flex-1 items-center justify-end gap-4 text-gray-600">

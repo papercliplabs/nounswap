@@ -3,7 +3,7 @@ export default function Disclaimer() {
     <section className="flex w-full max-w-[800px] flex-col gap-2 px-6 text-content-secondary md:px-10">
       <div className="font-bold label-sm">Legal Disclaimer</div>
       <p className="paragraph-sm">
-        The content on this site is produced by the NounSwap Team and is for
+        The content on this site is produced by the Nouns.com Team and is for
         informational purposes only. The content is not intended to be
         investment advice or any other kind of professional advice. Before
         taking any action based on this content you should do you own research.

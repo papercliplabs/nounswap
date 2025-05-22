@@ -101,10 +101,10 @@ export default function NounSelectDialog({
                 <div className="text-content-secondary">
                   {CHAIN_CONFIG.chain.id == 1 ? (
                     <>
-                      Don{"'"}t have a noun on Ethereum? Try NounSwap on{" "}
+                      Don{"'"}t have a noun on Ethereum? Try Nouns.com on{" "}
                       <LinkExternal
                         className="text-semantic-accent hover:brightness-[85%]"
-                        href="https://sepolia.nounswap.wtf"
+                        href="https://sepolia.nouns.com"
                       >
                         Sepolia Testnet
                       </LinkExternal>

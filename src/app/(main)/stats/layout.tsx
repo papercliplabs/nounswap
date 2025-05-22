@@ -1,10 +1,9 @@
 import StatsNav from "@/components/StatsNav";
-import { CHAIN_CONFIG } from "@/config";
 import { Metadata } from "next";
 import { ReactNode } from "react";
 
 export const metadata: Metadata = {
-  title: "NounSwap Stats - Track Noun DAO and $nouns Metrics",
+  title: "Nouns.com Stats - Track Noun DAO and $nouns Metrics",
   description:
     "Stay updated with Nouns DAO stats. Track Nouns Treasury activity, proposal spending, circulating Nouns, and $nouns trading volume. Real-time insights, all in one place.",
 };

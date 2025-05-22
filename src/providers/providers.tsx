@@ -7,7 +7,12 @@ import TanstackQueryProvider from "./TanstackQueryProvider";
 import { Address, fallback } from "viem";
 import { http, WagmiProvider } from "wagmi";
 import { CHAIN_CONFIG } from "@/config";
-import { getDefaultConfig, AvatarComponent, RainbowKitProvider, DisclaimerComponent } from "@rainbow-me/rainbowkit";
+import {
+  getDefaultConfig,
+  AvatarComponent,
+  RainbowKitProvider,
+  DisclaimerComponent,
+} from "@rainbow-me/rainbowkit";
 import { Avatar } from "@paperclip-labs/whisk-sdk/identity";
 
 export const PROJECT_ID = "cb75b98c5532821d721e6275da3e7006";
@@ -22,7 +27,7 @@ const config = getDefaultConfig({
   },
   projectId: "cb75b98c5532821d721e6275da3e7006",
 
-  appName: "NounSwap",
+  appName: "Nouns.com",
   appDescription: "Bid, explore, and swap Nouns.",
   appUrl: process.env.NEXT_PUBLIC_URL!,
   appIcon: `${process.env.NEXT_PUBLIC_URL}/app-icon.jpeg`,
@@ -36,7 +41,8 @@ export const CustomAvatar: AvatarComponent = ({ address, ensImage, size }) => {
 
 const Disclaimer: DisclaimerComponent = ({ Text, Link }) => (
   <Text>
-    By connecting your wallet, you agree to the <Link href="/terms">Terms & Conditions</Link>.
+    By connecting your wallet, you agree to the{" "}
+    <Link href="/terms">Terms & Conditions</Link>.
   </Text>
 );
 
