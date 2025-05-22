@@ -186,8 +186,8 @@ export default function NounDialog({
                   <BuyNounOnSecondaryDialog noun={noun} />
                 </div>
                 <div className="text-content-secondary">
-                  Buy this Noun instantly from the secondary market via NounSwap
-                  with no additional fees!
+                  Buy this Noun instantly from the secondary market via
+                  Nouns.com with no additional fees!
                 </div>
               </>
             )}

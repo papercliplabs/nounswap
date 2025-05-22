@@ -49,16 +49,16 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: "Discover, Buy, and Swap Nouns NFTs from Nouns DAO",
-  applicationName: "NounSwap",
+  applicationName: "Nouns.com",
   description:
-    "Discover NounSwap, your gateway to Nouns DAO and iconic Noggles. Bid on Noun NFTs, explore $NOUNS tokens, and join the creative Nouns ecosystem today.",
-  metadataBase: new URL("https://www.nounswap.wtf"),
+    "Discover Nouns.com, your gateway to Nouns DAO and iconic Noggles. Bid on Noun NFTs, explore $NOUNS tokens, and join the creative Nouns ecosystem today.",
+  metadataBase: new URL("https://www.nouns.com"),
   openGraph: {
-    url: "https://www.nounswap.wtf",
-    siteName: "NounSwap - Discover, Buy, and Swap Nouns from Nouns DAO",
+    url: "https://www.nouns.com",
+    siteName: "Nouns.com - Discover, Buy, and Swap Nouns from Nouns DAO",
     type: "website",
     locale: "en_US",
-    title: "NounSwap",
+    title: "Nouns.com",
     description: "Bid, explore, buy, and swap to find your forever Noun.",
   },
   robots: {
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
     googleBot: "index, follow",
   },
   appleWebApp: {
-    title: "NounSwap - Discover, Buy, and Swap Nouns from Nouns DAO",
+    title: "Nouns.com - Discover, Buy, and Swap Nouns from Nouns DAO",
     statusBarStyle: "default",
     capable: true,
   },
@@ -104,15 +104,15 @@ export default function RootLayout({
   const jsonLd: WithContext<WebSite> = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "NounSwap",
-    url: "https://www.nounswap.wtf",
+    name: "Nouns.com",
+    url: "https://www.nouns.com",
     description:
-      "NounSwap is the go-to platform for buying, selling, and swapping Nouns DAO NFTs.",
+      "Nouns.com is the go-to platform for buying, selling, and swapping Nouns DAO NFTs.",
     publisher: {
       "@type": "Organization",
-      name: "NounSwap",
-      url: "https://www.nounswap.wtf",
-      logo: "https://www.nounswap.wtf/app-icon.jpeg",
+      name: "Nouns.com",
+      url: "https://www.nouns.com",
+      logo: "https://www.nouns.com/app-icon.jpeg",
     },
   };
 
