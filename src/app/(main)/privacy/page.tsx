@@ -2,13 +2,23 @@ export default function PrivacyPolicyPage() {
   return (
     <div className="flex w-full max-w-[800px] flex-col gap-8 self-center p-6 pb-24 md:p-10 md:pb-24">
       <h1>Privacy Policy</h1>
-      <span>Last updated: Jan 7, 2025</span>
+      <span>Last updated: May 21, 2025</span>
       <p>
-        This Privacy Policy describes the practices of{" "}
-        <b>Office Supply Ventures LLC</b> ("Nouns.com," "we," "us," or "our")
-        regarding the collection, use, and sharing of personal information
-        through our website <a href="https://nouns.com">https://nouns.com</a>{" "}
-        (the "Interface") and related services, features, and tools.
+        This Privacy Policy describes the policies and procedures of{" "}
+        <b>Office Supply Ventures LLC</b> (“OSV,” “we,” “us,” or “our”)
+        regarding the collection, use, and disclosure of your information in
+        connection with your access to and use of the{" "}
+        <a href="https://nouns.com">Nouns.com</a> website, the{" "}
+        <a href="https://nouns.com">Nouns.com</a> interface, and the associated
+        services (collectively, the “Platform”). OSV receives information about
+        you from various ited to: (i) if you register to receive emails or
+        publications from us; (ii) your use of the Platform generally; and (iii)
+        from third party websites or services. By accessing or using the
+        Platform, you are consenting to the collection, transfer, manipulation,
+        storage, disclosure, and other uses of your information as described in
+        this Privacy Policy and in our Terms of Use (the “Terms”). Any defined
+        terms not defined herein shall have the meaning ascribed to them in the
+        Terms.
       </p>
       <div>
         <h2>Personal Information We Collect</h2>
