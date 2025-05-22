@@ -48,18 +48,19 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Discover, Buy, and Swap Nouns NFTs from Nouns DAO",
+  title: "Nouns.com | Daily Nouns NFT Auctions & Nouns DAO Governance Hub",
   applicationName: "Nouns.com",
   description:
-    "Discover Nouns.com, your gateway to Nouns DAO and iconic Noggles. Bid on Noun NFTs, explore $NOUNS tokens, and join the creative Nouns ecosystem today.",
+    "Discover, bid, and swap Nouns NFTs. Learn how Nouns DAO funds ideas and how $NOUNS tokens let you own a piece of the Nouns ecosystem.",
   metadataBase: new URL("https://www.nouns.com"),
   openGraph: {
     url: "https://www.nouns.com",
     siteName: "Nouns.com - Discover, Buy, and Swap Nouns from Nouns DAO",
     type: "website",
     locale: "en_US",
-    title: "Nouns.com",
-    description: "Bid, explore, buy, and swap to find your forever Noun.",
+    title: "Nouns.com – One Noun Every Day, Forever",
+    description:
+      "The place for all things Nouns DAO.  Bid, buy, swap, vote and convert Nouns NFTs or $NOUNS tokens.",
   },
   robots: {
     index: true,
