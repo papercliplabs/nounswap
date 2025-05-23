@@ -46,6 +46,11 @@ const PROJECTS: ProjectCard[] = [
     link: "https://nouns.movie/",
   },
   {
+    title: "Nouns House: The hub for builders in São Paulo",
+    imgSrc: "/project/nouns-house.png",
+    link: "https://instagram.com/nouns_house",
+  },
+  {
     title: "Gnars: Nouns Action Sports Team",
     imgSrc: "/project/gnars.png",
     link: "https://gnars.com/",
